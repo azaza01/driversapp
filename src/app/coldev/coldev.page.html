@@ -1,8 +1,17 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>coldev</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-toolbar class="menutoolbar">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title >
+        Collection & Deliveries
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button shape="round" fill="outline" color="Tertiary" (click)="coldev('Load collections and deliveries from?')" >Reload</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+   
+  </ion-header>
 
 <ion-content>
 
@@ -12,7 +21,7 @@
           <ion-col>
             <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-left" position="bottom"
               href="home">PREV</ion-button>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-center" position="bottom"
+            <ion-button shape="round" fill="outline" color="Tertiary"  position="bottom"
               href="home">TODAY</ion-button>  
             <ion-button shape="round"
               fill="outline" color="Tertiary" class="ion-float-right" position="bottom">NEXT</ion-button>

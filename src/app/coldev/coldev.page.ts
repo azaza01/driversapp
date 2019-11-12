@@ -22,7 +22,7 @@ export class ColdevPage implements OnInit {
       buttons: [
         {
           text: 'SERVER',
-          handler: (blah) => {
+          handler: () => {
 
           }
         }, {
