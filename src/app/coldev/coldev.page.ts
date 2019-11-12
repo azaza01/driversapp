@@ -9,6 +9,8 @@ import { AlertController } from '@ionic/angular';
 })
 export class ColdevPage implements OnInit {
 
+  selectedView = 'COLLECTION';
+
   constructor(private router : Router, public alertController: AlertController,) { }
 
   ngOnInit() {
@@ -23,12 +25,12 @@ export class ColdevPage implements OnInit {
         {
           text: 'SERVER',
           handler: () => {
-
+            //function herer
           }
         }, {
           text: 'LOCAL',
           handler: () => {
-            this.router.navigate(['/login']);
+           //function herer
           }
         }
       ]

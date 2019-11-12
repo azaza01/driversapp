@@ -1,32 +1,90 @@
 <ion-header>
     <ion-toolbar class="menutoolbar">
       <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-menu-button color="white"></ion-menu-button>
       </ion-buttons>
       <ion-title >
         Collection & Deliveries
       </ion-title>
       <ion-buttons slot="end">
-          <ion-button shape="round" fill="outline" color="Tertiary" (click)="coldev('Load collections and deliveries from?')" >Reload</ion-button>
+          <ion-button (click)="coldev('Load collections and deliveries from?')" expand="full" shape="round" color="warning" >Reload</ion-button>
       </ion-buttons>
     </ion-toolbar>
-   
   </ion-header>
 
-<ion-content>
+<ion-content >
+    <ion-segment [(ngModel)]="selectedView">
+        <ion-segment-button value="COLLECTION" >COLLECTION
+            <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
+        </ion-segment-button>
+        <ion-segment-button value="DELIVERIES">DELIVERIES
+            <ion-img src="../assets/images/delivery_icon.png" style="padding:5px;"></ion-img>
+        </ion-segment-button>
+    </ion-segment>
+<div [ngSwitch]="selectedView">
+    <div *ngSwitchCase="'COLLECTION'" >
 
-  <ion-grid>
+        <ion-item-group class="ion-padding">
+            <ion-item-divider style="background-color: yellow;">
+              <ion-label>CC-1911Ag01</ion-label>
+              <ion-label style="padding-left: 30px;">11:00</ion-label>
+              <ion-label style="padding-left: 30px;">12 Nov 2019</ion-label>
+            </ion-item-divider>
+            <ion-item>
+            <ion-label>Jaycee Fernandez</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Bagong Silang Caloocan City</ion-label>
+            </ion-item>
+            <ion-item >
+                <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;" >0</ion-label>
+                <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">0</ion-label>
+                <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">0</ion-label>
+                <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">0</ion-label>
+            </ion-item>
+        </ion-item-group>
+    </div>
+ 
+    <div *ngSwitchCase="'DELIVERIES'">
+        <ion-item-group class="ion-padding">
+            <ion-item-divider style="background-color: yellow;">
+              <ion-label>CC-1911Ag01</ion-label>
+              <ion-label style="padding-left: 30px;">11:00</ion-label>
+              <ion-label style="padding-left: 30px;">12 Nov 2019</ion-label>
+            </ion-item-divider>
+            <ion-item>
+            <ion-label>Jaycee Fernandez</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Bagong Silang Caloocan City</ion-label>
+            </ion-item>
+            <ion-item >
+                <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">1</ion-label>
+                <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">1</ion-label>
+                <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">1</ion-label>
+                <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
+                <ion-label style="padding: 10px;">1</ion-label>
+            </ion-item>
+        </ion-item-group>
+    </div>
 
-      <ion-row>
-          <ion-col>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-left" position="bottom"
-              href="home">PREV</ion-button>
-            <ion-button shape="round" fill="outline" color="Tertiary"  position="bottom"
-              href="home">TODAY</ion-button>  
-            <ion-button shape="round"
-              fill="outline" color="Tertiary" class="ion-float-right" position="bottom">NEXT</ion-button>
-          </ion-col>
-        </ion-row>
-  </ion-grid>
-
+  </div>
 </ion-content>
+
+<ion-row>
+    <ion-col >
+      <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-left" position="bottom"
+        href="home">PREV</ion-button>
+      <ion-button shape="round" fill="outline" color="Tertiary"  position="bottom"
+        href="home">TODAY</ion-button>  
+      <ion-button shape="round"
+        fill="outline" color="Tertiary" class="ion-float-right" position="bottom">NEXT</ion-button>
+    </ion-col>
+  </ion-row>
