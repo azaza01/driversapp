@@ -18,9 +18,9 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
+      title: 'Collection and Deliveries',
+      url: '/coldev',
+      icon: 'md-paper'
     }
   ];
 
@@ -64,5 +64,6 @@ export class AppComponent {
 
     await alert.present();
   }
+
 
 }
