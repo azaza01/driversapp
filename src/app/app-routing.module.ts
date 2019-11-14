@@ -16,7 +16,13 @@ const routes: Routes = [
     loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
   },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
-  { path: 'coldev', loadChildren: './coldev/coldev.module#ColdevPageModule' }
+  { path: 'coldev', loadChildren: './coldev/coldev.module#ColdevPageModule' },
+  { path: 'colectionview', loadChildren: './colectionview/colectionview.module#ColectionviewPageModule' },
+  { path: 'deliveryview', loadChildren: './deliveryview/deliveryview.module#DeliveryviewPageModule' },
+  { path: 'selectitemlist', loadChildren: './selectitemlist/selectitemlist.module#SelectitemlistPageModule' },
+  { path: 'selectcategory', loadChildren: './selectcategory/selectcategory.module#SelectcategoryPageModule' },
+  { path: 'deliverymakepayment', loadChildren: './deliverymakepayment/deliverymakepayment.module#DeliverymakepaymentPageModule' },
+  { path: 'deliveryitemview', loadChildren: './deliveryitemview/deliveryitemview.module#DeliveryitemviewPageModule' }
 ];
 
 @NgModule({

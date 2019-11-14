@@ -24,7 +24,7 @@
 <div [ngSwitch]="selectedView">
     <div *ngSwitchCase="'COLLECTION'" >
 
-        <ion-item-group class="ion-padding">
+        <ion-item-group class="ion-padding" (click)="colView('For curtains, carpets and sofa covers, please bill from DC. For any others, please bill from CC.')">
             <ion-item-divider style="background-color: yellow;">
               <ion-label>CC-1911Ag01</ion-label>
               <ion-label style="padding-left: 30px;">11:00</ion-label>
@@ -50,7 +50,7 @@
     </div>
  
     <div *ngSwitchCase="'DELIVERIES'">
-        <ion-item-group class="ion-padding">
+        <ion-item-group class="ion-padding" (click)="delView()">
             <ion-item-divider style="background-color: yellow;">
               <ion-label>CC-1911Ag01</ion-label>
               <ion-label style="padding-left: 30px;">11:00</ion-label>
@@ -79,12 +79,13 @@
 </ion-content>
 
 <ion-row>
-    <ion-col >
-      <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-left" position="bottom"
-        href="home">PREV</ion-button>
-      <ion-button shape="round" fill="outline" color="Tertiary"  position="bottom"
-        href="home">TODAY</ion-button>  
-      <ion-button shape="round"
-        fill="outline" color="Tertiary" class="ion-float-right" position="bottom">NEXT</ion-button>
+    <ion-col > 
+       <ion-button expand="full" shape="round" color="warning" class="ion-float-left" position="bottom" >PREV</ion-button>    
     </ion-col>
-  </ion-row>
+    <ion-col >
+        <ion-button  expand="full" shape="round" color="warning"class="ion-float-center"  position="bottom" >TODAY</ion-button>  
+    </ion-col>
+    <ion-col >
+        <ion-button expand="full" shape="round" color="warning" class="ion-float-right" position="bottom">NEXT</ion-button>
+    </ion-col>
+ </ion-row>

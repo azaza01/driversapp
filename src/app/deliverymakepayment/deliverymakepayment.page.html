@@ -1,0 +1,83 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Payment</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  
+    <ion-item-group>
+          <ion-item-divider style="background-color: yellow;">
+            <ion-label>Customer Details</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Invoice No:</ion-label>
+            <ion-label style="padding-left: 1px;">CC-191119Ag01 </ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label>Total : </ion-label>
+              <ion-label>$100 </ion-label>
+                <ion-label>Billed From : </ion-label>
+                <ion-label style="padding-right: 1px;">BSCS </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Others : </ion-label>
+                <ion-label>ddd </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Deposit : </ion-label>
+                <ion-label>$40 </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Last Paid : </ion-label>
+                <ion-label>15</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Outstanding : </ion-label>
+                <ion-label>John Doe </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Overdue : </ion-label>
+                <ion-label>$0.00 </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Paying : </ion-label>
+                <ion-input> </ion-input>
+                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+                        <ion-select-option value="brown">CASH</ion-select-option>
+                        <ion-select-option value="blonde">CHEQUE</ion-select-option>
+                        <ion-select-option value="black">CREDIT</ion-select-option>
+                        <ion-select-option value="red">BT</ion-select-option>
+                      </ion-select>
+
+            </ion-item>
+            <ion-row>
+                    <ion-col >
+                      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">REWASH</ion-button>
+                    </ion-col>
+                    <ion-col >
+                        <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">POSTPONE</ion-button>
+                    </ion-col>
+            </ion-row>
+            <ion-row>
+                    <ion-col >
+                      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">REFEAT</ion-button>
+                    </ion-col>
+                    <ion-col >
+                        <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">MAKE PAYMENT</ion-button>
+                    </ion-col>
+            </ion-row>
+            
+    </ion-item-group>
+  
+    <ion-item-group>
+        <ion-item-divider style="background-color: yellow;">
+          <ion-label>Overdue Payment</ion-label>
+        </ion-item-divider>
+       
+        
+      </ion-item-group>
+  
+     
+  </ion-content>
+  
