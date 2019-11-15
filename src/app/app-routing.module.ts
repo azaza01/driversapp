@@ -22,7 +22,10 @@ const routes: Routes = [
   { path: 'selectitemlist', loadChildren: './selectitemlist/selectitemlist.module#SelectitemlistPageModule' },
   { path: 'selectcategory', loadChildren: './selectcategory/selectcategory.module#SelectcategoryPageModule' },
   { path: 'deliverymakepayment', loadChildren: './deliverymakepayment/deliverymakepayment.module#DeliverymakepaymentPageModule' },
-  { path: 'deliveryitemview', loadChildren: './deliveryitemview/deliveryitemview.module#DeliveryitemviewPageModule' }
+  { path: 'deliveryitemview', loadChildren: './deliveryitemview/deliveryitemview.module#DeliveryitemviewPageModule' },
+  { path: 'confirminvoice', loadChildren: './confirminvoice/confirminvoice.module#ConfirminvoicePageModule' },
+  { path: 'collectionitems', loadChildren: './collectionitems/collectionitems.module#CollectionitemsPageModule' },
+  { path: 'createcustomitem', loadChildren: './createcustomitem/createcustomitem.module#CreatecustomitemPageModule' }
 ];
 
 @NgModule({

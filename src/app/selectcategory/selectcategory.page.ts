@@ -27,6 +27,21 @@ export class SelectcategoryPage implements OnInit {
     this.router.navigate(['/selectitemlist']);
   }
 
+  createcustomItem(){
+    this.router.navigate(['/createcustomitem']);
+  }
+
+
+  confirmInvoice(){
+    this.router.navigate(['/confirminvoice']);
+  }
+
+  viewCollectionItem(){
+    this.router.navigate(['/collectionitems']);
+  }
+
+
+
 
   // async presentModal() {
   //   const modal = await this.modalController.create({

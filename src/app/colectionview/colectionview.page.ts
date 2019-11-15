@@ -14,7 +14,7 @@ export class ColectionviewPage implements OnInit {
   ngOnInit() {
   }
 
-  createInvoiceItem(){
+  createInvoiceSelectItem(){
     this.router.navigate(['/selectcategory']);
   }
 

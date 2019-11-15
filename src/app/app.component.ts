@@ -22,6 +22,33 @@ export class AppComponent {
       url: '/coldev',
       icon: 'md-paper'
     }
+    ,
+    {
+      title: 'Sync Data',
+      url: '/coldev',
+      icon: 'md-sync'
+    }
+    ,
+    {
+      title: 'Driver Summary',
+      url: '/coldev',
+      icon: 'logo-usd'
+    },
+    {
+      title: 'Create Invoice',
+      url: '/coldev',
+      icon: 'md-document'
+    },
+    {
+      title: 'Print',
+      url: '/coldev',
+      icon: 'md-print'
+    },
+    {
+      title: 'Download latest Version',
+      url: '/coldev',
+      icon: 'md-cloud-download'
+    }
   ];
 
   constructor(

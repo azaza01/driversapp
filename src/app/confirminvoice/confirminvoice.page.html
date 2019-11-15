@@ -1,0 +1,142 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>confirminvoice</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+  <ion-content>
+  
+    <ion-item-group>
+          <ion-item-divider style="background-color: yellow;">
+            <ion-label>Customer Details</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Invoice :</ion-label>
+            <ion-label style="padding-left: 1px;">CC-1911Ag01</ion-label>
+            <ion-label>Type :</ion-label>
+            <ion-label style="padding-left: 1px;">text</ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label>date: </ion-label>
+              <ion-label>19 Nov 2019 </ion-label>
+              <ion-label>Billed From : </ion-label>
+              <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+                  <ion-select-option value="brown">CC</ion-select-option>
+                  <ion-select-option value="blonde">DC</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label>Agreed Delivery Date : </ion-label>
+                <ion-label>19 Nov 2019 </ion-label>
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change</ion-button>
+            </ion-item>
+            <ion-item>
+                <ion-label>Timeslots : </ion-label>
+                <ion-label>A 12-4 </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Inv. Notes : </ion-label>
+                <ion-input placeholder="Please put a note"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Donated : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+                <ion-label>Bags : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+            </ion-item>
+            <ion-item-divider style="background-color: yellow;">
+                <ion-label>Payment Details</ion-label>
+              </ion-item-divider>
+            <ion-item>
+                <ion-label>Subtotal: </ion-label>
+                <ion-label>0.00 </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Others : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+                <ion-label>% </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>After less : </ion-label>
+                <ion-label>0.00</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Express : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+                <ion-input> </ion-input>
+                <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+                  <ion-select-option value="brown">None</ion-select-option>
+                  <ion-select-option value="blonde">50%</ion-select-option>
+                  <ion-select-option value="black">100%</ion-select-option>
+               </ion-select>
+            <!-- <ion-item>
+                <ion-radio-group>
+                    <ion-list-header>
+                      <ion-label>Express</ion-label>
+                    </ion-list-header>
+                
+                    <ion-item>
+                      <ion-label>none</ion-label>
+                      <ion-radio slot="start" position="bottom" class="ion-float-left" value="biff" checked></ion-radio>
+                    </ion-item>
+                
+                    <ion-item>
+                      <ion-label>50%</ion-label>
+                      <ion-radio slot="start" position="bottom" class="ion-float-left"  value="griff"></ion-radio>
+                    </ion-item>
+                
+                    <ion-item>
+                      <ion-label>100%</ion-label>
+                      <ion-radio slot="start" position="bottom" class="ion-float-right" value="buford"></ion-radio>
+                    </ion-item>
+                  </ion-radio-group> -->
+                  
+            </ion-item>
+            <ion-item>
+                <ion-label>Overdue : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Payable : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Deposit : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+                <ion-input> </ion-input>
+                <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+                  <ion-select-option value="brown">CASH</ion-select-option>
+                  <ion-select-option value="blonde">CHEQUE</ion-select-option>
+                  <ion-select-option value="black">CREDIT</ion-select-option>
+                  <ion-select-option value="red">BT</ion-select-option>
+            </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label>Balance : </ion-label>
+                <ion-input placeholder="0"></ion-input>
+            </ion-item>
+    </ion-item-group>
+  
+    <ion-item-group>
+        <ion-item-divider style="background-color: yellow;">
+          <ion-label>Overdue Payment</ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Details here:</ion-label>
+          <ion-label style="padding-left: 1px;">John Doe </ion-label>
+        </ion-item>
+      </ion-item-group>
+  
+      <ion-row>
+          <ion-col >
+            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment()">Confirm and create another invoice</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col >
+              <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="viewItems()">Confirm payments</ion-button>
+            </ion-col>
+          </ion-row>
+  
+  </ion-content>
+  
