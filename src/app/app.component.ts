@@ -4,6 +4,7 @@ import { Platform, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-root',
@@ -56,9 +57,14 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public alertController: AlertController,
-    private router: Router
+    private router: Router,
+    private storage: Storage,
+
   ) {
+    this.autoLogin()
+
     this.initializeApp();
+    
   }
 
   initializeApp() {
@@ -68,6 +74,14 @@ export class AppComponent {
     });
   }
 
+  async autoLogin(){
+    this.storage.get('accounts_table').then(accData => {
+      console.log(accData)
+      if(accData != undefined){
+        this.router.navigate(['/home']);
+      }
+    });
+  }
   async logout(msg) {
     const alert = await this.alertController.create({
       header: '',
@@ -83,7 +97,13 @@ export class AppComponent {
         }, {
           text: 'OK',
           handler: () => {
-            this.router.navigate(['/login']);
+            this.storage.remove('accounts_table').then(() => {
+              console.log('removed ');
+              this.router.navigate(['/login']);
+
+            }).catch((error) => {
+              console.log('removed error for ' + 'authToken' + '', error);
+            });
           }
         }
       ]
