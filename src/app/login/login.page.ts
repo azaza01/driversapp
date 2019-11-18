@@ -4,6 +4,7 @@ import { LoadingController, ToastController, AlertController, MenuController } f
 import { AccountsService } from '../api/accounts.service';
 import { NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
+import { ItemsService } from '../api/items.service';
 
 
 @Component({
@@ -74,8 +75,6 @@ export class LoginPage implements OnInit {
       console.log(e);
     });
 
-
   }
-
 
 }

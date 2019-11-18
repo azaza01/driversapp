@@ -53,16 +53,46 @@ export class AccountsService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url+"/logon.json", infox).subscribe(
+      this.httpclient.post(this.url + "/logon.json", infox).subscribe(
         response => {
           let res;
-          res = response;
-          this.storage.set('accounts_table', res[0]).then(() => {
-
-          });
-  
-          resolve(res)
+          res = response[0];
           // console.log(res)
+
+          this.storage.set('ACCOUNTS_TABLE', res).then(() => {
+            this.getStandingOrder(res)
+            resolve(res)
+          });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  getStandingOrder(info) {
+    let params = {
+      userid: info.id,
+      email: info.email_address,
+      password: info.password
+    }
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/standingorder.json", params).subscribe(
+        response => {
+          let res;
+          res = response[0];
+          console.log(res)
+          this.storage.set('SO_TABLE', res[0]).then(() => {
+            resolve(res)
+          });
         },
         err => {
           console.log(err)

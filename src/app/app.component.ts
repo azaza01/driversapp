@@ -75,7 +75,7 @@ export class AppComponent {
   }
 
   async autoLogin(){
-    this.storage.get('accounts_table').then(accData => {
+    this.storage.get('ACCOUNTS_TABLE').then(accData => {
       console.log(accData)
       if(accData != undefined){
         this.router.navigate(['/home']);
@@ -97,7 +97,7 @@ export class AppComponent {
         }, {
           text: 'OK',
           handler: () => {
-            this.storage.remove('accounts_table').then(() => {
+            this.storage.remove('ACCOUNTS_TABLE').then(() => {
               console.log('removed ');
               this.router.navigate(['/login']);
 
