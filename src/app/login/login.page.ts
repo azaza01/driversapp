@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController, AlertController, MenuController } from '@ionic/angular';
 import { AccountsService } from '../api/accounts.service';
 import { NgForm } from '@angular/forms';
+import { Storage } from '@ionic/storage';
+
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,8 @@ export class LoginPage implements OnInit {
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
     private accSrvc: AccountsService,
+    private storage: Storage,
+
   ) { }
 
   ngOnInit() {

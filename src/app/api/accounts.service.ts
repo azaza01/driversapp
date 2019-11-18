@@ -10,18 +10,20 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountsService {
 
-  private url = "https://ccmanager.cottoncare.com.sg/ws/";
+  private url = "https://ccmanager.cottoncare.com.sg/ws";
   loading: any = new LoadingController;
 
   constructor(
     private httpclient: HttpClient,
     public loadingCtrl: LoadingController,
+    private storage: Storage,
 
   ) { }
 
@@ -51,10 +53,14 @@ export class AccountsService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url+"/logon.json", info).subscribe(
+      this.httpclient.post(this.url+"/logon.json", infox).subscribe(
         response => {
           let res;
           res = response;
+          this.storage.set('accounts_table', res[0]).then(() => {
+
+          });
+  
           resolve(res)
           // console.log(res)
         },
