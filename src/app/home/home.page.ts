@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from '../api/defaults.service';
+import { CollectionService } from '../api/collection.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomePage {
     private menuCtrl: MenuController,
     private storage: Storage,
     private defaultSrvc: DefaultsService,
+    private cltnSrvc: CollectionService,
 
   ) {}
 
@@ -28,7 +30,7 @@ export class HomePage {
   }
 
   tester(){
-    Promise.resolve(this.defaultSrvc.getTimeslot(this.accInfo)).then(data => {
+    Promise.resolve(this.cltnSrvc.getCollection(this.accInfo)).then(data => {
       console.log(data);
 
     }).catch(e => {
