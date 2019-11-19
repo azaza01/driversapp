@@ -63,7 +63,7 @@ export class LoginPage implements OnInit {
     // console.log(user.value)
     Promise.resolve(this.accSrvc.login(user.value)).then(data => {
       console.log(data);
-      
+      console.log(this.accSrvc.driverData)
       if (data) {
         this.router.navigate(['/home']);
       } else {

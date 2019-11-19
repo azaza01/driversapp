@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { DefaultsService } from './api/defaults.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ export class AppComponent {
     ,
     {
       title: 'Sync Data',
-      url: '/coldev',
+      url: '/home',
       icon: 'md-sync'
     }
     ,
@@ -59,12 +60,13 @@ export class AppComponent {
     public alertController: AlertController,
     private router: Router,
     private storage: Storage,
+    private defaultSrvc: DefaultsService,
 
   ) {
-    this.autoLogin()
+    // this.autoLogin()
 
     this.initializeApp();
-    
+
   }
 
   initializeApp() {
@@ -74,11 +76,37 @@ export class AppComponent {
     });
   }
 
-  async autoLogin(){
+  async presentAlert(msg) {
+    const alert = await this.alertController.create({
+      // header: 'Sync Data',
+      // subHeader: 'Subtitle',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
+
+  }
+
+  onTap(info) {
+    console.log(info)
+    if (info.title == 'Sync Data') {
+      this.storage.get('ACCOUNTS_TABLE').then(accData => {
+        console.log(accData)
+        Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
+          console.log(data);
+          this.presentAlert('Syncing Successful')
+        }).catch(e => {
+          console.log(e);
+        });
+      });
+    }
+  }
+
+  async autoLogin() {
     this.storage.get('ACCOUNTS_TABLE').then(accData => {
       console.log(accData)
-      if(accData != undefined){
-        // this.router.navigate(['/home']);
+      if (accData != undefined) {
+        this.router.navigate(['/home']);
       }
     });
   }
@@ -103,7 +131,7 @@ export class AppComponent {
               this.router.navigate(['/login']);
 
             }).catch((error) => {
-              console.log('removed error for ' + 'authToken' + '', error);
+              console.log('removed error for ' + 'ACCOUNTS_TABLE' + '', error);
             });
           }
         }

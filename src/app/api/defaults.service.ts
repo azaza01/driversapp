@@ -45,6 +45,82 @@ export class DefaultsService {
     return await this.loading.present();
   }
 
+  clearsyncsStorage(){
+    this.storage.remove('ITEMS_TABLE')
+    this.storage.remove('RATES_TABLE')
+    this.storage.remove('AREAS_TABLE')
+    this.storage.remove('INVOICE_TYPES_TABLE')
+    this.storage.remove('DISCOUNT_TYPES_TABLE')
+    this.storage.remove('TIMESLOT_TABLE')
+    this.storage.remove('FB_FORM_TABLE')
+    this.storage.remove('UNSYNCED_PAYMENT_TABLE')
+
+  }
+
+  async syncAll(driverInfo) {
+    await this.presentLoading('Please wait...');
+
+    return new Promise(resolve => {
+      Promise.resolve(this.getItems(driverInfo)).then(data => {
+        console.log('ITEMS_TABLE', data);
+
+        Promise.resolve(this.getRates(driverInfo)).then(data => {
+          console.log('RATES_TABLE', data);
+
+          Promise.resolve(this.getRegions(driverInfo)).then(data => {
+            console.log('AREAS_TABLE', data);
+
+            Promise.resolve(this.getInvoicetypes(driverInfo)).then(data => {
+              console.log('INVOICE_TYPES_TABLE', data);
+
+              Promise.resolve(this.getDiscounts(driverInfo)).then(data => {
+                console.log('DISCOUNT_TYPES_TABLE', data);
+
+                Promise.resolve(this.getTimeslot(driverInfo)).then(data => {
+                  console.log('TIMESLOT_TABLE', data);
+
+                  Promise.resolve(this.getFeedback(driverInfo)).then(data => {
+                    console.log('FB_FORM_TABLE', data);
+
+                    this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                      this.loading.dismiss();
+                      resolve(true)
+                    });
+
+                  }).catch(e => {
+                    console.log(e);
+                  });
+
+                }).catch(e => {
+                  console.log(e);
+                });
+
+              }).catch(e => {
+                console.log(e);
+              });
+
+            }).catch(e => {
+              console.log(e);
+            });
+
+          }).catch(e => {
+            console.log(e);
+          });
+
+        }).catch(e => {
+          console.log(e);
+        });
+
+      }).catch(e => {
+        console.log(e);
+      });
+
+    }).catch(err => {
+      console.log(err)
+    })
+
+  }
+
   getItems(info: any) {
     let params = {
       email: info.email_address,
@@ -56,11 +132,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('ITEMS_TABLE', res).then(() => {
+          this.storage.set('ITEMS_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -87,11 +163,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('RATES_TABLE', res).then(() => {
+          this.storage.set('RATES_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -118,11 +194,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('AREAS_TABLE', res).then(() => {
+          this.storage.set('AREAS_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -149,11 +225,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
+          this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -180,11 +256,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
+          this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -211,11 +287,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('TIMESLOT_TABLE', res).then(() => {
+          this.storage.set('TIMESLOT_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
@@ -242,11 +318,11 @@ export class DefaultsService {
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
 
-          // this.storage.set('FB_FORM_TABLE', res).then(() => {
+          this.storage.set('FB_FORM_TABLE', res).then(() => {
             resolve(res)
-          // });
+          });
 
         },
         err => {
