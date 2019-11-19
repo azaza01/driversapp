@@ -19,6 +19,7 @@ export class CollectionService {
 
   private url = "https://ccmanager.cottoncare.com.sg/ws";
   loading: any = new LoadingController;
+  
 
   constructor(
     private httpclient: HttpClient,
@@ -51,10 +52,16 @@ export class CollectionService {
       // password: info.password,
       // driverid: info.id,
       // date: "2019-11-19",
+
       "email": "davidchia@cottoncare.com.sg",
       "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
       "driverid": "16",
       "date": "2019-11-19"
+
+      // "email": "it01.azaza@gmail.com",
+      // "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      // "driverid": "109",
+      // "date": "2019-11-17"
     }
 
 
@@ -63,12 +70,12 @@ export class CollectionService {
       this.httpclient.post(this.url + "/gzipcollection.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
-          console.log(res)
+          res = response;
+          // console.log(res)
 
-          // this.storage.set('COLDEL_TABLE', res).then(() => {
+          this.storage.set('COLDEL_TABLE', res).then(() => {
           resolve(res)
-          // });
+          });
 
         },
         err => {

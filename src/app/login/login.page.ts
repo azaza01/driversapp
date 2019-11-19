@@ -16,6 +16,7 @@ export class LoginPage implements OnInit {
 
   loading: any = new LoadingController;
 
+
   constructor(
     private router: Router,
     private menuCtrl: MenuController,
@@ -62,9 +63,9 @@ export class LoginPage implements OnInit {
     // console.log(user.value)
     Promise.resolve(this.accSrvc.login(user.value)).then(data => {
       console.log(data);
+      
       if (data) {
         this.router.navigate(['/home']);
-
       } else {
         this.presentToast("Invalid credentials")
 

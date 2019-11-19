@@ -19,6 +19,7 @@ export class AccountsService {
 
   private url = "https://ccmanager.cottoncare.com.sg/ws";
   loading: any = new LoadingController;
+  driverdata: any;
 
   constructor(
     private httpclient: HttpClient,
@@ -60,6 +61,7 @@ export class AccountsService {
           // console.log(res)
 
           this.storage.set('ACCOUNTS_TABLE', res).then(() => {
+            this.driverdata = res;
             this.getStandingOrder(res)
             resolve(res)
           });

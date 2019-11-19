@@ -63,12 +63,12 @@ export class DeliveryService {
       this.httpclient.post(this.url + "/gzipdelivery.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
-          console.log(res)
+          res = response;
+          // console.log(res)
 
-          // this.storage.set('COLDEL_TABLE', res).then(() => {
+          this.storage.set('COLDEL_TABLE', res).then(() => {
           resolve(res)
-          // });
+          });
 
         },
         err => {

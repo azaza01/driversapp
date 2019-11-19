@@ -78,10 +78,11 @@ export class AppComponent {
     this.storage.get('ACCOUNTS_TABLE').then(accData => {
       console.log(accData)
       if(accData != undefined){
-        this.router.navigate(['/home']);
+        // this.router.navigate(['/home']);
       }
     });
   }
+  
   async logout(msg) {
     const alert = await this.alertController.create({
       header: '',
