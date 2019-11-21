@@ -38,25 +38,13 @@ export class HomePage {
       console.log(this.driversdata)
 
     });
-    this.storage.get('ITEMS_TABLE').then(res => {
-      console.log(res)
-    });
-    this.storage.remove('ITEMS_TABLE')
-    this.storage.remove('RATES_TABLE')
-    this.storage.remove('AREAS_TABLE')
-    this.storage.remove('INVOICE_TYPES_TABLE')
-    this.storage.remove('DISCOUNT_TYPES_TABLE')
-    this.storage.remove('TIMESLOT_TABLE')
-    this.storage.remove('FB_FORM_TABLE')
-    this.storage.remove('UNSYNCED_PAYMENT_TABLE')
+    
   }
 
   loadPromo(){
 		Promise.all([this.storage.get('SO_TABLE').then((data)=>{this.currentPromo=data;})]);
 		console.log(this.currentPromo);
 	}
-
-
 
   tester(){
     this.defaultSrvc.clearsyncsStorage()

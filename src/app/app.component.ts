@@ -81,6 +81,7 @@ export class AppComponent {
       // header: 'Sync Data',
       // subHeader: 'Subtitle',
       message: msg,
+      backdropDismiss: false,
       buttons: ['OK']
     });
     await alert.present();

@@ -1,6 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from '../api/defaults.service';
 import { CollectionService } from '../api/collection.service';
@@ -15,38 +15,66 @@ import { DeliveryService } from '../api/delivery.service';
 export class ColdevPage implements OnInit {
 
   selectedView = 'COLLECTION';
-  myCollection:  any = []
-  myDeliveries:  any = []
+  myCollection: any = []
+  myDeliveries: any = []
   selected: any = []
-
-
+  loading: any = new LoadingController;
 
   constructor(
-    private router : Router, 
-    public alertController: AlertController,
+    private router: Router,
     private storage: Storage,
     private defaultSrvc: DefaultsService,
     private cltnSrvc: CollectionService,
     private delcltnSrvc: DeliveryService,
-    private accSrvc: AccountsService,) { }
+    private accSrvc: AccountsService,
+    public loadingCtrl: LoadingController,
+    public alertController: AlertController,
+  ) { }
 
   ngOnInit() {
+    this.collection(this.accSrvc.driverData);
   }
-  
 
-  collection(info){
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      spinner: 'crescent',
+      cssClass: 'custom-class'
+    });
+    return await this.loading.present();
+  }
+
+  async presentAlert(msg) {
+    const alert = await this.alertController.create({
+      // header: 'Sync Data',
+      // subHeader: 'Subtitle',
+      message: msg,
+      backdropDismiss: false,
+      buttons: ['OK']
+    });
+    await alert.present();
+
+  }
+
+  async collection(info) {
+    await this.presentLoading('');
+
     Promise.resolve(this.cltnSrvc.getCollection(info)).then(data => {
-      console.log(data);
+      // console.log(data);
       this.myCollection = data;
       // this.myCollection = Array.of(this.myCollection); 
       console.log(this.myCollection);
+      this.loading.dismiss();
+
     }).catch(e => {
       console.log(e);
+      this.loading.dismiss();
+
     });
   }
 
 
-  delivery(info){
+  delivery(info) {
     Promise.resolve(this.delcltnSrvc.getDelivery(info)).then(data => {
       console.log(data);
       this.myDeliveries = data;
@@ -57,9 +85,9 @@ export class ColdevPage implements OnInit {
     });
   }
 
-
-    
   async colView(selected) {
+    console.log(selected)
+    this.selected = selected
     const alert = await this.alertController.create({
       header: 'Bill from which company?',
       message: 'For curtains, carpets and sofa covers, please bill from DC. For any others, please bill from CC.',
@@ -69,15 +97,15 @@ export class ColdevPage implements OnInit {
           text: 'DC',
           handler: () => {
             //function herer
-            console.log(this.selected[selected]);
-            this.router.navigate(['/colectionview']);
+            console.log(this.selected);
+            this.router.navigate(['/colectionview', { data: this.selected }]);
           }
         }, {
           text: 'CC',
           handler: () => {
-           //function herer
-           console.log(this.selected[selected]);
-           this.router.navigate(['/colectionview']);
+            //function herer
+            console.log(this.selected);
+            this.router.navigate(['/colectionview', this.selected]);
           }
         }
       ],
@@ -102,8 +130,8 @@ export class ColdevPage implements OnInit {
     //     }, {
     //       text: 'CC',
     //       handler: () => {
-           //function herer
-           this.router.navigate(['/deliveryview']);
+    //function herer
+    this.router.navigate(['/deliveryview']);
     //       }
     //     }
     //   ],
@@ -130,7 +158,7 @@ export class ColdevPage implements OnInit {
         }, {
           text: 'LOCAL',
           handler: () => {
-           //function herer
+            //function herer
           }
         }
       ]

@@ -64,8 +64,6 @@ export class CollectionService {
       // "date": "2019-11-17"
     }
 
-
-
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/gzipcollection.json", params).subscribe(
         response => {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
  
 @Component({
@@ -9,9 +9,18 @@ import { AlertController } from '@ionic/angular';
 })
 export class ColectionviewPage implements OnInit {
 
-  constructor(private router : Router, public alertController: AlertController) { }
+  constructor(
+    private router : Router, 
+    public alertController: AlertController,
+    public activatedRoute: ActivatedRoute
+
+    ) { }
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe((params) => {
+      console.log(params);
+    });
+
   }
 
   createInvoiceSelectItem(){
