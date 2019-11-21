@@ -11,13 +11,15 @@ import {
 } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeliveryService {
 
-  private url = "https://ccmanager.cottoncare.com.sg/ws";
+  private endpoint = environment.endpoint;
+  private url = this.endpoint;
   loading: any = new LoadingController;
 
   constructor(

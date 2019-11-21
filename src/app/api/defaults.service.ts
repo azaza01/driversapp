@@ -11,13 +11,15 @@ import {
 } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DefaultsService {
 
-  private url = "https://ccmanager.cottoncare.com.sg/ws";
+  private endpoint = environment.endpoint;
+  private url = this.endpoint;
   loading: any = new LoadingController;
 
   constructor(
@@ -315,6 +317,37 @@ export class DefaultsService {
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/feedback.json", params).subscribe(
+        response => {
+          let res;
+          res = response[0];
+          // console.log(res)
+
+          this.storage.set('FB_FORM_TABLE', res).then(() => {
+            resolve(res)
+          });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  getSpecialIns(info: any) {
+    let params = {
+      email: info.email_address,
+      password: info.password
+    }
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/specialinstructions.json", params).subscribe(
         response => {
           let res;
           res = response[0];
