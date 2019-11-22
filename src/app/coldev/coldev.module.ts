@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ColdevPage } from './coldev.page';
+import { FilterItems } from '../pipe/filter.pipe';
 
 const routes: Routes = [
   {
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ColdevPage]
+  declarations: [
+    ColdevPage,
+    FilterItems
+  ]
 })
 export class ColdevPageModule {}

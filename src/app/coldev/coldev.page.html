@@ -1,93 +1,97 @@
 <ion-header>
-    <ion-toolbar class="menutoolbar">
-      <ion-buttons slot="start">
-        <ion-menu-button color="white"></ion-menu-button>
-      </ion-buttons>
-      <ion-title style="color: cornsilk;">
-        Collection & Deliveries
-      </ion-title>
-      <ion-buttons slot="end">
-          <ion-button (click)="coldev('Load collections and deliveries from?')" expand="full" shape="round" color="warning" >Reload</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar class="menutoolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button color="white"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="color: cornsilk;">
+      Collection & Deliveries
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="coldev('Load collections and deliveries from?')" expand="full" shape="round" color="warning">
+        Reload</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 
-<ion-content >
-    <ion-segment [(ngModel)]="selectedView" class="ion-padding">
-        <ion-segment-button value="COLLECTION" >COLLECTION
-            <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
-        </ion-segment-button>
-        <ion-segment-button value="DELIVERIES">DELIVERIES
-            <ion-img src="../assets/images/delivery_icon.png" style="padding:5px;"></ion-img>
-        </ion-segment-button>
-    </ion-segment>
-<div [ngSwitch]="selectedView">
-    <div *ngSwitchCase="'COLLECTION'" >
-        <ion-list *ngFor="let item of myCollection; let i = index" >
-            <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
-                <ion-item-divider style="background-color: yellow;">
-                  <ion-label>{{  item.cot  }}</ion-label>
-                  <ion-label style="padding-left: 30px;">{{  item.cod  }}</ion-label>
-                </ion-item-divider>
-                <ion-item>
-                <ion-label>{{  item.cun  }}</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>{{  item.coa  }}</ion-label>
-                </ion-item>
-                <ion-item >
-                    <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;" >0</ion-label>
-                    <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                    <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                    <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                </ion-item>
-            </ion-item-group>
-          </ion-list>
+  <ion-segment [(ngModel)]="selectedView" class="ion-padding">
+    <ion-segment-button value="COLLECTION">COLLECTION
+      <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
+    </ion-segment-button>
+    <ion-segment-button value="DELIVERIES">DELIVERIES
+      <ion-img src="../assets/images/delivery_icon.png" style="padding:5px;"></ion-img>
+    </ion-segment-button>
+  </ion-segment>
+
+</ion-header>
+
+<ion-content>
+  <div [ngSwitch]="selectedView">
+    <div *ngSwitchCase="'COLLECTION'">
+      <ion-list *ngFor="let item of myColDev | filterColDev: 'collection'; let i = index">
+        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
+          <ion-item-divider style="background-color: yellow;">
+            <ion-label>{{ item.cot }}</ion-label>
+            <ion-label style="padding-left: 30px;">{{ item.cod }}</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>{{ item.cun }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ item.coa }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
     </div>
- 
+
     <div *ngSwitchCase="'DELIVERIES'">
-        <ion-list *ngFor="let delitem of myDeliveries; let i = index" >
-            <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(selected)">
-                <ion-item-divider style="background-color: yellow;">
-                  <ion-label>{{  delitem.inn  }}</ion-label>
-                  <ion-label>{{  delitem.det  }}</ion-label>
-                  <ion-label style="padding-left: 30px;">{{  delitem.ded  }}</ion-label>
-                </ion-item-divider>
-                <ion-item>
-                <ion-label>{{  delitem.cun  }}</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>{{  delitem.dea  }}</ion-label>
-                </ion-item>
-                <ion-item >
-                    <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;" >0</ion-label>
-                    <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                    <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                    <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
-                    <ion-label style="padding: 10px;">0</ion-label>
-                </ion-item>
-            </ion-item-group>
-          </ion-list>
+      <ion-list *ngFor="let delitem of myColDev | filterColDev: 'delivery'; let i = index">
+        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(delitem)">
+          <ion-item-divider style="background-color: yellow;">
+            <ion-label>{{ delitem.inn }}</ion-label>
+            <ion-label>{{ delitem.det }}</ion-label>
+            <ion-label style="padding-left: 30px;">{{ delitem.ded }}</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>{{ delitem.cun }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ delitem.dea }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+            <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
+            <ion-label style="padding: 10px;">0</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
     </div>
 
   </div>
 </ion-content>
 
 <ion-row>
-    <ion-col > 
-       <ion-button expand="full" shape="round" color="warning" class="ion-float-left" position="bottom" >PREV</ion-button>    
-    </ion-col>
-    <ion-col >
-        <ion-button  expand="full" shape="round" color="warning"class="ion-float-center"  position="bottom" >TODAY</ion-button>  
-    </ion-col>
-    <ion-col >
-        <ion-button expand="full" shape="round" color="warning" class="ion-float-right" position="bottom">NEXT</ion-button>
-    </ion-col>
- </ion-row>
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" class="ion-float-left" position="bottom">PREV</ion-button>
+  </ion-col>
+  <ion-col>
+    <ion-button (click)="getToday()" expand="full" shape="round" color="warning" class="ion-float-center" position="bottom">TODAY
+    </ion-button>
+  </ion-col>
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" class="ion-float-right" position="bottom">NEXT</ion-button>
+  </ion-col>
+</ion-row>

@@ -20,9 +20,9 @@ export class CollectionService {
 
   private endpoint = environment.endpoint;
   private url = this.endpoint;
-  
+
   loading: any = new LoadingController;
-  
+
 
   constructor(
     private httpclient: HttpClient,
@@ -49,17 +49,16 @@ export class CollectionService {
     return await this.loading.present();
   }
 
-  getCollection(info: any) {
+  getCollection(info: any, today) {
     let params = {
       // email: info.email_address,
       // password: info.password,
       // driverid: info.id,
-      // date: "2019-11-19",
-
+      date: today,
       "email": "davidchia@cottoncare.com.sg",
       "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
       "driverid": "16",
-      "date": "2019-11-19"
+      // "date": "2019-11-21"
 
       // "email": "it01.azaza@gmail.com",
       // "password": "7c222fb2927d828af22f592134e8932480637c0d",
@@ -74,9 +73,9 @@ export class CollectionService {
           res = response;
           // console.log(res)
 
-          this.storage.set('COLDEL_TABLE', res).then(() => {
-          resolve(res)
-          });
+          // this.storage.set('COLDEL_TABLE', res).then(() => {
+            resolve(res)
+          // });
 
         },
         err => {
