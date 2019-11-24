@@ -49,7 +49,7 @@ export class SelectcategoryPage implements OnInit {
           this.unsyncData = res
           console.log(this.unsyncData)
 
-          if (this.collectionInfo.com != 0 || this.collectionInfo.com != "") {
+          if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
               console.log('ITEMS_TABLE', data);
               this.category = this.getItem(data)
