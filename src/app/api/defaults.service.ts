@@ -12,6 +12,7 @@ import {
 import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
+import { AccountsService } from './accounts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class DefaultsService {
     private httpclient: HttpClient,
     public loadingCtrl: LoadingController,
     private storage: Storage,
+    private accSrvc: AccountsService,
 
   ) { }
 
@@ -47,7 +49,111 @@ export class DefaultsService {
     return await this.loading.present();
   }
 
-  clearsyncsStorage(){
+  getToday() {
+    let today;
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let yy = (yyyy + '').substr(2, 2);
+
+    today = yyyy + '-' + mm + '-' + dd;
+    // console.log(today)
+    return today
+  }
+
+  createInvSeries(tag) {
+    // this.storage.remove('ENVNUM_TABLE').then(res => {
+    //   console.log('remove')
+    // })
+    // this.storage.get('ENVNUM_TABLE').then(res => {
+    //   console.log(res)
+    // })
+    // return
+
+    return new Promise(resolve => {
+
+      let seriesTbl: any = []
+      let params: any = {};
+      params.INV_TYPE = "CC"
+      let dd = new Date().getDate() + 2;
+      let mm = new Date().getMonth() + 1;
+      let yyyy = new Date().getFullYear();
+      let yy = (yyyy + '').substr(2, 2);
+      params.INV_DATE = yyyy + '-' + mm + '-' + dd
+
+      let seriesNo;
+      let driver;
+      this.storage.get('ACCOUNTS_TABLE').then(res => {
+        driver = res
+        console.log(driver)
+      })
+
+      //CC-191123AG01
+      // console.log(params)
+
+      this.storage.get('ENVNUM_TABLE').then(res => {
+        // console.log(res)
+        res = null ? seriesTbl = [] : seriesTbl = res
+        // return
+        if (seriesTbl != null) {
+
+          let result;
+          result = seriesTbl.filter((item) => {
+            return (item.INV_DATE.indexOf(params.INV_DATE) !== -1)
+          })
+          if (result.length < 1) {
+            params.INV_RUNNING = 1
+            let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
+            seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+            params.INV_NO = seriesNo
+            seriesTbl.push(params)
+
+            this.storage.set('ENVNUM_TABLE', seriesTbl)
+            console.log(seriesNo)
+            console.log(seriesTbl)
+            resolve(seriesNo)
+          } else {
+            let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
+            params.INV_RUNNING = parseInt(maxSeries) + 1
+            let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
+            seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+            params.INV_NO = seriesNo
+            seriesTbl.push(params)
+
+            this.storage.set('ENVNUM_TABLE', seriesTbl)
+            console.log(seriesNo)
+            console.log(seriesTbl)
+            resolve(seriesNo)
+          }
+        } else {
+          params.INV_RUNNING = 1
+          seriesTbl = []
+          let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
+          seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+          params.INV_NO = seriesNo
+          seriesTbl.push(params)
+
+          this.storage.set('ENVNUM_TABLE', seriesTbl)
+          console.log(seriesNo)
+          console.log(seriesTbl)
+          resolve(seriesNo)
+        }
+      })
+
+    }).catch(err => {
+      console.log(err)
+    })
+
+    // var result = Number(n) + 1;
+    //     if ( result < 10 ) {
+    //         return "0" + result;
+    //     } else {
+    //         return result;
+    // }
+    // this.storage.set('ENVNUM_TABLE', info)
+  }
+
+  clearsyncsStorage() {
     this.storage.remove('ITEMS_TABLE')
     this.storage.remove('RATES_TABLE')
     this.storage.remove('AREAS_TABLE')
@@ -133,7 +239,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/items.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('ITEMS_TABLE', res).then(() => {
@@ -164,8 +270,8 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/rates.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
-          // console.log(res)
+          res = response;
+          console.log(res)
 
           this.storage.set('RATES_TABLE', res).then(() => {
             resolve(res)
@@ -195,7 +301,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/regions.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('AREAS_TABLE', res).then(() => {
@@ -226,7 +332,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/invoicetypes.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
@@ -257,7 +363,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/discounts.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
@@ -288,7 +394,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/timeslots.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('TIMESLOT_TABLE', res).then(() => {
@@ -319,7 +425,7 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/feedback.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
           this.storage.set('FB_FORM_TABLE', res).then(() => {
@@ -350,12 +456,12 @@ export class DefaultsService {
       this.httpclient.post(this.url + "/specialinstructions.json", params).subscribe(
         response => {
           let res;
-          res = response[0];
+          res = response;
           // console.log(res)
 
-          this.storage.set('FB_FORM_TABLE', res).then(() => {
-            resolve(res)
-          });
+          // this.storage.set('FB_FORM_TABLE', res).then(() => {
+          //   resolve(res)
+          // });
 
         },
         err => {

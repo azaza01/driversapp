@@ -49,7 +49,7 @@ export class HomePage {
   tester(){
     this.defaultSrvc.clearsyncsStorage()
     return
-    Promise.resolve(this.cltnSrvc.getCollection(this.accInfo)).then(data => {
+    Promise.resolve(this.cltnSrvc.getCollection(this.accInfo, '')).then(data => {
       console.log(data);
 
     }).catch(e => {

@@ -1,35 +1,22 @@
 <ion-header>
     <ion-toolbar>
-      <ion-title>Category</ion-title>
+        <ion-title>Category</ion-title>
     </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-  
+</ion-header>
+
+<ion-content *ngIf="isLoading == false">
+
     <ion-grid>
 
         <ion-item-group>
             <ion-item-divider style="background-color: yellow;">
-              <ion-label>Category</ion-label>
+                <ion-label>Category</ion-label>
             </ion-item-divider>
-            <ion-item (click)="createInvoiceItem()">
-                <ion-label>Category 1 </ion-label>
+            <ion-item *ngFor="let cat of category" (click)="createInvoiceItem()">
+                <ion-label>{{cat}}</ion-label>
             </ion-item>
-            <ion-item>
-                <ion-label>Category 1 </ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Category 1 </ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Category 1 </ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Category 1 </ion-label>
-            </ion-item>
-
             <ion-item (click)="createcustomItem()">
-                    <ion-label>Custom Item </ion-label>
+                <ion-label>Custom Item </ion-label>
             </ion-item>
         </ion-item-group>
 
@@ -63,13 +50,13 @@
             </ion-item-group>
    -->
     </ion-grid>
-  
-  </ion-content>
-  <ion-row>
-      <ion-col >
-          <ion-button  expand="full" shape="round" color="warning" (click)="viewCollectionItem()">VIEW ITEMs</ion-button>
-      </ion-col>
-      <ion-col >
-          <ion-button  expand="full" shape="round" color="warning" (click)="confirmInvoice()">CONFIRM INVOICE</ion-button>
-      </ion-col>
-  </ion-row>
+
+</ion-content>
+<ion-row>
+    <ion-col>
+        <ion-button expand="full" shape="round" color="warning" (click)="viewCollectionItem()">VIEW ITEMs</ion-button>
+    </ion-col>
+    <ion-col>
+        <ion-button expand="full" shape="round" color="warning" (click)="confirmInvoice()">CONFIRM INVOICE</ion-button>
+    </ion-col>
+</ion-row>

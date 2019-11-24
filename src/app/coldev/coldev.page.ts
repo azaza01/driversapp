@@ -35,7 +35,7 @@ export class ColdevPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.storage.remove('COLDEL_TABLE')
+    // this.storage.remove('COLDEL_TABLE')
   }
 
   async ionViewWillEnter() {
@@ -109,16 +109,9 @@ export class ColdevPage implements OnInit {
   }
 
   async getToday() {
-    let today;
-    let dd = new Date().getDate();
-    let mm = new Date().getMonth() + 1;
-    let yy = new Date().getFullYear();
-    today = yy + '-' + mm + '-' + dd;
-    // console.log(today)
-
     await this.presentLoading('');
-    await this.collection(this.accSrvc.driverData, today)
-    await this.delivery(this.accSrvc.driverData, today)
+    await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
+    await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
   }
 
   async collection(info, today) {
@@ -207,32 +200,8 @@ export class ColdevPage implements OnInit {
   }
 
   async colView(selected) {
-    console.log(selected)
-    this.selected = selected
-    const alert = await this.alertController.create({
-      header: 'Bill from which company?',
-      message: 'For curtains, carpets and sofa covers, please bill from DC. For any others, please bill from CC.',
-      cssClass: 'ion-alertCSS',
-      buttons: [
-        {
-          text: 'DC',
-          handler: () => {
-            //function herer
-            console.log(this.selected);
-            this.router.navigate(['/colectionview', { data: this.selected }]);
-          }
-        }, {
-          text: 'CC',
-          handler: () => {
-            //function herer
-            console.log(this.selected);
-            this.router.navigate(['/colectionview', this.selected]);
-          }
-        }
-      ],
-    });
-
-    await alert.present();
+    // console.log(selected)
+    this.router.navigate(['/colectionview', selected]);
   }
 
 
