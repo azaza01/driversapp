@@ -15,7 +15,7 @@
             <ion-item-divider style="background-color: yellow;">
                 <ion-label>Category</ion-label>
             </ion-item-divider>
-            <ion-item *ngFor="let cat of category" (click)="createInvoiceItem()">
+            <ion-item *ngFor="let cat of category" (click)="createInvoiceItem(cat)">
                 <ion-label>{{cat}}</ion-label>
             </ion-item>
             <ion-item (click)="createcustomItem()">

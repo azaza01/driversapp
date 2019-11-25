@@ -23,6 +23,22 @@ export class DefaultsService {
   private url = this.endpoint;
   loading: any = new LoadingController;
 
+  _category: any;
+  set getCategory(value: any) {
+    this._category = value;
+  }
+  get getCategory(): any {
+    return this._category;
+  }
+
+  _tempItems: any;
+  set getTempItems(value: any) {
+    this._tempItems = value;
+  }
+  get getTempItems(): any {
+    return this._tempItems;
+  }
+
   constructor(
     private httpclient: HttpClient,
     public loadingCtrl: LoadingController,
@@ -51,7 +67,7 @@ export class DefaultsService {
 
   getToday() {
     let today;
-    let dd = new Date().getDate();
+    let dd = new Date().getDate() - 2;
     let mm = new Date().getMonth() + 1;
     let yyyy = new Date().getFullYear();
     let yy = (yyyy + '').substr(2, 2);

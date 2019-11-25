@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Item List</ion-title>
+    </ion-buttons> -->
+    <ion-title>Selected Item List</ion-title>
   </ion-toolbar>
   <ion-row class="headerCss">
     <ion-col size="5">
@@ -23,8 +23,9 @@
 
 <ion-content>
 
-  <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}" *ngFor="let item of item_List">
-    <ion-card-content>
+  <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}"
+    *ngFor="let item of item_List">
+    <ion-card-content *ngIf="item.qty > 0">
       <ion-row>
         <ion-col size="5" class="descCss">
           {{item.description}}
@@ -44,9 +45,9 @@
 
 </ion-content>
 <ion-row>
-  <ion-col>
-    <ion-button expand="full" shape="round" color="warning" (click)="viewItems(item_List)">VIEW ITEMs</ion-button>
-  </ion-col>
+    <ion-col>
+        <ion-button expand="full" shape="round" color="light" (click)="closeModal()">CLOSE</ion-button>
+      </ion-col>
   <ion-col>
     <ion-button expand="full" shape="round" color="warning">CONFIRM INVOICE</ion-button>
   </ion-col>

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DefaultsService } from '../api/defaults.service';
 import { Storage } from '@ionic/storage';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-colectionview',
@@ -50,21 +51,12 @@ export class ColectionviewPage implements OnInit {
       buttons: [
         {
           text: 'DC',
-          handler: () => {
+          handler: async () => {
             //function herer
             // console.log(this.selected);
             tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
-          }
-        }, {
-          text: 'CC',
-          handler: async () => {
-            //function herer
-            // console.log(this.selected);
-            tag = "CC"
-            // this.collectionInfo. = ""
-            // this.defaultSrvc.createInvSeries(tag)
             Promise.resolve(this.defaultSrvc.createInvSeries(tag)).then(data => {
               console.log(data);
               let params: any = {};
@@ -72,7 +64,7 @@ export class ColectionviewPage implements OnInit {
               params.UNINV_COLLID = info.id
               params.UNINV_INVNO = data
               params.UNINV_CUSTID = info.cui
-              params.UNINV_INITIAL = 'CC'
+              params.UNINV_INITIAL = tag
               params.UNINV_TYPE = 'New'
               params.UNINV_DEPOAMT = '0'
               params.UNINV_DEPOTYPE = 'Cash'
@@ -125,10 +117,75 @@ export class ColectionviewPage implements OnInit {
             }).catch(e => {
               console.log(e);
             });
-            return
+          }
+        }, {
+          text: 'CC',
+          handler: async () => {
+            //function herer
+            // console.log(this.selected);
+            tag = "CC"
+            // this.collectionInfo. = ""
+            // this.defaultSrvc.createInvSeries(tag)
+            Promise.resolve(this.defaultSrvc.createInvSeries(tag)).then(data => {
+              console.log(data);
+              let params: any = {};
+              params.UNINV_COLLTS = new Date() + ''
+              params.UNINV_COLLID = info.id
+              params.UNINV_INVNO = data
+              params.UNINV_CUSTID = info.cui
+              params.UNINV_INITIAL = tag
+              params.UNINV_TYPE = 'New'
+              params.UNINV_DEPOAMT = '0'
+              params.UNINV_DEPOTYPE = 'Cash'
+              params.UNINV_BALANCE = '0'
+              params.UNINV_AGREEDDELIVERYDATE = info.cod
+              params.UNINV_DELIVERYTIMESLOT = info.cot
+              params.UNINV_INVOICENOTE = ''
+              params.UNINV_DISCOUNT = '0'
+              params.UNINV_EXPRESS = '1.00'
+              params.UNINV_HASDONATE = '0'
+              params.UNINV_DONATE = '0'
+              params.UNINV_BAGS = '0'
+              params.UNINV_SAVEDON = this.defaultSrvc.getToday()
+              console.log(params)
 
+              this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+                this.unsyncData = res
+                console.log(this.unsyncData)
 
+                if (res == null) {
+                  this.unsyncData = []
+                  this.unsyncData.push(params)
+                  this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                  console.log(this.unsyncData)
 
+                } else {
+                  let result;
+                  result = this.unsyncData.filter((item) => {
+                    return (item.UNINV_COLLID.indexOf(params.UNINV_COLLID) !== -1)
+                  })
+                  if (result.length < 1) {
+                    this.unsyncData.push(params)
+                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                    console.log(this.unsyncData)
+
+                  } else {
+                    console.log(result)
+                    let i;
+                    i = this.unsyncData.findIndex(x => x.id == result[0].id)
+                    this.unsyncData.splice(i, 1, params);
+                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                    console.log(this.unsyncData)
+                  }
+                }
+              }).finally(() => {
+                console.log(this.unsyncData);
+                this.router.navigate(['/selectcategory', info]);
+              })
+
+            }).catch(e => {
+              console.log(e);
+            });
           }
         }
       ],

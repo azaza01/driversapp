@@ -11,11 +11,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { IonicStorageModule } from '@ionic/storage';
+import { ViewItemsComponent } from './view-items/view-items.component';
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [
+    AppComponent, 
+    ViewItemsComponent,
+  ],
+  entryComponents: [
+    ViewItemsComponent,
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

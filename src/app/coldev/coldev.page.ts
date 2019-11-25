@@ -47,8 +47,8 @@ export class ColdevPage implements OnInit {
     // console.log(today)
 
     await this.presentLoading('');
-    await this.collection(this.accSrvc.driverData, today)
-    await this.delivery(this.accSrvc.driverData, today)
+    await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
+    await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
   }
 
   async presentLoading(msg) {
