@@ -6,14 +6,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterItems implements PipeTransform {
 
   transform(items: any[], type: string): any[] {
-    // console.log(items)
-    // console.log(type)
+    console.log(items)
+    console.log(type)
     if (!items) {
       return [];
     }
 
     return items.filter(it => {
-      return it.coldel_type.toLowerCase().includes(type);
+      return it.coldel_type.toString().includes(type);
     });
   }
 

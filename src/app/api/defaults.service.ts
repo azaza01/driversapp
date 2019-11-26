@@ -67,7 +67,7 @@ export class DefaultsService {
 
   getToday() {
     let today;
-    let dd = new Date().getDate() - 2;
+    let dd = new Date().getDate();
     let mm = new Date().getMonth() + 1;
     let yyyy = new Date().getFullYear();
     let yy = (yyyy + '').substr(2, 2);

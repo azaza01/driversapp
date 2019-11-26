@@ -44,7 +44,7 @@ export class ColdevPage implements OnInit {
     let mm = new Date().getMonth() + 1;
     let yy = new Date().getFullYear();
     today = yy + '-' + mm + '-' + dd;
-    // console.log(today)
+    console.log(today)
 
     await this.presentLoading('');
     await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())

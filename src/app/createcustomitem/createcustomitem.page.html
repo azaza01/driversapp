@@ -6,157 +6,161 @@
 
   <ion-content>
   
-    <ion-item-group>
+    <ion-item-group >
           <ion-item-divider style="background-color: yellow;">
             <ion-label>Customer Details</ion-label>
           </ion-item-divider>
           <ion-item>
               <ion-label>Category: </ion-label>
-              <ion-input> </ion-input>
-                    <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                      <ion-select-option value="brown">Clothing</ion-select-option>
-                      <ion-select-option value="blonde">Bedding</ion-select-option>
-                      <ion-select-option value="black">Curtains</ion-select-option>
-                      <ion-select-option value="red">Sofa Covers</ion-select-option>
-                      <ion-select-option value="blonde">Carpet</ion-select-option>
-                      <ion-select-option value="black">Accessories</ion-select-option>
-                      <ion-select-option value="red">Additional</ion-select-option>
-                      <ion-select-option value="black">Others</ion-select-option>
-                </ion-select>
+              <!-- <ion-input> </ion-input> -->
+                    <ion-select  ocancelText="Dismiss" name="selectedCat" [(ngModel)]="selectedCategory" (ngModelChange)="showSelectValue(selectedCategory)">
+                      <ion-select-option [value]="selectedCat" *ngFor="let selectedCat of generatedCategories">
+                        {{selectedCat}}
+                      </ion-select-option>
+              </ion-select>
           </ion-item>
-          <ion-item>
+          <div >
+          <ion-item  *ngIf="selectedCategory != 'Curtains' && selectedCategory != 'Carpet'">
               <ion-label>Description : </ion-label>
-              <ion-input placeholder="  type here"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Clean type: </ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">LD</ion-select-option>
-                        <ion-select-option value="blonde">DC</ion-select-option>
-                        <ion-select-option value="black">Iron Only</ion-select-option>
-                        <ion-select-option value="red">HW</ion-select-option>
+              <ion-input placeholder="add Description" [(ngModel)]="normaldesc" (ngModelChange)="getNormalDesc(normaldesc)"></ion-input>
+          </ion-item>
+            <!-- <div > -->
+            <ion-item *ngIf="selectedCategory != 'Curtains'" >
+                <ion-label>Clean types: </ion-label>
+                <!-- <ion-input> </ion-input> -->
+                  <ion-select  cancelText="Dismiss" [(ngModel)]="cleantypes" (ngModelChange)="selectedCleantypes(cleantypes)">
+                        <ion-select-option value="LD">LD</ion-select-option>
+                        <ion-select-option value="DC">DC</ion-select-option>
+                        <ion-select-option value="Iron Only">Iron Only</ion-select-option>
+                        <ion-select-option value="HW">HW</ion-select-option>
                   </ion-select>
             </ion-item>
+          <!-- </div> -->
+          <ion-item *ngIf="selectedCategory == 'Curtains'" >
+            <ion-label>Clean type</ion-label>
+            <!-- <ion-input> </ion-input> -->
+                  <ion-select cancelText="Dismiss" [(ngModel)]="cleantype2" (ngModelChange)="cleantypes2(cleantype2)">
+                    <ion-select-option value="LD">LD</ion-select-option>
+                    <ion-select-option value="DC">DC</ion-select-option>
+              </ion-select>
+          </ion-item>
             <ion-item>
                 <ion-label>Ready type: </ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">Hang</ion-select-option>
-                        <ion-select-option value="blonde">Pack</ion-select-option>
+                <!-- <ion-input> </ion-input> -->
+                      <ion-select cancelText="Dismiss" [(ngModel)]="readytype" (ngModelChange)="readyTypes(readytype)">
+                        <ion-select-option value="Hang">Hang</ion-select-option>
+                        <ion-select-option value="Pack">Pack</ion-select-option>
                   </ion-select>
             </ion-item>
-            <ion-item>
-                <ion-label>Job type </ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">Collection</ion-select-option>
-                        <ion-select-option value="blonde">Removal</ion-select-option>
+            <ion-item *ngIf="selectedCategory == 'Curtains'" >
+                <ion-label>Job type</ion-label>
+                <!-- <ion-input> </ion-input> -->
+                  <ion-select cancelText="Dismiss" [(ngModel)]="curtainService" (ngModelChange)="checkCurtainService(curtainService)">
+                        <ion-select-option [value]="Collection">Collection</ion-select-option>
+                        <ion-select-option [value]="Removal" >Removal</ion-select-option>
                   </ion-select>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="curtainService == 'Removal' &&  selectedCategory == 'Curtains'">
+              <ion-label>Description : </ion-label>
+              <ion-input placeholder="add Description" [(ngModel)]="curtaindesc" (ngModelChange)="getCurtainDesc(curtaindesc)"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="selectedCategory == 'Curtains'" >
                <ion-row>
                  <ion-col>
                     <ion-label>Day</ion-label>
-                    <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);"> </ion-input>
+                    <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);" [(ngModel)]="dayCurtain" (ngModelChange)="getdayCurtain(dayCurtain)"></ion-input> 
                  </ion-col>
                </ion-row>
                <ion-row>
                   <ion-col>
                       <ion-label>Night</ion-label>
-                      <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);"> </ion-input>
+                      <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);" [(ngModel)]="nightCurtain" (ngModelChange)="getnightCurtain(nightCurtain)"> </ion-input>
                   </ion-col>
                 </ion-row>
                 <ion-row>
                     <ion-col>
                         <ion-label>Blackout</ion-label>
-                        <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);"> </ion-input>
+                        <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);" [(ngModel)]="blackoutCurtain" (ngModelChange)="getblackoutCurtain(blackoutCurtain)"> </ion-input>
                     </ion-col>
                   </ion-row>
                   <ion-row>
                       <ion-col>
                           <ion-label>Belt</ion-label>
-                          <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);"> </ion-input>
+                          <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);" [(ngModel)]="belt" (ngModelChange)="getBelt(belt)"> </ion-input>
                       </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col>
                             <ion-label>others</ion-label>
-                            <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);"> </ion-input>
+                            <ion-input style=" border-bottom: 1px solid rgb(2, 2, 2);" [(ngModel)]="others" (ngModelChange)="getOthers(others)"> </ion-input>
                         </ion-col>
                       </ion-row>
             </ion-item>
-            <ion-item>
-                <ion-label>Clean type</ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">LD</ion-select-option>
-                        <ion-select-option value="blonde">DC</ion-select-option>
-                  </ion-select>
-            </ion-item>
-            <ion-item>
+            <ion-item *ngIf="selectedCategory == 'Carpet'" >
                 <ion-label>Carpet type</ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">short</ion-select-option>
-                        <ion-select-option value="blonde">shaggy</ion-select-option>
-                        <ion-select-option value="blonde">two-sided</ion-select-option>
+                <!-- <ion-input> </ion-input> -->
+                      <ion-select cancelText="Dismiss"  [(ngModel)]="carpettype" (ngModelChange)="carpettypes(carpettype)">
+                        <ion-select-option value="Short">short</ion-select-option>
+                        <ion-select-option value="Shaggy">shaggy</ion-select-option>
+                        <ion-select-option value="Twosided">two-sided</ion-select-option>
                   </ion-select>
             </ion-item>
             <ion-item>
                 <ion-label>Price type</ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">N</ion-select-option>
-                        <ion-select-option value="blonde">TBA</ion-select-option>
-                        <ion-select-option value="blonde">FOC</ion-select-option>
-                        <ion-select-option value="blonde">FW</ion-select-option>
+                <!-- <ion-input> </ion-input> -->
+                      <ion-select  cancelText="Dismiss" [(ngModel)]="pricetype" (ngModelChange)="pricetypes(pricetype)">
+                        <ion-select-option value="N">N</ion-select-option>
+                        <ion-select-option value="TBA">TBA</ion-select-option>
+                        <ion-select-option value="FOC">FOC</ion-select-option>
+                        <ion-select-option value="FW">FW</ion-select-option>
                   </ion-select>
             </ion-item>
-            <ion-item>
+            <ion-item  *ngIf="selectedCategory == 'Curtains' || selectedCategory == 'Carpet' || selectedCategory == 'Sofa Covers'">
                 <ion-label>Length : </ion-label>
-                <ion-input placeholder="  0"></ion-input>
+                <ion-input placeholder="0"  [(ngModel)]="lengths" (ngModelChange)="getLength(lengths)"></ion-input>
                 <ion-label>Breadth : </ion-label>
-                <ion-input placeholder="  0"></ion-input>
+                <ion-input placeholder="0"  [(ngModel)]="breadthdata"  (ngModelChange)="getBreadth(breadthdata)"></ion-input>
               </ion-item>
             
-            <ion-item>
+            <ion-item  *ngIf="selectedCategory == 'Curtains' || selectedCategory == 'Carpet' || selectedCategory == 'Sofa Covers'" >
                 <ion-label>Unit type</ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">cm</ion-select-option>
-                        <ion-select-option value="blonde">ft</ion-select-option>
+                <!-- <ion-input> </ion-input> -->
+                      <ion-select cancelText="Dismiss" [(ngModel)]="unittype" (ngModelChange)="unittypes(unittype)">
+                        <ion-select-option value="cm">cm</ion-select-option>
+                        <ion-select-option value="feet">ft</ion-select-option>
                   </ion-select>
             </ion-item>
-            <ion-item>
+            <ion-item  *ngIf="selectedCategory == 'Curtains' || selectedCategory == 'Carpet' || selectedCategory == 'Sofa Covers'">
                 <ion-label>Price / sqft : </ion-label>
-                <ion-label> 0</ion-label>
+                <ion-label >{{ pricepersqf  | number:'1.2-2' }} </ion-label>
               </ion-item>
-              <ion-item>
-                  <ion-label>Price : </ion-label>
-                  <ion-input placeholder="  0"></ion-input>
-                </ion-item>
-
                 <ion-item>
                     <ion-label>Qty / units : </ion-label>
-                    <ion-input placeholder="  0"></ion-input>
+                    <ion-input [(ngModel)]="myquan" (ngModelChange)="getQuan(myquan)"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Price : </ion-label>
+                    <ion-input [(ngModel)]="myprice" (ngModelChange)="getPrice(myprice)" ></ion-input>
                   </ion-item>
                   <ion-item>
                       <ion-label>No. of pieces : </ion-label>
-                      <ion-label> 0</ion-label>
+                      <ion-input [(ngModel)]="noOfPcs" ></ion-input>
                     </ion-item>
-                    <ion-item>
+                    <!-- <ion-item>
                         <ion-label>Subtotal : </ion-label>
-                        <ion-label> 0</ion-label>
+                        <ion-label >{{ subtotal | number:'1.2-2'}}</ion-label>
+                      </ion-item> -->
+                      <ion-item>
+                        <ion-label>Subtotal : </ion-label>
+                        <ion-input [(ngModel)]="subtotal" (ngModelChange)="getSubtotal(subtotal)" ></ion-input>
                       </ion-item>
-  
-
+        </div>
     </ion-item-group>
   
     
       <ion-row>
           <ion-col >
-            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceSelectItem()">ADD CUSTOM ITEM</ion-button>
+            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="addCustomItem()">ADD CUSTOM ITEM</ion-button>
           </ion-col>
         </ion-row>
   

@@ -71,7 +71,7 @@ export class CollectionService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          console.log(res)
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
