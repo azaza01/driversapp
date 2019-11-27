@@ -6,6 +6,7 @@ import { SelectitemlistPage } from '../selectitemlist/selectitemlist.page'
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from '../api/defaults.service';
 
+
 @Component({
   selector: 'app-selectcategory',
   templateUrl: './selectcategory.page.html',
@@ -53,7 +54,7 @@ export class SelectcategoryPage implements OnInit {
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           this.unsyncData = res
           console.log(this.unsyncData)
-
+          
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
               // console.log('ITEMS_TABLE', data);

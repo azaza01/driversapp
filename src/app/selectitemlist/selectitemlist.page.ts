@@ -16,6 +16,7 @@ export class SelectitemlistPage implements OnInit {
   category: any
   temp_List: any
   item_List: any = []
+  subtotal: any = 0;
 
   constructor(
     public modalController: ModalController,
@@ -33,6 +34,14 @@ export class SelectitemlistPage implements OnInit {
     this.item_List = await this.getList(this.temp_List)
     console.log(this.item_List)
 
+  }
+
+  updateSubtotal(item){
+    if(item.qty != 0){
+      this.subtotal = item.qty * item.price;
+      console.log(this.subtotal)
+      return this.subtotal;
+    }
   }
 
   async presentLoading(msg) {
