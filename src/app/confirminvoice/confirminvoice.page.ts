@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-confirminvoice',
@@ -7,9 +8,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfirminvoicePage implements OnInit {
 
-  constructor() { }
+  customerData: any
+  isLoading: boolean = false
+
+  constructor(
+    private storage: Storage,
+
+  ) { }
 
   ngOnInit() {
+    this.isLoading = true
+    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      console.log(res)
+      this.customerData = res[0]
+      this.isLoading = false
+    })
+  }
+
+  makePayment(){
+
+  }
+
+  viewItems(){
+
   }
 
 }

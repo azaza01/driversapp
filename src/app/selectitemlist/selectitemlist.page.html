@@ -19,16 +19,17 @@
       Pcs
     </ion-col>
     <ion-col size="2">
-        Subotal
+      SubTotal
     </ion-col>
   </ion-row>
 </ion-header>
 
 <ion-content>
 
-  <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}" *ngFor="let item of item_List; let i = index">
-    <ion-card-content >
-      <ion-row >
+  <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}"
+    *ngFor="let item of item_List; let i = index">
+    <ion-card-content>
+      <ion-row>
         <ion-col size="3.5" class="descCss">
           {{item.description}}
         </ion-col>
@@ -41,8 +42,8 @@
         <ion-col size="2" class="inputCss">
           <ion-input type="number" [(ngModel)]="item.pcs" (ngModelChange)="updateSubtotal(item)"></ion-input>
         </ion-col>
-        <ion-col size="2" class="priceCss" style="padding-left: 10px;">
-            {{item.qty * item.price}}
+        <ion-col size="2" style="padding-left: 10px; text-align: center;">
+          {{item.qty * item.price}}
         </ion-col>
       </ion-row>
     </ion-card-content>
@@ -54,6 +55,6 @@
     <ion-button expand="full" shape="round" color="warning" (click)="viewItems(item_List)">VIEW ITEMs</ion-button>
   </ion-col>
   <ion-col>
-    <ion-button expand="full" shape="round" color="warning">CONFIRM INVOICE</ion-button>
+    <ion-button expand="full" shape="round" color="warning" (click)="confirmInvoice()">CONFIRM INVOICE</ion-button>
   </ion-col>
 </ion-row>

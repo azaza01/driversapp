@@ -26,7 +26,7 @@
 <ion-content>
   <div [ngSwitch]="selectedView">
     <div *ngSwitchCase="'COLLECTION'">
-      <ion-list [hidden]="item.coldel_type != 'collection'" *ngFor="let item of myColDev; let i = index">>
+      <ion-list [hidden]="item.coldel_type != 'collection'" *ngFor="let item of myColDev; let i = index">
         <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
           <ion-item-divider style="background-color: yellow;">
             <ion-label>{{ item.cot }}</ion-label>

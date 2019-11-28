@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, LoadingController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultsService } from '../api/defaults.service';
 import { filter } from 'minimatch';
 import { ViewItemsComponent } from '../view-items/view-items.component';
@@ -23,6 +23,7 @@ export class SelectitemlistPage implements OnInit {
     public activatedRoute: ActivatedRoute,
     private defaultSrvc: DefaultsService,
     public loadingCtrl: LoadingController,
+    private router: Router,
 
   ) { }
 
@@ -96,4 +97,8 @@ export class SelectitemlistPage implements OnInit {
 
   }
 
+  async confirmInvoice() {
+    this.router.navigate(['/confirminvoice']);
+
+  }
 }

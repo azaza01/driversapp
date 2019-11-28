@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-  <ion-content>
+  <ion-content *ngIf="isLoading == false">
   
     <ion-item-group>
           <ion-item-divider style="background-color: yellow;">
@@ -12,9 +12,9 @@
           </ion-item-divider>
           <ion-item>
             <ion-label>Invoice :</ion-label>
-            <ion-label style="padding-left: 1px;">CC-1911Ag01</ion-label>
+            <ion-label style="padding-left: 1px;">{{customerData.UNINV_INVNO}}</ion-label>
             <ion-label>Type :</ion-label>
-            <ion-label style="padding-left: 1px;">text</ion-label>
+            <ion-label style="padding-left: 1px;">{{customerData.UNINV_TYPE}}</ion-label>
           </ion-item>
           <ion-item>
               <ion-label>date: </ion-label>
@@ -27,22 +27,22 @@
             </ion-item>
             <ion-item>
                 <ion-label>Agreed Delivery Date : </ion-label>
-                <ion-label>19 Nov 2019 </ion-label>
+                <ion-label>{{customerData.UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
                 <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change</ion-button>
             </ion-item>
             <ion-item>
                 <ion-label>Timeslots : </ion-label>
-                <ion-label>A 12-4 </ion-label>
+                <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Inv. Notes : </ion-label>
-                <ion-input placeholder="Please put a note"></ion-input>
+                <ion-input placeholder="Please put a note">{{customerData.UNINV_INVOICENOTE}}</ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>Donated : </ion-label>
-                <ion-input placeholder="0"></ion-input>
+                <ion-input placeholder="0">{{customerData.UNINV_DONATE}}</ion-input>
                 <ion-label>Bags : </ion-label>
-                <ion-input placeholder="0"></ion-input>
+                <ion-input placeholder="0">{{customerData.UNINV_BAGS}}</ion-input>
             </ion-item>
             <ion-item-divider style="background-color: yellow;">
                 <ion-label>Payment Details</ion-label>
