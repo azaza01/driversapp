@@ -563,6 +563,9 @@ getItemPrices(){
       if(this.lengths != 0 || this.breadthdata  != 0){
         this.myprice = this.convertedbreadthdata * 100 / 100;
         this.subtotal = this.convertedbreadthdata * this.myquan;
+        
+        this.myprice = Math.round(this.myprice * 100) / 100
+        this.subtotal = Math.round(this.subtotal * 100) / 100
       }
 
     }else {
@@ -642,7 +645,7 @@ getItemPrices(){
         this.readytype = this.selectedreadyTypes;
         this.itesmReady = "no";
 
-        this.itemPrice = this.myprice
+        this.itemPrice = this.myprice 
         this.itemQty = this.myquan
         this.itemPcs = this.totalItemsCurtain
         this.itemsubtotal = this.subtotal
@@ -692,6 +695,8 @@ getItemPrices(){
           this.itemPcs = this.noOfPcs
           this.subtotal = this.myprice * this.myquan
           this.itemsubtotal = this.subtotal
+
+          
 
            //save all above in temp_item_table
           this.saveData();
