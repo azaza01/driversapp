@@ -100,7 +100,7 @@ export class SelectitemlistPage implements OnInit {
   async confirmInvoice() {
     this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {
       this.defaultSrvc.getTempItems = this.temp_List
-      this.router.navigate(['/selectcategory']);
+      this.router.navigate(['/confirminvoice']);
     })
   }
 }
