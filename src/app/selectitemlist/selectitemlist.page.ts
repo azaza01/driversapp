@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultsService } from '../api/defaults.service';
 import { filter } from 'minimatch';
 import { ViewItemsComponent } from '../view-items/view-items.component';
-
+import { Storage } from '@ionic/storage';
 @Component({
   selector: 'app-selectitemlist',
   templateUrl: './selectitemlist.page.html',
@@ -24,6 +24,7 @@ export class SelectitemlistPage implements OnInit {
     private defaultSrvc: DefaultsService,
     public loadingCtrl: LoadingController,
     private router: Router,
+    private storage: Storage,
 
   ) { }
 
@@ -37,8 +38,8 @@ export class SelectitemlistPage implements OnInit {
 
   }
 
-  updateSubtotal(item){
-    if(item.qty != 0){
+  updateSubtotal(item) {
+    if (item.qty != 0) {
       this.subtotal = item.qty * item.price;
       console.log(this.subtotal)
       return this.subtotal;
@@ -94,11 +95,12 @@ export class SelectitemlistPage implements OnInit {
     })
 
     myModal.present();
-
   }
 
   async confirmInvoice() {
-    this.router.navigate(['/confirminvoice']);
-
+    this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {
+      this.defaultSrvc.getTempItems = this.temp_List
+      this.router.navigate(['/confirminvoice']);
+    })
   }
 }
