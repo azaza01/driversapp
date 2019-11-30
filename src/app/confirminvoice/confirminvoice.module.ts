@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { ConfirminvoicePage } from './confirminvoice.page';
 
+// import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
+
+
 const routes: Routes = [
   {
     path: '',
@@ -19,6 +22,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    // Ionic4DatepickerModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ConfirminvoicePage]

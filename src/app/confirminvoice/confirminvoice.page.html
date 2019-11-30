@@ -20,15 +20,16 @@
               <ion-label>date: </ion-label>
               <ion-label>19 Nov 2019 </ion-label>
               <ion-label>Billed From : </ion-label>
-              <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+              <ion-label>{{ company }}</ion-label>
+              <!-- <ion-select value="brown" okText="Okay" cancelText="Dismiss">
                   <ion-select-option value="brown">CC</ion-select-option>
                   <ion-select-option value="blonde">DC</ion-select-option>
-              </ion-select>
+              </ion-select> -->
             </ion-item>
             <ion-item>
                 <ion-label>Agreed Delivery Date : </ion-label>
                 <ion-label>{{customerData.UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change</ion-button>
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="getDate()">Change</ion-button>
             </ion-item>
             <ion-item>
                 <ion-label>Timeslots : </ion-label>

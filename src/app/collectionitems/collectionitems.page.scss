@@ -1,0 +1,121 @@
+:host {
+    ion-header {
+        ion-toolbar {
+            --background: #ffce00;
+            ion-title {
+                background: #ffce00;
+                color: #fff;
+            }
+            ion-buttons {
+                ion-back-button {
+                    color: #fff;
+                }
+                ion-menu-button {
+                    color: #fff;
+                }
+
+            }
+        }
+
+        ion-row.headerCss {
+            text-align: center;
+            font-size: .8rem;
+            background: #757575;
+            color: #fff;
+            font-weight: 900;
+        }
+    }
+
+    ion-content {
+        ion-card {
+            font-size: .8rem;
+            font-weight: 900;
+            ion-card-content {
+                ion-row {
+                    font-size: 0.7rem;
+                    ion-col.descCss {
+
+                    }
+                    ion-col.priceCss {
+
+                    }
+                    ion-col.inputCss {
+                        text-align: center;
+                        --padding-start: 0px;
+                        border: solid 1px #757575;
+                        border-radius: 5px;
+                        margin: 0px 1px;
+                        background: #fff;
+                        
+                        ion-input {
+                            --padding-top: 0px;
+                            --padding-bottom: 0px;
+                        }
+                    }
+                }
+            }
+        }
+        ion-card.laundry-class {
+            font-size: .8rem;
+            font-weight: 900;
+            background: #FFF8E1;
+            ion-card-content {
+                ion-row {
+                    font-size: 0.7rem;
+                    ion-col.descCss {
+
+                    }
+                    ion-col.priceCss {
+
+                    }
+                    ion-col.inputCss {
+                        text-align: center;
+                        --padding-start: 0px;
+                        border: solid 1px #757575;
+                        border-radius: 5px;
+                        margin: 0px 1px;
+                        background: #fff;
+
+                        ion-input {
+                            --padding-top: 0px;
+                            --padding-bottom: 0px;
+                        }
+                    }
+                }
+            }
+        }
+
+        ion-card.dryclean-class {
+            font-size: .8rem;
+            font-weight: 900;
+            background: #EDE7F6;
+            ion-card-content {
+                ion-row {
+                    font-size: 0.7rem;
+                    ion-col.descCss {
+
+                    }
+                    ion-col.priceCss {
+
+                    }
+                    ion-col.inputCss {
+                        text-align: center;
+                        --padding-start: 0px;
+                        border: solid 1px #757575;
+                        border-radius: 5px;
+                        margin: 0px 1px;
+                        background: #fff;
+
+                        ion-input {
+                            --padding-top: 0px;
+                            --padding-bottom: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+}

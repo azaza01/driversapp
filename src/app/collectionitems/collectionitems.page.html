@@ -1,9 +1,60 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>View Items</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ category }}</ion-title>
+    </ion-toolbar>
+    <ion-row class="headerCss">
+      <ion-col size="3.5">
+        Description
+      </ion-col>
+      <ion-col size="2" style="text-align: left;">
+        Price
+      </ion-col>
+      <ion-col size="2">
+        Qty
+      </ion-col>
+      <ion-col size="2">
+        Pcs
+      </ion-col>
+      <ion-col size="2">
+        SubTotal
+      </ion-col>
+    </ion-row>
+  </ion-header>
+  
+  <ion-content>
+  
+    <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}"
+      *ngFor="let item of item_List; let i = index">
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="3.5" class="descCss">
+            {{item.description}}
+          </ion-col>
+          <ion-col size="2" class="priceCss">
+            {{item.price}}
+          </ion-col>
+          <ion-col size="2" class="inputCss">
+            <ion-input type="number" [(ngModel)]="item.qty" (ngModelChange)="item.subtotal = item.qty * item.price"></ion-input>
+          </ion-col>
+          <ion-col size="2" class="inputCss">
+            <ion-input type="number" [(ngModel)]="item.pcs"></ion-input>
+          </ion-col>
+          <ion-col size="2" style="padding-left: 10px; text-align: center;">
+            {{item.qty * item.price}}
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  
+  </ion-content>
+  <ion-row>
+    <ion-col>
+      <ion-button expand="full" shape="round" color="warning" (click)="viewItems(item_List)">VIEW ITEMs</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="full" shape="round" color="warning" (click)="confirmInvoice()">CONFIRM INVOICE</ion-button>
+    </ion-col>
+  </ion-row>

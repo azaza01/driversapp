@@ -12,6 +12,7 @@ export class ConfirminvoicePage implements OnInit {
   isLoading: boolean = false
 
   checkAccount = 0;
+  company: any;
 
   invoiceId: any;
   invoiceType: any;
@@ -27,10 +28,11 @@ export class ConfirminvoicePage implements OnInit {
   expressCharge: any;
   depositAmount: any;
   balanceAmount: any;
+  returnDate: any;
+  customercredit:any ;
 
   constructor(
     private storage: Storage,
-
   ) { }
 
   ngOnInit() {
@@ -40,14 +42,28 @@ export class ConfirminvoicePage implements OnInit {
       this.customerData = res[0]
       this.isLoading = false
       this.invoiceId = this.customerData.UNINV_COLLID;
+      this.company = this.customerData.UNINV_INITIAL
       console.log(this.invoiceId);
+    })
+
+    this.storage.get('COLDEL_TABLE').then(res => {
+      console.log(res)
+      var l = res.length, i;
+      for( i=0; i<l; i++) {
+          if(res[i].id == this.invoiceId){
+            this.returnDate  = res[i].coldel_return;
+            this.customercredit = res[i].cca;
+          }               
+      }
+      console.log(this.returnDate)
+      console.log(this.customercredit)
     })
 
     this.getItemSubtotal();
   }
 
-  showFinal(finalSubtotal) {
-    this.finalSubtotal = finalSubtotal
+  showFinal(finalSubtotal){
+    this.finalSubtotal =  finalSubtotal
   }
 
   lessPromotion(percentPromo) {
