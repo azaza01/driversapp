@@ -4,6 +4,7 @@ import { ThrowStmt } from '@angular/compiler';
 import { AlertController } from '@ionic/angular';
 import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DefaultsService } from '../api/defaults.service';
 
 @Component({
   selector: 'app-createcustomitem',
@@ -15,22 +16,21 @@ export class CreatecustomitemPage implements OnInit {
   company: any; //sample
   checkAccount = 0;
   priceTables: any;
-  informat:any ;
-  mycompany:any ;
-
+  informat: any;
+  mycompany: any;
 
   //getData
   generatedCategories: any = []
   selectedCategory: any = []
   generatedSofa: any = []
-  selectedsofa: any 
-  selectedCurtainService: any 
+  selectedsofa: any
+  selectedCurtainService: any
   cleantypes: any
-  selectedreadyTypes: any 
+  selectedreadyTypes: any
   // cleantypetwo: any
   carpettype: any
   unittype: any = "cm"
-  pricetype: any 
+  pricetype: any
 
 
   //pricing variable
@@ -39,12 +39,12 @@ export class CreatecustomitemPage implements OnInit {
   carpetshaggyprice: any
   carpetTwosidedprice: any
   curtainlaundrypricestr: any
-  curtaindrycleanpricestr: any 
+  curtaindrycleanpricestr: any
   curtainremovalpricestr: any
 
   //labelprice variable
   pricepersqf: any = 0
-  getpricetype: any 
+  getpricetype: any
   breadthdata: any = 0
   convertedbreadthdata: any
   lengths: any = 0
@@ -67,42 +67,48 @@ export class CreatecustomitemPage implements OnInit {
   totalItemsCurtain: any
   concatDescripton: any
 
- //sofa pricing 
-SofaCoverLDS: any
-SofaCoverDCS: any
-SofaCoverLDD: any
-SofaCoverDCD: any
-SofaCoverLDT: any
-SofaCoverDCT: any
-SofaCoverLDL: any
-SofaCoverDCL: any
-CushionCoverDCS: any
-CushionCoverLDS: any
-CushionCoverLDM: any
-CushionoverDCM: any
-CushionCoverLDL: any
-CushionCoverDCL: any
+  //sofa pricing 
+  SofaCoverLDS: any
+  SofaCoverDCS: any
+  SofaCoverLDD: any
+  SofaCoverDCD: any
+  SofaCoverLDT: any
+  SofaCoverDCT: any
+  SofaCoverLDL: any
+  SofaCoverDCL: any
+  CushionCoverDCS: any
+  CushionCoverLDS: any
+  CushionCoverLDM: any
+  CushionoverDCM: any
+  CushionCoverLDL: any
+  CushionCoverDCL: any
 
-SofaSelectedPrice: any
-
-
-//for saving item
-generatedId: any
-concatDesc: any
-Category: any
-cleantype: any
-readytype: any
-itesmReady: any
-itemPrice: any
-itemQty: any
-itemPcs: any
-itemsubtotal: any
-
-allItems: any = []
-collectedData : any =[];
+  SofaSelectedPrice: any
 
 
-  constructor(private storage: Storage,public activatedRoute: ActivatedRoute, public alertController: AlertController,) { }
+  //for saving item
+  generatedId: any
+  concatDesc: any
+  Category: any
+  cleantype: any
+  readytype: any
+  itesmReady: any
+  itemPrice: any
+  itemQty: any
+  itemPcs: any
+  itemsubtotal: any
+
+  allItems: any = []
+  collectedData: any = [];
+
+
+  constructor(
+    private storage: Storage,
+    public activatedRoute: ActivatedRoute,
+    public alertController: AlertController,
+    private defaultSrvc: DefaultsService,
+
+  ) { }
 
   ngOnInit() {
     this.getItem();
@@ -110,9 +116,9 @@ collectedData : any =[];
     this.getSofaPrices();
   }
 
-  clearCalcu(){
+  clearCalcu() {
     this.lengths = "";
-    this.subtotal  = "";
+    this.subtotal = "";
     this.myprice = "";
     this.myquan = "";
     this.noOfPcs = "";
@@ -135,20 +141,20 @@ collectedData : any =[];
     this.cleantypes = "";
   }
 
-  showSelectValue(selectedCat){
+  showSelectValue(selectedCat) {
     this.selectedCategory = selectedCat;
     this.clearCalcu();
-    if(this.selectedCategory == "Sofa Covers"){
+    if (this.selectedCategory == "Sofa Covers") {
       this.getSofaList();
     }
-    
-    if(this.selectedCategory == "Carpet"){
+
+    if (this.selectedCategory == "Carpet") {
       this.readytype = "Roll"
-    }else{
+    } else {
       this.readytype = ""
     }
   }
-  
+
   // showSelectedSofa(selectedsofa){
   //   this.selectedsofa = selectedsofa;
   //   console.log(this.selectedsofa);
@@ -182,10 +188,10 @@ collectedData : any =[];
   //   }else if(this.selectedsofa == "Cushion Cover (L)" &&  this.selectedCleantype == "DC"){
   //     this.SofaSelectedPrice = this.CushionCoverDCL;
   //   }  
-    
+
   // }
 
-  selectedCleantypes(cleantypes){
+  selectedCleantypes(cleantypes) {
     this.cleantypes = cleantypes;
     this.curtainDesc();
     this.changeCurtainsCost();
@@ -197,18 +203,18 @@ collectedData : any =[];
   //   this.changeCurtainsCost();
   // }
 
-  readyTypes(readyType){
+  readyTypes(readyType) {
     this.selectedreadyTypes = readyType;
   }
 
-  checkCurtainService(curtainService){
+  checkCurtainService(curtainService) {
     this.selectedCurtainService = curtainService
     this.changeCurtainsCost();
     this.curtainDesc();
   }
 
 
-  carpettypes(carpettype){
+  carpettypes(carpettype) {
     this.carpettype = carpettype;
     if (this.carpettype == "Short") {
       this.pricepersqf = this.carpetlaundryprice;
@@ -222,93 +228,93 @@ collectedData : any =[];
     this.calculateCarpetCost();
   }
 
-  unittypes(unittype){
+  unittypes(unittype) {
     this.unittype = unittype;
     this.calculateCarpetCost();
   }
 
-  getLength(lengths){
+  getLength(lengths) {
     this.lengths = lengths;
     this.calculateCarpetCost();
   }
 
-  getBreadth(breadthdata){
+  getBreadth(breadthdata) {
     this.breadthdata = breadthdata;
     this.calculateCarpetCost();
   }
 
-  getNormalDesc(normaldesc){
+  getNormalDesc(normaldesc) {
     this.normaldesc = normaldesc;
   }
 
-  getCurtainDesc(curtaindesc){
+  getCurtainDesc(curtaindesc) {
     this.curtaindesc = curtaindesc;
     this.curtainDesc();
   }
 
-  getPrice(myprice){
+  getPrice(myprice) {
     this.myprice = myprice;
     this.calculateCarpetCost();
   }
-  getQuan(myquan){
+  getQuan(myquan) {
     this.myquan = myquan;
     this.calculateCarpetCost();
   }
 
-  
-  getSubtotal(subtotal){
+
+  getSubtotal(subtotal) {
     this.subtotal = subtotal;
   }
 
-  getdayCurtain(dayCurtain){
+  getdayCurtain(dayCurtain) {
     this.dayCurtain = dayCurtain;
     this.curtainDesc();
   }
 
-  getnightCurtain(nightCurtain){
+  getnightCurtain(nightCurtain) {
     this.nightCurtain = nightCurtain;
     this.curtainDesc();
   }
 
-  getblackoutCurtain(blackoutCurtain){
+  getblackoutCurtain(blackoutCurtain) {
     this.blackoutCurtain = blackoutCurtain;
     this.curtainDesc();
   }
 
-  getBelt(belt){
+  getBelt(belt) {
     this.belt = belt;
     this.curtainDesc();
   }
 
-  getOthers(others){
-    this.others =  others;
+  getOthers(others) {
+    this.others = others;
     this.curtainDesc();
   }
 
-  onClickquan(myquan){
-    if(myquan == 0){
+  onClickquan(myquan) {
+    if (myquan == 0) {
       this.myquan = ""
     }
   }
-  onClickprice(myprice){
-    if(myprice == 0){
+  onClickprice(myprice) {
+    if (myprice == 0) {
       this.myprice = ""
     }
   }
-  onClickPcs(noOfPcs){
-    if(noOfPcs == 0){
+  onClickPcs(noOfPcs) {
+    if (noOfPcs == 0) {
       this.noOfPcs = ""
     }
   }
 
-  onClickLength(lengths){
-    if(lengths == 0){
+  onClickLength(lengths) {
+    if (lengths == 0) {
       this.lengths = ""
     }
   }
 
-  onClickBreadth(breadthdata){
-    if(breadthdata == 0){
+  onClickBreadth(breadthdata) {
+    if (breadthdata == 0) {
       this.breadthdata = ""
     }
   }
@@ -316,16 +322,16 @@ collectedData : any =[];
 
 
 
-  pricetypes(pricetype){
+  pricetypes(pricetype) {
     this.pricetype = pricetype;
     if (this.pricetype == "TBA") {
       this.getpricetype = "Quote";
-    }else if (this.pricetype == "RW") {
-        this.getpricetype = "Rewash";
-    }else if (this.pricetype == "FOC") {
-        this.getpricetype = "FOC";
-    }else {
-        this.getpricetype = "Normal";
+    } else if (this.pricetype == "RW") {
+      this.getpricetype = "Rewash";
+    } else if (this.pricetype == "FOC") {
+      this.getpricetype = "FOC";
+    } else {
+      this.getpricetype = "Normal";
     }
   }
 
@@ -352,223 +358,224 @@ collectedData : any =[];
   //   return output
   // }
 
-getCompany(){
-  this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-    this.mycompany = res
-    this.company = this.mycompany[0].UNINV_INITIAL;
-  })
-}
+  getCompany() {
+    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      this.mycompany = res
+      console.log(this.mycompany)
+      this.company = this.mycompany[0].UNINV_INITIAL;
+    })
+  }
 
 
-getItem(){
+  getItem() {
     this.getCompany();
 
     console.log(this.checkAccount);
-    if(this.checkAccount == 1){
+    if (this.checkAccount == 1) {
       this.storage.get("RATES_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
-          for( i=0; i<l; i++) {
-              if( flags[res[i].cat_type]) continue;
-                  flags[res[i].cat_type] = true;
-                  output.push(res[i].cat_type);
-                   
-          }
-          output.push("Custom"); 
-          // output.push("Curtains"); 
-          this.generatedCategories = output;
-        })
-    }else if(this.checkAccount == 0){
+        for (i = 0; i < l; i++) {
+          if (flags[res[i].cat_type]) continue;
+          flags[res[i].cat_type] = true;
+          output.push(res[i].cat_type);
+
+        }
+        output.push("Custom");
+        // output.push("Curtains"); 
+        this.generatedCategories = output;
+      })
+    } else if (this.checkAccount == 0) {
       this.storage.get("ITEMS_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
-          for( i=0; i<l; i++) {
-              if( flags[res[i].cat_type]) continue;
-                  flags[res[i].cat_type] = true;
+        for (i = 0; i < l; i++) {
+          if (flags[res[i].cat_type]) continue;
+          flags[res[i].cat_type] = true;
 
-                  if(this.company == "DC"){
-                    if((res[i].cat_type == "Sofa Covers" ||  res[i].cat_type == "Carpet") || res[i].cat_type == "Curtains"){
-                      output.push(res[i].cat_type);
-                    }
-                  }else if(this.company == "CC"){
-                    if(res[i].cat_type != "Curtains" &&  res[i].cat_type != "Carpet" && res[i].cat_type != "Sofa Covers"){
-                      output.push(res[i].cat_type);
-                    }
-                  }  
+          if (this.company == "DC") {
+            if ((res[i].cat_type == "Sofa Covers" || res[i].cat_type == "Carpet") || res[i].cat_type == "Curtains") {
+              output.push(res[i].cat_type);
+            }
+          } else if (this.company == "CC") {
+            if (res[i].cat_type != "Curtains" && res[i].cat_type != "Carpet" && res[i].cat_type != "Sofa Covers") {
+              output.push(res[i].cat_type);
+            }
           }
-          output.push("Custom"); 
-          // output.push("Curtains"); 
-          this.generatedCategories = output;
-        })
+        }
+        output.push("Custom");
+        // output.push("Curtains"); 
+        this.generatedCategories = output;
+      })
     }
-  
+
   }
 
 
-  getSofaList(){
+  getSofaList() {
 
     this.getCompany();
 
-    if(this.checkAccount == 1){
+    if (this.checkAccount == 1) {
       this.storage.get("RATES_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
-          for( i=0; i<l; i++) {
-              if( flags[res[i].cat_type]) continue;
-                  flags[res[i].cat_type] = true;
-                  output.push(res[i].cat_type);
-                   
-          }
-          output.push("Custom"); 
-          // output.push("Curtains"); 
-          this.generatedCategories = output;
-        })
-    }else if(this.checkAccount == 0){
+        for (i = 0; i < l; i++) {
+          if (flags[res[i].cat_type]) continue;
+          flags[res[i].cat_type] = true;
+          output.push(res[i].cat_type);
+
+        }
+        output.push("Custom");
+        // output.push("Curtains"); 
+        this.generatedCategories = output;
+      })
+    } else if (this.checkAccount == 0) {
       this.storage.get("ITEMS_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
-          for( i=0; i<l; i++) {
-              if( flags[res[i].description]) continue;
-                  flags[res[i].description] = true;
+        for (i = 0; i < l; i++) {
+          if (flags[res[i].description]) continue;
+          flags[res[i].description] = true;
 
-                    if(res[i].cat_type == "Sofa Covers"){
-                      output.push(res[i].description);
-                    }
+          if (res[i].cat_type == "Sofa Covers") {
+            output.push(res[i].description);
           }
-          // output.push("Curtains"); 
-          this.generatedSofa = output;
-        })
+        }
+        // output.push("Curtains"); 
+        this.generatedSofa = output;
+      })
     }
-  
+
   }
 
-  getSofaPrices(){
+  getSofaPrices() {
     this.storage.get('ITEMS_TABLE').then(res => {
       var l = res.length, i;
-        for( i=0; i<l; i++) {
+      for (i = 0; i < l; i++) {
 
-                if(res[i].description == "Sofa Cover (S)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.SofaCoverLDS = res[i].price;
-                } 
-                if(res[i].description == "Sofa Cover (S)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.SofaCoverDCS = res[i].price;
-                } 
-
-                if(res[i].description == "Sofa Cover (D)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.SofaCoverLDD = res[i].price;
-                } 
-                if(res[i].description == "Sofa Cover (D)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.SofaCoverDCD = res[i].price;
-                } 
-
-                if(res[i].description == "Sofa Cover (T)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.SofaCoverLDT = res[i].price;
-                } 
-                if(res[i].description == "Sofa Cover (T)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.SofaCoverDCT = res[i].price;
-                } 
-
-                if(res[i].description == "Sofa Cover (L)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.SofaCoverLDL = res[i].price;
-                } 
-                if(res[i].description == "Sofa Cover (L)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.SofaCoverDCL = res[i].price;
-                } 
-
-                if(res[i].description == "Cushion Cover (S)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.CushionCoverLDS = res[i].price;
-                } 
-                if(res[i].description == "Cushion Cover (S)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.CushionCoverDCS = res[i].price;
-                } 
-
-                if(res[i].description == "Cushion Cover (M)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.CushionCoverLDM = res[i].price;
-                } 
-                if(res[i].description == "Cushion Cover (M)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.CushionoverDCM = res[i].price;
-                } 
-
-                if(res[i].description == "Cushion Cover (L)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry"){
-                  this.CushionCoverLDL = res[i].price;
-                } 
-                if(res[i].description == "Cushion Cover (L)" &&  res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean"){
-                  this.CushionCoverDCL = res[i].price;
-                } 
+        if (res[i].description == "Sofa Cover (S)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.SofaCoverLDS = res[i].price;
+        }
+        if (res[i].description == "Sofa Cover (S)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.SofaCoverDCS = res[i].price;
         }
 
-      })
+        if (res[i].description == "Sofa Cover (D)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.SofaCoverLDD = res[i].price;
+        }
+        if (res[i].description == "Sofa Cover (D)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.SofaCoverDCD = res[i].price;
+        }
+
+        if (res[i].description == "Sofa Cover (T)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.SofaCoverLDT = res[i].price;
+        }
+        if (res[i].description == "Sofa Cover (T)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.SofaCoverDCT = res[i].price;
+        }
+
+        if (res[i].description == "Sofa Cover (L)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.SofaCoverLDL = res[i].price;
+        }
+        if (res[i].description == "Sofa Cover (L)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.SofaCoverDCL = res[i].price;
+        }
+
+        if (res[i].description == "Cushion Cover (S)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.CushionCoverLDS = res[i].price;
+        }
+        if (res[i].description == "Cushion Cover (S)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.CushionCoverDCS = res[i].price;
+        }
+
+        if (res[i].description == "Cushion Cover (M)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.CushionCoverLDM = res[i].price;
+        }
+        if (res[i].description == "Cushion Cover (M)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.CushionoverDCM = res[i].price;
+        }
+
+        if (res[i].description == "Cushion Cover (L)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Laundry") {
+          this.CushionCoverLDL = res[i].price;
+        }
+        if (res[i].description == "Cushion Cover (L)" && res[i].cat_type == "Sofa Covers" && res[i].clean_type == "Dry Clean") {
+          this.CushionCoverDCL = res[i].price;
+        }
+      }
+
+    })
   }
 
 
-getItemPrices(){
+  getItemPrices() {
     this.storage.get('ITEMS_TABLE').then(res => {
       var l = res.length, i;
-        for( i=0; i<l; i++) {
-                if(res[i].description == "Carpet/Rug (per Sqf)" &&  res[i].cat_type == "Carpet" && res[i].clean_type == "Laundry"){
-                  this.carpetlaundryprice = res[i].price;
-                } 
-                if(res[i].description == "Carpet/Rug (per sqf)" &&  res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean"){
-                  this.carpetdrycleanprice = res[i].price;
-                } 
-                if(res[i].description == "Carpet Shaggy Type" &&  res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean"){
-                  this.carpetshaggyprice = res[i].price;
-                } 
-                if(res[i].description == "Carpet/Rug (two-sided)" &&  res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean"){
-                  this.carpetTwosidedprice = res[i].price;
-                } 
-                if(res[i].description == "Curtain/KG" &&  res[i].cat_type == "Curtains" && res[i].clean_type == "Laundry"){
-                  this.curtainlaundrypricestr = res[i].price;
-                } 
-                if(res[i].description == "Curtain/KG" &&  res[i].cat_type == "Curtains" && res[i].clean_type == "Dry Clean"){
-                  this.curtaindrycleanpricestr = res[i].price;
-                } 
-                if(res[i].description == "Curtain/R&I" &&  res[i].cat_type == "Curtains" && res[i].clean_type == "Dry Clean"){
-                  this.curtainremovalpricestr = res[i].price;
-                } 
+      for (i = 0; i < l; i++) {
+        if (res[i].description == "Carpet/Rug (per Sqf)" && res[i].cat_type == "Carpet" && res[i].clean_type == "Laundry") {
+          this.carpetlaundryprice = res[i].price;
         }
+        if (res[i].description == "Carpet/Rug (per sqf)" && res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean") {
+          this.carpetdrycleanprice = res[i].price;
+        }
+        if (res[i].description == "Carpet Shaggy Type" && res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean") {
+          this.carpetshaggyprice = res[i].price;
+        }
+        if (res[i].description == "Carpet/Rug (two-sided)" && res[i].cat_type == "Carpet" && res[i].clean_type == "Dry Clean") {
+          this.carpetTwosidedprice = res[i].price;
+        }
+        if (res[i].description == "Curtain/KG" && res[i].cat_type == "Curtains" && res[i].clean_type == "Laundry") {
+          this.curtainlaundrypricestr = res[i].price;
+        }
+        if (res[i].description == "Curtain/KG" && res[i].cat_type == "Curtains" && res[i].clean_type == "Dry Clean") {
+          this.curtaindrycleanpricestr = res[i].price;
+        }
+        if (res[i].description == "Curtain/R&I" && res[i].cat_type == "Curtains" && res[i].clean_type == "Dry Clean") {
+          this.curtainremovalpricestr = res[i].price;
+        }
+      }
 
-      })
+    })
   }
 
-  changeCurtainsCost(){
+  changeCurtainsCost() {
 
     if (this.selectedCurtainService == "Collection") {
       // Check curtain type
-      if (this.cleantypes == "LD" ) {
+      if (this.cleantypes == "LD") {
         this.myprice = this.curtainlaundrypricestr;
-      }else if (this.cleantypes == "DC") {
+      } else if (this.cleantypes == "DC") {
         this.myprice = this.curtaindrycleanpricestr;
       }
-    }else if (this.selectedCurtainService == "Removal") {
+    } else if (this.selectedCurtainService == "Removal") {
       this.myprice = this.curtainremovalpricestr;
     }
 
     this.curtainDesc();
-    
+
     if (this.myquan != 0) {
       this.subtotal = this.myprice * this.myquan;
     }
-    
+
 
   }
 
-  calculateCarpetCost(){ 
-    if(this.selectedCategory == "Carpet" && this.lengths !=  0 && this.breadthdata != 0){
+  calculateCarpetCost() {
+    if (this.selectedCategory == "Carpet" && this.lengths != 0 && this.breadthdata != 0) {
 
-      this.convertedbreadthdata  = this.lengths * this.breadthdata ;
+      this.convertedbreadthdata = this.lengths * this.breadthdata;
 
       if (this.unittype == "cm") {
         this.convertedbreadthdata = this.convertedbreadthdata * 0.0328084 * 0.0328084;
       }
-      
+
       this.convertedbreadthdata = this.convertedbreadthdata * this.pricepersqf;
 
-      if(this.lengths != 0 || this.breadthdata  != 0){
+      if (this.lengths != 0 || this.breadthdata != 0) {
         this.myprice = this.convertedbreadthdata * 100 / 100;
         this.subtotal = this.convertedbreadthdata * this.myquan;
-        
+
         this.myprice = Math.round(this.myprice * 100) / 100
         this.subtotal = Math.round(this.subtotal * 100) / 100
       }
 
-    }else {
+    } else {
       this.subtotal = this.myprice * this.myquan;
     }
   }
@@ -582,7 +589,7 @@ getItemPrices(){
     await alert.present();
   }
 
-  curtainDesc(){
+  curtainDesc() {
     this.totalItemsCurtain = 0;
     this.concatDescripton = "";
 
@@ -597,73 +604,51 @@ getItemPrices(){
       this.concatDescripton = this.concatDescripton + this.dayCurtain + "Day ";
       this.totalItemsCurtain = this.dayCurtain * 1;
     }
-    
+
     if (this.nightCurtain != 0 && this.nightCurtain != null) {
-      this.concatDescripton = this.concatDescripton + this.nightCurtain  + "Night ";
-      this.totalItemsCurtain +=  this.nightCurtain * 1
-      
-    }
-    if (this.blackoutCurtain != 0 && this.blackoutCurtain != null) {
-      this.concatDescripton = this.concatDescripton + this.blackoutCurtain  + "Blackout ";
-      this.totalItemsCurtain +=  this.blackoutCurtain * 1
+      this.concatDescripton = this.concatDescripton + this.nightCurtain + "Night ";
+      this.totalItemsCurtain += this.nightCurtain * 1
 
     }
-    if (this.belt != 0 && this.belt != null ) {
-      this.concatDescripton = this.concatDescripton + this.belt  + "Belt ";
-      this.totalItemsCurtain +=  this.belt * 1
+    if (this.blackoutCurtain != 0 && this.blackoutCurtain != null) {
+      this.concatDescripton = this.concatDescripton + this.blackoutCurtain + "Blackout ";
+      this.totalItemsCurtain += this.blackoutCurtain * 1
+
+    }
+    if (this.belt != 0 && this.belt != null) {
+      this.concatDescripton = this.concatDescripton + this.belt + "Belt ";
+      this.totalItemsCurtain += this.belt * 1
 
     }
     if (this.others != 0 && this.others != null) {
       this.concatDescripton = this.concatDescripton + this.others + "Other ";
-      this.totalItemsCurtain +=  this.others * 1
+      this.totalItemsCurtain += this.others * 1
 
     }
 
     // this.totalItemsCurtain = this.dayCurtain  * 1 + this.nightCurtain * 1 + this.blackoutCurtain  * 1 + this.belt * 1 + this.others * 1;
 
-    if(this.totalItemsCurtain > 0){
+    if (this.totalItemsCurtain > 0) {
       this.noOfPcs = this.totalItemsCurtain;
     }
-    
+
   }
 
 
-  addCustomItem(){
-
+  addCustomItem() {
     if ((this.myquan == null || this.myquan == 0) || (this.myprice == null || this.myprice == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
       this.presentAlert();
-    }else{
-      if(this.selectedCategory == "Carpet"){
+    } else {
+      if (this.selectedCategory == "Carpet") {
 
-        this.concatDesc = this.carpettype + " Carpet(" + this.lengths + this.unittype + " x " + this.breadthdata +  this.unittype  + ")"
+        this.concatDesc = this.carpettype + " Carpet(" + this.lengths + this.unittype + " x " + this.breadthdata + this.unittype + ")"
         this.Category = this.selectedCategory
-        if(this.cleantypes = "DC"){
+        if (this.cleantypes = "DC") {
           this.cleantype = ("Dry Clean"); //default
-        }else{
-          this.cleantype = ("Laundry"); 
+        } else {
+          this.cleantype = ("Laundry");
         }
         this.readytype = this.selectedreadyTypes;
-        this.itesmReady = "no";
-
-        this.itemPrice = this.myprice 
-        this.itemQty = this.myquan
-        this.itemPcs = this.totalItemsCurtain
-        this.itemsubtotal = this.subtotal
-
-        //save all above in temp_item_table
-        this.saveData();
-    
-
-      }else if(this.selectedCategory == "Curtains"){
-
-        this.concatDesc = this.concatDescripton
-        this.Category = this.selectedCategory
-        if(this.company = "DC"){
-          this.cleantype = ("Dry Clean"); //default
-        }else{
-          this.cleantype = ("Dry Clean"); 
-        }
-        this.readytype= this.selectedreadyTypes;
         this.itesmReady = "no";
 
         this.itemPrice = this.myprice
@@ -674,58 +659,94 @@ getItemPrices(){
         //save all above in temp_item_table
         this.saveData();
 
-      }else{
-        if(this.normaldesc == null || this.normaldesc == 0){
+
+      } else if (this.selectedCategory == "Curtains") {
+
+        this.concatDesc = this.concatDescripton
+        this.Category = this.selectedCategory
+        if (this.company = "DC") {
+          this.cleantype = ("Dry Clean"); //default
+        } else {
+          this.cleantype = ("Dry Clean");
+        }
+        this.readytype = this.selectedreadyTypes;
+        this.itesmReady = "no";
+
+        this.itemPrice = this.myprice
+        this.itemQty = this.myquan
+        this.itemPcs = this.totalItemsCurtain
+        this.itemsubtotal = this.subtotal
+
+        //save all above in temp_item_table
+        this.saveData();
+
+      } else {
+        if (this.normaldesc == null || this.normaldesc == 0) {
           this.presentAlert();
-        }else{
+        } else {
 
           this.concatDesc = this.normaldesc;
           console.log(this.concatDesc)
           this.Category = this.selectedCategory
-          if(this.cleantypes = "DC"){
+          if (this.cleantypes = "DC") {
             this.cleantype = ("Dry Clean"); //default
-          }else{
-            this.cleantype = ("Laundry"); 
+          } else {
+            this.cleantype = ("Laundry");
           }
           this.readytype = this.selectedreadyTypes;
           this.itesmReady = "no";
-  
+
           this.itemPrice = this.myprice
           this.itemQty = this.myquan
           this.itemPcs = this.noOfPcs
           this.subtotal = this.myprice * this.myquan
           this.itemsubtotal = this.subtotal
 
-          
 
-           //save all above in temp_item_table
+
+          //save all above in temp_item_table
           this.saveData();
-          
- 
+
+
         }
-      } 
+      }
     }
   }
 
-  saveData(){
-  
-    let params: any = {};
-    params.description = this.concatDesc
-    params.cat_type = this.Category
-    params.clean_type = this.cleantype
-    params.item_ready = this.readytype
-    params.price = this.itemPrice
-    params.qty = this.itemQty
-    params.pcs = this.itemPcs
-    params.subtotal = this.itemsubtotal
-    params.updated_by = "driver"
-    params.updated_on = "get date today"
-    params.rid = "Get invoice transaction Id"
+  saveData() {
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      console.log(res)
 
-    this.allItems = params;
 
+      let params: any = {};
+      params.description = this.concatDesc
+      params.cat_type = this.Category
+      params.clean_type = this.cleantype
+      params.item_ready = this.readytype
+      params.price = this.itemPrice
+      params.qty = this.itemQty
+      params.pcs = this.itemPcs
+      params.subtotal = this.itemsubtotal
+      params.updated_by = res.name
+        params.updated_on = this.defaultSrvc.getToday();
+      params.rid = this.mycompany[0].UNINV_COLLID
+
+      this.allItems = params;
+
+    })
+
+    this.storage.get("TEMP_ITEMS_TABLE").then(res => {
+      console.log(res)
+      console.log(this.allItems)
+      let result;
+      result = res
+      result.push(this.allItems)
+      console.log(result)
+      // this.storage.set('TEMP_ITEMS_TABLE', result)
+
+    })
   }
 
-  
+
 
 }

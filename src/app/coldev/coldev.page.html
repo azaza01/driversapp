@@ -53,8 +53,8 @@
     </div>
 
     <div *ngSwitchCase="'DELIVERIES'">
-      <ion-list *ngFor="let delitem of myColDev | filterColDev: 'delivery'; let i = index">
-        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(delitem)">
+      <ion-list [hidden]="delitem.coldel_type != 'delivery'" *ngFor="let delitem of myColDev; let i = index">
+        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="delView(delitem)">
           <ion-item-divider style="background-color: yellow;">
             <ion-label>{{ delitem.inn }}</ion-label>
             <ion-label>{{ delitem.det }}</ion-label>

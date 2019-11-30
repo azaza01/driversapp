@@ -205,7 +205,7 @@ export class ColdevPage implements OnInit {
   }
 
 
-  delView() {
+  delView(selected) {
     // const alert = await this.alertController.create({
     //   header: 'Bill from which company?',
     //   message: msg,
@@ -221,7 +221,7 @@ export class ColdevPage implements OnInit {
     //       text: 'CC',
     //       handler: () => {
     //function herer
-    this.router.navigate(['/deliveryview']);
+    this.router.navigate(['/deliveryview', selected]);
     //       }
     //     }
     //   ],

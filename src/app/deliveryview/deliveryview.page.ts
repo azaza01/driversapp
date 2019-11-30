@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { DefaultsService } from '../api/defaults.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-deliveryview',
@@ -9,9 +11,31 @@ import { AlertController } from '@ionic/angular';
 })
 export class DeliveryviewPage implements OnInit {
 
-  constructor(private router : Router, public alertController: AlertController) { }
+  deliveryInfo: any = []
+  driverInfo: any
+  isLoading: boolean = false
+  unsyncData: any;
+
+  constructor(
+    private router: Router,
+    public alertController: AlertController,
+    public activatedRoute: ActivatedRoute,
+    private defaultSrvc: DefaultsService,
+    private storage: Storage,
+    ) { }
 
   ngOnInit() {
+    this.isLoading = true
+    this.activatedRoute.params.subscribe((params) => {
+      console.log(params);
+      this.deliveryInfo = params
+    });
+
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      this.driverInfo = res
+      console.log(this.driverInfo)
+      this.isLoading = false
+    })
   }
 
   createInvoiceItem(){
