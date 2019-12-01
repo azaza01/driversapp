@@ -69,10 +69,10 @@
                   <ion-select-option value="100">100%</ion-select-option>
                </ion-select>
             </ion-item>
-            <ion-item>
+            <!-- <ion-item>
                 <ion-label>Overdue : </ion-label>
-                <ion-input placeholder="0"></ion-input>
-            </ion-item>
+                <ion-input [(ngModel)]="overDue" (ngModelChange)="overDueAmount(overDue)"></ion-input>
+            </ion-item> -->
             <ion-item>
                 <ion-label>Payable : </ion-label>
                 <ion-input >{{ payableAmount  | number:'1.2-2' }}</ion-input>
@@ -80,11 +80,11 @@
             <ion-item>
                 <ion-label>Deposit : </ion-label>
                 <ion-input cancelText="Dismiss" [(ngModel)]="depositAmount" (ngModelChange)="getDeposit(depositAmount)"> </ion-input>
-                <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                  <ion-select-option value="brown">CASH</ion-select-option>
-                  <ion-select-option value="blonde">CHEQUE</ion-select-option>
-                  <ion-select-option value="black">CREDIT</ion-select-option>
-                  <ion-select-option value="red">BT</ion-select-option>
+                <ion-select  cancelText="Dismiss" [(ngModel)]="paymentMethod" (ngModelChange)="getPayemntMethod(paymentMethod)">
+                  <ion-select-option value="CASH">CASH</ion-select-option>
+                  <ion-select-option value="CHEQUE">CHEQUE</ion-select-option>
+                  <ion-select-option value="CREDIT">CREDIT</ion-select-option>
+                  <ion-select-option value="BT">BT</ion-select-option>
             </ion-select>
             </ion-item>
             <ion-item>
@@ -105,12 +105,12 @@
   
       <ion-row>
           <ion-col >
-            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment()">Confirm and create another invoice</ion-button>
+            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
           </ion-col>
         </ion-row>
         <ion-row>
             <ion-col >
-              <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="viewItems()">Confirm payments</ion-button>
+              <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmPayment()">Confirm payments</ion-button>
             </ion-col>
           </ion-row>
   
