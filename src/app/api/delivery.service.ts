@@ -86,7 +86,7 @@ export class DeliveryService {
     })
   }
 
-  gettems(info: any, coldelID) {
+  gettems(info) {
     let params = {
       // email: info.email_address,
       // password: info.password,
@@ -103,6 +103,7 @@ export class DeliveryService {
           let res;
           res = response;
           console.log(res)
+          info = res
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)

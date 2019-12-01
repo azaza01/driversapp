@@ -11,6 +11,8 @@ import { Storage } from '@ionic/storage';
 export class DeliveryitemviewPage implements OnInit {
 
   selectedDelivery : any;
+  items: any = [];
+  info: any
 
   constructor(
     private router: Router,
@@ -20,9 +22,21 @@ export class DeliveryitemviewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-   
+    this.getItems(this.info);
   }
 
+//display item with 
 
+  getItems(info) {
+    Promise.resolve(this.delcltnSrvc.gettems(info)).then(data => {
+      let items: any
+      items = data;
+      this.info = data;
+      console.log(items);
+    }).catch(e => {
+      console.log(e);
+
+    });
+  }
 
 }

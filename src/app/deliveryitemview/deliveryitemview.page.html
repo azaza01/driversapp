@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>deliveryitemview</ion-title>
+    <ion-title>Delivery Items</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-    <ion-item-group>
+    <ion-item-group *ngFor="let item of info; let i = index">
         <ion-item-divider style="background-color: yellow;">
           <ion-label class="ion-padding">Description</ion-label>
           <ion-label class="ion-padding">Price</ion-label>
@@ -15,12 +15,15 @@
           <ion-label class="ion-padding">Total</ion-label>
         </ion-item-divider>
         <ion-item>
-              <ion-label>Tshirt </ion-label>
-              <ion-label>$3.00 </ion-label>
-              <ion-label>1 </ion-label>
-              <ion-label>2 </ion-label>
-              <ion-label>$300 </ion-label>
+              <ion-label >{{ item.description }} </ion-label>
         </ion-item>
+         <ion-item>
+            <ion-label>{{ item.price }}</ion-label>
+            <ion-label>{{ item.qty }}</ion-label>
+            <ion-label>{{ item.pieces }}</ion-label>
+            <ion-label>{{ item.price * item.qty }}</ion-label>
+         </ion-item>
+        
           
           
   </ion-item-group>
