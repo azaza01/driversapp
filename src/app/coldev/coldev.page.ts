@@ -8,6 +8,7 @@ import { AccountsService } from '../api/accounts.service';
 import { DeliveryService } from '../api/delivery.service';
 import { formatDate } from '@angular/common';
 import { format } from 'util';
+
 @Component({
   selector: 'app-coldev',
   templateUrl: './coldev.page.html',
@@ -80,6 +81,21 @@ export class ColdevPage implements OnInit {
       serverData.coldel_flag = "old"
       this.myColDev.push(serverData)
       this.storage.set('COLDEL_TABLE', this.myColDev)
+      
+      let params = {
+        UNPAY_DELID : serverData.dei,
+        UNPAY_INVOICENO : serverData.inn,
+        UNPAY_INITIAL : serverData.coi,
+        UNPAY_TOTAL: serverData.toa,
+        UNPAY_DISCOUNT : serverData.dis,
+        UNPAY_DATE :serverData.ded,
+        UNPAY_DEPOTYPE :serverData.dpt,
+        UNPAY_DEPOAMT :serverData.dpa,
+        UNPAY_BALANCELEFT :serverData.baa,
+        UNPAY_BALANCEPAID:serverData.bap,
+        UNPAY_BALANCETYPE: "Cash"
+      }
+      this.storage.set('UNSYNCED_PAYMENT_TABLE', params)
 
     } else {
 
@@ -206,28 +222,7 @@ export class ColdevPage implements OnInit {
 
 
   delView(selected) {
-    // const alert = await this.alertController.create({
-    //   header: 'Bill from which company?',
-    //   message: msg,
-    //   cssClass: 'ion-alertCSS',
-    //   buttons: [
-    //     {
-    //       text: 'DC',
-    //       handler: () => {
-    //         //function herer
-    //         this.router.navigate(['/deliveryview']);
-    //       }
-    //     }, {
-    //       text: 'CC',
-    //       handler: () => {
-    //function herer
     this.router.navigate(['/deliveryview', selected]);
-    //       }
-    //     }
-    //   ],
-    // });
-
-    // await alert.present();
   }
 
 
@@ -256,6 +251,32 @@ export class ColdevPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+
+  getSpecialInstruction(){
+
+    // //parameters 
+    // // "email", prefEmail));
+		// // "password", prefPassword));
+		// // "driverid", prefUserID));
+    // // "date", formattedDate));
+
+    // //siResult =  getSpecialInstructionsWS, "POST" http://ccmanager.cottoncare.com.sg/ws/specialinstructions.json
+    
+    // //result will delete to local and online if action = remove
+    //loop result 
+
+    //delete to coldel table where id , date & type 
+
+    //// delete also in online  http://ccmanager.cottoncare.com.sg/ws/deletespecialinstructions.json
+    //// parameters
+    //// "email", prefEmail));
+    //   //"password", prefPassword));
+    //   //"driverid", prefUserID));
+    //  //"date", formattedDate));
+    // //"id", json_data.getString("id")));
+
   }
 
 }

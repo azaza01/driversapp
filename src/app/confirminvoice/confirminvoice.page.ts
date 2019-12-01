@@ -45,9 +45,9 @@ export class ConfirminvoicePage implements OnInit {
   paymentMethod:any = "CASH";
 
   constructor(
-    private storage: Storage,
     public alertController: AlertController,
     private defaultSrvc: DefaultsService,
+    private storage: Storage,
   ) { }
 
   ngOnInit() {
@@ -76,6 +76,16 @@ export class ConfirminvoicePage implements OnInit {
       console.log(this.returnDate)
       console.log(this.customercredit)
       console.log(this.customerTypes)
+    })
+
+    this.storage.get('COLDEL_TABLE').then(res => {
+      var l = res.length, i;
+      for( i=0; i<l; i++) {
+          if(res[i].id == this.invoiceId){
+            this.returnDate  = res[i].coldel_return;
+          }               
+      }
+      console.log(this.returnDate)
     })
 
     this.getItemSubtotal();
@@ -141,6 +151,16 @@ export class ConfirminvoicePage implements OnInit {
     });
     await alert.present();
   }
+  // getDate(){
+    // this.datePicker.show({
+    //   date: new Date(),
+    //   mode: 'date',
+    //   androidTheme: this.datePicker.ANDROID_THEMES.THEME_TRADITIONAL
+    // }).then(
+    //   date => console.log('Got date: ', date),
+    //   err => console.log('Error occurred while getting date: ', err)
+    // );
+  // }
 
   showFinal(finalSubtotal){
     this.finalSubtotal =  finalSubtotal
@@ -379,8 +399,8 @@ export class ConfirminvoicePage implements OnInit {
 
     // "depositamount" = this.depositAmount
     // "deposittype"  = this.paymentMethod
-    // "balancepaid"  = "0.00"  //saved but useless
-    // "name"  = driver name
+    // "balancepaid" = "0.00"  //saved but useless
+    // "name" = driver name
     // "agreeddeliverydate" = agreed deliver date
     // "deliverytimeslot" = agreed deliver time
     // "invoiceitem" = items; //all items

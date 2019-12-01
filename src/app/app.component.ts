@@ -134,6 +134,14 @@ export class AppComponent {
             }).catch((error) => {
               console.log('removed error for ' + 'ACCOUNTS_TABLE' + '', error);
             });
+
+            this.storage.remove('COLDEL_TABLE').then(() => {
+              console.log('removed ');
+              this.router.navigate(['/login']);
+
+            }).catch((error) => {
+              console.log('removed error for ' + 'COLDEL_TABLE' + '', error);
+            });
           }
         }
       ]
