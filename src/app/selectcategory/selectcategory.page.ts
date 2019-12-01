@@ -68,6 +68,7 @@ export class SelectcategoryPage implements OnInit {
               });
               console.log('TEMP_ITEMS_TABLE', this.tempItems);
               this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
+              // this.defaultSrvc.getTempItems = this.tempItems
               this.category = this.getItem(this.tempItems, 'items')
               this.isLoading = false
               this.loading.dismiss();
@@ -156,7 +157,7 @@ export class SelectcategoryPage implements OnInit {
     console.log(data)
     console.log(this.tempItems)
     this.defaultSrvc.getCategory = data
-    this.defaultSrvc.getTempItems = this.tempItems
+    // this.defaultSrvc.getTempItems = this.tempItems
 
     this.router.navigate(['/selectitemlist']);
   }

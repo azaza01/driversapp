@@ -22,9 +22,8 @@ export class ConfirminvoicePage implements OnInit {
 
 
   finalSubtotal: any = 0;
+  percentPromo: any
   percentPromoAmount: any;
-  percentPromo: any;
-
   invoiceSyncLink : any;
   
   // percentValue: any;

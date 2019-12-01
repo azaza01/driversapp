@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,11 +32,20 @@ export class SelectitemlistPage implements OnInit {
   async ngOnInit() {
     console.log(this.defaultSrvc.getCategory)
     console.log(this.defaultSrvc.getTempItems)
-    this.category = this.defaultSrvc.getCategory
-    this.temp_List = this.defaultSrvc.getTempItems
-    this.item_List = await this.getList(this.temp_List)
-    console.log(this.item_List)
+    this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+      this.category = this.defaultSrvc.getCategory
+      this.temp_List = this.defaultSrvc.getTempItems ? this.defaultSrvc.getTempItems : res
+      this.item_List = await this.getList(this.temp_List)
+      console.log(this.temp_List)
+      console.log(this.item_List)
 
+    })
+  }
+
+  ionViewWillLeave() {
+    // this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {
+    this.defaultSrvc.getTempItems = this.temp_List
+    // })
   }
 
   updateSubtotal(item) {
@@ -83,11 +93,12 @@ export class SelectitemlistPage implements OnInit {
       backdropDismiss: false,
     });
 
-    myModal.onDidDismiss().then(data => {
+    myModal.onDidDismiss().then(async data => {
 
       if (data['data'] != undefined) {
         console.log(data)
-        this.item_List = data['data'].data
+        this.item_List = await this.getList(data['data'].data)
+
       } else {
 
       }
