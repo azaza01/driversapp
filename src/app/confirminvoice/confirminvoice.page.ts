@@ -257,9 +257,36 @@ export class ConfirminvoicePage implements OnInit {
   }
 
 
-
   confirmAndCreatePayment() {
-   
+
+    //generate new invoice
+
+    if(this.invoiceType == "Repeat"){
+      //update summary_table for repeat -- later part(KIV)
+    }else if(this.invoiceType == "Pending"){
+      //update summary_table for pending -- later part(KIV)
+    }else{
+      //update summary_table for new and others -- later part(KIV)
+    }
+
+    this.savePay()
+
+    //// collection generated in local UNSYNCED_COLLECTION_TABLE
+    // initialValues.put(UNCOLL_RELATED_UNSYNCED_ID, unsynccol.getUCOUIID());
+		// initialValues.put(UNCOLL_CUSTID, unsynccol.getUCOCustId());
+		// initialValues.put(UNCOLL_CUSTTYPE, unsynccol.getUCOcusttype());
+		// initialValues.put(UNCOLL_COLLECTTYPE, unsynccol.getUCOcollecttype());
+		// initialValues.put(UNCOLL_COLLECTDATE, unsynccol.getUCOcollectdate());
+    //     initialValues.put(UNCOLL_COLLECTTIME, unsynccol.getUCOcollecttime());
+    //     initialValues.put(UNCOLL_COLLECTADDRESS, unsynccol.getUCOcollectaddress());
+    //     initialValues.put(UNCOLL_COLLECTUNIT, unsynccol.getUCOcollectunit());
+    //     initialValues.put(UNCOLL_COLLECTPOSTAL, unsynccol.getUCOcollectpostal());
+    //     initialValues.put(UNCOLL_COLLECTBUILDING, unsynccol.getUCOcollectbuilding());
+    //     initialValues.put(UNCOLL_COLLECTREGION, unsynccol.getUCOcollectregion());
+    //     initialValues.put(UNCOLL_COLLECTNOTE, unsynccol.getUCOcollectnote());
+    //     initialValues.put(UNCOLL_COLLECTSTATUS, unsynccol.getUCOcollectstatus());
+    //     initialValues.put(UNCOLL_UPDATEBY, unsynccol.getUCOcreatedby());
+
   }
 
   confirmPayment() {
@@ -274,13 +301,14 @@ export class ConfirminvoicePage implements OnInit {
 
   }
 
+
   payAction(){
     if(this.invoiceType == "Repeat"){
-      //update summary_table for repeat
+      //update summary_table for repeat -- later part(KIV)
     }else if(this.invoiceType == "Pending"){
-      //update summary_table for pending
+      //update summary_table for pending -- later part(KIV)
     }else{
-      //update summary_table for new and others
+      //update summary_table for new and others -- later part(KIV)
     }
 
     ////check connection
@@ -361,13 +389,18 @@ export class ConfirminvoicePage implements OnInit {
 
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
-
-    //// delete on COLDEL_TABLE where = "collection", selectedDate, coldelID)
+    //if (successful{
+       //// delete on COLDEL_TABLE where = "collection", selectedDate, coldelID)
     //// delete on TEMP_ITEMS_TABLE whererid = current invoice id
     //// delete on UNSYNCED_INVOICE_TABLE where tumestamp =  timestamp of selected invoice
 
     ///// SYNCED_INVOICE_TABLE sync all successful - later part (KIV)
 
+    //}else{
+      this.savePay();
+    //}
+
+ 
   }
 
 }
