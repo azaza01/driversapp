@@ -23,9 +23,10 @@
 
 <ion-content>
 
-  <ion-card [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}"
+  <ion-card [hidden]="item.qty == 0 || item.qty == null"
+    [ngClass]="{'laundry-class': item.clean_type == 'Laundry','dryclean-class': item.clean_type == 'Dry Clean'}"
     *ngFor="let item of item_List">
-    <ion-card-content *ngIf="item.qty > 0">
+    <ion-card-content>
       <ion-row>
         <ion-col size="5" class="descCss">
           {{item.description}}
@@ -45,10 +46,10 @@
 
 </ion-content>
 <ion-row>
-    <!-- <ion-col>
-        <ion-button expand="full" shape="round" color="light" (click)="closeModal()">CLOSE</ion-button>
-      </ion-col>
   <ion-col>
-    <ion-button expand="full" shape="round" color="warning">CONFIRM INVOICE</ion-button>
-  </ion-col> -->
+    <ion-button expand="full" shape="round" color="light" (click)="closeModal()">CLOSE</ion-button>
+  </ion-col>
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" (click)="confirmInvoice()">CONFIRM INVOICE</ion-button>
+  </ion-col>
 </ion-row>

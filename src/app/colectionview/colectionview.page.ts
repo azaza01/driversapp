@@ -180,6 +180,7 @@ export class ColectionviewPage implements OnInit {
                 }
               }).finally(() => {
                 console.log(this.unsyncData);
+                this.defaultSrvc.getTempItems = null
                 this.router.navigate(['/selectcategory', info]);
               })
 
