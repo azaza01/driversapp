@@ -86,4 +86,43 @@ export class DeliveryService {
     })
   }
 
+  // gettems(info: any, today) {
+  //   let params = {
+  //     // email: info.email_address,
+  //     // password: info.password,
+  //     // driverid: info.id,
+  //     date: today,
+  //     "email": "davidchia@cottoncare.com.sg",
+  //     "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
+  //     "driverid": "16",
+  //     // "date": "2019-11-21"
+  //   }
+
+
+
+  //   return new Promise(resolve => {
+  //     this.httpclient.post(this.url + "/gzipdelivery.json", params).subscribe(
+  //       response => {
+  //         let res;
+  //         res = response;
+  //         console.log(res)
+
+  //         // this.storage.set('COLDEL_TABLE', res).then(() => {
+  //           resolve(res)
+  //         // });
+
+  //       },
+  //       err => {
+  //         console.log(err)
+  //         resolve(false)
+
+  //         // alert(JSON.stringify(err));
+  //       }
+  //     );
+
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // }
+
 }

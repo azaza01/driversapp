@@ -275,20 +275,20 @@ export class ConfirminvoicePage implements OnInit {
     this.savePay()
 
     //// collection generated in local UNSYNCED_COLLECTION_TABLE
-    // initialValues.put(UNCOLL_RELATED_UNSYNCED_ID, unsynccol.getUCOUIID());
-		// initialValues.put(UNCOLL_CUSTID, unsynccol.getUCOCustId());
-		// initialValues.put(UNCOLL_CUSTTYPE, unsynccol.getUCOcusttype());
-		// initialValues.put(UNCOLL_COLLECTTYPE, unsynccol.getUCOcollecttype());
-		// initialValues.put(UNCOLL_COLLECTDATE, unsynccol.getUCOcollectdate());
-    //     initialValues.put(UNCOLL_COLLECTTIME, unsynccol.getUCOcollecttime());
-    //     initialValues.put(UNCOLL_COLLECTADDRESS, unsynccol.getUCOcollectaddress());
-    //     initialValues.put(UNCOLL_COLLECTUNIT, unsynccol.getUCOcollectunit());
-    //     initialValues.put(UNCOLL_COLLECTPOSTAL, unsynccol.getUCOcollectpostal());
-    //     initialValues.put(UNCOLL_COLLECTBUILDING, unsynccol.getUCOcollectbuilding());
-    //     initialValues.put(UNCOLL_COLLECTREGION, unsynccol.getUCOcollectregion());
-    //     initialValues.put(UNCOLL_COLLECTNOTE, unsynccol.getUCOcollectnote());
-    //     initialValues.put(UNCOLL_COLLECTSTATUS, unsynccol.getUCOcollectstatus());
-    //     initialValues.put(UNCOLL_UPDATEBY, unsynccol.getUCOcreatedby());
+    //initialValues.put(UNCOLL_RELATED_UNSYNCED_ID, unsynccol.getUCOUIID());
+		//initialValues.put(UNCOLL_CUSTID, unsynccol.getUCOCustId());
+		//initialValues.put(UNCOLL_CUSTTYPE, unsynccol.getUCOcusttype());
+		//initialValues.put(UNCOLL_COLLECTTYPE, unsynccol.getUCOcollecttype());
+		//initialValues.put(UNCOLL_COLLECTDATE, unsynccol.getUCOcollectdate());
+    //initialValues.put(UNCOLL_COLLECTTIME, unsynccol.getUCOcollecttime());
+    //initialValues.put(UNCOLL_COLLECTADDRESS, unsynccol.getUCOcollectaddress());
+    //initialValues.put(UNCOLL_COLLECTUNIT, unsynccol.getUCOcollectunit());
+    //initialValues.put(UNCOLL_COLLECTPOSTAL, unsynccol.getUCOcollectpostal());
+    //initialValues.put(UNCOLL_COLLECTBUILDING, unsynccol.getUCOcollectbuilding());
+    //initialValues.put(UNCOLL_COLLECTREGION, unsynccol.getUCOcollectregion());
+    //initialValues.put(UNCOLL_COLLECTNOTE, unsynccol.getUCOcollectnote());
+    //initialValues.put(UNCOLL_COLLECTSTATUS, unsynccol.getUCOcollectstatus());
+    //initialValues.put(UNCOLL_UPDATEBY, unsynccol.getUCOcreatedby());
 
   }
 

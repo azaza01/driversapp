@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DefaultsService } from '../api/defaults.service';
 import { Storage } from '@ionic/storage';
+import { notEqual } from 'assert';
 
 @Component({
   selector: 'app-deliveryview',
@@ -15,6 +16,8 @@ export class DeliveryviewPage implements OnInit {
   driverInfo: any
   isLoading: boolean = false
   unsyncData: any;
+
+  dataParamsID: any;
 
   constructor(
     private router: Router,
@@ -29,6 +32,10 @@ export class DeliveryviewPage implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       console.log(params);
       this.deliveryInfo = params
+      this.dataParamsID = params.dea + "\n" + params.dun + " S" + params.dpc + "\n" + params.deb + "\n"  + "NOTE : "+ params.den
+      
+      console.log(this.driverInfo)
+      console.log(this.dataParamsID)
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {

@@ -29,14 +29,26 @@
       <ion-list [hidden]="item.coldel_type != 'collection'" *ngFor="let item of myColDev; let i = index">
         <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
           <ion-item-divider style="background-color: yellow;">
-            <ion-label>{{ item.cot }}</ion-label>
-            <ion-label style="padding-left: 30px;">{{ item.cod }}</ion-label>
+            <ion-label style="font-size: large;color: black;" >{{ item.cot }}</ion-label>
+            <ion-label style="padding-left: 20px;font-size: large;color: black;">{{ item.cod }}</ion-label>
           </ion-item-divider>
           <ion-item>
-            <ion-label>{{ item.cun }}</ion-label>
+            <ion-label>Name : {{ item.cun }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>{{ item.coa }}</ion-label>
+            <ion-label>Address : {{ item.coa }}</ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label>Unit : {{ item.cuo }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Postal : {{ item.cpc }}</ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label>Building : {{ item.cob }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-textarea>NOTE : {{ item.con }}</ion-textarea>
           </ion-item>
           <!-- <ion-item>
             <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
@@ -55,17 +67,33 @@
     <div *ngSwitchCase="'DELIVERIES'">
       <ion-list [hidden]="delitem.coldel_type != 'delivery'" *ngFor="let delitem of myColDev; let i = index">
         <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="delView(delitem)">
-          <ion-item-divider style="background-color: yellow;">
-            <ion-label>{{ delitem.inn }}</ion-label>
-            <ion-label>{{ delitem.det }}</ion-label>
-            <ion-label style="padding-left: 30px;">{{ delitem.ded }}</ion-label>
+          <ion-item-divider style="background-color: yellow;font-style: bold;">
+            <ion-label style="font-size: large;color: black;">{{ delitem.inn }}</ion-label>
+            <ion-label style="padding-left: 10px;font-size: large;color: black;"> {{ delitem.det }}</ion-label>
+            <ion-label style="padding-left: 20px;font-size: large;color: black;"> {{ delitem.ded }}</ion-label>
           </ion-item-divider>
           <ion-item>
-            <ion-label>{{ delitem.cun }}</ion-label>
+            <ion-label>Name : {{ delitem.cun }}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Address : {{ delitem.dea }}</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Unit : {{ delitem.dun }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>{{ delitem.dea }}</ion-label>
+            <ion-label>Postal :S{{ delitem.dpc }}</ion-label>
           </ion-item>
+          <ion-item>
+              <ion-label>Building : {{ delitem.deb }}</ion-label>
+            </ion-item>
+
+          <ion-item>
+            <ion-textarea>NOTE : {{ delitem.den }}</ion-textarea>
+          </ion-item>
+
           <ion-item>
             <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
             <ion-label style="padding: 10px;">0</ion-label>
