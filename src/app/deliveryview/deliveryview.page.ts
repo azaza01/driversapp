@@ -17,7 +17,7 @@ export class DeliveryviewPage implements OnInit {
   isLoading: boolean = false
   unsyncData: any;
 
-  dataParamsID: any;
+  selectedDelivery: any;
 
   constructor(
     private router: Router,
@@ -32,10 +32,8 @@ export class DeliveryviewPage implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       console.log(params);
       this.deliveryInfo = params
-      this.dataParamsID = params.dea + "\n" + params.dun + " S" + params.dpc + "\n" + params.deb + "\n"  + "NOTE : "+ params.den
-      
-      console.log(this.driverInfo)
-      console.log(this.dataParamsID)
+      this.selectedDelivery =  params.dei
+      console.log(this.selectedDelivery)
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -54,7 +52,7 @@ export class DeliveryviewPage implements OnInit {
   }
 
   viewItems(){
-    this.router.navigate(['/deliveryitemview']);
+    this.router.navigate(['/deliveryitemview'], this.selectedDelivery);
   }
 
 

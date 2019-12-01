@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DeliveryService } from '../api/delivery.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-deliveryitemview',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DeliveryitemviewPage implements OnInit {
 
-  constructor() { }
+  selectedDelivery : any;
+
+  constructor(
+    private router: Router,
+    public activatedRoute: ActivatedRoute,
+    private delcltnSrvc: DeliveryService,
+    private storage: Storage,
+  ) { }
 
   ngOnInit() {
+   
   }
+
+
 
 }
