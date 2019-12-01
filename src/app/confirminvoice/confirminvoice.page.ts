@@ -24,6 +24,9 @@ export class ConfirminvoicePage implements OnInit {
   finalSubtotal: any = 0;
   percentPromoAmount: any;
   percentPromo: any;
+
+  invoiceSyncLink : any;
+  
   // percentValue: any;
   convertedPercent: any;
   afterLessAmount: any;
@@ -351,6 +354,8 @@ export class ConfirminvoicePage implements OnInit {
 
   //with connection
   syncPay(){
+
+    this.invoiceSyncLink = "http://ccmanager.cottoncare.com.sg/ws/addinvoice.json"
 
     // //update overdue payment  - later part(KIV)
 
