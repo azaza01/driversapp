@@ -101,6 +101,8 @@ export class CreatecustomitemPage implements OnInit {
   allItems: any = []
   collectedData: any = [];
 
+  temp_List: any
+
 
   constructor(
     private storage: Storage,
@@ -139,6 +141,7 @@ export class CreatecustomitemPage implements OnInit {
     this.carpettype = "";
     this.pricetype = "";
     this.cleantypes = "";
+    this.readytype = "";
   }
 
   showSelectValue(selectedCat) {
@@ -717,8 +720,8 @@ export class CreatecustomitemPage implements OnInit {
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       console.log(res)
 
-
-      let params: any = {};
+      let params: any = [];
+      params.id = "999"
       params.description = this.concatDesc
       params.cat_type = this.Category
       params.clean_type = this.cleantype
@@ -735,16 +738,19 @@ export class CreatecustomitemPage implements OnInit {
 
     })
 
-    this.storage.get("TEMP_ITEMS_TABLE").then(res => {
+    console.log(this.defaultSrvc.getTempItems)
+    this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+      this.temp_List = this.defaultSrvc.getTempItems ? this.defaultSrvc.getTempItems : res
+      res.push(this.allItems)
       console.log(res)
-      console.log(this.allItems)
-      let result;
-      result = res
-      result.push(this.allItems)
-      console.log(result)
-      // this.storage.set('TEMP_ITEMS_TABLE', result)
 
+      this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress =>{
+        console.log(ress);
+      })
     })
+    this.clearCalcu();
+      // console.log(result)
+      // this.storage.set('TEMP_ITEMS_TABLE', result)
   }
 
 

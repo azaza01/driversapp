@@ -38,7 +38,7 @@ export class CollectionitemsPage implements OnInit {
   }
 
   updateSubtotal(item) {
-    if (item.qty != 0) {
+    if (item.qty != 0 ) {
       this.subtotal = item.qty * item.price;
       console.log(this.subtotal)
       return this.subtotal;

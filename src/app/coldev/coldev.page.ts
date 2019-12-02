@@ -82,20 +82,20 @@ export class ColdevPage implements OnInit {
       this.myColDev.push(serverData)
       this.storage.set('COLDEL_TABLE', this.myColDev)
       
-      let params = {
-        UNPAY_DELID : serverData.dei,
-        UNPAY_INVOICENO : serverData.inn,
-        UNPAY_INITIAL : serverData.coi,
-        UNPAY_TOTAL: serverData.toa,
-        UNPAY_DISCOUNT : serverData.dis,
-        UNPAY_DATE :serverData.ded,
-        UNPAY_DEPOTYPE :serverData.dpt,
-        UNPAY_DEPOAMT :serverData.dpa,
-        UNPAY_BALANCELEFT :serverData.baa,
-        UNPAY_BALANCEPAID:serverData.bap,
-        UNPAY_BALANCETYPE: "Cash"
-      }
-      this.storage.set('UNSYNCED_PAYMENT_TABLE', params)
+      // let params = {
+      //   UNPAY_DELID : serverData.dei,
+      //   UNPAY_INVOICENO : serverData.inn,
+      //   UNPAY_INITIAL : serverData.coi,
+      //   UNPAY_TOTAL: serverData.toa,
+      //   UNPAY_DISCOUNT : serverData.dis,
+      //   UNPAY_DATE :serverData.ded,
+      //   UNPAY_DEPOTYPE :serverData.dpt,
+      //   UNPAY_DEPOAMT :serverData.dpa,
+      //   UNPAY_BALANCELEFT :serverData.baa,
+      //   UNPAY_BALANCEPAID:serverData.bap,
+      //   UNPAY_BALANCETYPE: "Cash"
+      // }
+      // this.storage.set('UNSYNCED_PAYMENT_TABLE', params)  
 
     } else {
 

@@ -279,7 +279,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
 
-  confirmAndCreatePayment() {
+  confirmAndCreatePayment() { //KIV
 
     //generate new invoice
 
@@ -290,7 +290,6 @@ export class ConfirminvoicePage implements OnInit {
     }else{
       //update summary_table for new and others -- later part(KIV)
     }
-
     this.savePay()
 
     //// collection generated in local UNSYNCED_COLLECTION_TABLE
@@ -314,7 +313,7 @@ export class ConfirminvoicePage implements OnInit {
   confirmPayment() {
 
     if(this.paymentMethod == "CREDIT" && this.payableAmount <= this.customercredit){
-      //update credit credit of customer
+      //update credit credit of customer 
       //check overdue payment and add to total payable - later part(KIV)
       this.payAction()
     }else{
@@ -389,7 +388,7 @@ export class ConfirminvoicePage implements OnInit {
     // "invoiceno" = invoice_number
 
     // ////check type and get corresponding id number
-    // "type", invoicetypeID)); 
+    // "type", invoicetypeID
 
     // ///// subtract overdue amount from deposit else won't tally  - later part(KIV)
     // ///// BigDecimal depood = new BigDecimal(deposit.getText().toString()); - later part(KIV)
