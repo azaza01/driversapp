@@ -12,29 +12,33 @@
           </ion-item-divider>
           <ion-item>
             <ion-label>Invoice No:</ion-label>
-            <ion-label style="padding-left: 1px;">CC-191119Ag01 </ion-label>
+            <ion-label style="padding-left: 1px;">{{ invnum }} </ion-label>
           </ion-item>
           <ion-item>
               <ion-label>Total : </ion-label>
-              <ion-label>$100 </ion-label>
+              <ion-label>$ {{ totalamount }} </ion-label>
                 <ion-label>Billed From : </ion-label>
-                <ion-label style="padding-right: 1px;">BSCS </ion-label>
+                <ion-label style="padding-right: 1px;">{{ billFromCompany }} </ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Others : </ion-label>
-                <ion-label>ddd </ion-label>
+                <ion-label>{{  discounts }} %</ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Deposit : </ion-label>
-                <ion-label>$40 </ion-label>
+                <ion-label>$ {{ depositamount }}</ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Last Paid : </ion-label>
-                <ion-label>15</ion-label>
+                <ion-label>{{ LastPaid }}</ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Outstanding : </ion-label>
-                <ion-label>John Doe </ion-label>
+                <ion-label>{{ outstandingbalance  }} </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>Current credit : </ion-label>
+                <ion-label>{{ customerCredit  }} </ion-label>
             </ion-item>
             <!-- <ion-item>
                 <ion-label>Overdue : </ion-label>
@@ -42,26 +46,25 @@
             </ion-item> -->
             <ion-item>
                 <ion-label>Paying : </ion-label>
-                <ion-input> </ion-input>
-                      <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                        <ion-select-option value="brown">CASH</ion-select-option>
-                        <ion-select-option value="blonde">CHEQUE</ion-select-option>
-                        <ion-select-option value="black">CREDIT</ion-select-option>
-                        <ion-select-option value="red">BT</ion-select-option>
-                  </ion-select>
-
+                <ion-input cancelText="Dismiss" [(ngModel)]="payAmount" (ngModelChange)="getPay(payAmount)"> </ion-input>
+                <ion-select  cancelText="Dismiss" [(ngModel)]="paymentMethod" (ngModelChange)="getPayemntMethod(paymentMethod)">
+                  <ion-select-option value="CASH">CASH</ion-select-option>
+                  <ion-select-option value="CHEQUE">CHEQUE</ion-select-option>
+                  <ion-select-option value="CREDIT">CREDIT</ion-select-option>
+                  <ion-select-option value="BT">BT</ion-select-option>
+            </ion-select>
             </ion-item>
-            <ion-row>
+            <!-- <ion-row>
                     <ion-col >
                       <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">REWASH</ion-button>
                     </ion-col>
                     <ion-col >
                         <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">POSTPONE</ion-button>
                     </ion-col>
-            </ion-row>
+            </ion-row> -->
             <ion-row>
                     <ion-col >
-                      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">REFEAT</ion-button>
+                      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">REPEAT</ion-button>
                     </ion-col>
                     <ion-col >
                         <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">MAKE PAYMENT</ion-button>

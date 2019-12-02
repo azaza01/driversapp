@@ -6,7 +6,7 @@
 
 <ion-content>
 
-    <ion-item-group *ngFor="let item of info; let i = index">
+    <ion-item-group >
         <ion-item-divider style="background-color: yellow;">
           <ion-row>
             <ion-col class="ion-padding">
@@ -26,7 +26,7 @@
             </ion-col>
           </ion-row>
         </ion-item-divider>
-        <ion-item>
+        <ion-item  *ngFor="let item of info; let i = index">
         <ion-row>
             <ion-col class="ion-padding">
                 <ion-label >{{ item.description }} </ion-label>
