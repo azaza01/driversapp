@@ -5,6 +5,7 @@ import { AccountsService } from '../api/accounts.service';
 import { NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { ItemsService } from '../api/items.service';
+import { CryptoJS } from 'crypto-js';
 
 
 @Component({
@@ -15,6 +16,10 @@ import { ItemsService } from '../api/items.service';
 export class LoginPage implements OnInit {
 
   loading: any = new LoadingController;
+  hash: any
+
+  // email: any = "davidchia@cottoncare.com.sg"
+  // password: any = "fortune878"
 
 
   constructor(
@@ -29,6 +34,7 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
   }
 
   async presentLoading(msg) {
@@ -46,6 +52,7 @@ export class LoginPage implements OnInit {
   }
 
   async presentToast(msg) {
+    
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 3000,
@@ -58,6 +65,7 @@ export class LoginPage implements OnInit {
 
   async login(user: NgForm) {
     console.log(user.value)
+
     await this.presentLoading('');
     // this.isLoading = true;
     // console.log(user.value)

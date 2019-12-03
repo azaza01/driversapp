@@ -9,7 +9,7 @@ import {
   HttpClient,
   HttpHeaders,
 } from '@angular/common/http';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, IonFooter } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 
@@ -51,6 +51,14 @@ export class AccountsService {
 
   login(info: any) {
     console.log(info)
+    console.log(info.password)
+
+    //convert password to sha1 
+    var sha1 = require('sha1');
+    var generatedpassword  = sha1(info.password);
+    info.password = generatedpassword;
+    console.log(info.password);
+
     let infox = {
       // email: "it01.azaza@gmail.com",
       // password: "7c222fb2927d828af22f592134e8932480637c0d"
@@ -59,7 +67,7 @@ export class AccountsService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/logon.json", infox).subscribe(
+      this.httpclient.post(this.url + "/logon.json", info).subscribe(
         response => {
           let res;
           res = response[0];
