@@ -66,6 +66,7 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   saveSummury(){
+
     ///SUMMARY_TABLE
     //  SUMMARY_DATE, selectedDate);
     //  SUMMARY_COLLECTED, "0");
@@ -83,6 +84,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
   saveLocalPayment(){
     ///UNSYNCED_PAYMENT_TABLE
+
     // UNPAY_DELID,
     // UNPAY_DATE,
     // UNPAY_INVOICENO,
@@ -101,6 +103,82 @@ export class DeliverymakepaymentPage implements OnInit {
     this.deliveryStatus();
     // update summary table SUMMARY_TABLE +1 to deliver add value to (CASH or CREDIT, CHEQUE, BT  +1 to DC/CC)
 
+  //parametes
+        // "email", prefEmail));
+        // "password", prefPassword));
+        // "delid", coldelID)); //pass coldelID (actually is delID) and ws gets the invid
+        // "nowpaid", et.getText().toString())); // must add the Last Paid field together
+        // "lastpaid", String.valueOf(lastPaid))); // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
+        // "balancepaid", String.valueOf(balancePaid))); // must add the Last Paid field together because we are updating the balance paid field
+        // "balancetype", bt.getText().toString()));
+        // "status", status));
+        // "ppdate", ppDate)); //06-05-2013
+        // "pptimeslot", ppTimeslot)); //06-05-2013
+        // "name", prefUserName));
+        // "savedon", savedon)); //time of save from driver
+
+
+  // link = http://ccmanager.cottoncare.com.sg/ws/updateinvoicestatus.json
+
+  //update COLDEL_FLAG KIV 
+
+  //update SUMMARY_TABLE KIV 
+
+  //insert SYNCED_INVOICE_TABLE KIV 
+
+  //if success 
+
+  // send to server del to COLDEL_TABLE 
+
+  // delete also to UNSYNCED_PAYMENT_TABLE
+
+  // else
+
+ // update UNSYNCED_PAYMENT_TABLE 
+
+
+
+
+  }
+
+  makePaymentAndCreateNew(){
+    this.deliveryStatus();
+
+    // update COLDEL_TABLE
+
+    // update SUMMARY_TABLE
+
+    // UNSYNCED_PAYMENT_TABLE
+
+
+  }
+
+  async getdeliveryStatus() {
+    const alert = await this.alertController.create({
+      header: 'Delivery Status',
+      message: "Please choose below",
+      cssClass: 'ion-alertCSS',
+      buttons: [
+        {
+          text: 'Full Delivered',
+          handler: () => {
+            this.deliveryStatus = "Full Delivered"
+            this.getDeliveryPaymentStatus();
+          }
+        }, {
+          text: 'Partial Delivered',
+          handler: () => {
+            this.deliveryStatus = "Partial Delivered"
+            this.getDeliveryPaymentStatus();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  
+  getDeliveryPaymentStatus(){
     if ((this.LastPaid + this.depositamount + this.depositamount) ==  this.totalamount) {
       //Log.d("spark", "paid amount is smaller than existing credits");
         //status = status + ", Full Paid";
@@ -118,53 +196,7 @@ export class DeliverymakepaymentPage implements OnInit {
     else {
       this.deliveryStatus  =  this.deliveryStatus + ", Partial Paid";
     }
-
-    //parametes
-        // "email", prefEmail));
-        // "password", prefPassword));
-        // "delid", coldelID)); //pass coldelID (actually is delID) and ws gets the invid
-        // "nowpaid", et.getText().toString())); // must add the Last Paid field together
-        // "lastpaid", String.valueOf(lastPaid))); // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
-        // "balancepaid", String.valueOf(balancePaid))); // must add the Last Paid field together because we are updating the balance paid field
-        // "balancetype", bt.getText().toString()));
-        // "status", status));
-        // "ppdate", ppDate)); //06-05-2013
-        // "pptimeslot", ppTimeslot)); //06-05-2013
-        // "name", prefUserName));
-        // "savedon", savedon)); //time of save from driver
-
-
-  // link = http://ccmanager.cottoncare.com.sg/ws/updateinvoicestatus.json
-
-
-
   }
 
-  makePaymentAndCreateNew(){
-    this.deliveryStatus();
-  }
-
-  async getdeliveryStatus() {
-    const alert = await this.alertController.create({
-      header: 'Delivery Status',
-      message: "Please choose below",
-      cssClass: 'ion-alertCSS',
-      buttons: [
-        {
-          text: 'Full Delivered',
-          handler: () => {
-            this.deliveryStatus = "Full Delivered"
-          }
-        }, {
-          text: 'Partial Delivered',
-          handler: () => {
-            this.deliveryStatus = "Partial Delivered"
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
 
 }
