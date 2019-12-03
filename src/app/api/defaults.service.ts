@@ -205,12 +205,16 @@ export class DefaultsService {
 
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
                     console.log('FB_FORM_TABLE', data);
+                       Promise.resolve(this.gettimeSlots(driverInfo)).then(data => {
+                         console.log('TIMESLOT_TABLE', data);
 
-                    this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
-                      this.loading.dismiss();
-                      resolve(true)
-                    });
-
+                            this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                                this.loading.dismiss();
+                               resolve(true)
+                             });
+                        }).catch(e => {
+                          console.log(e);
+                        });
                   }).catch(e => {
                     console.log(e);
                   });
@@ -478,6 +482,37 @@ export class DefaultsService {
           // this.storage.set('FB_FORM_TABLE', res).then(() => {
           //   resolve(res)
           // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  gettimeSlots(info: any) {
+    let params = {
+      email: info.email_address,
+      password: info.password
+    }
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/timeslots.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          // console.log(res)
+
+          this.storage.set('TIMESLOT_TABLE', res).then(() => {
+            resolve(res)
+          });
 
         },
         err => {

@@ -717,11 +717,14 @@ export class CreatecustomitemPage implements OnInit {
   }
 
   saveData() {
+
+    let params
+
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       console.log(res)
 
-      let params: any = [];
-      params.id = "999"
+      
+      // params.id = "999"
       params.description = this.concatDesc
       params.cat_type = this.Category
       params.clean_type = this.cleantype
@@ -731,17 +734,16 @@ export class CreatecustomitemPage implements OnInit {
       params.pcs = this.itemPcs
       params.subtotal = this.itemsubtotal
       params.updated_by = res.name
-        params.updated_on = this.defaultSrvc.getToday();
+      params.updated_on = this.defaultSrvc.getToday();
       params.rid = this.mycompany[0].UNINV_COLLID
-
-      this.allItems = params;
 
     })
 
     console.log(this.defaultSrvc.getTempItems)
     this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+
       this.temp_List = this.defaultSrvc.getTempItems ? this.defaultSrvc.getTempItems : res
-      res.push(this.allItems)
+      res.push(params)
       console.log(res)
 
       this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress =>{

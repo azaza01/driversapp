@@ -67,7 +67,7 @@ export class AccountsService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/logon.json", info).subscribe(
+      this.httpclient.post(this.url + "/logon.json", infox).subscribe(
         response => {
           let res;
           res = response[0];
