@@ -44,6 +44,7 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   getPaymentDetails(){
+
       // this.invnum = "inn" 
 			// this.totalamount = "toa"
 			// this.billFromCompany = "coi"
@@ -83,6 +84,7 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   saveLocalPayment(){
+    
     ///UNSYNCED_PAYMENT_TABLE
 
     // UNPAY_DELID,

@@ -43,6 +43,8 @@ export class ConfirminvoicePage implements OnInit {
   customercredit:any ;
   paymentMethod:any = "CASH";
 
+  timeslots: any
+
   constructor(
     public alertController: AlertController,
     private defaultSrvc: DefaultsService,
@@ -86,6 +88,13 @@ export class ConfirminvoicePage implements OnInit {
       }
       console.log(this.returnDate)
     })
+
+    this.storage.get('TIMESLOT_TABLE').then(res => {
+      this.timeslots = res
+      console.log(res.description)
+      this.isLoading = false
+    })
+
 
     this.getItemSubtotal();
   }
@@ -163,6 +172,10 @@ export class ConfirminvoicePage implements OnInit {
 
   showFinal(finalSubtotal){
     this.finalSubtotal =  finalSubtotal
+  }
+
+  getTime(selectedtime){
+    console.log(selectedtime);
   }
   
   alertCustomerType(){
@@ -346,7 +359,7 @@ export class ConfirminvoicePage implements OnInit {
   savePay(){
           ////update UNSYNCED_INVOICE_TABLE
 
-         // UNINV_COLLTS = UCOtimestamp //use old timestamp because this is an update not insert new
+          // UNINV_COLLTS = UCOtimestamp //use old timestamp because this is an update not insert new
 		      // UNINV_COLLID = this.invoiceId
 	        // UNINV_CUSTID = custID
 		      // UNINV_INVNO = invoice_number

@@ -17,6 +17,7 @@ export class ColectionviewPage implements OnInit {
   driverInfo: any
   isLoading: boolean = false
   unsyncData: any;
+  timeslots: any
 
   constructor(
     private router: Router,
@@ -39,6 +40,29 @@ export class ColectionviewPage implements OnInit {
       console.log(this.driverInfo)
       this.isLoading = false
     })
+
+    this.storage.get('TIMESLOT_TABLE').then(res => {
+      this.timeslots = res
+      console.log(res.description)
+      this.isLoading = false
+    })
+
+    // this.storage.get("TIMESLOT_TABLE").then(res => {
+    //   var flags = [], output = [], l = res.length, i;
+    //   for (i = 0; i < l; i++) {
+    //     if (flags[res[i].description]) continue;
+    //     flags[res[i].description] = true;
+    //     output.push(res[i].description);
+
+    //   }
+    //   this.timeslots = output;
+    // })
+
+  }
+  
+
+  getTime(selectedtime){
+    console.log(selectedtime);
   }
 
   async createInvoiceSelectItem(info) {

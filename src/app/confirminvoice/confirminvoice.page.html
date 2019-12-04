@@ -32,8 +32,14 @@
                 <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change</ion-button>
             </ion-item>
             <ion-item>
-                <ion-label>Timeslots : </ion-label>
-                <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label>
+                <!-- <ion-label>Timeslots : </ion-label>
+                <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label> -->
+                <ion-label>Time : </ion-label>
+                <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
+                    <div *ngFor="let timeslot of timeslots; let i = index">
+                            <ion-select-option style="text-align: center;" value="{{ timeslot.description }}">{{ timeslot.description }}</ion-select-option>
+                    </div>
+                </ion-select>
             </ion-item>
             <ion-item>
                 <ion-label>Inv. Notes : </ion-label>

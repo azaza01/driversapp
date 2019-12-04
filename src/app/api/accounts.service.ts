@@ -54,10 +54,10 @@ export class AccountsService {
     console.log(info.password)
 
     //convert password to sha1 
-    var sha1 = require('sha1');
-    var generatedpassword  = sha1(info.password);
-    info.password = generatedpassword;
-    console.log(info.password);
+    // var sha1 = require('sha1');
+    // var generatedpassword  = sha1(info.password);
+    // info.password = generatedpassword;
+    // console.log(info.password);
 
     let infox = {
       // email: "it01.azaza@gmail.com",
