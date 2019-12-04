@@ -43,7 +43,8 @@ export class ConfirminvoicePage implements OnInit {
   customercredit:any ;
   paymentMethod:any = "CASH";
 
-  timeslots: any
+  timeslots: any = []
+  selectedtime: any
 
   constructor(
     public alertController: AlertController,
@@ -60,6 +61,7 @@ export class ConfirminvoicePage implements OnInit {
       this.invoiceId = this.customerData.UNINV_COLLID;
       this.company = this.customerData.UNINV_INITIAL
       this.invoiceType = this.customerData.UNINV_TYPE
+      this.selectedtime = this.customerData.UNINV_DELIVERYTIMESLOT
       console.log(this.invoiceId);
       this.alertCustomerType();
     })
@@ -83,15 +85,18 @@ export class ConfirminvoicePage implements OnInit {
       var l = res.length, i;
       for( i=0; i<l; i++) {
           if(res[i].id == this.invoiceId){
-            this.returnDate  = res[i].coldel_return;
+            this.returnDate  += res[i].coldel_return;
           }               
       }
       console.log(this.returnDate)
     })
 
     this.storage.get('TIMESLOT_TABLE').then(res => {
-      this.timeslots = res
-      console.log(res.description)
+      // this.timeslots = res
+      res.forEach(element => {
+        this.timeslots.push(element.description)
+      });
+      console.log(this.timeslots)
       this.isLoading = false
     })
 

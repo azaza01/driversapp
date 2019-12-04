@@ -129,19 +129,29 @@ export class AppComponent {
           handler: () => {
             this.storage.remove('ACCOUNTS_TABLE').then(() => {
               console.log('removed ');
-              this.router.navigate(['/login']);
+              this.storage.remove('COLDEL_TABLE').then(() => {
+                console.log('removed ');
+                this.storage.remove('TIMESLOT_TABLE').then(() => {
+                  console.log('removed ');
+                  this.router.navigate(['/login']);
+    
+                }).catch((error) => {
+                  console.log('removed error for ' + 'TIMESLOT_TABLE' + '', error);
+                });
+  
+              }).catch((error) => {
+                console.log('removed error for ' + 'COLDEL_TABLE' + '', error);
+              });
 
             }).catch((error) => {
               console.log('removed error for ' + 'ACCOUNTS_TABLE' + '', error);
             });
 
-            this.storage.remove('COLDEL_TABLE').then(() => {
-              console.log('removed ');
-              this.router.navigate(['/login']);
+           
 
-            }).catch((error) => {
-              console.log('removed error for ' + 'COLDEL_TABLE' + '', error);
-            });
+
+
+            
           }
         }
       ]

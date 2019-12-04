@@ -17,7 +17,8 @@ export class ColectionviewPage implements OnInit {
   driverInfo: any
   isLoading: boolean = false
   unsyncData: any;
-  timeslots: any
+  timeslots: any = []
+  selectedtime: any
 
   constructor(
     private router: Router,
@@ -33,6 +34,7 @@ export class ColectionviewPage implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       console.log(params);
       this.collectionInfo = params
+      this.selectedtime = this.collectionInfo.cot
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -42,8 +44,10 @@ export class ColectionviewPage implements OnInit {
     })
 
     this.storage.get('TIMESLOT_TABLE').then(res => {
-      this.timeslots = res
-      console.log(res.description)
+      res.forEach(element => {
+        this.timeslots.push(element.description)
+      });
+      console.log(this.timeslots)
       this.isLoading = false
     })
 

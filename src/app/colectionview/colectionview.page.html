@@ -110,8 +110,8 @@
             </ion-select> -->
             <ion-label>Time : </ion-label>
             <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
-                <div *ngFor="let timeslot of timeslots; let i = index">
-                        <ion-select-option value="{{ timeslot.description }}">{{ timeslot.description }}</ion-select-option>
+                <div *ngFor="let selectedtime of timeslots; let i = index">
+                        <ion-select-option value="{{ selectedtime }}">{{ selectedtime }}</ion-select-option>
                 </div>
             </ion-select>
         </ion-item>

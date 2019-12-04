@@ -36,8 +36,8 @@
                 <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label> -->
                 <ion-label>Time : </ion-label>
                 <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
-                    <div *ngFor="let timeslot of timeslots; let i = index">
-                            <ion-select-option style="text-align: center;" value="{{ timeslot.description }}">{{ timeslot.description }}</ion-select-option>
+                    <div *ngFor="let selectedtime of timeslots; let i = index">
+                            <ion-select-option style="text-align: center;" value="{{ selectedtime }}">{{ selectedtime }}</ion-select-option>
                     </div>
                 </ion-select>
             </ion-item>
