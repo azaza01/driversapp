@@ -12,6 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { IonicStorageModule } from '@ionic/storage';
 import { ViewItemsComponent } from './view-items/view-items.component';
+import { Network } from '@ionic-native/network/ngx';
+import { DatePipe } from '@angular/common';
+import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 
 
 @NgModule({
@@ -25,6 +28,7 @@ import { ViewItemsComponent } from './view-items/view-items.component';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    Ionic4DatepickerModule,
     IonicStorageModule.forRoot(),
     FormsModule,
     HttpClientModule,
@@ -34,6 +38,8 @@ import { ViewItemsComponent } from './view-items/view-items.component';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Network,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

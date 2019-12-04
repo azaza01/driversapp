@@ -2,13 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
 import { ConfirminvoicePage } from './confirminvoice.page';
-
-// import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
-
+import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 
 const routes: Routes = [
   {
@@ -22,9 +18,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    // Ionic4DatepickerModule,
+    Ionic4DatepickerModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ConfirminvoicePage]
 })
-export class ConfirminvoicePageModule {}
+export class ConfirminvoicePageModule { }

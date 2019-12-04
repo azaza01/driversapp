@@ -13,6 +13,7 @@ import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { AccountsService } from './accounts.service';
+import { Network } from '@ionic-native/network/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -39,12 +40,20 @@ export class DefaultsService {
     return this._tempItems;
   }
 
+  _selectedItem: any;
+  set getSelectedItem(value: any) {
+    this._selectedItem = value;
+  }
+  get getSelectedItem(): any {
+    return this._selectedItem;
+  }
+
   constructor(
     private httpclient: HttpClient,
     public loadingCtrl: LoadingController,
     private storage: Storage,
     private accSrvc: AccountsService,
-
+    private network: Network
   ) { }
 
   private getHeaders() {
@@ -63,6 +72,14 @@ export class DefaultsService {
       cssClass: 'custom-class'
     });
     return await this.loading.present();
+  }
+
+  checkConnection() {
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      console.log('network was disconnected :-(');
+    });
+    console.log(disconnectSubscription)
+
   }
 
   getToday() {
@@ -490,6 +507,5 @@ export class DefaultsService {
       console.log(err)
     })
   }
-  
 
 }

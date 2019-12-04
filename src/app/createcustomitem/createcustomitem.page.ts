@@ -741,18 +741,16 @@ export class CreatecustomitemPage implements OnInit {
 
     console.log(this.defaultSrvc.getTempItems)
     this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
-
-      this.temp_List = this.defaultSrvc.getTempItems ? this.defaultSrvc.getTempItems : res
       res.push(params)
       console.log(res)
 
-      this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress =>{
+      this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
         console.log(ress);
       })
     })
     this.clearCalcu();
-      // console.log(result)
-      // this.storage.set('TEMP_ITEMS_TABLE', result)
+    // console.log(result)
+    // this.storage.set('TEMP_ITEMS_TABLE', result)
   }
 
 

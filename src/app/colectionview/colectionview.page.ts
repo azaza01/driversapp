@@ -97,7 +97,7 @@ export class ColectionviewPage implements OnInit {
               params.UNINV_DEPOAMT = '0'
               params.UNINV_DEPOTYPE = 'Cash'
               params.UNINV_BALANCE = '0'
-              params.UNINV_AGREEDDELIVERYDATE = info.cod
+              params.UNINV_AGREEDDELIVERYDATE = info.rtd
               params.UNINV_DELIVERYTIMESLOT = info.cot
               params.UNINV_INVOICENOTE = ''
               params.UNINV_DISCOUNT = '0'
@@ -166,7 +166,7 @@ export class ColectionviewPage implements OnInit {
               params.UNINV_DEPOAMT = '0'
               params.UNINV_DEPOTYPE = 'Cash'
               params.UNINV_BALANCE = '0'
-              params.UNINV_AGREEDDELIVERYDATE = info.cod
+              params.UNINV_AGREEDDELIVERYDATE = info.rtd
               params.UNINV_DELIVERYTIMESLOT = info.cot
               params.UNINV_INVOICENOTE = ''
               params.UNINV_DISCOUNT = '0'
@@ -202,8 +202,8 @@ export class ColectionviewPage implements OnInit {
                     let i;
                     i = this.unsyncData.findIndex(x => x.id == result[0].id)
                     this.unsyncData.splice(i, 1, params);
-                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                     console.log(this.unsyncData)
+                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                   }
                 }
               }).finally(() => {

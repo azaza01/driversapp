@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { SelectitemlistPage } from '../selectitemlist/selectitemlist.page'
 import { Storage } from '@ionic/storage';
@@ -32,8 +32,20 @@ export class SelectcategoryPage implements OnInit {
     private defaultSrvc: DefaultsService,
     public activatedRoute: ActivatedRoute,
     public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
 
   ) { }
+
+  async presentToast(msg) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom',
+      color: 'medium',
+      cssClass: 'customToast-class',
+    });
+    toast.present();
+  }
 
   async ngOnInit() {
     this.isLoading = true
@@ -54,7 +66,7 @@ export class SelectcategoryPage implements OnInit {
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           this.unsyncData = res
           console.log(this.unsyncData)
-          
+
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
               // console.log('ITEMS_TABLE', data);
@@ -168,7 +180,16 @@ export class SelectcategoryPage implements OnInit {
 
 
   confirmInvoice() {
-    this.router.navigate(['/confirminvoice']);
+    console.log(this.defaultSrvc.getTempItems)
+
+    if (this.defaultSrvc.getTempItems == undefined) {
+      this.presentToast('Please select item first')
+    } else {
+      this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
+        // this.defaultSrvc.getTempItems = this.item_List
+        this.router.navigate(['/confirminvoice']);
+      })
+    }
   }
 
   viewCollectionItem() {

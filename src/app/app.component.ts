@@ -111,7 +111,7 @@ export class AppComponent {
       }
     });
   }
-  
+
   async logout(msg) {
     const alert = await this.alertController.create({
       header: '',
@@ -134,24 +134,12 @@ export class AppComponent {
                 this.storage.remove('TIMESLOT_TABLE').then(() => {
                   console.log('removed ');
                   this.router.navigate(['/login']);
-    
-                }).catch((error) => {
-                  console.log('removed error for ' + 'TIMESLOT_TABLE' + '', error);
-                });
-  
-              }).catch((error) => {
-                console.log('removed error for ' + 'COLDEL_TABLE' + '', error);
-              });
-
-            }).catch((error) => {
-              console.log('removed error for ' + 'ACCOUNTS_TABLE' + '', error);
-            });
-
-           
-
-
-
-            
+                })
+              })
+              // this.storage.remove('UNSYNCED_INVOICE_TABLE').then(() => {
+              //   console.log('removed ');
+              // })
+            })
           }
         }
       ]

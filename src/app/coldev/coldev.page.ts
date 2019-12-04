@@ -217,7 +217,10 @@ export class ColdevPage implements OnInit {
 
   async colView(selected) {
     // console.log(selected)
-    this.router.navigate(['/colectionview', selected]);
+    this.storage.set('SELECTED_ITEM', selected).then(() => {
+      this.router.navigate(['/colectionview', selected]);
+
+    })
   }
 
 

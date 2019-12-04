@@ -1,124 +1,129 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Confirm Invoice</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Confirm Invoice</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
   <ion-content *ngIf="isLoading == false">
   
     <ion-item-group>
-          <ion-item-divider style="background-color: yellow;">
-            <ion-label>Customer Details</ion-label>
-          </ion-item-divider>
-          <ion-item>
-            <ion-label>Invoice :</ion-label>
-            <ion-label style="padding-left: 1px;">{{customerData.UNINV_INVNO}}</ion-label>
-            <ion-label>Type :</ion-label>
-            <ion-label style="padding-left: 1px;">{{customerData.UNINV_TYPE}}</ion-label>
-          </ion-item>
-          <ion-item>
-              <ion-label>date: </ion-label>
-              <ion-label>19 Nov 2019 </ion-label>
-              <ion-label>Billed From : </ion-label>
-              <ion-label>{{ company }}</ion-label>
-              <!-- <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-                  <ion-select-option value="brown">CC</ion-select-option>
-                  <ion-select-option value="blonde">DC</ion-select-option>
-              </ion-select> -->
-            </ion-item>
-            <ion-item>
-                <ion-label>Agreed Delivery Date : </ion-label>
-                <ion-label>{{customerData.UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change</ion-button>
-            </ion-item>
-            <ion-item>
-                <!-- <ion-label>Timeslots : </ion-label>
-                <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label> -->
-                <ion-label>Time : </ion-label>
-                <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
-                    <div *ngFor="let selectedtime of timeslots; let i = index">
-                            <ion-select-option style="text-align: center;" value="{{ selectedtime }}">{{ selectedtime }}</ion-select-option>
-                    </div>
-                </ion-select>
-            </ion-item>
-            <ion-item>
-                <ion-label>Inv. Notes : </ion-label>
-                <ion-input placeholder="Please put a note">{{customerData.UNINV_INVOICENOTE}}</ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Donated : </ion-label>
-                <ion-input placeholder="0">{{customerData.UNINV_DONATE}}</ion-input>
-                <ion-label>Bags : </ion-label>
-                <ion-input placeholder="0">{{customerData.UNINV_BAGS}}</ion-input>
-            </ion-item>
-            <ion-item-divider style="background-color: yellow;">
-                <ion-label>Payment Details</ion-label>
-              </ion-item-divider>
-            <ion-item>
-                <ion-label>Subtotal: </ion-label>
-                <ion-label> {{ finalSubtotal  | number:'1.2-2' }}</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Others : </ion-label>
-                <ion-input placeholder="0" [(ngModel)]="percentPromo"  (ngModelChange)="lessPromotion(percentPromo)" ></ion-input>
-                <ion-label>% </ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>After less : </ion-label>
-                <ion-label>{{ afterLessAmount  | number:'1.2-2' }}</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Express : </ion-label>
-                <ion-select cancelText="Dismiss" [(ngModel)]="expressCharge" (ngModelChange)="getexpressAmount(expressCharge)">
-                  <ion-select-option value="None">None</ion-select-option>
-                  <ion-select-option value="50">50%</ion-select-option>
-                  <ion-select-option value="100">100%</ion-select-option>
-               </ion-select>
-            </ion-item>
-            <!-- <ion-item>
-                <ion-label>Overdue : </ion-label>
-                <ion-input [(ngModel)]="overDue" (ngModelChange)="overDueAmount(overDue)"></ion-input>
-            </ion-item> -->
-            <ion-item>
-                <ion-label>Payable : </ion-label>
-                <ion-input >{{ payableAmount  | number:'1.2-2' }}</ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Deposit : </ion-label>
-                <ion-input cancelText="Dismiss" [(ngModel)]="depositAmount" (ngModelChange)="getDeposit(depositAmount)"> </ion-input>
-                <ion-select  cancelText="Dismiss" [(ngModel)]="paymentMethod" (ngModelChange)="getPayemntMethod(paymentMethod)">
-                  <ion-select-option value="CASH">CASH</ion-select-option>
-                  <ion-select-option value="CHEQUE">CHEQUE</ion-select-option>
-                  <ion-select-option value="CREDIT">CREDIT</ion-select-option>
-                  <ion-select-option value="BT">BT</ion-select-option>
-            </ion-select>
-            </ion-item>
-            <ion-item>
-                <ion-label>Balance : </ion-label>
-                <ion-input >{{ balanceAmount  | number:'1.2-2' }}</ion-input>
-            </ion-item>
+      <ion-item-divider style="background-color: yellow;">
+        <ion-label>Customer Details</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Invoice :</ion-label>
+        <ion-label style="padding-left: 1px;">{{customerData.UNINV_INVNO}}</ion-label>
+        <ion-label>Type :</ion-label>
+        <ion-label style="padding-left: 1px;">{{customerData.UNINV_TYPE}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>date: </ion-label>
+        <ion-label>19 Nov 2019 </ion-label>
+        <ion-label>Billed From : </ion-label>
+        <ion-label>{{ company }}</ion-label>
+        <!-- <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+                    <ion-select-option value="brown">CC</ion-select-option>
+                    <ion-select-option value="blonde">DC</ion-select-option>
+                </ion-select> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>Agreed Delivery Date : </ion-label>
+        <ion-label>{{customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : customerData.UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
+        <ion-button *ngIf="initDELIVERYDATE == '0000-00-00'" (click)="openDatePicker()" shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change
+        </ion-button>
+      </ion-item>
+      <ion-item>
+          <!-- <ion-label>Timeslots : </ion-label>
+          <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label> -->
+          <ion-label>Time : </ion-label>
+          <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
+              <div *ngFor="let selectedtime of timeslots; let i = index">
+                      <ion-select-option style="text-align: center;" value="{{ selectedtime }}">{{ selectedtime }}</ion-select-option>
+              </div>
+          </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Inv. Notes : </ion-label>
+        <ion-input placeholder="Please put a note" [(ngModel)]="customerData.UNINV_INVOICENOTE"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Donated : </ion-label>
+        <ion-input placeholder="0" [(ngModel)]="customerData.UNINV_DONATE"></ion-input>
+        <ion-label>Bags : </ion-label>
+        <ion-input placeholder="0" [(ngModel)]="customerData.UNINV_BAGS"></ion-input>
+      </ion-item>
+      <ion-item-divider style="background-color: yellow;">
+        <ion-label>Payment Details</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Subtotal: </ion-label>
+        <ion-label> {{ finalSubtotal  | number:'1.2-2' }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Others : </ion-label>
+        <ion-input placeholder="0" [(ngModel)]="percentPromo" (ngModelChange)="lessPromotion(percentPromo)"></ion-input>
+        <ion-label>% </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>After less : </ion-label>
+        <ion-label>{{ afterLessAmount  | number:'1.2-2' }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Express : </ion-label>
+        <ion-select cancelText="Dismiss" [(ngModel)]="expressCharge" (ngModelChange)="getexpressAmount(expressCharge)">
+          <ion-select-option value="None">None</ion-select-option>
+          <ion-select-option value="50">50%</ion-select-option>
+          <ion-select-option value="100">100%</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-item>
+                  <ion-label>Overdue : </ion-label>
+                  <ion-input [(ngModel)]="overDue" (ngModelChange)="overDueAmount(overDue)"></ion-input>
+              </ion-item> -->
+      <ion-item>
+        <ion-label>Payable : </ion-label>
+        <ion-input>{{ payableAmount  | number:'1.2-2' }}</ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Deposit : </ion-label>
+        <ion-input cancelText="Dismiss" [(ngModel)]="depositAmount" (ngModelChange)="getDeposit(depositAmount)">
+        </ion-input>
+        <ion-select cancelText="Dismiss" [(ngModel)]="paymentMethod" (ngModelChange)="getPayemntMethod(paymentMethod)">
+          <ion-select-option value="CASH">CASH</ion-select-option>
+          <ion-select-option value="CHEQUE">CHEQUE</ion-select-option>
+          <ion-select-option value="CREDIT">CREDIT</ion-select-option>
+          <ion-select-option value="BT">BT</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Balance : </ion-label>
+        <ion-input>{{ balanceAmount  | number:'1.2-2' }}</ion-input>
+      </ion-item>
     </ion-item-group>
   
     <!-- <ion-item-group>
-        <ion-item-divider style="background-color: yellow;">
-          <ion-label>Overdue Payment</ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-label>Details here:</ion-label>
-          <ion-label style="padding-left: 1px;">John Doe </ion-label>
-        </ion-item>
-      </ion-item-group> -->
+          <ion-item-divider style="background-color: yellow;">
+            <ion-label>Overdue Payment</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Details here:</ion-label>
+            <ion-label style="padding-left: 1px;">John Doe </ion-label>
+          </ion-item>
+        </ion-item-group> -->
   
-      <!-- <ion-row>
-          <ion-col >
-            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
-          </ion-col>
-        </ion-row> -->
-        <ion-row>
+    <!-- <ion-row>
             <ion-col >
-              <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmPayment()">Confirm payments</ion-button>
+              <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
             </ion-col>
-          </ion-row>
+          </ion-row> -->
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="confirmPayment(paymentMethod)">
+          Confirm payments</ion-button>
+      </ion-col>
+    </ion-row>
   
   </ion-content>
-  
