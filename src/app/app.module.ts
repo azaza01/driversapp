@@ -15,6 +15,8 @@ import { ViewItemsComponent } from './view-items/view-items.component';
 import { Network } from '@ionic-native/network/ngx';
 import { DatePipe } from '@angular/common';
 import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+// import { SMS } from '@ionic-native/sms';
 
 
 @NgModule({
@@ -37,6 +39,8 @@ import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
   providers: [
     StatusBar,
     SplashScreen,
+    CallNumber,
+    // SMS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Network,
     DatePipe

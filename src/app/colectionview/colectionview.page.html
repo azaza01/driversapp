@@ -49,20 +49,20 @@
             <ion-label>Notes : </ion-label>
             <ion-label>{{collectionInfo.noe}}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item *ngIf="collectionInfo.cn1 != ''">
             <ion-label>Number 1: </ion-label>
             <ion-label>{{collectionInfo.cn1}}</ion-label>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Call
+            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('1')">Call
             </ion-button>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">SMS
+            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom"  href="sms: +65{{collectionInfo.cn1}}">SMS
             </ion-button>
         </ion-item>
-        <ion-item>
+        <ion-item *ngIf="collectionInfo.cn2 != ''">
             <ion-label>Number 2 : </ion-label>
             <ion-label>{{collectionInfo.cn2}}</ion-label>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Call
+            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('2')">Call
             </ion-button>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">SMS
+            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" href="sms: +65{{collectionInfo.cn}}">SMS
             </ion-button>
         </ion-item>
         <ion-item>

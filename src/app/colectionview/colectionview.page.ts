@@ -4,6 +4,8 @@ import { AlertController } from '@ionic/angular';
 import { DefaultsService } from '../api/defaults.service';
 import { Storage } from '@ionic/storage';
 import { async } from '@angular/core/testing';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+// import { SMS } from '@ionic-native/sms/ngx';
 
 @Component({
   selector: 'app-colectionview',
@@ -19,6 +21,9 @@ export class ColectionviewPage implements OnInit {
   unsyncData: any;
   timeslots: any = []
   selectedtime: any
+  callnumber: any
+  sendNumber: any
+  customerName: any;
 
   constructor(
     private router: Router,
@@ -26,7 +31,8 @@ export class ColectionviewPage implements OnInit {
     public activatedRoute: ActivatedRoute,
     private defaultSrvc: DefaultsService,
     private storage: Storage,
-
+    private callNumber: CallNumber,
+    // private sms: SMS
   ) { }
 
   ngOnInit() {
@@ -35,6 +41,7 @@ export class ColectionviewPage implements OnInit {
       console.log(params);
       this.collectionInfo = params
       this.selectedtime = this.collectionInfo.cot
+      this.customerName = this.collectionInfo.cun
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -62,6 +69,26 @@ export class ColectionviewPage implements OnInit {
     //   this.timeslots = output;
     // })
 
+  }
+
+  // sendMessage(number){
+  //   if(number == "1"){
+  //     this.sendNumber = this.collectionInfo.cn1
+  //   }else{
+  //     this.sendNumber = this.collectionInfo.cn2
+  //   }
+  //   this.sms.send(this.sendNumber, 'Dear');
+  // }
+
+  callNow(number) {
+    if(number == "1"){
+      this.callnumber = this.collectionInfo.cn1
+    }else{
+      this.callnumber = this.collectionInfo.cn2
+    }
+    this.callNumber.callNumber(this.callnumber, true)
+      .then(res => console.log('Launched dialer!', res))
+      .catch(err => console.log('Error launching dialer', err));
   }
   
 
