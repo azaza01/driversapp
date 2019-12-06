@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { ThrowStmt } from '@angular/compiler';
 import { AlertController } from '@ionic/angular';
 import { CurrencyPipe } from '@angular/common';
@@ -12,6 +13,8 @@ import { DefaultsService } from '../api/defaults.service';
   styleUrls: ['./createcustomitem.page.scss'],
 })
 export class CreatecustomitemPage implements OnInit {
+
+  loading: any = new LoadingController;
 
   company: any; //sample
   checkAccount = 0;
@@ -102,20 +105,64 @@ export class CreatecustomitemPage implements OnInit {
   collectedData: any = [];
 
   temp_List: any
+  newitems: any
+  item_List: any
+  category: any
+  driverInfo: any
+  tempItems: any
 
 
   constructor(
+    private router: Router,
     private storage: Storage,
     public activatedRoute: ActivatedRoute,
     public alertController: AlertController,
+    public loadingCtrl: LoadingController,
     private defaultSrvc: DefaultsService,
 
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+
+    // console.log(this.defaultSrvc.getCategory)
+    console.log(this.defaultSrvc.getTempItems)
+    this.category = this.defaultSrvc.getCategory
+    this.temp_List = this.defaultSrvc.getTempItems
+    this.item_List = await this.getList(this.temp_List)
+    console.log(this.item_List)
+
+
     this.getItem();
     this.getItemPrices();
     this.getSofaPrices();
+  }
+
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      spinner: 'crescent',
+      cssClass: 'custom-class'
+    });
+    return await this.loading.present();
+  }
+
+  async getList(data) {
+    let res
+    res = data
+    let filtered: any = []
+    await this.presentLoading('');
+
+    if(res != undefined){
+      res.forEach(temp => {
+        if (temp.qty != 0) {
+          filtered.push(temp)
+        }
+      });
+    }
+
+    this.loading.dismiss()
+    return filtered
+
   }
 
   clearCalcu() {
@@ -592,6 +639,15 @@ export class CreatecustomitemPage implements OnInit {
     await alert.present();
   }
 
+  async presentAddedItem() {
+    const alert = await this.alertController.create({
+      message: "Added",
+      backdropDismiss: false,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
   curtainDesc() {
     this.totalItemsCurtain = 0;
     this.concatDescripton = "";
@@ -718,13 +774,13 @@ export class CreatecustomitemPage implements OnInit {
 
   saveData() {
 
-    let params
-
+    this.loading.dismiss();
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res)
+      // console.log(res)
+      this.driverInfo = res
 
-      
-      // params.id = "999"
+      let params: any = {};
+      params.id = "999"
       params.description = this.concatDesc
       params.cat_type = this.Category
       params.clean_type = this.cleantype
@@ -737,22 +793,22 @@ export class CreatecustomitemPage implements OnInit {
       params.updated_on = this.defaultSrvc.getToday();
       params.rid = this.mycompany[0].UNINV_COLLID
 
+      
+      this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+        this.newitems = res.push(params)
+        console.log(res)
+        // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
+        //   console.log(ress);
+        // // })
+        // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+        //   this.presentAddedItem();
+        //   this.clearCalcu();
+        // })
+        this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+          this.defaultSrvc.getTempItems = this.temp_List
+        })
+      })   
     })
-
-    console.log(this.defaultSrvc.getTempItems)
-    this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
-      res.push(params)
-      console.log(res)
-
-      this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
-        console.log(ress);
-      })
-    })
-    this.clearCalcu();
-    // console.log(result)
-    // this.storage.set('TEMP_ITEMS_TABLE', result)
   }
-
-
 
 }

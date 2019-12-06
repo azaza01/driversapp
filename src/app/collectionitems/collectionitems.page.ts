@@ -61,11 +61,13 @@ export class CollectionitemsPage implements OnInit {
     let filtered: any = []
     await this.presentLoading('');
 
-    res.forEach(temp => {
-      if (temp.qty != 0) {
-        filtered.push(temp)
-      }
-    });
+    if(res != undefined){
+      res.forEach(temp => {
+        if (temp.qty != 0) {
+          filtered.push(temp)
+        }
+      });
+    }
 
     this.loading.dismiss()
     return filtered

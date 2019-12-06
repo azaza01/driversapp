@@ -22,7 +22,11 @@ export class ConfirminvoicePage implements OnInit {
 
   invoiceId: any;
   invoiceType: any;
+  invoiceNumber: any
+  customerID: any
+  driver_name: any
   promotionItem: any;
+  invoiceNotes: any
 
 
   finalSubtotal: any = 0;
@@ -41,6 +45,29 @@ export class ConfirminvoicePage implements OnInit {
   balanceAmount: any;
   returnDate: any;
   customerTypes: any;
+  driver_email: any
+  driver_password: any
+
+  UNINV_AGREEDDELIVERYDATE: any
+UNINV_BAGS: any
+UNINV_BALANCE: any
+UNINV_COLLID: any
+UNINV_COLLTS: any
+UNINV_CUSTID: any
+UNINV_DELIVERYTIMESLOT: any
+UNINV_DEPOAMT: any
+UNINV_DEPOTYPE: any
+UNINV_DISCOUNT: any
+UNINV_DONATE: any
+UNINV_EXPRESS: any
+UNINV_HASDONATE: any
+UNINV_INITIAL: any
+UNINV_INVNO: any
+UNINV_INVOICENOTE: any
+UNINV_SAVEDON: any
+UNINV_TYPE: any
+
+allinvoiceitems: any
 
   overDue: any;
 
@@ -94,18 +121,56 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   ngOnInit() {
+    
     this.isLoading = true
-    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+    this.storage.get('SELECTED_ITEM').then(res => {
       console.log(res)
-      this.customerData = res[0]
       this.isLoading = false
-      this.invoiceId = this.customerData.UNINV_COLLID;
+      this.invoiceId = res.id;
+      console.log(this.invoiceId);
+    })
+
+    
+
+    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      this.isLoading = true
+      console.log(res)
+      var l = res.length, i;
+      for (i = 0; i < l; i++) {
+        if (res[i].UNINV_COLLID == this.invoiceId){
+            this.customerData = res[i];
+        }
+      }
+
       this.company = this.customerData.UNINV_INITIAL
       this.invoiceType = this.customerData.UNINV_TYPE
+      this.customerID = this.customerData.UNINV_CUSTID
       this.selectedtime = this.customerData.UNINV_DELIVERYTIMESLOT
+      this.invoiceNumber = this.customerData.UNINV_INVNO
       const initDeliveryDate = this.customerData.UNINV_AGREEDDELIVERYDATE
       this.initDELIVERYDATE = initDeliveryDate
-      console.log(this.invoiceId);
+      this.isLoading = false
+
+      this.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE
+      this.UNINV_BAGS = this.customerData.UNINV_BAGS
+      this.UNINV_BALANCE = this.customerData.UNINV_BALANCE
+      this.UNINV_COLLID = this.customerData.UNINV_COLLID
+      this.UNINV_COLLTS = this.customerData.UNINV_COLLTS
+      this.UNINV_CUSTID = this.customerData.UNINV_CUSTID
+      this.UNINV_DELIVERYTIMESLOT = this.customerData.UNINV_DELIVERYTIMESLOT
+      this.UNINV_DEPOAMT = this.customerData.UNINV_DEPOAMT
+      this.UNINV_DEPOTYPE = this.customerData.UNINV_DEPOTYPE
+      this.UNINV_DISCOUNT = this.customerData.UNINV_DISCOUNT
+      this.UNINV_DONATE = this.customerData.UNINV_DONATE
+      this.UNINV_EXPRESS = this.customerData.UNINV_EXPRESS
+      this.UNINV_HASDONATE = this.customerData.UNINV_HASDONATE
+      this.UNINV_INITIAL = this.customerData.UNINV_INITIAL
+      this.UNINV_INVNO = this.customerData.UNINV_INVNO
+      this.UNINV_INVOICENOTE = this.customerData.UNINV_INVOICENOTE
+      this.UNINV_SAVEDON = this.customerData.UNINV_SAVEDON
+      this.UNINV_TYPE = this.customerData.UNINV_TYPE
+
+      console.log(this.customerData);
       this.alertCustomerType();
     })
 
@@ -141,6 +206,13 @@ export class ConfirminvoicePage implements OnInit {
       console.log(this.timeslots)
       this.isLoading = false
     })
+
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      console.log(res)
+      this.driver_email = res.email_address
+      this.driver_password = res.password
+      this.driver_name = res.name
+    })  
 
 
     this.getItemSubtotal();
@@ -223,6 +295,7 @@ export class ConfirminvoicePage implements OnInit {
 
   getTime(selectedtime) {
     console.log(selectedtime);
+    this.UNINV_DELIVERYTIMESLOT = this.selectedtime
   }
 
   alertCustomerType() {
@@ -350,6 +423,7 @@ export class ConfirminvoicePage implements OnInit {
     } else {
       //update summary_table for new and others -- later part(KIV)
     }
+
     this.savePay()
 
     //// collection generated in local UNSYNCED_COLLECTION_TABLE
@@ -425,18 +499,18 @@ export class ConfirminvoicePage implements OnInit {
     this.customerData.UNINV_DEPOTYPE = this.paymentMethod
     this.customerData.UNINV_BALANCE = this.balanceAmount
     this.customerData.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? this.datepipe.transform(new Date(this.getDay(7)), 'yyyy-MM-dd') : this.customerData.UNINV_AGREEDDELIVERYDATE
-    // newCustomerData.UNINV_DELIVERYTIMESLOT = agreed deliver time
-    // newCustomerData.UNINV_INVOICENOTE =  getnote
+    this.customerData.UNINV_DELIVERYTIMESLOT = this.UNINV_DELIVERYTIMESLOT 
+    this.customerData.UNINV_INVOICENOTE =  this.UNINV_INVOICENOTE
     this.customerData.UNINV_DISCOUNT = this.percentPromoAmount
     this.customerData.UNINV_EXPRESS = this.expressPercent
-    // newCustomerData.UNINV_HASDONATE = getdonate
-    // this.customerData.UNINV_DONATE = this.customerData.UNINV_DONATE
-    // this.customerData.UNINV_BAGS = this.customerData.UNINV_BAGS
+    this.customerData.UNINV_HASDONATE = this.UNINV_HASDONATE
+    this.customerData.UNINV_DONATE = this.UNINV_DONATE
+    this.customerData.UNINV_BAGS = this.UNINV_BAGS
     this.customerData.UNINV_SAVEDON = new Date() + ''
 
     console.log(this.customerData)
 
-    //update as collected from pending
+    //update as collected from pending COLDEV_TABLE
 
     ////go to main menu
   }
@@ -449,41 +523,39 @@ export class ConfirminvoicePage implements OnInit {
     // //update overdue payment  - later part(KIV)
 
     // //get all items as array
+
     // //parameters below
-
-    // "email" = driver email
-    // "password" = driver password
-    // "initial"  = this.company
-    // "customerid" =  custID
-    // "collectionid" = this.invoiceId
-    // "invoiceno" = invoice_number
-
+      let params: any = {};
+      params.email  = this.driver_email
+      params.password  = this.driver_password
+      params.initial  = this.company
+      params.customerid = this.customerID
+      params.collectionid = this.invoiceId 
+      params.invoiceno = this.invoiceNumber
     // ////check type and get corresponding id number
-    // "type", invoicetypeID
-
+      params.type = this.invoiceType
     // ///// subtract overdue amount from deposit else won't tally  - later part(KIV)
     // ///// BigDecimal depood = new BigDecimal(deposit.getText().toString()); - later part(KIV)
     // ///// BigDecimal odamt = new BigDecimal(overdueTV.getText().toString());
     // ///// BigDecimal depoonly = depood.subtract(odamt); - later part(KIV)
-
-    // "depositamount" = this.depositAmount
-    // "deposittype"  = this.paymentMethod
-    // "balancepaid" = "0.00"  //saved but useless
-    // "name" = driver name
-    // "agreeddeliverydate" = agreed deliver date
-    // "deliverytimeslot" = agreed deliver time
-    // "invoiceitem" = items; //all items
-    // "invoicenote" = getnote //have to format into array else will have error
-    // "hasdonate" = getdonate
-    // "donatetotal" = getdonate
-    // "discount" = this.percentPromoAmount
-    // "express" = this.expressPercent
-    // "bags" = getbags
-    // "savedon" = UCOtimestamp
+      params.depositamount = this.depositAmount
+      params.deposittype  = this.paymentMethod
+      params.balancepaid = "0.00"  //saved but useless
+      params.name = this.driver_name
+      params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
+      params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT 
+      params.invoiceitem = "All items" //all items
+      params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
+      params.hasdonate = this.UNINV_DONATE
+      params.donatetotal = this.UNINV_DONATE //saved but useless
+      params.discount = this.percentPromoAmount
+      params.express = this.expressPercent
+      params.bags = this.UNINV_BAGS
+      params.savedon = new Date() + ''
 
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
-    //if (successful{
+    //if (successful){
     //// delete on COLDEL_TABLE where = "collection", selectedDate, coldelID)
     //// delete on TEMP_ITEMS_TABLE whererid = current invoice id
     //// delete on UNSYNCED_INVOICE_TABLE where tumestamp =  timestamp of selected invoice
