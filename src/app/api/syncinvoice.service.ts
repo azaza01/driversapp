@@ -42,15 +42,26 @@ export class SyncinvoiceService {
     return await this.loading.present();
   }
 
+  private getHeaders() {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + token
+      })
+    };
+  }
 
-  getRates(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
-    }
+
+  syncInvoice(info: any) {
+    this.getHeaders();
+    console.log(info)
+    // let params = {
+    //   email: info.email_address,
+    //   password: info.password
+    // }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/addinvoice.json", params).subscribe(
+      this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
         response => {
           let res;
           res = response;

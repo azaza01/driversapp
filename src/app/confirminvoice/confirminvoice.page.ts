@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController, LoadingController } from '@ionic/angular';
 import { DefaultsService } from '../api/defaults.service';
 import { Network } from '@ionic-native/network/ngx';
 import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Ionic4DatepickerModalComponent } from '@logisticinfotech/ionic4-datepicker';
+import { SyncinvoiceService } from '../api/syncinvoice.service';
 
 @Component({
   selector: 'app-confirminvoice',
@@ -14,8 +15,11 @@ import { Ionic4DatepickerModalComponent } from '@logisticinfotech/ionic4-datepic
 })
 export class ConfirminvoicePage implements OnInit {
 
+  loading: any = new LoadingController;
+
   customerData: any
   isLoading: boolean = false
+  invoicedata: any
 
   checkAccount = 0;
   company: any;
@@ -88,6 +92,9 @@ allinvoiceitems: any
     private network: Network,
     public datepipe: DatePipe,
     public modalCtrl: ModalController,
+    public syncinvoice: SyncinvoiceService,
+    private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
 
   ) {
     this.datePickerObj = {
@@ -240,12 +247,11 @@ allinvoiceitems: any
     } else if (this.checkAccount == 0) {
       this.storage.get("TEMP_ITEMS_TABLE").then(res => {
         console.log(res)
-
         var flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
             console.log(res[i])
-
+            this.allinvoiceitems = res[i]
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
@@ -475,9 +481,9 @@ allinvoiceitems: any
 
     ////check connection
     if (!navigator.onLine) {
-      this.syncPay()
-    } else {
       this.savePay()
+    } else {
+      this.syncPay()
     }
 
   }
@@ -515,10 +521,33 @@ allinvoiceitems: any
     ////go to main menu
   }
 
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      spinner: 'crescent',
+      cssClass: 'custom-class'
+    });
+    return await this.loading.present();
+  }
+
+
+  async presentToast(msg) {
+    
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom',
+      color: 'medium',
+      cssClass: 'customToast-class',
+    });
+    toast.present();
+  }
+
   //with connection
-  syncPay() {
+  async syncPay() {
     console.log(navigator.onLine)
-    this.invoiceSyncLink = "http://ccmanager.cottoncare.com.sg/ws/addinvoice.json"
+
+    // this.invoiceSyncLink = "http://ccmanager.cottoncare.com.sg/ws/addinvoice.json"
 
     // //update overdue payment  - later part(KIV)
 
@@ -544,7 +573,7 @@ allinvoiceitems: any
       params.name = this.driver_name
       params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
       params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT 
-      params.invoiceitem = "All items" //all items
+      params.invoiceitem = this.allinvoiceitems.toString() //all items
       params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
       params.hasdonate = this.UNINV_DONATE
       params.donatetotal = this.UNINV_DONATE //saved but useless
@@ -553,6 +582,26 @@ allinvoiceitems: any
       params.bags = this.UNINV_BAGS
       params.savedon = new Date() + ''
 
+
+        await this.presentLoading('');
+        // this.isLoading = true;
+        // console.log(user.value)
+        Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
+          console.log(data);
+          if (data) {
+            // this.router.navigate(['/home']);
+            this.presentToast("Nice")
+          } else {
+            this.presentToast("Cannot sync")
+    
+          }
+          this.loading.dismiss();
+    
+        }).catch(e => {
+          console.log(e);
+        });
+    
+      
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
     //if (successful){
