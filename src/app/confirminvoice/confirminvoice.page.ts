@@ -71,7 +71,7 @@ UNINV_INVOICENOTE: any
 UNINV_SAVEDON: any
 UNINV_TYPE: any
 
-allinvoiceitems: any
+allinvoiceitems: any = []
 
   overDue: any;
 
@@ -573,7 +573,8 @@ allinvoiceitems: any
       params.name = this.driver_name
       params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
       params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT 
-      params.invoiceitem = this.allinvoiceitems.toString() //all items
+      params.invoiceitem = JSON.stringify(this.allinvoiceitems); //all items this.items = JSON.stringify(this.result);
+      console.log(JSON.stringify(this.allinvoiceitems))
       params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
       params.hasdonate = this.UNINV_DONATE
       params.donatetotal = this.UNINV_DONATE //saved but useless
@@ -604,6 +605,7 @@ allinvoiceitems: any
       
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
+    
     //if (successful){
     //// delete on COLDEL_TABLE where = "collection", selectedDate, coldelID)
     //// delete on TEMP_ITEMS_TABLE whererid = current invoice id

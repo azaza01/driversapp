@@ -53,7 +53,6 @@ export class SyncinvoiceService {
 
 
   syncInvoice(info: any) {
-    this.getHeaders();
     console.log(info)
     // let params = {
     //   email: info.email_address,
@@ -61,6 +60,7 @@ export class SyncinvoiceService {
     // }
 
     return new Promise(resolve => {
+      this.getHeaders()
       this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
         response => {
           let res;
