@@ -582,6 +582,7 @@ allinvoiceitems: any = []
       params.express = this.expressPercent
       params.bags = this.UNINV_BAGS
       params.savedon = new Date() + ''
+      console.log(params)
 
 
         await this.presentLoading('');
