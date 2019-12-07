@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { SelectitemlistPage } from '../selectitemlist/selectitemlist.page'
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from '../api/defaults.service';
+import { CollectionitemsPage } from '../collectionitems/collectionitems.page';
 
 
 @Component({
@@ -175,7 +176,7 @@ export class SelectcategoryPage implements OnInit {
   }
 
   createcustomItem() {
-    this.router.navigate(['/createcustomitem']);
+    // this.router.navigate(['/createcustomitem']);
   }
 
 
@@ -193,7 +194,49 @@ export class SelectcategoryPage implements OnInit {
   }
 
   viewCollectionItem() {
-    this.router.navigate(['/collectionitems']);
+    // this.router.navigate(['/collectionitems']);
+    this.viewItems(this.tempItems)
+  }
+
+  async viewItems(info) {
+    const myModal = await this.modalController.create({
+      component: CollectionitemsPage,
+      cssClass: 'viewItem-css',
+      componentProps: { value: info },
+      backdropDismiss: false,
+    });
+
+    myModal.onDidDismiss().then(async data => {
+
+      if (data['data'] != undefined) {
+        console.log(data)
+        this.tempItems = await this.getList(data['data'].data)
+
+      } else {
+
+      }
+
+    })
+
+    myModal.present();
+  }
+
+  async getList(data) {
+    let res
+    res = data
+    let filtered: any = []
+    await this.presentLoading('');
+
+    if(res != undefined){
+      res.forEach(temp => {
+        if (temp.qty != 0) {
+          filtered.push(temp)
+        }
+      });
+    }
+
+    this.loading.dismiss()
+    return filtered
   }
 
 

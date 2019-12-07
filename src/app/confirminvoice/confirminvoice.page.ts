@@ -53,25 +53,25 @@ export class ConfirminvoicePage implements OnInit {
   driver_password: any
 
   UNINV_AGREEDDELIVERYDATE: any
-UNINV_BAGS: any
-UNINV_BALANCE: any
-UNINV_COLLID: any
-UNINV_COLLTS: any
-UNINV_CUSTID: any
-UNINV_DELIVERYTIMESLOT: any
-UNINV_DEPOAMT: any
-UNINV_DEPOTYPE: any
-UNINV_DISCOUNT: any
-UNINV_DONATE: any
-UNINV_EXPRESS: any
-UNINV_HASDONATE: any
-UNINV_INITIAL: any
-UNINV_INVNO: any
-UNINV_INVOICENOTE: any
-UNINV_SAVEDON: any
-UNINV_TYPE: any
+  UNINV_BAGS: any
+  UNINV_BALANCE: any
+  UNINV_COLLID: any
+  UNINV_COLLTS: any
+  UNINV_CUSTID: any
+  UNINV_DELIVERYTIMESLOT: any
+  UNINV_DEPOAMT: any
+  UNINV_DEPOTYPE: any
+  UNINV_DISCOUNT: any
+  UNINV_DONATE: any
+  UNINV_EXPRESS: any
+  UNINV_HASDONATE: any
+  UNINV_INITIAL: any
+  UNINV_INVNO: any
+  UNINV_INVOICENOTE: any
+  UNINV_SAVEDON: any
+  UNINV_TYPE: any
 
-allinvoiceitems: any = []
+  allinvoiceitems: any = []
 
   overDue: any;
 
@@ -128,7 +128,7 @@ allinvoiceitems: any = []
   }
 
   ngOnInit() {
-    
+
     this.isLoading = true
     this.storage.get('SELECTED_ITEM').then(res => {
       console.log(res)
@@ -137,15 +137,15 @@ allinvoiceitems: any = []
       console.log(this.invoiceId);
     })
 
-    
+
 
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       this.isLoading = true
       console.log(res)
       var l = res.length, i;
       for (i = 0; i < l; i++) {
-        if (res[i].UNINV_COLLID == this.invoiceId){
-            this.customerData = res[i];
+        if (res[i].UNINV_COLLID == this.invoiceId) {
+          this.customerData = res[i];
         }
       }
 
@@ -219,7 +219,7 @@ allinvoiceitems: any = []
       this.driver_email = res.email_address
       this.driver_password = res.password
       this.driver_name = res.name
-    })  
+    })
 
 
     this.getItemSubtotal();
@@ -251,7 +251,7 @@ allinvoiceitems: any = []
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
             console.log(res[i])
-            this.allinvoiceitems = res[i]
+            this.allinvoiceitems.push(res[i])
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
@@ -505,8 +505,8 @@ allinvoiceitems: any = []
     this.customerData.UNINV_DEPOTYPE = this.paymentMethod
     this.customerData.UNINV_BALANCE = this.balanceAmount
     this.customerData.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? this.datepipe.transform(new Date(this.getDay(7)), 'yyyy-MM-dd') : this.customerData.UNINV_AGREEDDELIVERYDATE
-    this.customerData.UNINV_DELIVERYTIMESLOT = this.UNINV_DELIVERYTIMESLOT 
-    this.customerData.UNINV_INVOICENOTE =  this.UNINV_INVOICENOTE
+    this.customerData.UNINV_DELIVERYTIMESLOT = this.UNINV_DELIVERYTIMESLOT
+    this.customerData.UNINV_INVOICENOTE = this.UNINV_INVOICENOTE
     this.customerData.UNINV_DISCOUNT = this.percentPromoAmount
     this.customerData.UNINV_EXPRESS = this.expressPercent
     this.customerData.UNINV_HASDONATE = this.UNINV_HASDONATE
@@ -532,7 +532,7 @@ allinvoiceitems: any = []
 
 
   async presentToast(msg) {
-    
+
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 3000,
@@ -554,59 +554,59 @@ allinvoiceitems: any = []
     // //get all items as array
 
     // //parameters below
-      let params: any = {};
-      params.email  = this.driver_email
-      params.password  = this.driver_password
-      params.initial  = this.company
-      params.customerid = this.customerID
-      params.collectionid = this.invoiceId 
-      params.invoiceno = this.invoiceNumber
+    let params: any = {};
+    params.email = this.driver_email
+    params.password = this.driver_password
+    params.initial = this.company
+    params.customerid = this.customerID
+    params.collectionid = this.invoiceId
+    params.invoiceno = this.invoiceNumber
     // ////check type and get corresponding id number
-      params.type = this.invoiceType
+    params.type = this.invoiceType
     // ///// subtract overdue amount from deposit else won't tally  - later part(KIV)
     // ///// BigDecimal depood = new BigDecimal(deposit.getText().toString()); - later part(KIV)
     // ///// BigDecimal odamt = new BigDecimal(overdueTV.getText().toString());
     // ///// BigDecimal depoonly = depood.subtract(odamt); - later part(KIV)
-      params.depositamount = this.depositAmount
-      params.deposittype  = this.paymentMethod
-      params.balancepaid = "0.00"  //saved but useless
-      params.name = this.driver_name
-      params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
-      params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT 
-      params.invoiceitem = JSON.stringify(this.allinvoiceitems); //all items this.items = JSON.stringify(this.result);
-      console.log(JSON.stringify(this.allinvoiceitems))
-      params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
-      params.hasdonate = this.UNINV_DONATE
-      params.donatetotal = this.UNINV_DONATE //saved but useless
-      params.discount = this.percentPromoAmount
-      params.express = this.expressPercent
-      params.bags = this.UNINV_BAGS
-      params.savedon = new Date() + ''
-      console.log(params)
+    params.depositamount = this.depositAmount
+    params.deposittype = this.paymentMethod
+    params.balancepaid = "0.00"  //saved but useless
+    params.name = this.driver_name
+    params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
+    params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT
+    params.invoiceitem = JSON.stringify(this.allinvoiceitems) //all items this.items = JSON.stringify(this.result);
+    console.log(this.allinvoiceitems)
+    params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
+    params.hasdonate = this.UNINV_DONATE
+    params.donatetotal = this.UNINV_DONATE //saved but useless
+    params.discount = this.percentPromoAmount
+    params.express = this.expressPercent
+    params.bags = this.UNINV_BAGS
+    params.savedon = new Date() + ''
+    console.log(params)
 
 
-        await this.presentLoading('');
-        // this.isLoading = true;
-        // console.log(user.value)
-        Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
-          console.log(data);
-          if (data) {
-            // this.router.navigate(['/home']);
-            this.presentToast("Nice")
-          } else {
-            this.presentToast("Cannot sync")
-    
-          }
-          this.loading.dismiss();
-    
-        }).catch(e => {
-          console.log(e);
-        });
-    
-      
+    await this.presentLoading('');
+    // this.isLoading = true;
+    // console.log(user.value)
+    Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
+      console.log(data);
+      if (data) {
+        // this.router.navigate(['/home']);
+        this.presentToast("Nice")
+      } else {
+        this.presentToast("Cannot sync")
+
+      }
+      this.loading.dismiss();
+
+    }).catch(e => {
+      console.log(e);
+    });
+
+
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
-    
+
     //if (successful){
     //// delete on COLDEL_TABLE where = "collection", selectedDate, coldelID)
     //// delete on TEMP_ITEMS_TABLE whererid = current invoice id
@@ -658,3 +658,81 @@ allinvoiceitems: any = []
   }
 
 }
+
+
+// {
+//   "agreeddeliverydate": "2019-12-04",
+//   "bags": "1",
+//   "balancepaid": "0.00",
+//   "collectionid": "141699",
+//   "customerid": "27915",
+//   "deliverytimeslot": "I Day Time",
+//   "depositamount": "42",
+//   "deposittype": "CASH",
+//   "discount": "3.0500000000000003",
+//   "donatetotal": "10",
+//   "email": "davidchia@cottoncare.com.sg",
+//   "express": "0.5",
+//   "hasdonate": "10",
+//   "initial": "CC",
+//   "invoiceitem": [
+//     {
+//       "cat_type": "Clothing",
+//       "clean_type": "Laundry",
+//       "description": "Blouse (Ladies)",
+//       "id": "1",
+//       "item_ready": "no",
+//       "pcs": "1",
+//       "price": "5.50",
+//       "qty": "2",
+//       "ready_type": "Hang",
+//       "rid": "141699",
+//       "subtotal": "11",
+//       "updated_by": "admin",
+//       "updated_on": "0000-00-00 00:00:00"
+//     },
+//     {
+//       "cat_type": "Clothing",
+//       "clean_type": "Dry Clean",
+//       "description": "Blouse (Ladies)",
+//       "id": "2",
+//       "item_ready": "no",
+//       "pcs": "1",
+//       "price": "6.50",
+//       "qty": "3",
+//       "ready_type": "Hang",
+//       "rid": "141699",
+//       "subtotal": "19.5",
+//       "updated_by": "admin",
+//       "updated_on": "0000-00-00 00:00:00"
+//     }
+//   ],
+//   "invoiceno": "CC-19129Ch01",
+//   "invoicenote": "asadsa",
+//   "name": "Chia",
+//   "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
+//   "savedon": "Sat Dec 07 2019 15:43:33 GMT+0800 (Philippine Standard Time)",
+//   "type": "New"
+// }
+
+// agreeddeliverydate:2019-12-04
+// bags:1
+// balancepaid:0.00
+// collectionid:141699
+// customerid:27915
+// deliverytimeslot:I Day Time
+// depositamount:42
+// deposittype:CASH
+// discount:3.0500000000000003
+// donatetotal:10
+// email:davidchia@cottoncare.com.sg
+// express:0.5
+// hasdonate:10
+// initial:CC
+// invoiceno:CC-19129Ch0
+// invoicenote:yuyuy
+// name:Chia
+// password:585ae7c2bcd0b7409c9be2edc4b117e22a51b33d
+// savedon:Sat Dec 07 2019 15:43:33 GMT+0800 (Philippine Standard Time)
+// type:New
+// invoiceitem:[↵    {↵      "cat_type": "Clothing",↵      "clean_type": "Laundry",↵      "description": "Blouse (Ladies)",↵      "id": "1",↵      "item_ready": "no",↵      "pcs": "1",↵      "price": "5.50",↵      "qty": "2",↵      "ready_type": "Hang",↵      "rid": "141699",↵      "subtotal": "11",↵      "updated_by": "admin",↵      "updated_on": "0000-00-00 00:00:00"↵    },↵    {↵      "cat_type": "Clothing",↵      "clean_type": "Dry Clean",↵      "description": "Blouse (Ladies)",↵      "id": "2",↵      "item_ready": "no",↵      "pcs": "1",↵      "price": "6.50",↵      "qty": "3",↵      "ready_type": "Hang",↵      "rid": "141699",↵      "subtotal": "19.5",↵      "updated_by": "admin",↵      "updated_on": "0000-00-00 00:00:00"↵    }↵  ]

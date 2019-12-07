@@ -16,6 +16,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { DatePipe } from '@angular/common';
 import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { CollectionitemsPage } from './collectionitems/collectionitems.page';
 // import { SMS } from '@ionic-native/sms';
 
 
@@ -23,9 +24,13 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
   declarations: [
     AppComponent, 
     ViewItemsComponent,
+    CollectionitemsPage
+
   ],
   entryComponents: [
     ViewItemsComponent,
+    CollectionitemsPage
+
   ],
   imports: [
     BrowserModule,

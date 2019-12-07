@@ -81,7 +81,7 @@ export class ColdevPage implements OnInit {
       serverData.coldel_flag = "old"
       this.myColDev.push(serverData)
       this.storage.set('COLDEL_TABLE', this.myColDev)
-      
+
       // let params = {
       //   UNPAY_DELID : serverData.dei,
       //   UNPAY_INVOICENO : serverData.inn,
@@ -216,7 +216,6 @@ export class ColdevPage implements OnInit {
   }
 
   async colView(selected) {
-    // console.log(selected)
     this.storage.set('SELECTED_ITEM', selected).then(() => {
       this.router.navigate(['/colectionview', selected]);
 
@@ -225,7 +224,9 @@ export class ColdevPage implements OnInit {
 
 
   delView(selected) {
-    this.router.navigate(['/deliveryview', selected]);
+    this.storage.set('SELECTED_ITEM', selected).then(() => {
+      this.router.navigate(['/deliveryview', selected]);
+    })
   }
 
 
@@ -257,16 +258,16 @@ export class ColdevPage implements OnInit {
   }
 
 
-  getSpecialInstruction(){
+  getSpecialInstruction() {
 
     // //parameters 
     // // "email", prefEmail));
-		// // "password", prefPassword));
-		// // "driverid", prefUserID));
+    // // "password", prefPassword));
+    // // "driverid", prefUserID));
     // // "date", formattedDate));
 
     // //siResult =  getSpecialInstructionsWS, "POST" http://ccmanager.cottoncare.com.sg/ws/specialinstructions.json
-    
+
     // //result will delete to local and online if action = remove
     //loop result 
 

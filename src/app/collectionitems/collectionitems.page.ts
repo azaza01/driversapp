@@ -27,6 +27,7 @@ export class CollectionitemsPage implements OnInit {
     public loadingCtrl: LoadingController,
     private router: Router,
     private storage: Storage,
+
   ) { }
 
   async ngOnInit() {
@@ -104,5 +105,11 @@ export class CollectionitemsPage implements OnInit {
       this.defaultSrvc.getTempItems = this.temp_List
       this.router.navigate(['/confirminvoice']);
     })
+  }
+
+  closeModal() {
+    this.modalController.dismiss({
+      data: this.item_List
+    });
   }
 }
