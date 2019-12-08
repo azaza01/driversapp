@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CollectionitemsPage } from './collectionitems/collectionitems.page';
+import { CreatecustomitemPage } from './createcustomitem/createcustomitem.page';
 // import { SMS } from '@ionic-native/sms';
 
 
@@ -24,13 +25,13 @@ import { CollectionitemsPage } from './collectionitems/collectionitems.page';
   declarations: [
     AppComponent, 
     ViewItemsComponent,
-    CollectionitemsPage
-
+    CollectionitemsPage,
+    CreatecustomitemPage
   ],
   entryComponents: [
     ViewItemsComponent,
-    CollectionitemsPage
-
+    CollectionitemsPage,
+    CreatecustomitemPage
   ],
   imports: [
     BrowserModule,

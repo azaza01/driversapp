@@ -119,6 +119,7 @@ export class CreatecustomitemPage implements OnInit {
     public alertController: AlertController,
     public loadingCtrl: LoadingController,
     private defaultSrvc: DefaultsService,
+    public modalCtrl: ModalController,
 
   ) { }
 
@@ -152,7 +153,7 @@ export class CreatecustomitemPage implements OnInit {
     let filtered: any = []
     await this.presentLoading('');
 
-    if(res != undefined){
+    if (res != undefined) {
       res.forEach(temp => {
         if (temp.qty != 0) {
           filtered.push(temp)
@@ -793,22 +794,32 @@ export class CreatecustomitemPage implements OnInit {
       params.updated_on = this.defaultSrvc.getToday();
       params.rid = this.mycompany[0].UNINV_COLLID
 
-      
-      this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
-        this.newitems = res.push(params)
-        console.log(res)
-        // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
-        //   console.log(ress);
-        // // })
-        // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
-        //   this.presentAddedItem();
-        //   this.clearCalcu();
-        // })
-        this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
-          this.defaultSrvc.getTempItems = this.temp_List
-        })
-      })   
+
+      this.newitems = this.defaultSrvc.getTempItems
+      this.newitems.push(params)
+      console.log(this.newitems)
+      this.closeModal(this.newitems)
+
+      // this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+      //   this.newitems = res.push(params)
+      //   console.log(res)
+      // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
+      //   console.log(ress);
+      // // })
+      // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+      //   this.presentAddedItem();
+      //   this.clearCalcu();
+      // })
+      // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+      //   this.defaultSrvc.getTempItems = this.temp_List
+      // })
+      // })   
     })
   }
 
+  closeModal(info) {
+    this.modalCtrl.dismiss({
+      data: info
+    });
+  }
 }

@@ -6,6 +6,7 @@ import { SelectitemlistPage } from '../selectitemlist/selectitemlist.page'
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from '../api/defaults.service';
 import { CollectionitemsPage } from '../collectionitems/collectionitems.page';
+import { CreatecustomitemPage } from '../createcustomitem/createcustomitem.page';
 
 
 @Component({
@@ -175,8 +176,31 @@ export class SelectcategoryPage implements OnInit {
     this.router.navigate(['/selectitemlist']);
   }
 
-  createcustomItem() {
-    // this.router.navigate(['/createcustomitem']);
+  createcustomItemX() {
+    this.router.navigate(['/createcustomitem']);
+  }
+
+  async createcustomItem() {
+    const myModal = await this.modalController.create({
+      component: CreatecustomitemPage,
+      cssClass: 'viewItem-css',
+      componentProps: { value: '' },
+      backdropDismiss: false,
+    });
+
+    myModal.onDidDismiss().then(async data => {
+
+      if (data['data'] != undefined) {
+        console.log(data)
+        // this.tempItems = await this.getList(data['data'].data)
+
+      } else {
+
+      }
+
+    })
+
+    myModal.present();
   }
 
 
