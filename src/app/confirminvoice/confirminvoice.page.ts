@@ -31,10 +31,10 @@ export class ConfirminvoicePage implements OnInit {
   customerID: any
   driver_name: any
   promotionItem: any;
-  invoiceNotes: any = '[{"name":""}]';
+  invoiceNotes: any;
 
   //sample default item
-  newItems: any = '{"cat_type":"Clothing","description":"Cheong Sam","clean_type":"Dry Clean","ready_type":"Pack","price":"16.00","is_ready":"no","qty":2,"pieces":2}';
+  newItems: any = '{"cat_type":"Clothing","description":"Cheong Sam","clean_type":"Dry Clean","ready_type":"Pack","price":"16.00","is_ready":"no","qty":2.00,"pieces":2.00}';
 
   expressData: any = "1.00"
 
@@ -79,7 +79,12 @@ UNINV_INVOICENOTE: any = {}
 UNINV_SAVEDON: any
 UNINV_TYPE: any
 
-allinvoiceitems: any
+allinvoiceitems: any = []
+itemsArray: any = []
+itemObject: any = {}
+
+invoiceNotesArray: any = []
+invoiceNotesObject: any = {}
 
   overDue: any;
   todaydate : any;
@@ -253,20 +258,20 @@ allinvoiceitems: any
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
             let params = {
-              'cat_type' : res[i].cat_type,
-							'description' : res[i].description,
-							'clean_type' : res[i].clean_type,
-							'ready_type' : res[i].ready_type,
-							'price' : res[i].price,
-							'is_ready' : res[i].is_ready,
-							'qty' : res[i].qty,
-							'pieces' : res[i].pieces
+              "cat_type" : res[i].cat_type,
+							"description" : res[i].description,
+							"clean_type" : res[i].clean_type,
+							"ready_type" : res[i].ready_type,
+							"price" : parseFloat(res[i].price),
+							"is_ready" : res[i].is_ready,
+							"qty" : parseFloat(res[i].qty),
+							"pieces" : parseFloat(res[i].pieces)
             }
-            this.allinvoiceitems = this.allinvoiceitems + params
+            this.allinvoiceitems = this.allinvoiceitems.concat(params)
             // this.allinvoiceitems = params
-            console.log(this.allinvoiceitems)
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
+          console.log(this.allinvoiceitems)
 
         }
         console.log(this.finalSubtotal)
@@ -287,26 +292,23 @@ allinvoiceitems: any
             console.log(res[i])
             
             let params = {
-              'cat_type' : res[i].cat_type,
-							'description' : res[i].description,
-							'clean_type' : res[i].clean_type,
-							'ready_type' : res[i].ready_type,
-							'price' : res[i].price,
-							'is_ready' : res[i].is_ready,
-							'qty' : res[i].qty,
-							'pieces' : res[i].pieces
+              "cat_type" : res[i].cat_type,
+							"description" : res[i].description,
+							"clean_type" : res[i].clean_type,
+							"ready_type" : res[i].ready_type,
+							"price" : parseFloat(res[i].price),
+							"is_ready" : res[i].is_ready,
+							"qty" : parseFloat(res[i].qty),
+							"pieces" : parseFloat(res[i].pieces)
             }
-            // this.allinvoiceitems.push(res[i])
-            // str1 = new String(params)
-            var a = new Array(params);
-            str1 = a.join(",");  // s is the string "1+2+3+testing"
-            // this.allinvoiceitems = params
-           
+            this.itemObject = params;
+            this.itemsArray.push(this.itemObject);
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
-          this.allinvoiceitems = str1
-          console.log(this.allinvoiceitems)
-        }
+         }
+        this.allinvoiceitems = this.itemsArray
+        console.log(this.itemsArray)
+        console.log(this.allinvoiceitems)
         console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
         this.afterLessAmount = this.finalSubtotal;
@@ -346,18 +348,7 @@ allinvoiceitems: any
   //   err => console.log('Error occurred while getting date: ', err)
   // );
   // }
-  getNotes(UNINV_INVOICENOTE){
-    if(UNINV_INVOICENOTE == undefined || UNINV_INVOICENOTE == null){
-      var json = '{ "name": "' + UNINV_INVOICENOTE + '"}';
-      this.UNINV_INVOICENOTE = json;
-      this.invoiceNotes = json;
-    }else{
-      var json = '{ "name": ""}';
-      this.UNINV_INVOICENOTE = json;
-      this.invoiceNotes = json;
-    }
 
-  }
 
 
 
@@ -623,12 +614,20 @@ allinvoiceitems: any
   }
 
   //with connection
-  async syncPay() {
+async syncPay() {
     console.log(navigator.onLine)
     // //update overdue payment  - later part(KIV)
     // //get all items as array
-    var json = this.allinvoiceitems
-    this.newItems = json
+    if(this.UNINV_INVOICENOTE == undefined || this.UNINV_INVOICENOTE == null){
+      this.invoiceNotesObject = '{"name":"' + this.UNINV_INVOICENOTE + '"}';
+      this.invoiceNotes =  this.invoiceNotesArray.push(this.invoiceNotesArray)
+    }else{
+      var json = '[{"name":""}]';
+      this.invoiceNotes = json;
+    }
+
+    // var myObj = JSON.stringify(JSON.parse(this.allinvoiceitems));
+    var myObj = JSON.stringify(this.allinvoiceitems);
 
 
   let params: any  = {}
@@ -646,7 +645,7 @@ allinvoiceitems: any
   params.name = this.driver_name,
   params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE,
   params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT,
-  params.invoiceitem = JSON.stringify(this.allinvoiceitems),//all items this.items = JSON.stringify(this.result);
+  params.invoiceitem = JSON.stringify(myObj),//all items this.items = JSON.stringify(this.result);
   params.invoicenote = JSON.stringify(this.invoiceNotes), //have to format into array else will have error
   params.hasdonate = this.UNINV_DONATE,
   params.donatetotal = this.UNINV_DONATE, //saved but useless
@@ -658,26 +657,24 @@ allinvoiceitems: any
   console.log(params)
 
 
-    // await this.presentLoading('');
-    // // this.isLoading = true;
-    // // console.log(user.value)
-    // Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
-    //   console.log(data);
-    //   if (data) {
-    //     // this.router.navigate(['/home']);
-    //     this.presentToast("Sync Successful")
-    //     this.router.navigate(['/home']);
-    //   } else {
-    //     this.presentToast("Cannot sync")
-    //     //this.savePay();
-    //   }
-    //   this.loading.dismiss();
+    await this.presentLoading('');
+    // this.isLoading = true;
+    // console.log(user.value)
+    Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
+      console.log(data);
+      if (data) {
+        // this.router.navigate(['/home']);
+        this.presentToast("Sync Successful")
+        this.router.navigate(['/home']);
+      } else {
+        this.presentToast("Cannot sync")
+        //this.savePay();
+      }
+      this.loading.dismiss();
 
-    // }).catch(e => {
-    //   console.log(e);
-    // });
-
-
+    }).catch(e => {
+      console.log(e);
+    });
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
 

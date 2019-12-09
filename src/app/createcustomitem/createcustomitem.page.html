@@ -1,10 +1,10 @@
 <ion-header>
-  <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
-      </ion-buttons>
-      <ion-title>Create Custom</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Create Custom</ion-title>
+    </ion-toolbar>
 </ion-header>
 
   <ion-content>
@@ -176,7 +176,10 @@
           <ion-col >
             <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="addCustomItem()">ADD CUSTOM ITEM</ion-button>
           </ion-col>
-        </ion-row>
+      </ion-row>
+      <ion-col>
+          <ion-button expand="full" shape="round" color="light" (click)="closeModal()">CLOSE</ion-button>
+      </ion-col>
   
   </ion-content>
   

@@ -28,6 +28,10 @@ export class HomePage {
 
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
+
+    // this.storage.remove('ACCOUNTS_TABLE').then(() => {})
+    
+
     
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       // console.log(res)

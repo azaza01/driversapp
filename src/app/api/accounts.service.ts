@@ -59,7 +59,7 @@ export class AccountsService {
     // info.password = generatedpassword;
     // console.log(info.password);
 
-    let infoxi = {
+    let infoi = {
       // email: "it01.azaza@gmail.com",
       // password: "7c222fb2927d828af22f592134e8932480637c0d"
       "email": "it01.azaza@gmail.com",
@@ -74,7 +74,7 @@ export class AccountsService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/logon.json", infoxi).subscribe(
+      this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
         response => {
           let res;
           res = response[0];
