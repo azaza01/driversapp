@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
+import { AlertController, ModalController, ToastController, LoadingController } from '@ionic/angular';
+import { DefaultsService } from '../api/defaults.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SyncdeliveryService } from '../api/syncdelivery.service'
 @Component({
   selector: 'app-deliverymakepayment',
   templateUrl: './deliverymakepayment.page.html',
@@ -9,8 +11,10 @@ import { Storage } from '@ionic/storage';
 })
 export class DeliverymakepaymentPage implements OnInit {
 
+  loading: any = new LoadingController;
+
   paymentMethod: any
-  payAmount: any
+  payAmount: any = 0
 
   invnum: any
   totalamount: any = 0
@@ -27,18 +31,37 @@ export class DeliverymakepaymentPage implements OnInit {
   deliveryDetails: any
   isLoading: boolean = false
 
+  email_address: any
+  password: any 
+  name: any
+
+  todaydate: any
+
   constructor(
     public alertController: AlertController,
     private storage: Storage,
-
+    private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+    public syncdelivery: SyncdeliveryService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
     this.getPaymentDetails()
+    this.getToday() 
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      console.log(res)
+      this.email_address = res.email_address
+      this.password = res.password
+      this.name = res.name
+    })
   }
 
   getPay(payAmount) {
     this.payAmount = payAmount
+    if(this.payAmount == undefined){
+      this.payAmount = 0
+    }
     console.log(payAmount)
   }
 
@@ -65,15 +88,15 @@ export class DeliverymakepaymentPage implements OnInit {
     // this.outstandingbalance = this.totalamount - (this.depositamount  + this.LastPaid )
     // this.customerCredit = "100"
 
-    this.invnum = "inn"
-    this.totalamount = 108
-    this.billFromCompany = "CC"
-    this.discounts = 20
-    this.depositamount = 60
-    this.deposittype = "CASH"
-    this.LastPaid = 40
-    this.outstandingbalance = this.totalamount - (this.depositamount + this.LastPaid)
-    this.customerCredit = "100"
+    // this.invnum = "inn"
+    // this.totalamount = 108
+    // this.billFromCompany = "CC"
+    // this.discounts = 20
+    // this.depositamount = 60
+    // this.deposittype = "CASH"
+    // this.LastPaid = 40
+    // this.outstandingbalance = this.totalamount - (this.depositamount + this.LastPaid)
+    // this.customerCredit = "100"
   }
 
   saveSummury() {
@@ -94,7 +117,6 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   saveLocalPayment() {
-
     ///UNSYNCED_PAYMENT_TABLE
 
     // UNPAY_DELID,
@@ -108,29 +130,13 @@ export class DeliverymakepaymentPage implements OnInit {
     // UNPAY_BALANCEPAID,
     // UNPAY_BALANCELEFT
 
-
   }
 
-  makePayment() {
+  async makePayment(){
     this.getdeliveryStatus();
     // update summary table SUMMARY_TABLE +1 to deliver add value to (CASH or CREDIT, CHEQUE, BT  +1 to DC/CC)
 
-    //parametes
-    // "email", prefEmail));
-    // "password", prefPassword));
-    // "delid", coldelID)); //pass coldelID (actually is delID) and ws gets the invid
-    // "nowpaid", et.getText().toString())); // must add the Last Paid field together
-    // "lastpaid", String.valueOf(lastPaid))); // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
-    // "balancepaid", String.valueOf(balancePaid))); // must add the Last Paid field together because we are updating the balance paid field
-    // "balancetype", bt.getText().toString()));
-    // "status", status));
-    // "ppdate", ppDate)); //06-05-2013
-    // "pptimeslot", ppTimeslot)); //06-05-2013
-    // "name", prefUserName));
-    // "savedon", savedon)); //time of save from driver
 
-
-    // link = http://ccmanager.cottoncare.com.sg/ws/updateinvoicestatus.json
 
     //update COLDEL_FLAG KIV 
 
@@ -148,12 +154,9 @@ export class DeliverymakepaymentPage implements OnInit {
 
     // update UNSYNCED_PAYMENT_TABLE 
 
-
-
-
   }
 
-  makePaymentAndCreateNew() {
+  makePaymentAndCreateNew(){
     this.getdeliveryStatus();
 
     // update COLDEL_TABLE
@@ -163,6 +166,58 @@ export class DeliverymakepaymentPage implements OnInit {
     // UNSYNCED_PAYMENT_TABLE
 
 
+  }
+
+  getToday() {
+    let today;
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let hr = new Date().getHours();
+    let min = new Date().getMinutes();
+    let ss = new Date().getSeconds();
+    let yy = (yyyy + '').substr(2, 2);
+
+    today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
+    this.todaydate = today
+    console.log(this.todaydate)
+  }
+
+  async deliverysync(){
+    let params = {
+      email : this.email_address,
+      password : this.password,
+      delid : this.deliveryDetails.dei, //pass coldelID (actually is delID) and ws gets the invid
+      nowpaid : this.payAmount, // must add the Last Paid field together
+      lastpaid : this.deliveryDetails.bap, // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
+      balancepaid : this.deliveryDetails.dpa , // must add the Last Paid field together because we are updating the balance paid field
+      balancetype : this.deliveryDetails.dpt,
+      status : this.deliveryStatus,
+      ppdate : this.deliveryDetails.ded, //06-05-2013
+      pptimeslot : this.deliveryDetails.det, //06-05-2013
+      name : this.name,
+      savedon : this.todaydate
+     }
+     console.log(params)
+
+     await this.presentLoading('');
+     Promise.resolve(this.syncdelivery.syncdeliverysrvc(params)).then(data => {
+       console.log(data);
+       if (data) {
+         this.presentToast("Delivery Successfully Sync")
+         this.router.navigate(['/home']);
+       } else {
+         this.presentToast("Cannot sync, please save later")
+         this.saveLocalPayment();
+         this.router.navigate(['/home']);
+         
+       }
+       this.loading.dismiss();
+ 
+     }).catch(e => {
+       console.log(e);
+     });
+    
   }
 
   async getdeliveryStatus() {
@@ -191,28 +246,55 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   getDeliveryPaymentStatus() {
-    if ((this.LastPaid + this.depositamount + this.depositamount) == this.totalamount) {
+    console.log(this.deliveryDetails.bap);
+    console.log(this.deliveryDetails.dpa);
+    console.log(this.payAmount);
+    var newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa)  + (this.payAmount);
+    console.log(newamount);
+    if (newamount >= this.outstandingbalance) {
       //Log.d("spark", "paid amount is smaller than existing credits");
       //status = status + ", Full Paid";
       //if credit amount is less than the amount to pay, mark as partial paid
-      if ((this.outstandingbalance <= 0) && (this.paymentMethod == "CREDIT")) { //outstandingPaid is > than creditsBalance 2015-01-13
-        this.deliveryStatus = this.deliveryStatus + ", Partial Paid"
-      }
-      else {
-        this.deliveryStatus = this.deliveryStatus + ", Full Paid";
-      }
+        if ((this.deliveryDetails.cca  < this.outstandingbalance) && (this.paymentMethod == "CREDIT")) { //outstandingPaid is > than creditsBalance 2015-01-13
+          this.deliveryStatus  =  this.deliveryStatus  + ", Partial Paid"
+          this.deliverysync();
+        }else {
+          this.deliveryStatus=  this.deliveryStatus + ", Full Paid";
+          this.deliverysync();
+        }
+    }else if (this.outstandingbalance  == 0) {
+      this.deliveryStatus  =  this.deliveryStatus + ", Unpaid";
+      this.deliverysync();
+    }else {
+      this.deliveryStatus  =  this.deliveryStatus + ", Partial Paid";
+      this.deliverysync();
     }
-    else if (this.outstandingbalance == 0) {
-      this.deliveryStatus = this.deliveryStatus + ", Unpaid";
-    }
-    else {
-      this.deliveryStatus = this.deliveryStatus + ", Partial Paid";
-    }
-  }
 
+  }
 
   createInvoiceItem() {
 
+  }
+
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      spinner: 'crescent',
+      cssClass: 'custom-class'
+    });
+    return await this.loading.present();
+  }
+
+  async presentToast(msg) {
+    
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom',
+      color: 'medium',
+      cssClass: 'customToast-class',
+    });
+    toast.present();
   }
 
 }

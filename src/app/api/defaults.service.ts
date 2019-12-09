@@ -222,10 +222,12 @@ export class DefaultsService {
 
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
                     console.log('FB_FORM_TABLE', data);
+
                             this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
                                 this.loading.dismiss();
                                resolve(true)
                              });
+                             
                   }).catch(e => {
                     console.log(e);
                   });
@@ -485,6 +487,37 @@ export class DefaultsService {
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/specialinstructions.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          // console.log(res)
+
+          // this.storage.set('FB_FORM_TABLE', res).then(() => {
+          //   resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  getInvoiceType(info: any) {
+    let params = {
+      email: info.email_address,
+      password: info.password
+    }
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/invoicetypes.json", params).subscribe(
         response => {
           let res;
           res = response;

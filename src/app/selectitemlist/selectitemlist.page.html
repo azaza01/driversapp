@@ -40,7 +40,7 @@
           <ion-input type="number" [(ngModel)]="item.qty" (ngModelChange)="item.subtotal = item.qty * item.price"></ion-input>
         </ion-col>
         <ion-col size="2" class="inputCss">
-          <ion-input type="number" [(ngModel)]="item.pcs"></ion-input>
+          <ion-input type="number" [(ngModel)]="item.pieces"></ion-input>
         </ion-col>
         <ion-col size="2" style="padding-left: 10px; text-align: center;">
           {{item.qty * item.price}}

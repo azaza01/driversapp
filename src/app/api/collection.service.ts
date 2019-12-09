@@ -55,9 +55,9 @@ export class CollectionService {
       // password: info.password,
       // driverid: info.id,
       date: today,
-      "email": "davidchia@cottoncare.com.sg",
-      "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
-      "driverid": "16",
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "driverid": "109",
       // "date": "2019-11-21"
 
       // "email": "it01.azaza@gmail.com",

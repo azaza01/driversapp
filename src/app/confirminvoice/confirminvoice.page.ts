@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Ionic4DatepickerModalComponent } from '@logisticinfotech/ionic4-datepicker';
 import { SyncinvoiceService } from '../api/syncinvoice.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-confirminvoice',
@@ -30,53 +31,61 @@ export class ConfirminvoicePage implements OnInit {
   customerID: any
   driver_name: any
   promotionItem: any;
-  invoiceNotes: any
+  invoiceNotes: any = '[{"name":""}]';
+
+  //sample default item
+  newItems: any = '{"cat_type":"Clothing","description":"Cheong Sam","clean_type":"Dry Clean","ready_type":"Pack","price":"16.00","is_ready":"no","qty":2,"pieces":2}';
+
+  expressData: any = "1.00"
 
 
   finalSubtotal: any = 0;
   percentPromo: any
-  percentPromoAmount: any;
+  percentPromoAmount: number = 0;
+  percentPromoAmountFM: any = 0;
   invoiceSyncLink: any;
 
   // percentValue: any;
   convertedPercent: any;
   afterLessAmount: any;
   expressAmount: any;
-  expressPercent: any;
+  expressPercent: number = 0;
   payableAmount: any;
   expressCharge: any = "None";
-  depositAmount: any;
-  balanceAmount: any;
+  depositAmount: any = "0.00";
+  balanceAmount: number = 0;
   returnDate: any;
   customerTypes: any;
   driver_email: any
   driver_password: any
+  invoiceTypeID: any
 
   UNINV_AGREEDDELIVERYDATE: any
-  UNINV_BAGS: any
-  UNINV_BALANCE: any
-  UNINV_COLLID: any
-  UNINV_COLLTS: any
-  UNINV_CUSTID: any
-  UNINV_DELIVERYTIMESLOT: any
-  UNINV_DEPOAMT: any
-  UNINV_DEPOTYPE: any
-  UNINV_DISCOUNT: any
-  UNINV_DONATE: any
-  UNINV_EXPRESS: any
-  UNINV_HASDONATE: any
-  UNINV_INITIAL: any
-  UNINV_INVNO: any
-  UNINV_INVOICENOTE: any
-  UNINV_SAVEDON: any
-  UNINV_TYPE: any
+UNINV_BAGS: any
+UNINV_BALANCE: any
+UNINV_COLLID: any
+UNINV_COLLTS: any
+UNINV_CUSTID: any
+UNINV_DELIVERYTIMESLOT: any
+UNINV_DEPOAMT: any
+UNINV_DEPOTYPE: any
+UNINV_DISCOUNT: any
+UNINV_DONATE: any
+UNINV_EXPRESS: any
+UNINV_HASDONATE: any
+UNINV_INITIAL: any
+UNINV_INVNO: any
+UNINV_INVOICENOTE: any = {}
+UNINV_SAVEDON: any
+UNINV_TYPE: any
 
-  allinvoiceitems: any = []
+allinvoiceitems: any
 
   overDue: any;
+  todaydate : any;
 
   customercredit: any;
-  paymentMethod: any = "CASH";
+  paymentMethod: any = "Cash";
 
   datePickerObj: any = {};
   initDELIVERYDATE: any
@@ -95,7 +104,7 @@ export class ConfirminvoicePage implements OnInit {
     public syncinvoice: SyncinvoiceService,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-
+    private router: Router,
   ) {
     this.datePickerObj = {
       // inputDate: new Date('12'), // If you want to set month in date-picker
@@ -128,7 +137,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.getToday();
     this.isLoading = true
     this.storage.get('SELECTED_ITEM').then(res => {
       console.log(res)
@@ -158,7 +167,7 @@ export class ConfirminvoicePage implements OnInit {
       this.initDELIVERYDATE = initDeliveryDate
       this.isLoading = false
 
-      this.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE
+      this.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? this.datepipe.transform(new Date(this.getDay(7)), 'yyyy-MM-dd') : this.customerData.UNINV_AGREEDDELIVERYDATE
       this.UNINV_BAGS = this.customerData.UNINV_BAGS
       this.UNINV_BALANCE = this.customerData.UNINV_BALANCE
       this.UNINV_COLLID = this.customerData.UNINV_COLLID
@@ -178,6 +187,18 @@ export class ConfirminvoicePage implements OnInit {
       this.UNINV_TYPE = this.customerData.UNINV_TYPE
 
       console.log(this.customerData);
+
+
+      this.storage.get('INVOICE_TYPES_TABLE').then(res => {
+      console.log(res)
+      var  l = res.length, i;
+        for (i = 0; i < l; i++) {
+          if (res[i].description == this.invoiceType){
+          this.invoiceTypeID = res[i].id
+          console.log(this.invoiceTypeID);
+         }
+        }
+      })
       this.alertCustomerType();
     })
 
@@ -186,9 +207,9 @@ export class ConfirminvoicePage implements OnInit {
       this.returnDate = res.coldel_return;
       this.customercredit = res.cca;
       this.customerTypes = res.cut;
-      console.log(this.returnDate)
-      console.log(this.customercredit)
-      console.log(this.customerTypes)
+      // console.log(this.returnDate)
+      // console.log(this.customercredit)
+      // console.log(this.customerTypes)
     })
 
     this.storage.get('COLDEL_TABLE').then(res => {
@@ -210,7 +231,7 @@ export class ConfirminvoicePage implements OnInit {
       res.forEach(element => {
         this.timeslots.push(element.description)
       });
-      console.log(this.timeslots)
+      // console.log(this.timeslots)
       this.isLoading = false
     })
 
@@ -231,7 +252,20 @@ export class ConfirminvoicePage implements OnInit {
         var flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
-            this.finalSubtotal = res[i].subtotal;
+            let params = {
+              'cat_type' : res[i].cat_type,
+							'description' : res[i].description,
+							'clean_type' : res[i].clean_type,
+							'ready_type' : res[i].ready_type,
+							'price' : res[i].price,
+							'is_ready' : res[i].is_ready,
+							'qty' : res[i].qty,
+							'pieces' : res[i].pieces
+            }
+            this.allinvoiceitems = this.allinvoiceitems + params
+            // this.allinvoiceitems = params
+            console.log(this.allinvoiceitems)
+            this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
 
         }
@@ -246,14 +280,32 @@ export class ConfirminvoicePage implements OnInit {
       })
     } else if (this.checkAccount == 0) {
       this.storage.get("TEMP_ITEMS_TABLE").then(res => {
-        console.log(res)
-        var flags = [], output = [], l = res.length, i;
+        // console.log(res)
+        var str1, flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
             console.log(res[i])
-            this.allinvoiceitems.push(res[i])
+            
+            let params = {
+              'cat_type' : res[i].cat_type,
+							'description' : res[i].description,
+							'clean_type' : res[i].clean_type,
+							'ready_type' : res[i].ready_type,
+							'price' : res[i].price,
+							'is_ready' : res[i].is_ready,
+							'qty' : res[i].qty,
+							'pieces' : res[i].pieces
+            }
+            // this.allinvoiceitems.push(res[i])
+            // str1 = new String(params)
+            var a = new Array(params);
+            str1 = a.join(",");  // s is the string "1+2+3+testing"
+            // this.allinvoiceitems = params
+           
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
+          this.allinvoiceitems = str1
+          console.log(this.allinvoiceitems)
         }
         console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
@@ -294,6 +346,20 @@ export class ConfirminvoicePage implements OnInit {
   //   err => console.log('Error occurred while getting date: ', err)
   // );
   // }
+  getNotes(UNINV_INVOICENOTE){
+    if(UNINV_INVOICENOTE == undefined || UNINV_INVOICENOTE == null){
+      var json = '{ "name": "' + UNINV_INVOICENOTE + '"}';
+      this.UNINV_INVOICENOTE = json;
+      this.invoiceNotes = json;
+    }else{
+      var json = '{ "name": ""}';
+      this.UNINV_INVOICENOTE = json;
+      this.invoiceNotes = json;
+    }
+
+  }
+
+
 
   showFinal(finalSubtotal) {
     this.finalSubtotal = finalSubtotal
@@ -325,10 +391,10 @@ export class ConfirminvoicePage implements OnInit {
         params.description = "Chain Promotion";
         params.cat_type = "";
         params.clean_type = "Promotion";
-        params.item_ready = "Yes"
+        params.is_ready = "Yes"
         params.price = "0"
         params.qty = "1"
-        params.pcs = "0"
+        params.pieces = "0"
         params.subtotal = "-3"
         params.updated_by = res.name
         params.updated_on = this.defaultSrvc.getToday();
@@ -366,12 +432,22 @@ export class ConfirminvoicePage implements OnInit {
 
   getexpressAmount(expressCharge) {
     this.expressCharge = expressCharge
+    if(this.expressCharge == "None"){
+      this.expressData = "1.00"
+    }else if(this.expressCharge == "50"){
+      this.expressData = "1.50"
+    }else  if(this.expressCharge == "100"){
+      this.expressData = "2.00"
+    }
     console.log(this.expressCharge)
     this.getTotalPayable();
   }
 
   getDeposit(depositAmount) {
     this.depositAmount = depositAmount;
+    if(this.depositAmount == undefined){
+      this.depositAmount = "0.00";
+    }
     this.getTotalPayable();
   }
 
@@ -388,7 +464,8 @@ export class ConfirminvoicePage implements OnInit {
   getTotalPayable() {
     if (this.percentPromo > 0) {
       this.convertedPercent = (this.percentPromo / 1000) * 10
-      this.percentPromoAmount = this.finalSubtotal * this.convertedPercent
+      this.percentPromoAmountFM = this.finalSubtotal * this.convertedPercent
+      this.percentPromoAmount = Math.round(this.percentPromoAmountFM * 100) / 100
       this.afterLessAmount = this.finalSubtotal - this.percentPromoAmount
       this.payableAmount = this.afterLessAmount
       console.log(this.payableAmount);
@@ -398,7 +475,7 @@ export class ConfirminvoicePage implements OnInit {
       console.log(this.payableAmount);
     }
 
-    if (this.expressCharge != "None" && this.expressCharge != "" && this.expressCharge != 0) {
+    if (this.expressCharge != "None" && this.expressCharge != "" && this.expressCharge != 0 && this.expressCharge != undefined) {
       this.expressPercent = (this.expressCharge / 1000) * 10
 
       if (this.afterLessAmount != null || this.afterLessAmount != 0) {
@@ -407,9 +484,11 @@ export class ConfirminvoicePage implements OnInit {
       } else {
         this.payableAmount = this.afterLessAmount
       }
+    }else if(this.expressCharge == "None"){
+      this.expressPercent = 0
     }
 
-    if (this.depositAmount == "" || this.depositAmount == undefined) {
+    if (this.depositAmount == 0 || this.depositAmount == undefined) {
       this.balanceAmount = this.payableAmount
     } else {
       this.balanceAmount = this.payableAmount - this.depositAmount
@@ -455,7 +534,7 @@ export class ConfirminvoicePage implements OnInit {
     console.log(this.customercredit)
     console.log(this.payableAmount)
 
-    if (paymentMethod == "CREDIT" && this.payableAmount <= this.customercredit) {
+    if (paymentMethod == "Credit" && this.payableAmount <= this.customercredit) {
       //update credit credit of customer
       this.updateCredit()
       //check overdue payment and add to total payable - later part(KIV)
@@ -546,62 +625,57 @@ export class ConfirminvoicePage implements OnInit {
   //with connection
   async syncPay() {
     console.log(navigator.onLine)
-
-    // this.invoiceSyncLink = "http://ccmanager.cottoncare.com.sg/ws/addinvoice.json"
-
     // //update overdue payment  - later part(KIV)
-
     // //get all items as array
-
-    // //parameters below
-    let params: any = {};
-    params.email = this.driver_email
-    params.password = this.driver_password
-    params.initial = this.company
-    params.customerid = this.customerID
-    params.collectionid = this.invoiceId
-    params.invoiceno = this.invoiceNumber
-    // ////check type and get corresponding id number
-    params.type = this.invoiceType
-    // ///// subtract overdue amount from deposit else won't tally  - later part(KIV)
-    // ///// BigDecimal depood = new BigDecimal(deposit.getText().toString()); - later part(KIV)
-    // ///// BigDecimal odamt = new BigDecimal(overdueTV.getText().toString());
-    // ///// BigDecimal depoonly = depood.subtract(odamt); - later part(KIV)
-    params.depositamount = this.depositAmount
-    params.deposittype = this.paymentMethod
-    params.balancepaid = "0.00"  //saved but useless
-    params.name = this.driver_name
-    params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE
-    params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT
-    params.invoiceitem = JSON.stringify(this.allinvoiceitems) //all items this.items = JSON.stringify(this.result);
-    console.log(this.allinvoiceitems)
-    params.invoicenote = this.UNINV_INVOICENOTE //have to format into array else will have error
-    params.hasdonate = this.UNINV_DONATE
-    params.donatetotal = this.UNINV_DONATE //saved but useless
-    params.discount = this.percentPromoAmount
-    params.express = this.expressPercent
-    params.bags = this.UNINV_BAGS
-    params.savedon = new Date() + ''
-    console.log(params)
+    var json = this.allinvoiceitems
+    this.newItems = json
 
 
-    await this.presentLoading('');
-    // this.isLoading = true;
-    // console.log(user.value)
-    Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
-      console.log(data);
-      if (data) {
-        // this.router.navigate(['/home']);
-        this.presentToast("Nice")
-      } else {
-        this.presentToast("Cannot sync")
+  let params: any  = {}
+  params.email = this.driver_email,
+  params.password = this.driver_password,
+  params.initial = this.company,
+  params.customerid = this.customerID,
+  params.collectionid = this.invoiceId,
+  params.invoiceno = this.invoiceNumber,
+  // ////check type and get corresponding id number
+  params.type = this.invoiceTypeID, 
+  params.depositamount = this.depositAmount,
+  params.deposittype = this.paymentMethod,
+  params.balancepaid =  "0.00"   //saved but useless
+  params.name = this.driver_name,
+  params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE,
+  params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT,
+  params.invoiceitem = JSON.stringify(this.allinvoiceitems),//all items this.items = JSON.stringify(this.result);
+  params.invoicenote = JSON.stringify(this.invoiceNotes), //have to format into array else will have error
+  params.hasdonate = this.UNINV_DONATE,
+  params.donatetotal = this.UNINV_DONATE, //saved but useless
+  params.discount = this.percentPromoAmount,
+  params.express = this.expressData,
+  params.bags = this.UNINV_BAGS,
+  params.savedon = this.todaydate
+  
+  console.log(params)
 
-      }
-      this.loading.dismiss();
 
-    }).catch(e => {
-      console.log(e);
-    });
+    // await this.presentLoading('');
+    // // this.isLoading = true;
+    // // console.log(user.value)
+    // Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
+    //   console.log(data);
+    //   if (data) {
+    //     // this.router.navigate(['/home']);
+    //     this.presentToast("Sync Successful")
+    //     this.router.navigate(['/home']);
+    //   } else {
+    //     this.presentToast("Cannot sync")
+    //     //this.savePay();
+    //   }
+    //   this.loading.dismiss();
+
+    // }).catch(e => {
+    //   console.log(e);
+    // });
 
 
 
@@ -656,6 +730,22 @@ export class ConfirminvoicePage implements OnInit {
       // this.selectedDate = data.data.date;
     });
   }
+
+  getToday() {
+    let today;
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let hr = new Date().getHours();
+    let min = new Date().getMinutes();
+    let ss = new Date().getSeconds();
+    let yy = (yyyy + '').substr(2, 2);
+
+    today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
+    this.todaydate = today
+    console.log(this.todaydate)
+  }
+
 
 }
 

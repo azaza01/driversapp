@@ -111,6 +111,10 @@ export class CreatecustomitemPage implements OnInit {
   driverInfo: any
   tempItems: any
 
+  email_address: any
+  password: any
+  name: any
+
 
   constructor(
     private router: Router,
@@ -132,6 +136,12 @@ export class CreatecustomitemPage implements OnInit {
     this.item_List = await this.getList(this.temp_List)
     console.log(this.item_List)
 
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      console.log(res)
+      this.email_address = res.email_address
+      this.password = res.password
+      this.name = res.name
+    })
 
     this.getItem();
     this.getItemPrices();
@@ -785,12 +795,12 @@ export class CreatecustomitemPage implements OnInit {
       params.description = this.concatDesc
       params.cat_type = this.Category
       params.clean_type = this.cleantype
-      params.item_ready = this.readytype
+      params.is_ready = this.readytype
       params.price = this.itemPrice
       params.qty = this.itemQty
-      params.pcs = this.itemPcs
+      params.pieces = this.itemPcs
       params.subtotal = this.itemsubtotal
-      params.updated_by = res.name
+      params.updated_by = this.name
       params.updated_on = this.defaultSrvc.getToday();
       params.rid = this.mycompany[0].UNINV_COLLID
 

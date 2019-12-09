@@ -74,9 +74,9 @@ export class SelectcategoryPage implements OnInit {
               // console.log('ITEMS_TABLE', data);
               this.tempItems = data
               this.tempItems.forEach(item => {
-                item.item_ready = "no"
+                item.is_ready = "no"
                 item.qty = 0
-                item.pcs = 0
+                item.pieces = 0
                 item.subtotal = 0
                 item.rid = this.collectionInfo.id
               });
@@ -99,9 +99,9 @@ export class SelectcategoryPage implements OnInit {
               console.log('RATES_TABLE', data);
               this.tempItems = data
               this.tempItems.forEach(item => {
-                item.item_ready = "no"
+                item.is_ready = "no"
                 item.qty = 0
-                item.pcs = 0
+                item.pieces = 0
                 item.subtotal = 0
                 item.rid = this.collectionInfo.id
               });
