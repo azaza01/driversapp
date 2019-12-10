@@ -108,7 +108,7 @@ export class SyncinvoiceService {
 
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
+      this.httpclient.post(this.url + "/addinvoice", info).subscribe(
         response => {
           let res;
           res = response;

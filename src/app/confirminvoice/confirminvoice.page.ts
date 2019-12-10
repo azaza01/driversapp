@@ -267,12 +267,11 @@ invoiceNotesObject: any = {}
 							"qty" : parseFloat(res[i].qty),
 							"pieces" : parseFloat(res[i].pieces)
             }
-            this.allinvoiceitems = this.allinvoiceitems.concat(params)
+            this.allinvoiceitems.push(params);
+            // this.allinvoiceitems = this.allinvoiceitems.concat(params)
             // this.allinvoiceitems = params
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
-          console.log(this.allinvoiceitems)
-
         }
         console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
@@ -301,13 +300,11 @@ invoiceNotesObject: any = {}
 							"qty" : parseFloat(res[i].qty),
 							"pieces" : parseFloat(res[i].pieces)
             }
-            this.itemObject = params;
-            this.itemsArray.push(this.itemObject);
+            this.allinvoiceitems.push(params);
+            // this.itemsArray.push(this.itemObject);
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
          }
-        this.allinvoiceitems = this.itemsArray
-        console.log(this.itemsArray)
         console.log(this.allinvoiceitems)
         console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
@@ -619,15 +616,25 @@ async syncPay() {
     // //update overdue payment  - later part(KIV)
     // //get all items as array
     if(this.UNINV_INVOICENOTE == undefined || this.UNINV_INVOICENOTE == null){
-      this.invoiceNotesObject = '{"name":"' + this.UNINV_INVOICENOTE + '"}';
+      this.invoiceNotesObject = '[{"name":"' + this.UNINV_INVOICENOTE + '"}]';
       this.invoiceNotes =  this.invoiceNotesArray.push(this.invoiceNotesArray)
     }else{
       var json = '[{"name":""}]';
       this.invoiceNotes = json;
     }
 
-    // var myObj = JSON.stringify(JSON.parse(this.allinvoiceitems));
+    // string validation of items
     var myObj = JSON.stringify(this.allinvoiceitems);
+    var myStringRep = JSON.stringify(myObj);
+    var removeQuote = myStringRep.replace("\"[", "");
+    var finalstring = removeQuote.replace("]\"", "");
+    console.log(finalstring)
+
+    // string validation of it
+    var mystringnotes = JSON.stringify(this.invoiceNotes);
+    var removeNotesQuote = mystringnotes.replace("\"[", "");
+    var finalstringNotes = removeNotesQuote.replace("]\"", "");
+    console.log(finalstringNotes)
 
 
   let params: any  = {}
@@ -636,7 +643,7 @@ async syncPay() {
   params.initial = this.company,
   params.customerid = this.customerID,
   params.collectionid = this.invoiceId,
-  params.invoiceno = this.invoiceNumber,
+  params.invoiceno =  "CC-1910Ch01"  //this.invoiceNumber,
   // ////check type and get corresponding id number
   params.type = this.invoiceTypeID, 
   params.depositamount = this.depositAmount,
@@ -645,8 +652,8 @@ async syncPay() {
   params.name = this.driver_name,
   params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE,
   params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT,
-  params.invoiceitem = JSON.stringify(myObj),//all items this.items = JSON.stringify(this.result);
-  params.invoicenote = JSON.stringify(this.invoiceNotes), //have to format into array else will have error
+  params.invoiceitem = finalstring.toString(),//all items this.items = JSON.stringify(this.result);
+  params.invoicenote = finalstringNotes.toString(), //have to format into array else will have error
   params.hasdonate = this.UNINV_DONATE,
   params.donatetotal = this.UNINV_DONATE, //saved but useless
   params.discount = this.percentPromoAmount,
