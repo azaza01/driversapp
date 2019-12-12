@@ -6,6 +6,7 @@ import { DefaultsService } from '../api/defaults.service';
 import { CollectionService } from '../api/collection.service';
 import { AccountsService } from '../api/accounts.service';
 import { DeliveryService } from '../api/delivery.service';
+import { SpecialinstructionService } from '../api/specialinstruction.service';
 import { formatDate } from '@angular/common';
 import { format } from 'util';
 
@@ -21,6 +22,9 @@ export class ColdevPage implements OnInit {
   myDeliveries: any = []
   myColDev: any = []
 
+  specialIns: any
+  colDelToCheck: any
+
  
 
   selected: any = []
@@ -32,13 +36,15 @@ export class ColdevPage implements OnInit {
     private defaultSrvc: DefaultsService,
     private cltnSrvc: CollectionService,
     private delcltnSrvc: DeliveryService,
+    private SplSrvc: SpecialinstructionService,
     private accSrvc: AccountsService,
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     // this.storage.remove('COLDEL_TABLE')
+
   }
 
   async ionViewWillEnter() {
@@ -49,9 +55,16 @@ export class ColdevPage implements OnInit {
     today = yy + '-' + mm + '-' + dd;
     console.log(today)
 
-    await this.presentLoading('');
-    await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
-    await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
+    if(navigator.onLine == true){
+      await this.presentLoading('');
+      await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
+      await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
+      await this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())
+    }else{
+      await this.presentAlert("Please check your internet connection")
+    }
+    
+
   }
 
   async presentLoading(msg) {
@@ -63,6 +76,7 @@ export class ColdevPage implements OnInit {
     return await this.loading.present();
   }
 
+
   async presentAlert(msg) {
     const alert = await this.alertController.create({
       // header: 'Sync Data',
@@ -72,6 +86,55 @@ export class ColdevPage implements OnInit {
       buttons: ['OK']
     });
     await alert.present();
+
+  }
+
+  async getSInstruction(info, today) {
+    this.loading.present();
+    Promise.resolve(this.SplSrvc.getSpecialInstruction(info, today)).then(data => {
+      this.specialIns = data; 
+    if(data != null){ 
+       this.storage.get('COLDEL_TABLE').then(res => {
+        var specialCounts = this.specialIns.length, i;
+        var coldevCounts = res.length, i2;
+            for (i = 0; i < specialCounts; i++) {
+              if(this.specialIns[i].action == "remove"){
+                for (i2 = 0; i2 < coldevCounts; i2++) {
+                  if (res[i2].id != this.specialIns[i].against && (res[i2].cod != this.specialIns[i].against || res[i2].dei != this.specialIns[i].against )  && res[i2].coldel_type != this.specialIns[i].type) {
+                      this.myColDev.push = res[i2]; //need to check
+                  }
+                }
+                this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), this.specialIns[i].id)
+              } 
+            }
+            this.storage.set('COLDEL_TABLE', this.myColDev) ////need to check
+          this.loading.dismiss();
+      })
+    }
+
+    }).catch(e => {
+      console.log(e);
+      this.loading.dismiss();
+
+    });
+  }
+
+  delayToDeleteForCorsPolicy(driverdata, dattoday, myid){
+    setTimeout(() => {
+      this.delSInstruction(driverdata, dattoday, myid)
+    }, 3000);
+  }
+  
+
+  async delSInstruction(info, today, coldelSplID) {
+    await Promise.resolve(this.SplSrvc.delSpecialInstruction(info, today, coldelSplID)).then(data => {
+
+    }).catch(e => {
+      console.log(e);
+      // this.loading.dismiss();
+
+    });
+   
 
   }
 

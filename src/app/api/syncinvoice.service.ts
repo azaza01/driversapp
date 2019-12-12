@@ -70,9 +70,41 @@ export class SyncinvoiceService {
     console.log(this.todaydate)
   }
 
+  checkOverDue(info: any) {
+    //address.setText(o.getCDListAddress() + "\n" + o.getCDListUnit() + " S" +o.getCDListPostal() + "\n" + o.getCDListBuilding() +  "\n" + "NOTE : "+ o.getCDListInstruction());
+    
+    console.log(info)
+  
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/addcollection.json", info).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+
+          // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
+          //   resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+
 
   syncInvoice(info: any) {
-    this.getToday();
+
     let infox = {
       // email: info.email_address,
       // password: info.password
@@ -105,18 +137,18 @@ export class SyncinvoiceService {
     //address.setText(o.getCDListAddress() + "\n" + o.getCDListUnit() + " S" +o.getCDListPostal() + "\n" + o.getCDListBuilding() +  "\n" + "NOTE : "+ o.getCDListInstruction());
     
     console.log(info)
-
+  
 
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/addinvoice", info).subscribe(
+      this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
         response => {
           let res;
           res = response;
           console.log(res)
 
-          this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
-            resolve(res)
-          });
+          // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
+          //   resolve(res)
+          // });
 
         },
         err => {

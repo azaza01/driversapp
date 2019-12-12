@@ -75,8 +75,8 @@
         </ion-item>
         <ion-item>
             <ion-label>Email : </ion-label>
-            <ion-label>{{collectionInfo.cue}}</ion-label>
-            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Update
+            <ion-input type="email" [(ngModel)]="customerEmail" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"></ion-input>
+            <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="updateMyEmail()">Update
             </ion-button>
         </ion-item>
     </ion-item-group>

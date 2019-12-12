@@ -25,6 +25,9 @@ export class ColectionviewPage implements OnInit {
   sendNumber: any
   customerName: any;
 
+  customerEmail: any;
+
+
   constructor(
     private router: Router,
     public alertController: AlertController,
@@ -42,6 +45,7 @@ export class ColectionviewPage implements OnInit {
       this.collectionInfo = params
       this.selectedtime = this.collectionInfo.cot
       this.customerName = this.collectionInfo.cun
+      this.customerEmail = this.collectionInfo.cue
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -90,7 +94,11 @@ export class ColectionviewPage implements OnInit {
       .then(res => console.log('Launched dialer!', res))
       .catch(err => console.log('Error launching dialer', err));
   }
-  
+
+
+  updateMyEmail(){
+
+  }
 
   getTime(selectedtime){
     console.log(selectedtime);

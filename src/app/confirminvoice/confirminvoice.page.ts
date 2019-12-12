@@ -615,6 +615,7 @@ async syncPay() {
     console.log(navigator.onLine)
     // //update overdue payment  - later part(KIV)
     // //get all items as array
+
     if(this.UNINV_INVOICENOTE == undefined || this.UNINV_INVOICENOTE == null){
       this.invoiceNotesObject = '[{"name":"' + this.UNINV_INVOICENOTE + '"}]';
       this.invoiceNotes =  this.invoiceNotesArray.push(this.invoiceNotesArray)
@@ -626,14 +627,14 @@ async syncPay() {
     // string validation of items
     var myObj = JSON.stringify(this.allinvoiceitems);
     var myStringRep = JSON.stringify(myObj);
-    var removeQuote = myStringRep.replace("\"[", "");
-    var finalstring = removeQuote.replace("]\"", "");
+    var removeQuote = myStringRep.replace("\"[{", "{[");
+    var finalstring = removeQuote.replace("}]\"", "]}");
     console.log(finalstring)
 
     // string validation of it
     var mystringnotes = JSON.stringify(this.invoiceNotes);
-    var removeNotesQuote = mystringnotes.replace("\"[", "");
-    var finalstringNotes = removeNotesQuote.replace("]\"", "");
+    var removeNotesQuote = mystringnotes.replace("\"[{", "{[");
+    var finalstringNotes = removeNotesQuote.replace("}]\"", "]}");
     console.log(finalstringNotes)
 
 
@@ -643,7 +644,7 @@ async syncPay() {
   params.initial = this.company,
   params.customerid = this.customerID,
   params.collectionid = this.invoiceId,
-  params.invoiceno =  "CC-1910Ch01"  //this.invoiceNumber,
+  params.invoiceno =  this.invoiceNumber  //this.invoiceNumber,
   // ////check type and get corresponding id number
   params.type = this.invoiceTypeID, 
   params.depositamount = this.depositAmount,
@@ -660,17 +661,12 @@ async syncPay() {
   params.express = this.expressData,
   params.bags = this.UNINV_BAGS,
   params.savedon = this.todaydate
-  
+
   console.log(params)
-
-
     await this.presentLoading('');
-    // this.isLoading = true;
-    // console.log(user.value)
     Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
       console.log(data);
       if (data) {
-        // this.router.navigate(['/home']);
         this.presentToast("Sync Successful")
         this.router.navigate(['/home']);
       } else {
