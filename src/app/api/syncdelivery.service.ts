@@ -23,6 +23,7 @@ export class SyncdeliveryService {
 
   private endpoint = environment.endpoint;
   private url = this.endpoint;
+
   loading: any = new LoadingController;
 
   constructor(

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { DefaultsService } from '../api/defaults.service';
 import { Storage } from '@ionic/storage';
 import { async } from '@angular/core/testing';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 // import { SMS } from '@ionic-native/sms/ngx';
+import { CollectionService } from '../api/collection.service';
+import { AccountsService } from '../api/accounts.service';
 
 @Component({
   selector: 'app-colectionview',
@@ -26,6 +28,15 @@ export class ColectionviewPage implements OnInit {
   customerName: any;
 
   customerEmail: any;
+  customerId: any
+  today: any;
+  originalDate: any
+  collectionId: any
+  formatedDate: any
+
+
+  loading: any = new LoadingController;
+  require: any 
 
 
   constructor(
@@ -34,7 +45,11 @@ export class ColectionviewPage implements OnInit {
     public activatedRoute: ActivatedRoute,
     private defaultSrvc: DefaultsService,
     private storage: Storage,
+    private accSrvc: AccountsService,
+    private cltnSrvc: CollectionService,
     private callNumber: CallNumber,
+    public loadingCtrl: LoadingController,
+  
     // private sms: SMS
   ) { }
 
@@ -46,6 +61,19 @@ export class ColectionviewPage implements OnInit {
       this.selectedtime = this.collectionInfo.cot
       this.customerName = this.collectionInfo.cun
       this.customerEmail = this.collectionInfo.cue
+      this.customerId = this.collectionInfo.cui
+      this.originalDate = this.collectionInfo.cod
+      this.collectionId = this.collectionInfo.id
+
+      let todays;
+      let dd = new Date(this.originalDate).getDate();
+      let mm = new Date(this.originalDate ).getMonth() + 1;
+      let yyyy = new Date( this.originalDate ).getFullYear();
+      //todays = dd + "-" + mm + "-" + yyyy
+      todays = yyyy + "-" + mm + "-" + dd
+
+      this.today = todays
+      console.log(todays)
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -84,6 +112,25 @@ export class ColectionviewPage implements OnInit {
   //   this.sms.send(this.sendNumber, 'Dear');
   // }
 
+  async presentAlert(msg) {
+    const alert = await this.alertController.create({
+      message: msg,
+      backdropDismiss: false,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      spinner: 'crescent',
+      cssClass: 'custom-class'
+    });
+    return await this.loading.present();
+  }
+
+
   callNow(number) {
     if(number == "1"){
       this.callnumber = this.collectionInfo.cn1
@@ -95,9 +142,65 @@ export class ColectionviewPage implements OnInit {
       .catch(err => console.log('Error launching dialer', err));
   }
 
+  async postphone(){
+    console.log(this.today)
+    console.log(this.selectedtime)
+    let selectedDate;
+    let dd = new Date(this.today).getDate();
+    let mm = new Date(this.today).getMonth() + 1;
+    let yyyy = new Date(this.today).getFullYear();
+    selectedDate = yyyy + "-" + mm + "-" + dd
+    let selectedDate2;
+    let ddd = new Date(this.today).getDate();
+    let mmm = new Date(this.today).getMonth() + 1;
+    let yyyyy = new Date(this.today).getFullYear();
+    selectedDate2 = ddd + "-" + mmm + "-" + yyyyy
 
-  updateMyEmail(){
 
+    if(selectedDate == this.originalDate){
+      this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
+    }else{
+      await this.presentLoading('');
+      await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.driverData, this.today, this.selectedtime, this.collectionId)).then(data => {
+        if(data == true){
+          this.presentAlert("Collection Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
+          this.loading.dismiss();
+          //need to check
+        }else{
+          this.presentAlert("Connection error");
+          this.loading.dismiss();
+        }
+      }).catch(e => {
+        console.log(e);
+        this.presentAlert("Connection error");
+        this.loading.dismiss();
+      });
+    }
+  }
+
+
+  async updateMyEmail(){
+    // var validator = require("email-validator"); //need to check
+    await this.presentLoading('');
+    // if(validator.validate(this.customerEmail) == true){
+
+      await Promise.resolve(this.cltnSrvc.updateEmail(this.accSrvc.driverData, this.customerEmail, this.customerId )).then(data => {
+        if(data == true){
+          this.presentAlert("Email Successfully Change");
+          this.loading.dismiss();
+        }else{
+          this.presentAlert("Connection error");
+          this.loading.dismiss();
+        }
+      }).catch(e => {
+        console.log(e);
+        this.presentAlert("Connection error");
+        this.loading.dismiss();
+      });
+    // }else{
+    //   this.presentAlert("Invalid Email! Please check.");
+    //   this.loading.dismiss();
+    // }
   }
 
   getTime(selectedtime){

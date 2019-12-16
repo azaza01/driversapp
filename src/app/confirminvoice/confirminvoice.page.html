@@ -24,6 +24,7 @@
       <ion-item>
         <ion-label>Agreed Delivery Date : </ion-label>
         <ion-label>{{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
+        <!-- <ion-datetime  min="2019-12-12" max="2100-12-31"  displayFormat="DD-MMMM-YYYY" [(ngModel)]="today"></ion-datetime> -->
         <ion-button *ngIf="initDELIVERYDATE == '0000-00-00'" (click)="openDatePicker()" shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change
         </ion-button>
       </ion-item>
@@ -72,10 +73,10 @@
           <ion-select-option value="100">100%</ion-select-option>
         </ion-select>
       </ion-item>
-      <!-- <ion-item>
-                  <ion-label>Overdue : </ion-label>
-                  <ion-input [(ngModel)]="overDue" (ngModelChange)="overDueAmount(overDue)"></ion-input>
-              </ion-item> -->
+      <ion-item>
+            <ion-label>Overdue : </ion-label>
+            <ion-input [(ngModel)]="overDue" (ngModelChange)="overDueAmount(overDue)"></ion-input>
+      </ion-item>
       <ion-item>
         <ion-label>Payable : </ion-label>
         <ion-input>{{ payableAmount  | number:'1.2-2' }}</ion-input>

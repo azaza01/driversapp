@@ -204,12 +204,13 @@ export class DeliverymakepaymentPage implements OnInit {
      Promise.resolve(this.syncdelivery.syncdeliverysrvc(params)).then(data => {
        console.log(data);
        if (data) {
+        console.log(data)
          this.presentToast("Delivery Successfully Sync")
-         this.router.navigate(['/home']);
+        //  this.router.navigate(['/home']);
        } else {
          this.presentToast("Cannot sync, please save later")
          this.saveLocalPayment();
-         this.router.navigate(['/home']);
+        //  this.router.navigate(['/home']);
          
        }
        this.loading.dismiss();

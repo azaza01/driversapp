@@ -50,24 +50,102 @@ export class CollectionService {
   }
 
   getCollection(info: any, today) {
+    
     let params = {
-      // email: info.email_address,
-      // password: info.password,
-      // driverid: info.id,
       date: today,
       "email": "it01.azaza@gmail.com",
       "password": "7c222fb2927d828af22f592134e8932480637c0d",
       "driverid": "109",
-      // "date": "2019-11-21"
-
-      // "email": "it01.azaza@gmail.com",
-      // "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      // "driverid": "109",
-      // "date": "2019-11-17"
     }
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/gzipcollection.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+
+          // this.storage.set('COLDEL_TABLE', res).then(() => {
+            resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  updateEmail(info: any, customerEmail, customerId) {
+    // let params = {
+    //   "email": info.email_address,
+    //   "password": info.password,
+    //   "custid": customerId,
+    //   "custemail": customerEmail,
+    //  }
+
+     let params = {
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "custid": customerId,
+      "custemail": customerEmail,
+    }
+
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/updatecustomeremail.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+
+          // this.storage.set('COLDEL_TABLE', res).then(() => {
+            resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  postPone(info: any, selectedDate, selectedTime, collectionID) {
+  //   let params = {
+  //     "email": info.email_address,
+  //     "password": info.password,
+  //     "name": info.name,
+  //     "id": collectionID,
+  //     "date": selectedDate,
+  //     "time": selectedTime,
+  //  }
+
+     let params = {
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "name": "DummyDriver",
+      "id": collectionID,
+      "date": selectedDate,
+      "time": selectedTime,
+    }
+
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/changecollectdate.json", params).subscribe(
         response => {
           let res;
           res = response;

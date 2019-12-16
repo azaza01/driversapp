@@ -66,7 +66,7 @@ export class DeliveryService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          console.log(res)
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
@@ -86,6 +86,7 @@ export class DeliveryService {
     })
   }
 
+
   gettems(info) {
     let params = {
       "email": "davidchia@cottoncare.com.sg",
@@ -93,6 +94,7 @@ export class DeliveryService {
       "driverid": "16",
       "coldelID": "124093"
     }
+
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/invitem.json", info).subscribe(
         response => {
@@ -118,5 +120,48 @@ export class DeliveryService {
       console.log(err)
     })
   }
+
+  postponeDelivery(info, deliveryDate, deliverytime, selectedDelivery, reasonofpostpone) {
+
+    let params = {
+      // "email" : info.email_address,
+      // "password": info.password,
+      // "name": info.name,
+      "email": "davidchia@cottoncare.com.sg",
+      "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
+      "name": "DummyDriver",
+      "id":  selectedDelivery,
+      "date": deliveryDate,
+      "time": deliverytime,
+      "reasontopostpone": reasonofpostpone
+    }
+
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/changedeliverydate.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+          info = res
+
+          // this.storage.set('COLDEL_TABLE', res).then(() => {
+            resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
 
 }

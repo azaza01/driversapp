@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DeliveryService } from '../api/delivery.service';
 import { Storage } from '@ionic/storage';
-import { AlertController, ModalController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController,ToastController, LoadingController } from '@ionic/angular';
+import { CollectionService } from '../api/collection.service';
+import { AccountsService } from '../api/accounts.service';
 
 @Component({
   selector: 'app-deliveryitemview',
@@ -21,9 +23,11 @@ export class DeliveryitemviewPage implements OnInit {
   password: any
   ids: any
 
+
   constructor(
     private router: Router,
     public activatedRoute: ActivatedRoute,
+    public alertController: AlertController,
     private delcltnSrvc: DeliveryService,
     private storage: Storage,
     private toastCtrl: ToastController,
@@ -33,6 +37,7 @@ export class DeliveryitemviewPage implements OnInit {
   ngOnInit() {
     this.getItems();
   }
+
 
   async presentLoading(msg) {
     this.loading = await this.loadingCtrl.create({

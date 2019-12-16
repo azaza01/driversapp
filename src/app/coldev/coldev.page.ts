@@ -101,13 +101,13 @@ export class ColdevPage implements OnInit {
               if(this.specialIns[i].action == "remove"){
                 for (i2 = 0; i2 < coldevCounts; i2++) {
                   if (res[i2].id != this.specialIns[i].against && (res[i2].cod != this.specialIns[i].against || res[i2].dei != this.specialIns[i].against )  && res[i2].coldel_type != this.specialIns[i].type) {
-                      this.myColDev.push = res[i2]; //need to check
+                     // this.myColDev.push = res[i2]; //need to check
                   }
                 }
                 this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), this.specialIns[i].id)
               } 
             }
-            this.storage.set('COLDEL_TABLE', this.myColDev) ////need to check
+           // this.storage.set('COLDEL_TABLE', this.myColDev) ////need to check
           this.loading.dismiss();
       })
     }
@@ -211,7 +211,7 @@ export class ColdevPage implements OnInit {
           col.coldel_roll = "nil"
           col.coldel_return = "nil"
           col.coldel_return = "nil"
-          col.coldel_flag = "new"
+          col.coldel_flag = "New"
 
           this.myCollection.push(col)
         });
@@ -253,7 +253,7 @@ export class ColdevPage implements OnInit {
           del.coldel_type = "delivery"
           del.coldel_returndate = ""
           del.coldel_returntime = ""
-          del.coldel_flag = "new"
+          del.coldel_flag = "New"
 
           this.myDeliveries.push(del)
         });

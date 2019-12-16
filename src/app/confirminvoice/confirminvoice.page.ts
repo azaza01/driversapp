@@ -106,7 +106,7 @@ invoiceNotesObject: any = {}
     private network: Network,
     public datepipe: DatePipe,
     public modalCtrl: ModalController,
-    public syncinvoice: SyncinvoiceService,
+    public syncinvoiceSrvs: SyncinvoiceService,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     private router: Router,
@@ -518,18 +518,20 @@ invoiceNotesObject: any = {}
   }
 
   confirmPayment(paymentMethod) {
-    console.log(paymentMethod)
-    console.log(this.customercredit)
-    console.log(this.payableAmount)
+     console.log(paymentMethod)
+    this.syncPay()
+    // console.log(paymentMethod)
+    // console.log(this.customercredit)
+    // console.log(this.payableAmount)
 
-    if (paymentMethod == "Credit" && this.payableAmount <= this.customercredit) {
-      //update credit credit of customer
-      this.updateCredit()
-      //check overdue payment and add to total payable - later part(KIV)
-      this.payAction()
-    } else {
-      this.payAction()
-    }
+    // if (paymentMethod == "Credit" && this.payableAmount <= this.customercredit) {
+    //   //update credit credit of customer
+    //   this.updateCredit()
+    //   //check overdue payment and add to total payable - later part(KIV)
+    //   this.payAction()
+    // } else {
+    //   this.payAction()
+    // }
 
   }
 
@@ -557,7 +559,7 @@ invoiceNotesObject: any = {}
 
 
   //no connection
-  savePay() {
+  async savePay() {
     console.log(navigator.onLine)
     ////update UNSYNCED_INVOICE_TABLE
     console.log(this.customerData)
@@ -615,7 +617,6 @@ async syncPay() {
     console.log(navigator.onLine)
     // //update overdue payment  - later part(KIV)
     // //get all items as array
-
     if(this.UNINV_INVOICENOTE == undefined || this.UNINV_INVOICENOTE == null){
       this.invoiceNotesObject = '[{"name":"' + this.UNINV_INVOICENOTE + '"}]';
       this.invoiceNotes =  this.invoiceNotesArray.push(this.invoiceNotesArray)
@@ -623,61 +624,63 @@ async syncPay() {
       var json = '[{"name":""}]';
       this.invoiceNotes = json;
     }
-
     // string validation of items
     var myObj = JSON.stringify(this.allinvoiceitems);
     var myStringRep = JSON.stringify(myObj);
-    var removeQuote = myStringRep.replace("\"[{", "{[");
-    var finalstring = removeQuote.replace("}]\"", "]}");
+    var removeQuote = myStringRep.replace("\"[{", "[{");
+    var finalstring = removeQuote.replace("}]\"", "}]");
     console.log(finalstring)
-
     // string validation of it
     var mystringnotes = JSON.stringify(this.invoiceNotes);
-    var removeNotesQuote = mystringnotes.replace("\"[{", "{[");
-    var finalstringNotes = removeNotesQuote.replace("}]\"", "]}");
+    var removeNotesQuote = mystringnotes.replace("\"[{", "[{");
+    var finalstringNotes = removeNotesQuote.replace("}]\"", "}]");
     console.log(finalstringNotes)
 
+    // var item = JSON.parse(this.allinvoiceitems)
+    // var newitems = JSON.stringify(item);
 
-  let params: any  = {}
-  params.email = this.driver_email,
-  params.password = this.driver_password,
-  params.initial = this.company,
-  params.customerid = this.customerID,
-  params.collectionid = this.invoiceId,
-  params.invoiceno =  this.invoiceNumber  //this.invoiceNumber,
-  // ////check type and get corresponding id number
-  params.type = this.invoiceTypeID, 
-  params.depositamount = this.depositAmount,
-  params.deposittype = this.paymentMethod,
-  params.balancepaid =  "0.00"   //saved but useless
-  params.name = this.driver_name,
-  params.agreeddeliverydate = this.UNINV_AGREEDDELIVERYDATE,
-  params.deliverytimeslot = this.UNINV_DELIVERYTIMESLOT,
-  params.invoiceitem = finalstring.toString(),//all items this.items = JSON.stringify(this.result);
-  params.invoicenote = finalstringNotes.toString(), //have to format into array else will have error
-  params.hasdonate = this.UNINV_DONATE,
-  params.donatetotal = this.UNINV_DONATE, //saved but useless
-  params.discount = this.percentPromoAmount,
-  params.express = this.expressData,
-  params.bags = this.UNINV_BAGS,
-  params.savedon = this.todaydate
+  let params = {
+  email : this.driver_email,
+  password : this.driver_password,
+  initial : this.company,
+  customerid : this.customerID,
+  collectionid : this.invoiceId,
+  invoiceno :  this.invoiceNumber, 
+  type : this.invoiceTypeID, 
+  depositamount : this.depositAmount,
+  deposittype : this.paymentMethod,
+  balancepaid :  "0.00",
+  name : this.driver_name,
+  agreeddeliverydate : this.UNINV_AGREEDDELIVERYDATE,
+  deliverytimeslot : this.UNINV_DELIVERYTIMESLOT,
+  invoiceitem : finalstring.toString(),
+  invoicenote : finalstringNotes.toString(),
+  hasdonate : this.UNINV_DONATE,
+  donatetotal : this.UNINV_DONATE, 
+  discount : this.percentPromoAmount,
+  express : this.expressData,
+  bags : this.UNINV_BAGS,
+  savedon : this.todaydate
+ }
 
-  console.log(params)
-    await this.presentLoading('');
-    Promise.resolve(this.syncinvoice.syncInvoice(params)).then(data => {
-      console.log(data);
-      if (data) {
-        this.presentToast("Sync Successful")
-        this.router.navigate(['/home']);
-      } else {
-        this.presentToast("Cannot sync")
-        //this.savePay();
-      }
-      this.loading.dismiss();
+ await this.presentLoading('');
+ Promise.resolve(this.syncinvoiceSrvs.addinvoiceService(params)).then(data => {
+   console.log(data);
+   if (data) {
+    console.log(data)
+     this.presentToast("Invoice Successfully Sync")
+    //  this.router.navigate(['/home']);
+   } else {
+     this.presentToast("Cannot sync, please save later")
+    //  this.router.navigate(['/home']);
+     
+   }
+   this.loading.dismiss();
 
-    }).catch(e => {
-      console.log(e);
-    });
+ }).catch(e => {
+   console.log(e);
+ });
+
 
     //// get "collection", selectedDate, coldelID) to delete on local table if successful
 
@@ -691,9 +694,7 @@ async syncPay() {
     //}else{
     // this.savePay();
     //}
-
-
-  }
+}
 
   getDay(num) {
     let today;
