@@ -34,7 +34,7 @@ export class DeliveryviewPage implements OnInit {
   selectedDate: any
   today: any
   selectedTimeValue: any
-  reasonofpostpone: any
+  reasonofpostpone: any = "";
   isDisabled = true;
 
   constructor(
@@ -157,6 +157,7 @@ export class DeliveryviewPage implements OnInit {
     if(selectedDate == this.originalDate){
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
     }else{
+      if(this.reasonofpostpone != ""){
       await this.presentLoading('');
       await Promise.resolve(this.delSrvc.postponeDelivery(this.accSrvc.driverData, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone )).then(data => {
         if(data == true){
@@ -172,6 +173,9 @@ export class DeliveryviewPage implements OnInit {
         this.presentAlert("Connection error");
         this.loading.dismiss();
       });
+     }else{
+      this.presentAlert("Please add reason to postpone");
+     }
     }
   }
 

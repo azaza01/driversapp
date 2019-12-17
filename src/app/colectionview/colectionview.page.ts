@@ -33,6 +33,7 @@ export class ColectionviewPage implements OnInit {
   originalDate: any
   collectionId: any
   formatedDate: any
+  reasonofpostpone: any = "";
 
 
   loading: any = new LoadingController;
@@ -156,12 +157,14 @@ export class ColectionviewPage implements OnInit {
     let yyyyy = new Date(this.today).getFullYear();
     selectedDate2 = ddd + "-" + mmm + "-" + yyyyy
 
+    console.log(this.reasonofpostpone)
 
     if(selectedDate == this.originalDate){
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
     }else{
+      if(this.reasonofpostpone != ""){
       await this.presentLoading('');
-      await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.driverData, this.today, this.selectedtime, this.collectionId)).then(data => {
+      await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.driverData, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
         if(data == true){
           this.presentAlert("Collection Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
           this.loading.dismiss();
@@ -175,6 +178,9 @@ export class ColectionviewPage implements OnInit {
         this.presentAlert("Connection error");
         this.loading.dismiss();
       });
+      }else{
+      this.presentAlert("Please add reason of Re-schedule");
+      }
     }
   }
 

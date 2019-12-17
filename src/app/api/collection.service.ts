@@ -124,7 +124,7 @@ export class CollectionService {
     })
   }
 
-  postPone(info: any, selectedDate, selectedTime, collectionID) {
+  postPone(info: any, selectedDate, selectedTime, collectionID, reasonofpostpone) {
   //   let params = {
   //     "email": info.email_address,
   //     "password": info.password,
@@ -141,7 +141,9 @@ export class CollectionService {
       "id": collectionID,
       "date": selectedDate,
       "time": selectedTime,
+      "reasontopostpone": reasonofpostpone
     }
+
 
 
     return new Promise(resolve => {

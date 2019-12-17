@@ -121,6 +121,10 @@
                 </ion-select-option>
              </ion-select>
         </ion-item>
+        <ion-item *ngIf="driverInfo.postpone == 1" >
+                <ion-label>Reason of Re-schedule : </ion-label>
+                <ion-input [(ngModel)]="reasonofpostpone"></ion-input>
+        </ion-item>
         <ion-item>
             <ion-button *ngIf="driverInfo.postpone == 1" expand="full" shape="round" fill="outline" color="Tertiary" class="ion-float-left" position="bottom" (click)="postphone()">Postpone 
            </ion-button>

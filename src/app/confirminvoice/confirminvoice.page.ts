@@ -618,10 +618,10 @@ async syncPay() {
     // //update overdue payment  - later part(KIV)
     // //get all items as array
     if(this.UNINV_INVOICENOTE == undefined || this.UNINV_INVOICENOTE == null){
-      this.invoiceNotesObject = '[{"name":"' + this.UNINV_INVOICENOTE + '"}]';
+      this.invoiceNotesObject = '[{"note":"' + this.UNINV_INVOICENOTE + '"}]';
       this.invoiceNotes =  this.invoiceNotesArray.push(this.invoiceNotesArray)
     }else{
-      var json = '[{"name":""}]';
+      var json = '[{"note":""}]';
       this.invoiceNotes = json;
     }
     // string validation of items
@@ -663,22 +663,25 @@ async syncPay() {
   savedon : this.todaydate
  }
 
- await this.presentLoading('');
- Promise.resolve(this.syncinvoiceSrvs.addinvoiceService(params)).then(data => {
+//  await this.presentLoading('');
+ await Promise.resolve(this.syncinvoiceSrvs.addinvoiceService(params)).then(data => {
    console.log(data);
    if (data) {
     console.log(data)
      this.presentToast("Invoice Successfully Sync")
+    //  this.loading.dismiss();
     //  this.router.navigate(['/home']);
    } else {
      this.presentToast("Cannot sync, please save later")
+    //  this.loading.dismiss();
     //  this.router.navigate(['/home']);
      
    }
-   this.loading.dismiss();
+   
 
  }).catch(e => {
    console.log(e);
+  //  this.loading.dismiss();
  });
 
 

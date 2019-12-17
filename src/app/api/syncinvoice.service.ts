@@ -21,8 +21,8 @@ import { Network } from '@ionic-native/network/ngx';
 })
 export class SyncinvoiceService {
 
-  // private endpoint = environment.endpoint;
-  // private url = this.endpoint;
+  private endpoint = environment.endpoint;
+  private url = this.endpoint;
 
   loading: any = new LoadingController;
 
@@ -58,24 +58,49 @@ export class SyncinvoiceService {
   private getHeaders() {
     return {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Headers': 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Accept-Encoding, Authorization, application/x-www-form-urlencoded',
+        'Access-Control-Allow-Methods': 'GET, DELETE, PUT, OPTIONS, TRACE, PATCH, CONNECT'
+        // 'Authorization': 'Bearer ' + token
       })
     };
   }
 
 
-  addinvoiceService(info: any) {
+  async addinvoiceService(info: any) {
     console.log(info)
 
+      let infox = {
+  "email": "it01.azaza@gmail.com",
+	"password": "7c222fb2927d828af22f592134e8932480637c0d",
+	"initial": "DC",
+	"customerid": "24047",
+	"collectionid": "142819",
+	"invoiceno": "CC-191215Du02",
+	"type": "39",
+	"depositamount": "0.00",
+	"deposittype": "Cash",
+	"balancepaid": "0.00",
+	"name": "DummyDriver",
+	"agreeddeliverydate": "2019-12-23",
+	"deliverytimeslot": "O Any Time",
+	"invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
+	"invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
+	"hasdonate": "0",
+	"donatetotal": "0",
+	"discount": 0,
+	"express": "1.00",
+	"bags": "0",
+	"savedon": "2019-12-16 11:48:11"
+}
+    await this.presentLoading('Syncing Collection'); 
     return new Promise(resolve => {
-      //this.httpclient.jsonp("https://ccmanager.1kbiz.com/ws/addinvoice.json", info).subscribe(
-      this.httpclient.post("https://ccmanager.1kbiz.com/ws/addinvoice.json", info).subscribe(
-      // this.httpclient.post("https://ccmanager.1kbiz.com/ws/addinvoice.json", info).subscribe(
+      this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
         response => {
           let res;
           res = response;
           console.log(res)
-
+          this.loading.dismiss();
           // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
           //   resolve(res)
           // });
@@ -84,7 +109,7 @@ export class SyncinvoiceService {
         err => {
           console.log(err)
           resolve(false)
-
+          this.loading.dismiss();
           // alert(JSON.stringify(err));
         }
       );
@@ -167,22 +192,22 @@ export class SyncinvoiceService {
     //address.setText(o.getCDListAddress() + "\n" + o.getCDListUnit() + " S" +o.getCDListPostal() + "\n" + o.getCDListBuilding() +  "\n" + "NOTE : "+ o.getCDListInstruction());
     console.log(info)
   
-  //   return new Promise(resolve => {
-  //     this.httpclient.post(this.url + "/addcollection.json", info).subscribe(
-  //       response => {
-  //         let res;
-  //         res = response;
-  //         console.log(res)
-  //       },
-  //       err => {
-  //         console.log(err)
-  //         resolve(false)
-  //       }
-  //     );
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/addcollection.json", info).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+        }
+      );
 
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
 

@@ -4,6 +4,8 @@ import { AlertController, ModalController, ToastController, LoadingController } 
 import { DefaultsService } from '../api/defaults.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SyncdeliveryService } from '../api/syncdelivery.service'
+
+
 @Component({
   selector: 'app-deliverymakepayment',
   templateUrl: './deliverymakepayment.page.html',
@@ -206,11 +208,11 @@ export class DeliverymakepaymentPage implements OnInit {
        if (data) {
         console.log(data)
          this.presentToast("Delivery Successfully Sync")
-        //  this.router.navigate(['/home']);
+         this.router.navigate(['/home']);
        } else {
          this.presentToast("Cannot sync, please save later")
          this.saveLocalPayment();
-        //  this.router.navigate(['/home']);
+         this.router.navigate(['/home']);
          
        }
        this.loading.dismiss();
