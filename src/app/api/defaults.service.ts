@@ -137,11 +137,11 @@ export class DefaultsService {
           result = seriesTbl.filter((item) => {
             return (item.INV_DATE.indexOf(params.INV_DATE) !== -1)
           })
-          
+
           if (result.length < 1) {
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
@@ -153,7 +153,7 @@ export class DefaultsService {
             let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
             params.INV_RUNNING = parseInt(maxSeries) + 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
@@ -166,7 +166,7 @@ export class DefaultsService {
           params.INV_RUNNING = 1
           seriesTbl = []
           let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-          seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
+          seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
           params.INV_NO = seriesNo
           seriesTbl.push(params)
 
@@ -227,11 +227,11 @@ export class DefaultsService {
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
                     console.log('FB_FORM_TABLE', data);
 
-                            this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
-                                this.loading.dismiss();
-                               resolve(true)
-                             });
-                             
+                    this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                      this.loading.dismiss();
+                      resolve(true)
+                    });
+
                   }).catch(e => {
                     console.log(e);
                   });

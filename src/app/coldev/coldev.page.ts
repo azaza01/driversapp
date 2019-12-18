@@ -25,7 +25,7 @@ export class ColdevPage implements OnInit {
   specialIns: any
   colDelToCheck: any
 
- 
+
 
   selected: any = []
   loading: any = new LoadingController;
@@ -55,15 +55,30 @@ export class ColdevPage implements OnInit {
     today = yy + '-' + mm + '-' + dd;
     console.log(today)
 
-    if(navigator.onLine == true){
+    if (navigator.onLine == true) {
       await this.presentLoading('');
-      await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
-      await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
-      await this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())
-    }else{
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
+        console.log(res);
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
+          console.log(res);
+          Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
+            console.log(res);
+            this.loading.dismiss();
+
+          }).catch(e => {
+            console.log(e);
+          });
+
+        }).catch(e => {
+          console.log(e);
+        });
+      }).catch(e => {
+        console.log(e);
+      });
+    } else {
       await this.presentAlert("Please check your internet connection")
     }
-    
+
 
   }
 
@@ -90,42 +105,95 @@ export class ColdevPage implements OnInit {
   }
 
   async getSInstruction(info, today) {
-    this.loading.present();
-    Promise.resolve(this.SplSrvc.getSpecialInstruction(info, today)).then(data => {
-      this.specialIns = data; 
-      console.log(data)
-    if(data != undefined){ 
-       this.storage.get('COLDEL_TABLE').then(res => {
-        var specialCounts = this.specialIns.length, i;
-        var coldevCounts = res.length, i2;
-            for (i = 0; i < specialCounts; i++) {
-              if(this.specialIns[i].action == "remove"){
-                for (i2 = 0; i2 < coldevCounts; i2++) {
-                  if (res[i2].id != this.specialIns[i].against && (res[i2].cod != this.specialIns[i].against || res[i2].dei != this.specialIns[i].against )  && res[i2].coldel_type != this.specialIns[i].type) {
-                     // this.myColDev.push = res[i2]; //need to check
+    return new Promise(resolve => {
+
+      Promise.resolve(this.SplSrvc.getSpecialInstruction(info, today)).then(data => {
+        this.specialIns = data;
+        console.log(data)
+        if (data != undefined) {
+          this.storage.get('COLDEL_TABLE').then(res => {
+            console.log(res)
+            let exData = res
+            var specialCounts = this.specialIns.length, i;
+            var coldevCounts = res.length, i2;
+            if (this.specialIns.length > 0) {
+
+              this.specialIns.forEach(async spI => {
+
+                if (spI.action == "remove") {
+                  this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), spI.id)
+
+                  i = spI.type == 'collection' ? exData.findIndex(x => x.id == spI.against) : exData.findIndex(x => x.dei == spI.against)
+                  console.log(i)
+                  if (spI.type == 'collection') {
+                    if (exData[i].cod != this.defaultSrvc.getToday()) {
+                      exData.splice(i, 1);
+                      this.storage.set('COLDEL_TABLE', exData).then(res => {
+                        this.myColDev = exData;
+                        console.log(this.myColDev)
+                      })
+                    }
+
+                  } else if(spI.type == 'delivery') {
+                    if (exData[i].ded != this.defaultSrvc.getToday()) {
+                      exData.splice(i, 1);
+                      this.storage.set('COLDEL_TABLE', exData).then(res => {
+                        this.myColDev = exData;
+                        console.log(this.myColDev)
+                      })
+                    }
+                  } else if(i < 0){
+
                   }
+                  // this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), spI.id)
+                  console.log(this.myColDev)
+
                 }
-                this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), this.specialIns[i].id)
-              } 
+                resolve(true)
+
+              });
+
+            } else {
+              resolve(true)
             }
-           // this.storage.set('COLDEL_TABLE', this.myColDev) ////need to check
-          this.loading.dismiss();
-      })
-    }
 
-    }).catch(e => {
-      console.log(e);
-      this.loading.dismiss();
+            // for (i = 0; i < specialCounts; i++) {
+            //   if (this.specialIns[i].action == "remove") {
 
-    });
+
+            //     for (i2 = 0; i2 < coldevCounts; i2++) {
+            //       if (res[i2].id == this.specialIns[i].against && (res[i2].cod == this.specialIns[i].against || res[i2].dei == this.specialIns[i].against) && res[i2].coldel_type == this.specialIns[i].type) {
+            //         //   // this.myColDev.push = res[i2]; //need to check
+            //         i = exData.findIndex(x => x.id == this.specialIns[i].against)
+            //         //   this.myColDev.splice(i, 1, serverData);
+
+            //       }
+            //     }
+            //     this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), this.specialIns[i].id)
+            //   }
+            // }
+            // // this.storage.set('COLDEL_TABLE', this.myColDev) ////need to check
+            // this.loading.dismiss();
+          })
+        }
+
+      }).catch(e => {
+        console.log(e);
+        this.loading.dismiss();
+
+      });
+
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
-  delayToDeleteForCorsPolicy(driverdata, dattoday, myid){
+  delayToDeleteForCorsPolicy(driverdata, dattoday, myid) {
     setTimeout(() => {
       this.delSInstruction(driverdata, dattoday, myid)
     }, 3000);
   }
-  
+
 
   async delSInstruction(info, today, coldelSplID) {
     await Promise.resolve(this.SplSrvc.delSpecialInstruction(info, today, coldelSplID)).then(data => {
@@ -135,58 +203,71 @@ export class ColdevPage implements OnInit {
       // this.loading.dismiss();
 
     });
-   
+
 
   }
 
   async checkDuplicate(serverData, localData) {
     // console.log(serverData)
     // console.log(localData)
+    return new Promise(resolve => {
 
-    if (localData == null) {
-      serverData.coldel_flag = "old"
-      this.myColDev.push(serverData)
-      this.storage.set('COLDEL_TABLE', this.myColDev)
-
-      // let params = {
-      //   UNPAY_DELID : serverData.dei,
-      //   UNPAY_INVOICENO : serverData.inn,
-      //   UNPAY_INITIAL : serverData.coi,
-      //   UNPAY_TOTAL: serverData.toa,
-      //   UNPAY_DISCOUNT : serverData.dis,
-      //   UNPAY_DATE :serverData.ded,
-      //   UNPAY_DEPOTYPE :serverData.dpt,
-      //   UNPAY_DEPOAMT :serverData.dpa,
-      //   UNPAY_BALANCELEFT :serverData.baa,
-      //   UNPAY_BALANCEPAID:serverData.bap,
-      //   UNPAY_BALANCETYPE: "Cash"
-      // }
-      // this.storage.set('UNSYNCED_PAYMENT_TABLE', params)  
-
-    } else {
-
-      let result;
-      result = localData.filter((item) => {
-        return (item.id.indexOf(serverData.id) !== -1)
-      })
-      // console.log(result)
-      if (result.length < 1) {
+      if (localData == null) {
         serverData.coldel_flag = "old"
         this.myColDev.push(serverData)
-        // console.log(this.myColDev)
-        this.storage.set('COLDEL_TABLE', this.myColDev)
+        this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
+          resolve(true)
+
+        })
+
+        // let params = {
+        //   UNPAY_DELID : serverData.dei,
+        //   UNPAY_INVOICENO : serverData.inn,
+        //   UNPAY_INITIAL : serverData.coi,
+        //   UNPAY_TOTAL: serverData.toa,
+        //   UNPAY_DISCOUNT : serverData.dis,
+        //   UNPAY_DATE :serverData.ded,
+        //   UNPAY_DEPOTYPE :serverData.dpt,
+        //   UNPAY_DEPOAMT :serverData.dpa,
+        //   UNPAY_BALANCELEFT :serverData.baa,
+        //   UNPAY_BALANCEPAID:serverData.bap,
+        //   UNPAY_BALANCETYPE: "Cash"
+        // }
+        // this.storage.set('UNSYNCED_PAYMENT_TABLE', params)  
 
       } else {
-        let i;
-        i = localData.findIndex(x => x.id == result[0].id)
-        // console.log(i);
-        serverData.coldel_flag = "old"
-        this.myColDev.splice(i, 1, serverData);
-        // console.log(this.myColDev)
-        this.storage.set('COLDEL_TABLE', this.myColDev)
+
+        let result;
+        result = localData.filter((item) => {
+          return (item.id.indexOf(serverData.id) !== -1)
+        })
+        // console.log(result)
+        if (result.length < 1) {
+          serverData.coldel_flag = "old"
+          this.myColDev.push(serverData)
+          console.log(this.myColDev)
+          this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
+            resolve(true)
+
+          })
+        } else {
+          let i;
+          i = localData.findIndex(x => x.id == result[0].id)
+          // console.log(i);
+          serverData.coldel_flag = "old"
+          this.myColDev.splice(i, 1, serverData);
+          console.log(this.myColDev)
+          this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
+            resolve(true)
+
+          })
+        }
+
       }
 
-    }
+    }).catch(err => {
+      console.log(err)
+    })
 
   }
 
@@ -198,87 +279,117 @@ export class ColdevPage implements OnInit {
 
   async collection(info, today) {
     // await this.presentLoading('');
-    Promise.resolve(this.cltnSrvc.getCollection(info, today)).then(data => {
-      // console.log(data);
-      this.myCollection = []
-      let collection: any
-      collection = data;
-      if (collection.length > 0) {
+    return new Promise(resolve => {
 
-        collection.forEach(col => {
-          col.coldel_type = "collection"
-          col.coldel_hang = "nil"
-          col.coldel_pack = "nil"
-          col.coldel_roll = "nil"
-          col.coldel_return = "nil"
-          col.coldel_return = "nil"
-          col.coldel_flag = "New"
+      Promise.resolve(this.cltnSrvc.getCollection(info, today)).then(data => {
+        // console.log(data);
+        this.myCollection = []
+        let collection: any
+        collection = data;
+        if (collection.length > 0) {
 
-          this.myCollection.push(col)
-        });
-        // console.log(this.myCollection);
-        this.storage.get('COLDEL_TABLE').then(res => {
-          // console.log(res);
-          res == null ? this.myColDev = [] : this.myColDev = res
-          this.myCollection.forEach(myC => {
-            // myC.id = (parseInt(myC.id) + 1) + ""
-            this.checkDuplicate(myC, this.myColDev)
-            this.loading.dismiss();
+          collection.forEach(col => {
+            col.coldel_type = "collection"
+            col.coldel_hang = "nil"
+            col.coldel_pack = "nil"
+            col.coldel_roll = "nil"
+            col.coldel_return = "nil"
+            col.coldel_return = "nil"
+            col.coldel_flag = "New"
+
+            this.myCollection.push(col)
           });
+          // console.log(this.myCollection);
+          this.storage.get('COLDEL_TABLE').then(res => {
+            // console.log(res);
+            res == null ? this.myColDev = [] : this.myColDev = res
+            this.myCollection.forEach(myC => {
+              // myC.id = (parseInt(myC.id) + 1) + ""
+              // this.checkDuplicate(myC, this.myColDev)
+              Promise.resolve(this.checkDuplicate(myC, this.myColDev)).then(res => {
+                console.log(res);
 
-        })
+                resolve(true)
+              }).catch(e => {
+                console.log(e);
+              });
+              // this.loading.dismiss();
+            });
 
-      } else {
+          })
+
+        } else {
+          resolve(true)
+
+          // this.loading.dismiss();
+
+        }
+
+      }).catch(e => {
+        console.log(e);
         this.loading.dismiss();
 
-      }
+      });
 
-    }).catch(e => {
-      console.log(e);
-      this.loading.dismiss();
-
-    });
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
 
   async delivery(info, today) {
     // await this.presentLoading('');
-    Promise.resolve(this.delcltnSrvc.getDelivery(info, today)).then(data => {
-      // console.log(data);
-      this.myDeliveries = []
-      let deliveries: any
-      deliveries = data;
-      if (deliveries.length > 0) {
+    return new Promise(resolve => {
 
-        deliveries.forEach(del => {
-          del.coldel_type = "delivery"
-          del.coldel_returndate = ""
-          del.coldel_returntime = ""
-          del.coldel_flag = "New"
+      Promise.resolve(this.delcltnSrvc.getDelivery(info, today)).then(data => {
+        // console.log(data);
+        this.myDeliveries = []
+        let deliveries: any
+        deliveries = data;
+        if (deliveries.length > 0) {
 
-          this.myDeliveries.push(del)
-        });
-        // console.log(this.myDeliveries);
-        this.storage.get('COLDEL_TABLE').then(res => {
-          // console.log(res);
-          res == null ? this.myColDev = [] : this.myColDev = res
-          this.myDeliveries.forEach(myC => {
-            // myC.id = (parseInt(myC.id) + 1) + ""
-            this.checkDuplicate(myC, this.myColDev)
-            this.loading.dismiss();
+          deliveries.forEach(del => {
+            del.coldel_type = "delivery"
+            del.coldel_returndate = ""
+            del.coldel_returntime = ""
+            del.coldel_flag = "New"
+
+            this.myDeliveries.push(del)
           });
+          // console.log(this.myDeliveries);
+          this.storage.get('COLDEL_TABLE').then(res => {
+            // console.log(res);
+            res == null ? this.myColDev = [] : this.myColDev = res
+            this.myDeliveries.forEach(myC => {
+              // myC.id = (parseInt(myC.id) + 1) + ""
+              // this.checkDuplicate(myC, this.myColDev)
+              Promise.resolve(this.checkDuplicate(myC, this.myColDev)).then(res => {
+                console.log(res);
 
-        })
+                resolve(true)
+              }).catch(e => {
+                console.log(e);
+              });
+              // this.loading.dismiss();
+            });
 
-      } else {
+          })
+
+        } else {
+          resolve(true)
+          // this.loading.dismiss();
+
+        }
+      }).catch(e => {
+        console.log(e);
         this.loading.dismiss();
 
-      }
-    }).catch(e => {
-      console.log(e);
-      this.loading.dismiss();
+      });
 
-    });
+    }).catch(err => {
+      console.log(err)
+    })
+
   }
 
   async colView(selected) {

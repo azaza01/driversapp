@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { ItemsService } from '../api/items.service';
 import { CryptoJS } from 'crypto-js';
+import { DefaultsService } from '../api/defaults.service';
 
 
 @Component({
@@ -30,10 +31,32 @@ export class LoginPage implements OnInit {
     public alertController: AlertController,
     private accSrvc: AccountsService,
     private storage: Storage,
+    private defaultSrvc: DefaultsService,
 
   ) { }
 
   ngOnInit() {
+    // let wew
+    // let wew2 = []
+
+    // wew = {
+    //   INV_DATE: "2019-12-18",
+    //   INV_NO: "CC-191130Ch03",
+    //   INV_RUNNING: 3,
+    //   INV_TYPE: "CC"
+    // }
+    // for (let index = 0; index < 10; index++) {
+    //   wew2.push(wew)
+
+    // }
+    // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
+
+    // })
+    // return
+
+    this.storage.get('ENVNUM_TABLE').then(res => {
+      console.log(res)
+    })
 
   }
 
@@ -52,7 +75,7 @@ export class LoginPage implements OnInit {
   }
 
   async presentToast(msg) {
-    
+
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 3000,
@@ -73,7 +96,30 @@ export class LoginPage implements OnInit {
       console.log(data);
       console.log(this.accSrvc.driverData)
       if (data) {
-        this.router.navigate(['/home']);
+
+        this.storage.get('ENVNUM_TABLE').then(res => {
+          let data = res
+          let newSet = []
+          console.log(res)
+
+          data.forEach(inv => {
+            if (inv.INV_DATE == this.defaultSrvc.getToday()) {
+              // console.log('yeah')
+              newSet.push(inv)
+
+            }
+          });
+          // console.log(data)
+          // console.log(newSet)
+
+          this.storage.set('ENVNUM_TABLE', newSet).then(res => {
+            console.log(res)
+            this.router.navigate(['/home']);
+
+          })
+        })
+
+
       } else {
         this.presentToast("Invalid credentials")
 
