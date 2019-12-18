@@ -24,6 +24,8 @@ export class DefaultsService {
   private url = this.endpoint;
   loading: any = new LoadingController;
 
+  prepended_number: any
+
   _category: any;
   set getCategory(value: any) {
     this._category = value;
@@ -108,11 +110,12 @@ export class DefaultsService {
       let seriesTbl: any = []
       let params: any = {};
       params.INV_TYPE = "CC"
-      let dd = new Date().getDate() + 2;
+      let dd = new Date().getDate();
       let mm = new Date().getMonth() + 1;
       let yyyy = new Date().getFullYear();
       let yy = (yyyy + '').substr(2, 2);
-      params.INV_DATE = yyyy + '-' + mm + '-' + dd
+
+      this.prepended_number = String(dd).padStart(2, '0')
 
       let seriesNo;
       let driver;
@@ -134,10 +137,11 @@ export class DefaultsService {
           result = seriesTbl.filter((item) => {
             return (item.INV_DATE.indexOf(params.INV_DATE) !== -1)
           })
+          
           if (result.length < 1) {
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
@@ -149,7 +153,7 @@ export class DefaultsService {
             let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
             params.INV_RUNNING = parseInt(maxSeries) + 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
@@ -162,7 +166,7 @@ export class DefaultsService {
           params.INV_RUNNING = 1
           seriesTbl = []
           let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-          seriesNo = params.INV_TYPE + "-" + yy + mm + dd + driver.code + num
+          seriesNo = params.INV_TYPE + "-" + yy + mm + this.prepended_number + driver.code + num
           params.INV_NO = seriesNo
           seriesTbl.push(params)
 
