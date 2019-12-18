@@ -83,7 +83,7 @@ export class AccountsService {
           // console.log(res)
           this.driverData = res
           this.storage.set('ACCOUNTS_TABLE', res).then(() => {
-            this.getStandingOrder(res)
+            // this.getStandingOrder(res)
             resolve(res)
           });
 
@@ -102,17 +102,24 @@ export class AccountsService {
   }
 
   getStandingOrder(info) {
+    // let params = {
+    //   userid: info.id,
+    //   email: info.email_address,
+    //   password: info.password
+    // }
+
     let params = {
-      userid: info.id,
-      email: info.email_address,
-      password: info.password
-    }
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "userid": "109",
+     }
+
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/standingorder.json", params).subscribe(
         response => {
           let res;
           res = response[0];
-          console.log(res)
+          // console.log(res)
           this.storage.set('SO_TABLE', res[0]).then(() => {
             resolve(res)
           });

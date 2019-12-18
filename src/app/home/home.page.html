@@ -15,10 +15,8 @@
       <ion-card-header  >
         <ion-card-title >Welcome </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <ion-title>
-        </ion-title>
-        <p>Promo</p>
+      <ion-card-content *ngFor="let promotion of currentPromo; let i = index">
+        <p>{{ promotion.description }}</p>
       </ion-card-content>
     </ion-card>
 
