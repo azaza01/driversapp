@@ -93,7 +93,8 @@ export class ColdevPage implements OnInit {
     this.loading.present();
     Promise.resolve(this.SplSrvc.getSpecialInstruction(info, today)).then(data => {
       this.specialIns = data; 
-    if(data != null){ 
+      console.log(data)
+    if(data != undefined){ 
        this.storage.get('COLDEL_TABLE').then(res => {
         var specialCounts = this.specialIns.length, i;
         var coldevCounts = res.length, i2;

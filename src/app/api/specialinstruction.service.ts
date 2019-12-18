@@ -27,19 +27,19 @@ export class SpecialinstructionService {
 
   getSpecialInstruction(info: any, today) {
 
+    // let params = {
+    //   "date": today,
+    //   "email": info.email_address,
+    //   "password": info.password,
+    //   "driverid": info.id,
+    // }
+
     let params = {
       "date": today,
-      "email": info.email_address,
-      "password": info.password,
-      "driverid": info.id,
-    }
-
-    // let params = {
-    //   "date": "2019-12-12",
-    //   "email": "it01.azaza@gmail.com",
-    //   "password": "7c222fb2927d828af22f592134e8932480637c0d",
-    //   "driverid": "109",
-    //  }
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "driverid": "109",
+     }
 
     console.log(info)
     console.log(today)
@@ -67,21 +67,21 @@ export class SpecialinstructionService {
 
   delSpecialInstruction(info: any, today, coldelSplID) {
     
-    let params = {
-      "date": today,
-      "email": info.email_address,
-      "password": info.password,
-      "driverid": info.id,
-      "id": coldelSplID,
-     }
-
-    //  let params = {
-    //   "date": "2019-12-12",
-    //   "email": "it01.azaza@gmail.com",
-    //   "password": "7c222fb2927d828af22f592134e8932480637c0d",
-    //   "driverid": "109",
+    // let params = {
+    //   "date": today,
+    //   "email": info.email_address,
+    //   "password": info.password,
+    //   "driverid": info.id,
     //   "id": coldelSplID,
     //  }
+
+     let params = {
+      "date": today,
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "driverid": "109",
+      "id": coldelSplID,
+     }
 
     console.log(params)
 
