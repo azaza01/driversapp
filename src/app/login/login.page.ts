@@ -58,9 +58,9 @@ export class LoginPage implements OnInit {
     // })
     // return
 
-    // this.storage.get('ENVNUM_TABLE').then(res => {
-    //   console.log(res)
-    // })
+    this.storage.get('ENVNUM_TABLE').then(res => {
+      console.log(res)
+    })
 
   }
 
