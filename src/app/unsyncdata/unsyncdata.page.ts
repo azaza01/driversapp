@@ -40,6 +40,10 @@ export class UnsyncdataPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.ionViewWillEnter();
+  }
+
+  async ionViewWillEnter(){
     await this.presentLoading('Collecting Local Data');
     Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       this.unsyncCollection = res
@@ -77,6 +81,7 @@ export class UnsyncdataPage implements OnInit {
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(datum => {
               console.log(datum)
               this.presentAlert("Invoice Successfully Sync")
+              this.ionViewWillEnter();
             })
           })
         } else {

@@ -137,13 +137,13 @@ export class AppComponent {
               console.log('removed ');
               this.storage.remove('COLDEL_TABLE').then(() => {
                 console.log('removed ');
-                this.storage.remove('TIMESLOT_TABLE').then(() => {
-                  console.log('removed '); 
+                // this.storage.remove('TIMESLOT_TABLE').then(() => {
+                //   console.log('removed '); 
                   this.storage.remove('SO_TABLE').then(() => {
                     console.log('removed ');                  
                   this.router.navigate(['/login']);
                 })
-             })
+            //  })
             })
               // this.storage.remove('UNSYNCED_INVOICE_TABLE').then(() => {
               //   console.log('removed ');
