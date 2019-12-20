@@ -71,7 +71,7 @@ export class ConfirminvoicePage implements OnInit {
   UNINV_DELIVERYTIMESLOT: any
   UNINV_DEPOAMT: any
   UNINV_DEPOTYPE: any
-  UNINV_DISCOUNT: any
+  UNINV_DISCOUNT: any = 0
   UNINV_DONATE: any
   UNINV_EXPRESS: any
   UNINV_HASDONATE: any
@@ -87,6 +87,12 @@ export class ConfirminvoicePage implements OnInit {
 
   invoiceNotesArray: any = []
   invoiceNotesObject: any = {}
+
+  drvna: any
+  drvpa: any
+  drvem: any
+  colitem: any
+
 
   overDue: any;
   todaydate: any;
@@ -147,74 +153,52 @@ export class ConfirminvoicePage implements OnInit {
     this.getToday();
     this.isLoading = true
     this.storage.get('SELECTED_ITEM').then(res => {
-      console.log(res)
+      // console.log(res)
       this.isLoading = false
       this.invoiceId = res.id;
-      console.log(this.invoiceId);
+      // console.log(this.invoiceId);
     })
 
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       this.isLoading = true
-      console.log(res)
+      // console.log(res)
       var l = res.length, i;
       for (i = 0; i < l; i++) {
         if (res[i].UNINV_COLLID == this.invoiceId) {
           this.customerData = res[i];
         }
       }
-      // this.storage.remove('ENVNUM_TABLE')
+
       // this.storage.remove('UNSYNCED_INVOICE_TABLE')
+      // this.storage.remove('ENVNUM_TABLE')
+      // let wew
+      // let wew2 = []
+  
+      // wew = {
+      //   COLID: "142823",
+      //   INV_DATE: "2019-12-20",
+      //   INV_TYPE: "CC",
+      //   INV_RUNNING: 1,
+      //   INV_NO: "CC-191220Du01"
+      // }
+      // for (let index = 0; index < 1; index++) {
+      //   wew2.push(wew)
+  
+      // }
+      // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
+      //   console.log(res);
+      // })
+    
       Promise.resolve(this.defaultSrvc.createInvSeries()).then(data => {
-        console.log(data);
+        // console.log(data);
         this.UNINV_INVNO = data
         this.invoiceNumber = data
       }).catch(e => {
         console.log(e);
       });
 
-      this.company = this.customerData.UNINV_INITIAL
-      this.invoiceType = this.customerData.UNINV_TYPE
-      this.customerID = this.customerData.UNINV_CUSTID
-      this.selectedtime = this.customerData.UNINV_DELIVERYTIMESLOT
-      const initDeliveryDate = this.customerData.UNINV_AGREEDDELIVERYDATE
-      this.initDELIVERYDATE = initDeliveryDate
-      this.isLoading = false
-      this.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? this.datepipe.transform(new Date(this.getDay(7)), 'yyyy-MM-dd') : this.customerData.UNINV_AGREEDDELIVERYDATE
-      this.UNINV_BAGS = this.customerData.UNINV_BAGS
-      this.UNINV_BALANCE = this.customerData.UNINV_BALANCE
-      this.UNINV_COLLID = this.customerData.UNINV_COLLID
-      this.UNINV_COLLTS = this.customerData.UNINV_COLLTS
-      this.UNINV_CUSTID = this.customerData.UNINV_CUSTID
-      this.UNINV_DELIVERYTIMESLOT = this.customerData.UNINV_DELIVERYTIMESLOT
-      this.UNINV_DEPOAMT = this.customerData.UNINV_DEPOAMT
-      this.UNINV_DEPOTYPE = this.customerData.UNINV_DEPOTYPE
-      this.UNINV_DISCOUNT = this.customerData.UNINV_DISCOUNT
-      this.UNINV_DONATE = this.customerData.UNINV_DONATE
-      this.UNINV_EXPRESS = this.customerData.UNINV_EXPRESS
-      this.UNINV_HASDONATE = this.customerData.UNINV_HASDONATE
-      this.UNINV_INITIAL = this.customerData.UNINV_INITIAL
-      this.UNINV_INVNO = this.customerData.UNINV_INVNO
-      this.UNINV_SAVEDON = this.customerData.UNINV_SAVEDON
-      this.UNINV_TYPE = this.customerData.UNINV_TYPE
-
-      console.log(this.customerData);
-
-
-      this.storage.get('INVOICE_TYPES_TABLE').then(res => {
-        console.log(res)
-        var l = res.length, i;
-        for (i = 0; i < l; i++) {
-          if (res[i].description == this.invoiceType) {
-            this.invoiceTypeID = res[i].id
-            console.log(this.invoiceTypeID);
-          }
-        }
-      })
-      this.alertCustomerType();
-    })
-
     this.storage.get('SELECTED_ITEM').then(res => {
-      console.log(res)
+      // console.log(res)
       this.returnDate = res.coldel_return;
       this.customercredit = res.cca;
       this.customerTypes = res.cut;
@@ -234,7 +218,7 @@ export class ConfirminvoicePage implements OnInit {
         //     this.returnDate = res[i].coldel_return;
         //   }
       }
-      console.log(this.returnDate)
+      // console.log(this.returnDate)
     })
 
     this.storage.get('TIMESLOT_TABLE').then(res => {
@@ -247,14 +231,58 @@ export class ConfirminvoicePage implements OnInit {
     })
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res)
+      // console.log(res)
       this.driver_email = res.email_address
       this.driver_password = res.password
       this.driver_name = res.name
     })
 
-
     this.getItemSubtotal();
+
+    this.company = this.customerData.UNINV_INITIAL
+    this.invoiceType = this.customerData.UNINV_TYPE
+    this.customerID = this.customerData.UNINV_CUSTID
+    this.selectedtime = this.customerData.UNINV_DELIVERYTIMESLOT
+    const initDeliveryDate = this.customerData.UNINV_AGREEDDELIVERYDATE
+    this.initDELIVERYDATE = initDeliveryDate
+    this.isLoading = false
+
+    this.UNINV_AGREEDDELIVERYDATE = this.customerData.UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? this.datepipe.transform(new Date(this.getDay(7)), 'yyyy-MM-dd') : this.customerData.UNINV_AGREEDDELIVERYDATE
+    this.UNINV_BAGS = "1"
+    this.UNINV_BALANCE = this.customerData.UNINV_BALANCE
+    this.UNINV_COLLID = this.customerData.UNINV_COLLID
+    this.UNINV_COLLTS = this.customerData.UNINV_SAVEDON
+    this.UNINV_CUSTID = this.customerData.UNINV_CUSTID
+    this.UNINV_DELIVERYTIMESLOT = this.customerData.UNINV_DELIVERYTIMESLOT
+    this.UNINV_DEPOAMT = this.customerData.UNINV_DEPOAMT
+    this.UNINV_DEPOTYPE = this.customerData.UNINV_DEPOTYPE
+    this.UNINV_DISCOUNT = this.customerData.UNINV_DISCOUNT
+    this.UNINV_DONATE = this.customerData.UNINV_DONATE
+    this.UNINV_EXPRESS = this.customerData.UNINV_EXPRESS
+    this.UNINV_HASDONATE = this.customerData.UNINV_HASDONATE
+    this.UNINV_INITIAL = this.customerData.UNINV_INITIAL
+    this.UNINV_INVNO = this.UNINV_INVNO
+    this.UNINV_INVOICENOTE = this.UNINV_INVOICENOTE
+    this.UNINV_SAVEDON = this.customerData.UNINV_SAVEDON
+    this.UNINV_TYPE = this.customerData.UNINV_TYPE
+    this.drvna = this.driver_name
+    this.drvpa = this.driver_password
+    this.drvem = this.driver_email 
+    this.colitem = this.allinvoiceitems
+
+
+    this.storage.get('INVOICE_TYPES_TABLE').then(res => {
+      // console.log(res)
+      var l = res.length, i;
+      for (i = 0; i < l; i++) {
+        if (res[i].description == this.invoiceType) {
+          this.invoiceTypeID = res[i].id
+          // console.log(this.invoiceTypeID);
+        }
+      }
+    })
+    this.alertCustomerType();
+  })
   }
 
   getItemSubtotal() {
@@ -279,7 +307,7 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        console.log(this.finalSubtotal)
+        // console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
         this.afterLessAmount = this.finalSubtotal;
         this.balanceAmount = this.finalSubtotal;
@@ -294,7 +322,7 @@ export class ConfirminvoicePage implements OnInit {
         var str1, flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && res[i].qty != 0) {
-            console.log(res[i])
+            // console.log(res[i])
 
             let params = {
               "cat_type": res[i].cat_type,
@@ -311,8 +339,8 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        console.log(this.allinvoiceitems)
-        console.log(this.finalSubtotal)
+        // console.log(this.allinvoiceitems)
+        // console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
         this.afterLessAmount = this.finalSubtotal;
         this.balanceAmount = this.finalSubtotal;
@@ -320,7 +348,7 @@ export class ConfirminvoicePage implements OnInit {
           this.addDiscount();
         }
       })
-    }
+    } 
 
   }
 
@@ -355,7 +383,7 @@ export class ConfirminvoicePage implements OnInit {
     modalCtrl.onDidDismiss().then(data => {
       // this.isModalOpen = false;
       this.customerData.UNINV_AGREEDDELIVERYDATE = this.datepipe.transform(new Date(data['data'].date), 'yyyy-MM-dd')
-      console.log(data['data'].date);
+      // console.log(data['data'].date);
       // this.selectedDate = data.data.date;
     });
   }
@@ -372,7 +400,7 @@ export class ConfirminvoicePage implements OnInit {
 
     today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
     this.todaydate = today
-    console.log(this.todaydate)
+    // console.log(this.todaydate)
   }
 
   async presentAlert2(msg) {
@@ -441,7 +469,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   getTime(selectedtime) {
-    console.log(selectedtime);
+    // console.log(selectedtime);
     this.UNINV_DELIVERYTIMESLOT = this.selectedtime
   }
 
@@ -461,7 +489,7 @@ export class ConfirminvoicePage implements OnInit {
     if (this.invoiceType == "Repeat" && (this.finalSubtotal > 30) && (this.company != "DC")) {
       //create promotion object
       this.storage.get('ACCOUNTS_TABLE').then(res => {
-        console.log(res)
+        // console.log(res)
         let params: any = {};
         params.description = "Chain Promotion";
         params.cat_type = "";
@@ -479,12 +507,12 @@ export class ConfirminvoicePage implements OnInit {
       })
 
       this.storage.get("TEMP_ITEMS_TABLE").then(res => {
-        console.log(res)
-        console.log(this.promotionItem)
+        // console.log(res)
+        // console.log(this.promotionItem)
         let result;
         result = res
         result.push(this.promotionItem)
-        console.log(result)
+        // console.log(result)
       })
 
       this.payableAmount = this.finalSubtotal - 3;
@@ -514,7 +542,7 @@ export class ConfirminvoicePage implements OnInit {
     } else if (this.expressCharge == "100") {
       this.expressData = "2.00"
     }
-    console.log(this.expressCharge)
+    // console.log(this.expressCharge)
     this.getTotalPayable();
   }
 
@@ -528,7 +556,7 @@ export class ConfirminvoicePage implements OnInit {
 
   getPayemntMethod(paymentMethod) {
     this.paymentMethod = paymentMethod
-    console.log(this.paymentMethod)
+    // console.log(this.paymentMethod)
   }
 
   // overDueAmount(overDue){
@@ -543,11 +571,11 @@ export class ConfirminvoicePage implements OnInit {
       this.percentPromoAmount = Math.round(this.percentPromoAmountFM * 100) / 100
       this.afterLessAmount = this.finalSubtotal - this.percentPromoAmount
       this.payableAmount = this.afterLessAmount
-      console.log(this.payableAmount);
+      // console.log(this.payableAmount);
     } else if (this.percentPromo <= 0 || this.percentPromo == "") {
       this.afterLessAmount = this.finalSubtotal
       this.payableAmount = this.finalSubtotal
-      console.log(this.payableAmount);
+      // console.log(this.payableAmount);
     }
 
     if (this.expressCharge != "None" && this.expressCharge != "" && this.expressCharge != 0 && this.expressCharge != undefined) {
@@ -605,6 +633,7 @@ export class ConfirminvoicePage implements OnInit {
     } else {
       Promise.resolve(this.collectiondata()).then(coldata => {
         this.savePay(coldata)
+        console.log(coldata)
       })
     }
 
@@ -612,6 +641,7 @@ export class ConfirminvoicePage implements OnInit {
 
   //no connection
   async savePay(offlinedata) {
+    console.log(offlinedata)
     await this.presentLoading('Syncing local Data');
     ////update UNSYNCED_INVOICE_TABLE
     await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -621,7 +651,7 @@ export class ConfirminvoicePage implements OnInit {
 
       if(data != null){
         data.forEach(unsync => {
-          if (unsync.UNINV_INVNO == offlinedata.invoiceno) {
+          if (unsync.UNINV_COLLID == offlinedata.collectionid) {
             let params = {
               UNINV_AGREEDDELIVERYDATE: offlinedata.agreeddeliverydate,
               UNINV_BAGS: offlinedata.bags,
@@ -651,6 +681,7 @@ export class ConfirminvoicePage implements OnInit {
             filtered.push(unsync)
           }
         });
+        console.log(filtered)
         this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
         this.loading.dismiss();
       }else{
@@ -678,13 +709,14 @@ export class ConfirminvoicePage implements OnInit {
           drvem: offlinedata.email,
           colitem: offlinedata.invoiceitem
         }
+        console.log(params)
         this.storage.set('UNSYNCED_INVOICE_TABLE', params)
         this.loading.dismiss();
       }
 
     }).finally(() => {
-      this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-        console.log(res)
+      this.storage.get('UNSYNCED_INVOICE_TABLE').then(ress => {
+        console.log(ress)
       })
     })
 
@@ -754,7 +786,7 @@ export class ConfirminvoicePage implements OnInit {
     }).finally(() => {
       this.storage.get('COLDEL_TABLE').then(ress => {
         console.log(ress)
-        // this.router.navigate(['/coldev']);
+        this.router.navigate(['/coldev']);
       })
     })
   }

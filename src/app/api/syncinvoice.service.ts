@@ -58,7 +58,7 @@ export class SyncinvoiceService {
   private getHeaders() {
     return {
       headers: new HttpHeaders({
-        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Accept-Encoding, Authorization, application/x-www-form-urlencoded',
         'Access-Control-Allow-Methods': 'GET, DELETE, PUT, OPTIONS, TRACE, PATCH, CONNECT'
         // 'Authorization': 'Bearer ' + token
@@ -66,36 +66,92 @@ export class SyncinvoiceService {
     };
   }
 
+  async addinvoiceServiceLocal(info: any) {
+    console.log(info)
+
+    let infox = {
+      "email": info.drvem,
+      "password": info.drvpa,
+      "initial": info.UNINV_INITIAL,
+      "customerid": info.UNINV_CUSTID,
+      "collectionid": info.UNINV_COLLID,
+      "invoiceno": info.UNINV_INVNO,
+      "type": info.UNINV_TYPE,
+      "depositamount": info.UNINV_DEPOAMT,
+      "deposittype": info.UNINV_DEPOTYPE,
+      "balancepaid": info.UNINV_BALANCE,
+      "name": info.drvna,
+      "agreeddeliverydate": info.UNINV_AGREEDDELIVERYDATE,
+      "deliverytimeslot": info.UNINV_DELIVERYTIMESLOT,
+      "invoiceitem": info.colitem,
+      "invoicenote": info.UNINV_INVOICENOTE,
+      "hasdonate": info.UNINV_HASDONATE,
+      "donatetotal": info.UNINV_DONATE,
+      "discount": info.UNINV_DISCOUNT,
+      "express": info.UNINV_EXPRESS,
+      "bags": info.UNINV_BAGS,
+      "savedon": info.UNINV_SAVEDON
+    }
+    console.log(info)
+
+    await this.presentLoading('Syncing Collection');
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/addinvoice.json", infox).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+          resolve(res)
+          this.loading.dismiss();
+
+          // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
+          //   resolve(res)
+          // });
+
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+          this.loading.dismiss();
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
 
   async addinvoiceService(info: any) {
     console.log(info)
 
-      let infox = {
-  "email": "it01.azaza@gmail.com",
-	"password": "7c222fb2927d828af22f592134e8932480637c0d",
-	"initial": "DC",
-	"customerid": "24047",
-	"collectionid": "142819",
-	"invoiceno": "CC-191215Du02",
-	"type": "39",
-	"depositamount": "0.00",
-	"deposittype": "Cash",
-	"balancepaid": "0.00",
-	"name": "DummyDriver",
-	"agreeddeliverydate": "2019-12-23",
-	"deliverytimeslot": "O Any Time",
-	"invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
-	"invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
-	"hasdonate": "0",
-	"donatetotal": "0",
-	"discount": 0,
-	"express": "1.00",
-	"bags": "0",
-	"savedon": "2019-12-16 11:48:11"
-      }
-      console.log(info)
-    
-    await this.presentLoading('Syncing Collection'); 
+    let infox = {
+      "email": "it01.azaza@gmail.com",
+      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      "initial": "DC",
+      "customerid": "24047",
+      "collectionid": "142819",
+      "invoiceno": "CC-191215Du02",
+      "type": "39",
+      "depositamount": "0.00",
+      "deposittype": "Cash",
+      "balancepaid": "0.00",
+      "name": "DummyDriver",
+      "agreeddeliverydate": "2019-12-23",
+      "deliverytimeslot": "O Any Time",
+      "invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
+      "invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
+      "hasdonate": "0",
+      "donatetotal": "0",
+      "discount": 0,
+      "express": "1.00",
+      "bags": "0",
+      "savedon": "2019-12-16 11:48:11"
+    }
+    console.log(info)
+
+    await this.presentLoading('Syncing Collection');
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
         response => {
@@ -104,7 +160,7 @@ export class SyncinvoiceService {
           console.log(res)
           resolve(res)
           this.loading.dismiss();
-          
+
           // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
           //   resolve(res)
           // });
@@ -138,64 +194,64 @@ export class SyncinvoiceService {
   //   console.log(this.todaydate)
   // }
 
-//   syncInvoice(info: any) {
-//     console.log(info)
-//   let infox = {
-//   "email": "it01.azaza@gmail.com",
-// 	"password": "7c222fb2927d828af22f592134e8932480637c0d",
-// 	"initial": "DC",
-// 	"customerid": "24047",
-// 	"collectionid": "142819",
-// 	"invoiceno": "CC-191215Du02",
-// 	"type": "39",
-// 	"depositamount": "0.00",
-// 	"deposittype": "Cash",
-// 	"balancepaid": "0.00",
-// 	"name": "DummyDriver",
-// 	"agreeddeliverydate": "2019-12-23",
-// 	"deliverytimeslot": "O Any Time",
-// 	"invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
-// 	"invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
-// 	"hasdonate": "0",
-// 	"donatetotal": "0",
-// 	"discount": 0,
-// 	"express": "1.00",
-// 	"bags": "0",
-// 	"savedon": "2019-12-16 11:48:11"
-// }
+  //   syncInvoice(info: any) {
+  //     console.log(info)
+  //   let infox = {
+  //   "email": "it01.azaza@gmail.com",
+  // 	"password": "7c222fb2927d828af22f592134e8932480637c0d",
+  // 	"initial": "DC",
+  // 	"customerid": "24047",
+  // 	"collectionid": "142819",
+  // 	"invoiceno": "CC-191215Du02",
+  // 	"type": "39",
+  // 	"depositamount": "0.00",
+  // 	"deposittype": "Cash",
+  // 	"balancepaid": "0.00",
+  // 	"name": "DummyDriver",
+  // 	"agreeddeliverydate": "2019-12-23",
+  // 	"deliverytimeslot": "O Any Time",
+  // 	"invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
+  // 	"invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
+  // 	"hasdonate": "0",
+  // 	"donatetotal": "0",
+  // 	"discount": 0,
+  // 	"express": "1.00",
+  // 	"bags": "0",
+  // 	"savedon": "2019-12-16 11:48:11"
+  // }
 
-//     //https://ccmanager.1kbiz.com/server_ionic/manage_data.php
+  //     //https://ccmanager.1kbiz.com/server_ionic/manage_data.php
 
-//     return new Promise(resolve => {
-//       this.httpclient.post(this.url + "/addinvoice.json", infox).subscribe(
-//         response => {
-//           let res;
-//           res = response;
-//           console.log(res)
+  //     return new Promise(resolve => {
+  //       this.httpclient.post(this.url + "/addinvoice.json", infox).subscribe(
+  //         response => {
+  //           let res;
+  //           res = response;
+  //           console.log(res)
 
-//           this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
-//             resolve(res)
-//           });
+  //           this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
+  //             resolve(res)
+  //           });
 
-//         },
-//         err => {
-//           console.log(err)
-//           resolve(false)
+  //         },
+  //         err => {
+  //           console.log(err)
+  //           resolve(false)
 
-//           // alert(JSON.stringify(err));
-//         }
-//       );
+  //           // alert(JSON.stringify(err));
+  //         }
+  //       );
 
-//     }).catch(err => {
-//       console.log(err)
-//     })
-//   }
+  //     }).catch(err => {
+  //       console.log(err)
+  //     })
+  //   }
 
 
   checkOverDue(info: any) {
     //address.setText(o.getCDListAddress() + "\n" + o.getCDListUnit() + " S" +o.getCDListPostal() + "\n" + o.getCDListBuilding() +  "\n" + "NOTE : "+ o.getCDListInstruction());
     console.log(info)
-  
+
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/addcollection.json", info).subscribe(
         response => {

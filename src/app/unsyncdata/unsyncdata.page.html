@@ -12,7 +12,7 @@
       </ion-buttons> -->
     </ion-toolbar>
   
-    <ion-segment [(ngModel)]="selectedView" class="ion-padding">
+    <ion-segment [(ngModel)]="selectedViewSync" class="ion-padding">
       <ion-segment-button value="COLLECTION">COL
         <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
       </ion-segment-button>
@@ -23,15 +23,15 @@
   
   </ion-header>
   
-  <ion-content>
-    <div [ngSwitch]="selectedView">
+  <ion-content (onload)="ionViewWillEnter()">
+    <div [ngSwitch]="selectedViewSync">
       <div *ngSwitchCase="'COLLECTION'">
-        <ion-list *ngFor="let item of unsyncCollection; let i = index">
-          <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
+        <ion-list *ngFor="let unsyncItems of unsyncCollection; let i = index">
+          <ion-item-group class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;">
-              <ion-label style="font-size: large;color: black;" >{{ item.UNINV_AGREEDDELIVERYDATE }}</ion-label>
-              <ion-label style="padding-left: 20px;font-size: large;color: black;">{{ item.UNINV_INVNO }}</ion-label>
-            </ion-item-divider>
+              <ion-label style="padding-left: 20px;font-size: large;color: black;" >{{ unsyncItems.UNINV_INVNO }}</ion-label>
+              <ion-button style="padding-left: 60px;"  color="success" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)">Sync</ion-button>
+            </ion-item-divider> 
             <!-- <ion-item>
               <ion-label>Name : {{ item.cun }}</ion-label>
             </ion-item>
