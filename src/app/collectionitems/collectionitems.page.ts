@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { ModalController, LoadingController, NavParams } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultsService } from '../api/defaults.service';
 import { filter } from 'minimatch';
@@ -27,20 +27,25 @@ export class CollectionitemsPage implements OnInit {
     public loadingCtrl: LoadingController,
     private router: Router,
     private storage: Storage,
+    public params: NavParams,
 
   ) { }
 
   async ngOnInit() {
+    let list = this.params.get('value')
+    console.log(list)
+
     console.log(this.defaultSrvc.getCategory)
     console.log(this.defaultSrvc.getTempItems)
     this.category = this.defaultSrvc.getCategory
     this.temp_List = this.defaultSrvc.getTempItems
     this.item_List = await this.getList(this.temp_List)
     console.log(this.item_List)
+
   }
 
   updateSubtotal(item) {
-    if (item.qty != 0 ) {
+    if (item.qty != 0) {
       this.subtotal = item.qty * item.price;
       console.log(this.subtotal)
       return this.subtotal;
@@ -62,7 +67,7 @@ export class CollectionitemsPage implements OnInit {
     let filtered: any = []
     await this.presentLoading('');
 
-    if(res != undefined){
+    if (res != undefined) {
       res.forEach(temp => {
         if (temp.qty != 0) {
           filtered.push(temp)

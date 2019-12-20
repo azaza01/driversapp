@@ -192,7 +192,11 @@ export class SelectcategoryPage implements OnInit {
 
       if (data['data'] != undefined) {
         console.log(data)
-        // this.tempItems = await this.getList(data['data'].data)
+        console.log(data['data'].data)
+        this.defaultSrvc.getTempItems = data['data'].data
+
+        this.tempItems = await this.getList(data['data'].data)
+        console.log(this.tempItems)
 
       } else {
 
@@ -223,6 +227,7 @@ export class SelectcategoryPage implements OnInit {
   }
 
   async viewItems(info) {
+    console.log(info)
     const myModal = await this.modalController.create({
       component: CollectionitemsPage,
       cssClass: 'viewItem-css',
@@ -234,7 +239,7 @@ export class SelectcategoryPage implements OnInit {
 
       if (data['data'] != undefined) {
         console.log(data)
-        this.tempItems = await this.getList(data['data'].data)
+        // this.tempItems = await this.getList(data['data'].data)
 
       } else {
 
@@ -251,7 +256,7 @@ export class SelectcategoryPage implements OnInit {
     let filtered: any = []
     await this.presentLoading('');
 
-    if(res != undefined){
+    if (res != undefined) {
       res.forEach(temp => {
         if (temp.qty != 0) {
           filtered.push(temp)
@@ -263,5 +268,5 @@ export class SelectcategoryPage implements OnInit {
     return filtered
   }
 
-  
+
 }
