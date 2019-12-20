@@ -92,7 +92,9 @@ export class SyncinvoiceService {
 	"express": "1.00",
 	"bags": "0",
 	"savedon": "2019-12-16 11:48:11"
-}
+      }
+      console.log(info)
+    
     await this.presentLoading('Syncing Collection'); 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/addinvoice.json", info).subscribe(
@@ -100,7 +102,9 @@ export class SyncinvoiceService {
           let res;
           res = response;
           console.log(res)
+          resolve(res)
           this.loading.dismiss();
+          
           // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
           //   resolve(res)
           // });

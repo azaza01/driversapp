@@ -26,6 +26,9 @@ export class DefaultsService {
 
   prepended_number: any
 
+  resultINVNUM: any
+  myInvoiceNumber: any
+
   _category: any;
   set getCategory(value: any) {
     this._category = value;
@@ -92,11 +95,11 @@ export class DefaultsService {
     let yy = (yyyy + '').substr(2, 2);
 
     today = yyyy + '-' + mm + '-' + dd;
-    // console.log(today)
+    console.log(today)
     return today
   }
 
-  createInvSeries(tag) {
+  createInvSeries() {
     // this.storage.remove('ENVNUM_TABLE').then(res => {
     //   console.log('remove')
     // })
@@ -109,6 +112,8 @@ export class DefaultsService {
 
       let seriesTbl: any = []
       let params: any = {};
+      // params.COLID = info
+      params.INV_DATE = this.getToday()
       params.INV_TYPE = "CC"
       let dd = new Date().getDate();
       let mm = new Date().getMonth() + 1;
@@ -130,6 +135,7 @@ export class DefaultsService {
       this.storage.get('ENVNUM_TABLE').then(res => {
         // console.log(res)
         res = null ? seriesTbl = [] : seriesTbl = res
+        console.log(seriesTbl)
         // return
         if (seriesTbl != null) {
 
@@ -139,6 +145,7 @@ export class DefaultsService {
           })
 
           if (result.length < 1) {
+            console.log("1st");
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
             seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
@@ -150,19 +157,35 @@ export class DefaultsService {
             console.log(seriesTbl)
             resolve(seriesNo)
           } else {
+            // res.forEach(coldelData => {
+            //   if (coldelData.COLID == info) {
+            //     console.log(true)
+            //     this.resultINVNUM = true
+            //     this.myInvoiceNumber = coldelData.INV_NO 
+            //   } 
+            // })
+
+            // if(this.resultINVNUM != true){
+            //   console.log(false)
+            console.log("2nd");
             let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
             params.INV_RUNNING = parseInt(maxSeries) + 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
             seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
+            console.log(params)
             seriesTbl.push(params)
-
             this.storage.set('ENVNUM_TABLE', seriesTbl)
             console.log(seriesNo)
             console.log(seriesTbl)
             resolve(seriesNo)
+            // }else{
+            //   console.log(this.myInvoiceNumber)
+            //   resolve(this.myInvoiceNumber)
+            // }
           }
         } else {
+          console.log("3rd");
           params.INV_RUNNING = 1
           seriesTbl = []
           let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
@@ -228,8 +251,11 @@ export class DefaultsService {
                     console.log('FB_FORM_TABLE', data);
 
                     this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
-                      this.loading.dismiss();
-                      resolve(true)
+
+                      this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
+                        this.loading.dismiss();
+                        resolve(true)
+                      });
                     });
 
                   }).catch(e => {
@@ -267,220 +293,297 @@ export class DefaultsService {
   }
 
   getItems(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/items.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('ITEMS_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('ITEMS_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/items.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('ITEMS_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getRates(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/rates.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            console.log(res)
+
+            this.storage.set('RATES_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('RATES_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/rates.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          console.log(res)
-
-          this.storage.set('RATES_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
+
   getRegions(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/regions.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('AREAS_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('AREAS_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/regions.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('AREAS_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getInvoicetypes(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/invoicetypes.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('INVOICE_TYPES_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/invoicetypes.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getDiscounts(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/discounts.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('DISCOUNT_TYPES_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/discounts.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getTimeslot(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/timeslots.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('TIMESLOT_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('TIMESLOT_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/timeslots.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('TIMESLOT_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getFeedback(info: any) {
-    let params = {
-      email: info.email_address,
-      password: info.password
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/feedback.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            // console.log(res)
+
+            this.storage.set('FB_FORM_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('FB_FORM_TABLE').then(res => {
+          console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     }
-
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/feedback.json", params).subscribe(
-        response => {
-          let res;
-          res = response;
-          // console.log(res)
-
-          this.storage.set('FB_FORM_TABLE', res).then(() => {
-            resolve(res)
-          });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-    })
   }
 
   getSpecialIns(info: any) {

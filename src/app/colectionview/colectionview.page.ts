@@ -37,7 +37,7 @@ export class ColectionviewPage implements OnInit {
 
 
   loading: any = new LoadingController;
-  require: any 
+  require: any
 
 
   constructor(
@@ -50,14 +50,14 @@ export class ColectionviewPage implements OnInit {
     private cltnSrvc: CollectionService,
     private callNumber: CallNumber,
     public loadingCtrl: LoadingController,
-  
+
     // private sms: SMS
   ) { }
 
   ngOnInit() {
     this.isLoading = true
     this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
+      // console.log(params);
       this.collectionInfo = params
       this.selectedtime = this.collectionInfo.cot
       this.customerName = this.collectionInfo.cun
@@ -68,18 +68,18 @@ export class ColectionviewPage implements OnInit {
 
       let todays;
       let dd = new Date(this.originalDate).getDate();
-      let mm = new Date(this.originalDate ).getMonth() + 1;
-      let yyyy = new Date( this.originalDate ).getFullYear();
+      let mm = new Date(this.originalDate).getMonth() + 1;
+      let yyyy = new Date(this.originalDate).getFullYear();
       //todays = dd + "-" + mm + "-" + yyyy
       todays = yyyy + "-" + mm + "-" + dd
 
       this.today = todays
-      console.log(todays)
+      // console.log(todays)
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       this.driverInfo = res
-      console.log(this.driverInfo)
+      // console.log(this.driverInfo)
       this.isLoading = false
     })
 
@@ -87,7 +87,7 @@ export class ColectionviewPage implements OnInit {
       res.forEach(element => {
         this.timeslots.push(element.description)
       });
-      console.log(this.timeslots)
+      // console.log(this.timeslots)
       this.isLoading = false
     })
 
@@ -133,9 +133,9 @@ export class ColectionviewPage implements OnInit {
 
 
   callNow(number) {
-    if(number == "1"){
+    if (number == "1") {
       this.callnumber = this.collectionInfo.cn1
-    }else{
+    } else {
       this.callnumber = this.collectionInfo.cn2
     }
     this.callNumber.callNumber(this.callnumber, true)
@@ -143,9 +143,9 @@ export class ColectionviewPage implements OnInit {
       .catch(err => console.log('Error launching dialer', err));
   }
 
-  async postphone(){
-    console.log(this.today)
-    console.log(this.selectedtime)
+  async postphone() {
+    // console.log(this.today)
+    // console.log(this.selectedtime)
     let selectedDate;
     let dd = new Date(this.today).getDate();
     let mm = new Date(this.today).getMonth() + 1;
@@ -157,64 +157,121 @@ export class ColectionviewPage implements OnInit {
     let yyyyy = new Date(this.today).getFullYear();
     selectedDate2 = ddd + "-" + mmm + "-" + yyyyy
 
-    console.log(this.reasonofpostpone)
+    // console.log(this.reasonofpostpone)
 
-    if(selectedDate == this.originalDate){
+    if (selectedDate == this.originalDate) {
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
-    }else{
-      if(this.reasonofpostpone != ""){
-      await this.presentLoading('');
-      await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.driverData, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
-        if(data == true){
-          this.presentAlert("Collection Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
-          this.loading.dismiss();
-          //need to check
-        }else{
+    } else {
+      if (this.reasonofpostpone != "") {
+        await this.presentLoading('');
+        await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.accountsDetails(), this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
+          if (data == true) {
+            this.presentAlert("Collection Postponed to " + selectedDate2 + " with timing " + this.selectedtime);
+            this.loading.dismiss();
+            //need to check
+          } else {
+            this.presentAlert("Connection error");
+            this.loading.dismiss();
+          }
+        }).catch(e => {
+          console.log(e);
           this.presentAlert("Connection error");
           this.loading.dismiss();
-        }
-      }).catch(e => {
-        console.log(e);
-        this.presentAlert("Connection error");
-        this.loading.dismiss();
-      });
-      }else{
-      this.presentAlert("Please add reason of Re-schedule");
+        });
+      } else {
+        this.presentAlert("Please add reason of Re-schedule");
       }
     }
   }
 
 
-  async updateMyEmail(){
+  async updateMyEmail() {
     // var validator = require("email-validator"); //need to check
-    await this.presentLoading('');
+    this.presentLoading('Syncing local Data');
     // if(validator.validate(this.customerEmail) == true){
+    let params = {
+      customerID: this.customerId,
+      customerEmail: this.customerEmail
+    }
 
-      await Promise.resolve(this.cltnSrvc.updateEmail(this.accSrvc.driverData, this.customerEmail, this.customerId )).then(data => {
-        if(data == true){
-          this.presentAlert("Email Successfully Change");
+    await Promise.resolve(this.cltnSrvc.updateEmail(this.accSrvc.accountsDetails(), this.customerEmail, this.customerId)).then(data => {
+
+      if (data == true) {
+        this.presentAlert("Email Successfully Change");
+        this.loading.dismiss();
+      } else {
+        this.presentAlert("Connection error");
+
+        this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+          let data
+          data = res
+          let filtered: any = []
+          if (data != "") {
+            data.forEach(unsync => {
+              if (unsync.customerID == this.customerId) {
+                filtered.push(params)
+              } else {
+                filtered.push(unsync)
+              }
+            });
+            this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
+            this.loading.dismiss();
+          }else{
+            this.storage.set('UNSYNCED_EMAILS_TABLE', params)
+            this.loading.dismiss();
+          }
+        }).finally(() => {
+          this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+            // console.log(res)
+            this.loading.dismiss();
+          })
+          
+        })
+      }
+    }).catch(e => {
+      console.log(e);
+      this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+        let data
+        data = res
+        let filtered: any = []
+        if (data != "") {
+          data.forEach(unsync => {
+            if (unsync.customerID == this.customerId) {
+              filtered.push(params)
+            } else {
+              filtered.push(unsync)
+            }
+          });
+          this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
           this.loading.dismiss();
         }else{
-          this.presentAlert("Connection error");
+          this.storage.set('UNSYNCED_EMAILS_TABLE', params)
           this.loading.dismiss();
         }
-      }).catch(e => {
-        console.log(e);
-        this.presentAlert("Connection error");
-        this.loading.dismiss();
-      });
+      }).finally(() => {
+        this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+          // console.log(res)
+          this.loading.dismiss();
+        })
+      })
+      this.loading.dismiss();
+    });
+    this.loading.dismiss();
     // }else{
     //   this.presentAlert("Invalid Email! Please check.");
     //   this.loading.dismiss();
     // }
   }
 
-  getTime(selectedtime){
+
+
+  getTime(selectedtime) {
     console.log(selectedtime);
   }
 
   async createInvoiceSelectItem(info) {
-    console.log(this.collectionInfo)
+    console.log(info)
+    // console.log(this.collectionInfo)
     let tag;
     const alert = await this.alertController.create({
       header: 'Bill from which company?',
@@ -229,66 +286,70 @@ export class ColectionviewPage implements OnInit {
             tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
-            Promise.resolve(this.defaultSrvc.createInvSeries(tag)).then(data => {
-              console.log(data);
-              let params: any = {};
-              params.UNINV_COLLTS = new Date() + ''
-              params.UNINV_COLLID = info.id
-              params.UNINV_INVNO = data
-              params.UNINV_CUSTID = info.cui
-              params.UNINV_INITIAL = tag
-              params.UNINV_TYPE = 'New'
-              params.UNINV_DEPOAMT = '0'
-              params.UNINV_DEPOTYPE = 'Cash'
-              params.UNINV_BALANCE = '0'
-              params.UNINV_AGREEDDELIVERYDATE = info.rtd
-              params.UNINV_DELIVERYTIMESLOT = info.cot
-              params.UNINV_INVOICENOTE = ''
-              params.UNINV_DISCOUNT = '0'
-              params.UNINV_EXPRESS = '1.00'
-              params.UNINV_HASDONATE = '0'
-              params.UNINV_DONATE = '0'
-              params.UNINV_BAGS = '0'
-              params.UNINV_SAVEDON = this.defaultSrvc.getToday()
-              console.log(params)
+            // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
+            //   console.log(data);
+            let params: any = {};
+            params.UNINV_COLLTS = new Date() + ''
+            params.UNINV_COLLID = info.id
+            params.UNINV_INVNO = ""
+            params.UNINV_CUSTID = info.cui
+            params.UNINV_INITIAL = tag
+            params.UNINV_TYPE = 'New'
+            params.UNINV_DEPOAMT = '0'
+            params.UNINV_DEPOTYPE = 'Cash'
+            params.UNINV_BALANCE = '0'
+            params.UNINV_AGREEDDELIVERYDATE = info.rtd
+            params.UNINV_DELIVERYTIMESLOT = info.cot
+            params.UNINV_INVOICENOTE = ''
+            params.UNINV_DISCOUNT = '0'
+            params.UNINV_EXPRESS = '1.00'
+            params.UNINV_HASDONATE = '0'
+            params.UNINV_DONATE = '0'
+            params.UNINV_BAGS = '0'
+            params.drvna = '0'
+            params.drvpa = '0'
+            params.drvem = '0'
+            params.colitem = '0'
+            params.UNINV_SAVEDON = this.defaultSrvc.getToday()
+            // console.log(params)
 
-              this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-                this.unsyncData = res
-                console.log(this.unsyncData)
+            this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+              this.unsyncData = res
+              // console.log(this.unsyncData)
 
-                if (res == null) {
-                  this.unsyncData = []
+              if (res == null) {
+                this.unsyncData = []
+                this.unsyncData.push(params)
+                this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                // console.log(this.unsyncData)
+
+              } else {
+                let result;
+                result = this.unsyncData.filter((item) => {
+                  return (item.UNINV_COLLID.indexOf(params.UNINV_COLLID) !== -1)
+                })
+                if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  console.log(this.unsyncData)
+                  // console.log(this.unsyncData)
 
                 } else {
-                  let result;
-                  result = this.unsyncData.filter((item) => {
-                    return (item.UNINV_COLLID.indexOf(params.UNINV_COLLID) !== -1)
-                  })
-                  if (result.length < 1) {
-                    this.unsyncData.push(params)
-                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                    console.log(this.unsyncData)
-
-                  } else {
-                    console.log(result)
-                    let i;
-                    i = this.unsyncData.findIndex(x => x.id == result[0].id)
-                    this.unsyncData.splice(i, 1, params);
-                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                    console.log(this.unsyncData)
-                  }
+                  // console.log(result)
+                  let i;
+                  i = this.unsyncData.findIndex(x => x.id == result[0].id)
+                  this.unsyncData.splice(i, 1, params);
+                  this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                  // console.log(this.unsyncData)
                 }
-              }).finally(() => {
-                console.log(this.unsyncData);
-                this.router.navigate(['/selectcategory', info]);
-              })
+              }
+            }).finally(() => {
+              // console.log(this.unsyncData);
+              this.router.navigate(['/selectcategory', info]);
+            })
 
-            }).catch(e => {
-              console.log(e);
-            });
+            // }).catch(e => {
+            //   console.log(e);
+            // });
           }
         }, {
           text: 'CC',
@@ -298,67 +359,71 @@ export class ColectionviewPage implements OnInit {
             tag = "CC"
             // this.collectionInfo. = ""
             // this.defaultSrvc.createInvSeries(tag)
-            Promise.resolve(this.defaultSrvc.createInvSeries(tag)).then(data => {
-              console.log(data);
-              let params: any = {};
-              params.UNINV_COLLTS = new Date() + ''
-              params.UNINV_COLLID = info.id
-              params.UNINV_INVNO = data
-              params.UNINV_CUSTID = info.cui
-              params.UNINV_INITIAL = tag
-              params.UNINV_TYPE = 'New'
-              params.UNINV_DEPOAMT = '0'
-              params.UNINV_DEPOTYPE = 'Cash'
-              params.UNINV_BALANCE = '0'
-              params.UNINV_AGREEDDELIVERYDATE = info.rtd
-              params.UNINV_DELIVERYTIMESLOT = info.cot
-              params.UNINV_INVOICENOTE = ''
-              params.UNINV_DISCOUNT = '0'
-              params.UNINV_EXPRESS = '1.00'
-              params.UNINV_HASDONATE = '0'
-              params.UNINV_DONATE = '0'
-              params.UNINV_BAGS = '0'
-              params.UNINV_SAVEDON = this.defaultSrvc.getToday()
-              console.log(params)
+            // Promise.resolve(this.defaultSrvc.createInvSeries(tag,this.collectionId)).then(data => {
+            //   console.log(data);
+            let params: any = {};
+            params.UNINV_COLLTS = new Date() + ''
+            params.UNINV_COLLID = info.id
+            params.UNINV_INVNO = ""
+            params.UNINV_CUSTID = info.cui
+            params.UNINV_INITIAL = tag
+            params.UNINV_TYPE = 'New'
+            params.UNINV_DEPOAMT = '0'
+            params.UNINV_DEPOTYPE = 'Cash'
+            params.UNINV_BALANCE = '0'
+            params.UNINV_AGREEDDELIVERYDATE = info.rtd
+            params.UNINV_DELIVERYTIMESLOT = info.cot
+            params.UNINV_INVOICENOTE = ''
+            params.UNINV_DISCOUNT = '0'
+            params.UNINV_EXPRESS = '1.00'
+            params.UNINV_HASDONATE = '0'
+            params.UNINV_DONATE = '0'
+            params.UNINV_BAGS = '0'
+            params.drvna = '0'
+            params.drvpa = '0'
+            params.drvem = '0'
+            params.colitem = '0'
+            params.UNINV_SAVEDON = this.defaultSrvc.getToday()
+            // console.log(params)
 
-              this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-                this.unsyncData = res
-                console.log(this.unsyncData)
+            this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+              this.unsyncData = res
+              // console.log(this.unsyncData)
 
-                if (res == null) {
-                  this.unsyncData = []
+              if (res == null) {
+                this.unsyncData = []
+                this.unsyncData.push(params)
+                this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
+                // console.log(this.unsyncData)
+
+              } else {
+                let result;
+                result = this.unsyncData.filter((item) => {
+                  return (item.UNINV_COLLID.indexOf(params.UNINV_COLLID) !== -1)
+                })
+                if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  console.log(this.unsyncData)
+                  // console.log(this.unsyncData)
 
                 } else {
-                  let result;
-                  result = this.unsyncData.filter((item) => {
-                    return (item.UNINV_COLLID.indexOf(params.UNINV_COLLID) !== -1)
-                  })
-                  if (result.length < 1) {
-                    this.unsyncData.push(params)
-                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                    console.log(this.unsyncData)
-
-                  } else {
-                    console.log(result)
-                    let i;
-                    i = this.unsyncData.findIndex(x => x.id == result[0].id)
-                    this.unsyncData.splice(i, 1, params);
-                    console.log(this.unsyncData)
-                    this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  }
+                  // console.log(result)
+                  let i;
+                  i = this.unsyncData.findIndex(x => x.id == result[0].id)
+                  this.unsyncData.splice(i, 1, params);
+                  // console.log(this.unsyncData)
+                  this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                 }
-              }).finally(() => {
-                console.log(this.unsyncData);
-                this.defaultSrvc.getTempItems = null
-                this.router.navigate(['/selectcategory', info]);
-              })
+              }
+            }).finally(() => {
+              // console.log(this.unsyncData);
+              this.defaultSrvc.getTempItems = null
+              this.router.navigate(['/selectcategory', info]);
+            })
 
-            }).catch(e => {
-              console.log(e);
-            });
+            // }).catch(e => {
+            //   console.log(e);
+            // });
           }
         }
       ],

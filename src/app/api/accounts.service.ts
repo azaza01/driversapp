@@ -50,9 +50,22 @@ export class AccountsService {
     return await this.loading.present();
   }
 
+  accountsDetails() {
+    return new Promise(resolve => {
+      this.storage.get('ACCOUNTS_TABLE').then(res => {
+        console.log(res);
+        this.driverData = res
+        resolve(res)
+      })
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
   login(info: any) {
     console.log(info)
     console.log(info.password)
+
 
     //convert password to sha1 
     
@@ -75,30 +88,61 @@ export class AccountsService {
       "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
     }
 
-    return new Promise(resolve => {
-      this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
-        response => {
-          let res;
-          res = response[0];
-          // console.log(res)
-          this.driverData = res
-          this.storage.set('ACCOUNTS_TABLE', res).then(() => {
-            // this.getStandingOrder(res)
-            resolve(res)
-          });
-
-        },
-        err => {
+    if (navigator.onLine == true) {
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
+          response => {
+            let res;
+            res = response[0];
+            // console.log(res)
+            this.driverData = res
+            this.storage.set('ACCOUNTS_TABLE', res).then(() => {
+              // this.getStandingOrder(res)
+              resolve(res)
+            });
+  
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+  
+            // alert(JSON.stringify(err));
+          }
+        );
+      }).catch(err => {
+        console.log(err)
+        return new Promise(resolve => {
+          this.storage.get('ACCOUNTS_TABLE').then(res => {
+            console.log(res);
+            this.driverData = res
+            if(res.email_address == infoi.email && res.password == infoi.password){
+              resolve(res)
+            }else{
+  
+            }
+          })
+        }).catch(err => {
           console.log(err)
-          resolve(false)
+        })
+      })
+    }else{
+      return new Promise(resolve => {
+        this.storage.get('ACCOUNTS_TABLE').then(res => {
+          console.log(res);
+          this.driverData = res
+          if(res.email_address == infoi.email && res.password == infoi.password){
+            resolve(res)
+          }else{
 
-          // alert(JSON.stringify(err));
-        }
-      );
+          }
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    }
 
-    }).catch(err => {
-      console.log(err)
-    })
+
+
   }
 
   getStandingOrder(info) {

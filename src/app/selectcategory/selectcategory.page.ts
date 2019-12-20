@@ -63,7 +63,7 @@ export class SelectcategoryPage implements OnInit {
 
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         this.driverInfo = res
-        // console.log(this.driverInfo)
+        console.log(this.driverInfo)
 
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           this.unsyncData = res
@@ -71,7 +71,7 @@ export class SelectcategoryPage implements OnInit {
 
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
-              // console.log('ITEMS_TABLE', data);
+              console.log('ITEMS_TABLE', data);
               this.tempItems = data
               this.tempItems.forEach(item => {
                 item.is_ready = "no"
@@ -263,71 +263,5 @@ export class SelectcategoryPage implements OnInit {
     return filtered
   }
 
-
-
-
-  // async presentModal() {
-  //   const modal = await this.modalController.create({
-  //     component: SelectitemlistPage
-  //   });
-  //   return await modal.present();
-  // }
-
-  // async presentModal() {
-  //   const modal = await this.modalController.create({
-  //     component: SelectitemlistPage,
-  //     componentProps: {
-  //       "paramID": 123,
-  //       "paramTitle": "Test Title"
-  //     }
-  //   });
-
-  //   modal.onDidDismiss().then((dataReturned) => {
-  //     if (dataReturned !== null) {
-  //       this.dataReturned = dataReturned.data;
-  //       //alert('Modal Sent Data :'+ dataReturned);
-  //     }
-  //   });
-
-  //   return await modal.present();
-  // }
-
-  // async showItem() {
-  //   const alert = await this.alertController.create({
-  //     header: 'ADD ITEMS',
-  //     // message: 'Message',
-  //     cssClass: 'ion-alertCSS',
-  //     label : [{
-  //       name: 'one'
-  //     },],
-  //     inputs: [
-  //       {
-  //         name: 'checkbox1',
-  //         type: 'number',
-  //         label: 'Checkbox 1',
-  //         value: 'value1',
-  //       },
-
-  //      ],
-  //     buttons: [
-  //       {
-  //         text: 'CANCEL',
-  //         role: 'cancel',
-  //         cssClass: 'secondary',
-  //         handler: () => {
-  //          //nofunction
-  //         }
-  //       }, {
-  //         text: 'ADD',
-  //         handler: () => {
-  //          //function here
-
-  //         }
-  //       }
-  //     ],
-  //   });
-
-  //   await alert.present();
-  // }
-
+  
 }

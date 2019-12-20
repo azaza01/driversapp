@@ -44,41 +44,24 @@ export class ColdevPage implements OnInit {
 
   async ngOnInit() {
     // this.storage.remove('COLDEL_TABLE')
-
+    this.ionViewWillEnter()
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     let today;
     let dd = new Date().getDate();
     let mm = new Date().getMonth() + 1;
     let yy = new Date().getFullYear();
     today = yy + '-' + mm + '-' + dd;
     console.log(today)
-
-    if (navigator.onLine == true) {
-      await this.presentLoading('');
-      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-        console.log(res);
-        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-          console.log(res);
-          Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-            console.log(res);
-            this.loading.dismiss();
-
-          }).catch(e => {
-            console.log(e);
-          });
-
-        }).catch(e => {
-          console.log(e);
-        });
-      }).catch(e => {
-        console.log(e);
-      });
-    } else {
-      await this.presentAlert("Please check your internet connection")
-    }
-
+    this.storage.get('COLDEL_TABLE').then(res => {
+      console.log(res)
+      if(res != null){
+        this.myColDev = res
+      }else if(res == null){
+        this.coldev("Load collections and deliveries from?")
+      }
+    })
 
   }
 
@@ -115,7 +98,7 @@ export class ColdevPage implements OnInit {
             console.log(res)
             let exData = res
             var specialCounts = this.specialIns.length, i;
-            var coldevCounts = res.length, i2;
+            // var coldevCounts = res.length, i2;
             if (this.specialIns.length > 0) {
 
               this.specialIns.forEach(async spI => {
@@ -259,7 +242,6 @@ export class ColdevPage implements OnInit {
           console.log(this.myColDev)
           this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
             resolve(true)
-
           })
         }
 
@@ -271,11 +253,11 @@ export class ColdevPage implements OnInit {
 
   }
 
-  async getToday() {
-    await this.presentLoading('');
-    await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
-    await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
-  }
+  // async getToday() {
+  //   await this.presentLoading('');
+  //   await this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())
+  //   await this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())
+  // }
 
   async collection(info, today) {
     // await this.presentLoading('');
@@ -406,8 +388,6 @@ export class ColdevPage implements OnInit {
     })
   }
 
-
-
   async coldev(msg) {
     const alert = await this.alertController.create({
       header: '',
@@ -417,15 +397,13 @@ export class ColdevPage implements OnInit {
         {
           text: 'SERVER',
           handler: () => {
-            this.getToday()
+            // this.getToday()
+            this.LoadFromServer();
           }
         }, {
           text: 'LOCAL',
           handler: () => {
-            this.storage.get('COLDEL_TABLE').then(res => {
-              // console.log(res);
-              this.myColDev = res
-            })
+            this.LoadFromLocal()
           }
         }
       ]
@@ -434,38 +412,36 @@ export class ColdevPage implements OnInit {
     await alert.present();
   }
 
+  LoadFromServer(){
+    if (navigator.onLine == true) {
+      this.presentLoading('Loading Data, Please Wait');
+      Promise.resolve(this.collection(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+        console.log(res);
+        Promise.resolve(this.delivery(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+          console.log(res);
+          Promise.resolve(this.getSInstruction(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+            console.log(res);
+            this.loading.dismiss();
+          }).catch(e => {
+            console.log(e);
+          });
 
-  getSpecialInstruction() {
+        }).catch(e => {
+          console.log(e);
+        });
+      }).catch(e => {
+        console.log(e);
+      });
+    } else {
+      this.presentAlert("Please check your internet connection")
+    }
+  }
 
-    // //parameters 
-    // // "email", prefEmail));
-    // // "password", prefPassword));
-    // // "driverid", prefUserID));
-    // // "date", formattedDate));
-
-    // //siResult =  getSpecialInstructionsWS, "POST" http://ccmanager.cottoncare.com.sg/ws/specialinstructions.json
-
-    // //result will delete to local and online if action = remove
-    //loop result 
-
-    //delete to coldel table where id , date & type 
-
-    //// delete also in online  http://ccmanager.cottoncare.com.sg/ws/deletespecialinstructions.json
-    //// parameters
-    //// "email", prefEmail));
-    //   //"password", prefPassword));
-    //   //"driverid", prefUserID));
-    //  //"date", formattedDate));
-    // //"id", json_data.getString("id")));
-
+  LoadFromLocal(){
+    this.storage.get('COLDEL_TABLE').then(res => {
+      console.log(res);
+      this.myColDev = res
+    })
   }
 
 }
-
-      // let dd = new Date(info.value.pdate).getDate();
-      // let mm = new Date(info.value.pdate).getMonth() + 1;
-      // let yy = new Date(info.value.pdate).getFullYear();
-      // let hh = new Date(info.value.ptime).getHours();
-      // let ms = new Date(info.value.ptime).getMinutes();
-      // let x = yy + ',' + mm + ',' + dd + ' ' + hh + ':' + ms;
-      // this.transDetails.pickupDate = new Date(x).getTime();

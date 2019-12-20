@@ -32,23 +32,29 @@ export class AppComponent {
     }
     ,
     {
+      title: 'Unsync Col and Del',
+      url: '/unsyncdata',
+      icon: 'md-sync'
+    }
+    ,
+    {
       title: 'Driver Summary',
-      url: '/coldev',
+      url: '',
       icon: 'logo-usd'
     },
     {
       title: 'Create Invoice',
-      url: '/coldev',
+      url: '',
       icon: 'md-document'
     },
     {
       title: 'Print',
-      url: '/coldev',
+      url: '',
       icon: 'md-print'
     },
     {
       title: 'Download latest Version',
-      url: '/coldev',
+      url: '',
       icon: 'md-cloud-download'
     }
   ];
