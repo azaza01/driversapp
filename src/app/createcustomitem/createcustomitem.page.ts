@@ -105,7 +105,7 @@ export class CreatecustomitemPage implements OnInit {
   collectedData: any = [];
 
   temp_List: any
-  newitems: any
+  newitems: any = []
   item_List: any
   category: any
   driverInfo: any
@@ -804,11 +804,14 @@ export class CreatecustomitemPage implements OnInit {
       params.updated_on = this.defaultSrvc.getToday();
       params.rid = this.mycompany[0].UNINV_COLLID
 
+      this.storage.get('TEMP_ITEMS_TABLE').then(async tempItems => {
+        this.newitems = this.defaultSrvc.getTempItems == undefined ? tempItems : this.defaultSrvc.getTempItems
+        this.newitems.push(params)
+        console.log(this.newitems)
+        this.closeModal(this.newitems)
 
-      this.newitems = this.defaultSrvc.getTempItems
-      this.newitems.push(params)
-      console.log(this.newitems)
-      this.closeModal(this.newitems)
+      })
+
 
       // this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
       //   this.newitems = res.push(params)
