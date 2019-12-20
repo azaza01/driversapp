@@ -115,6 +115,8 @@ export class CreatecustomitemPage implements OnInit {
   password: any
   name: any
 
+  myRid: any
+
 
   constructor(
     private router: Router,
@@ -128,6 +130,10 @@ export class CreatecustomitemPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.storage.get('SELECTED_ITEM').then(res => {
+      console.log(res)
+      this.myRid =res.id
+    })
 
     // console.log(this.defaultSrvc.getCategory)
     console.log(this.defaultSrvc.getTempItems)
@@ -795,14 +801,15 @@ export class CreatecustomitemPage implements OnInit {
       params.description = this.concatDesc
       params.cat_type = this.Category
       params.clean_type = this.cleantype
-      params.is_ready = this.readytype
+      params.ready_type = this.readytype
       params.price = this.itemPrice
+      params.is_ready = "no"
       params.qty = this.itemQty
       params.pieces = this.itemPcs
       params.subtotal = this.itemsubtotal
       params.updated_by = this.name
       params.updated_on = this.defaultSrvc.getToday();
-      params.rid = this.mycompany[0].UNINV_COLLID
+      params.rid = this.myRid
 
       this.storage.get('TEMP_ITEMS_TABLE').then(async tempItems => {
         this.newitems = this.defaultSrvc.getTempItems == undefined ? tempItems : this.defaultSrvc.getTempItems

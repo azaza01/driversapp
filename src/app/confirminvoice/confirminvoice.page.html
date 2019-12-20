@@ -25,6 +25,8 @@
         <ion-label>Agreed Delivery Date : </ion-label>
         <ion-label>{{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
         <!-- <ion-datetime  min="2019-12-12" max="2100-12-31"  displayFormat="DD-MMMM-YYYY" [(ngModel)]="today"></ion-datetime> -->
+      </ion-item>
+      <ion-item>
         <ion-button *ngIf="initDELIVERYDATE == '0000-00-00'" (click)="openDatePicker()" shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change
         </ion-button>
       </ion-item>
@@ -115,10 +117,10 @@
           Confirm payments</ion-button>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <!-- <ion-row>
         <ion-col >
           <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
         </ion-col>
-    </ion-row>
+    </ion-row> -->
   
   </ion-content>

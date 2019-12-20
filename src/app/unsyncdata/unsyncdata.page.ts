@@ -48,13 +48,14 @@ export class UnsyncdataPage implements OnInit {
     Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       this.unsyncCollection = res
       console.log(res)
+      this.loading.dismiss();
     })).then(data => {
       
       this.loading.dismiss();
     })  
   }
 
-  async syncCollection(selected) {
+  syncCollection(selected) {
     console.log(selected)
     if (navigator.onLine == true) {
       Promise.resolve(this.syncinvoiceSrvs.addinvoiceServiceLocal(selected)).then(data => {

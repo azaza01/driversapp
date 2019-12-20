@@ -169,6 +169,14 @@ export class ConfirminvoicePage implements OnInit {
         }
       }
 
+      Promise.resolve(this.defaultSrvc.createInvSeries()).then(data => {
+        // console.log(data);
+        this.UNINV_INVNO = data
+        this.invoiceNumber = data
+      }).catch(e => {
+        console.log(e);
+      });
+
       // this.storage.remove('UNSYNCED_INVOICE_TABLE')
       // this.storage.remove('ENVNUM_TABLE')
       // let wew
@@ -189,14 +197,6 @@ export class ConfirminvoicePage implements OnInit {
       //   console.log(res);
       // })
     
-      Promise.resolve(this.defaultSrvc.createInvSeries()).then(data => {
-        // console.log(data);
-        this.UNINV_INVNO = data
-        this.invoiceNumber = data
-      }).catch(e => {
-        console.log(e);
-      });
-
     this.storage.get('SELECTED_ITEM').then(res => {
       // console.log(res)
       this.returnDate = res.coldel_return;
@@ -256,7 +256,7 @@ export class ConfirminvoicePage implements OnInit {
     this.UNINV_DELIVERYTIMESLOT = this.customerData.UNINV_DELIVERYTIMESLOT
     this.UNINV_DEPOAMT = this.customerData.UNINV_DEPOAMT
     this.UNINV_DEPOTYPE = this.customerData.UNINV_DEPOTYPE
-    this.UNINV_DISCOUNT = this.customerData.UNINV_DISCOUNT
+    this.UNINV_DISCOUNT = "0"
     this.UNINV_DONATE = this.customerData.UNINV_DONATE
     this.UNINV_EXPRESS = this.customerData.UNINV_EXPRESS
     this.UNINV_HASDONATE = this.customerData.UNINV_HASDONATE
@@ -307,7 +307,7 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        // console.log(this.finalSubtotal)
+        console.log(this.allinvoiceitems)
         this.payableAmount = this.finalSubtotal;
         this.afterLessAmount = this.finalSubtotal;
         this.balanceAmount = this.finalSubtotal;
@@ -339,7 +339,7 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        // console.log(this.allinvoiceitems)
+        console.log(this.allinvoiceitems)
         // console.log(this.finalSubtotal)
         this.payableAmount = this.finalSubtotal;
         this.afterLessAmount = this.finalSubtotal;
@@ -620,6 +620,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   confirmPayment() {
+
     if (this.invoiceType == "Repeat") {
       //update summary_table for repeat -- later part(KIV)
     } else if (this.invoiceType == "Pending") {
@@ -786,7 +787,13 @@ export class ConfirminvoicePage implements OnInit {
     }).finally(() => {
       this.storage.get('COLDEL_TABLE').then(ress => {
         console.log(ress)
-        this.router.navigate(['/coldev']);
+        this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+          console.log('removed ');
+          this.storage.remove('TEMP_RATES_TABLE').then(() => {
+            console.log('removed ');
+            this.router.navigate(['/coldev']);
+          })
+        })
       })
     })
   }

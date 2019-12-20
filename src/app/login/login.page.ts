@@ -37,26 +37,26 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    // this.storage.remove('UNSYNCED_INVOICE_TABLE')
+    this.storage.remove('UNSYNCED_INVOICE_TABLE')
     // this.storage.remove('ENVNUM_TABLE')
-    // let wew
-    // let wew2 = []
+    let wew
+    let wew2 = []
 
-    // wew = {
-    //   COLID: "142823",
-    //   INV_DATE: "2019-12-20",
-    //   INV_TYPE: "CC",
-    //   INV_RUNNING: 1,
-    //   INV_NO: "CC-191220Du01"
-    // }
-    // for (let index = 0; index < 1; index++) {
-    //   wew2.push(wew)
+    wew = {
+      COLID: "142823",
+      INV_DATE: "2019-12-20",
+      INV_TYPE: "CC",
+      INV_RUNNING: 5,
+      INV_NO: "CC-191220Du05"
+    }
+    for (let index = 0; index < 1; index++) {
+      wew2.push(wew)
 
-    // }
-    // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
-    //   console.log(res);
-    // })
-    // return
+    }
+    this.storage.set('ENVNUM_TABLE', wew2).then(res => {
+      console.log(res);
+    })
+    return
 
     this.storage.get('ENVNUM_TABLE').then(res => {
       console.log(res)
