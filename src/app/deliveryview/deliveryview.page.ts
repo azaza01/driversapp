@@ -7,6 +7,7 @@ import { notEqual } from 'assert';
 import { CollectionService } from '../api/collection.service';
 import { AccountsService } from '../api/accounts.service';
 import { DeliveryService } from '../api/delivery.service';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 
 @Component({
@@ -28,6 +29,8 @@ export class DeliveryviewPage implements OnInit {
   customerEmail: any
   customerId: any
 
+  callnumber: any
+
   timeslots: any = []
   selectedtime: any
   originalDate: any
@@ -47,6 +50,7 @@ export class DeliveryviewPage implements OnInit {
     private accSrvc: AccountsService,
     public loadingCtrl: LoadingController,
     private cltnSrvc: CollectionService,
+    private callNumber: CallNumber,
     ) { }
 
   ngOnInit() {
@@ -88,6 +92,18 @@ export class DeliveryviewPage implements OnInit {
       this.isLoading = false
     })
   }
+
+  callNow(number) {
+    if (number == "1") {
+      this.callnumber = this.deliveryInfo.cn1
+    } else {
+      this.callnumber = this.deliveryInfo.cn2
+    }
+    this.callNumber.callNumber(this.callnumber, true)
+      .then(res => console.log('Launched dialer!', res))
+      .catch(err => console.log('Error launching dialer', err));
+  }
+
 
   getTime(selectedtime){
     console.log(selectedtime);

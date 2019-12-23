@@ -59,6 +59,7 @@ export class ConfirminvoicePage implements OnInit {
   returnDate: any;
   customerTypes: any;
   driver_email: any
+  driversDetails: any
   driver_password: any
   invoiceTypeID: any
 
@@ -231,7 +232,8 @@ export class ConfirminvoicePage implements OnInit {
     })
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      // console.log(res)
+      console.log(res)
+      this.driversDetails = res
       this.driver_email = res.email_address
       this.driver_password = res.password
       this.driver_name = res.name
@@ -733,57 +735,26 @@ export class ConfirminvoicePage implements OnInit {
       colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
       console.log(colid)
 
+      if(data  != ""){
       data.forEach(coldelData => {
+        if(coldelData.coldel_type =='collection'){
+          if (coldelData.id == offlinedata.collectionid) {
+          } else {
+            filtered.push(coldelData)
+          }
+        }else{
+          filtered.push(coldelData)
+        }
+
         if (coldelData.id == offlinedata.collectionid) {
-          // let params = {
-          //   aid: coldelData.aid,
-          //   cca: coldelData.cca,
-          //   cn1: coldelData.cn1,
-          //   cn2: coldelData.cn2,
-          //   cn3: coldelData.cn3,
-          //   coa: coldelData.coa,
-          //   cob: coldelData.cob,
-          //   cod: coldelData.cod,
-          //   col: coldelData.col,
-          //   coldel_flag: coldelData.coldel_flag,
-          //   coldel_hang: coldelData.coldel_hang,
-          //   coldel_pack: coldelData.coldel_pack,
-          //   coldel_return: coldelData.coldel_return,
-          //   coldel_roll: coldelData.coldel_roll,
-          //   coldel_type: coldelData.coldel_type,
-          //   com: coldelData.com,
-          //   con: coldelData.con,
-          //   cot: coldelData.cot,
-          //   cpc: coldelData.cpc,
-          //   cue: coldelData.cue,
-          //   cui: coldelData.cui,
-          //   cun: coldelData.cun,
-          //   cuo: coldelData.cuo,
-          //   cut: coldelData.cut,
-          //   driver_id: coldelData.driver_id,
-          //   email_address: coldelData.email_address,
-          //   id: coldelData.id,
-          //   lil: coldelData.lil,
-          //   mobile_no: coldelData.mobile_no,
-          //   na2: coldelData.na2,
-          //   name: coldelData.name,
-          //   noe: coldelData.noe,
-          //   office_no: coldelData.office_no,
-          //   pax: coldelData.pax,
-          //   ren: coldelData.ren,
-          //   rtd: coldelData.rtd,
-          //   rtt: coldelData.rtt,
-          //   sts: "Collected",
-          //   uby: coldelData.uby,
-          //   uon: coldelData.uon
-          // }
-          // filtered.push(params)
+          // this eill remove on local list
         } else {
           filtered.push(coldelData)
         }
       });
       this.storage.set('COLDEL_TABLE', filtered)
       this.loading.dismiss();
+      }
     }).finally(() => {
       this.storage.get('COLDEL_TABLE').then(ress => {
         console.log(ress)
@@ -806,10 +777,8 @@ export class ConfirminvoicePage implements OnInit {
           if (data == true) {
             this.presentAlert2("Invoice Successfully Sync")
             this.offlineCollectionUpdate(coldata);
-            this.router.navigate(['/coldev']);
           } else if (data == "duplicate") {
             this.presentAlert2("Duplicate Invoice")
-            this.router.navigate(['/coldev']);
             this.savePay(coldata);
           } else {
             this.presentAlert2("Cannot sync, poor internet connection. Please save later")
@@ -884,8 +853,6 @@ export class ConfirminvoicePage implements OnInit {
       console.log(e);
     });
   }
-
-
 
   payAction() {
     if (this.invoiceType == "Repeat") {

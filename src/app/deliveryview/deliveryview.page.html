@@ -52,17 +52,17 @@
             <ion-item>
                 <ion-label>Number 1: </ion-label>
                 <ion-label>{{deliveryInfo.cn1}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Call
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('1')">Call
                 </ion-button>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">SMS
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn1}}">SMS
                 </ion-button>
             </ion-item>
             <ion-item>
                 <ion-label>Number 2 : </ion-label>
                 <ion-label>{{deliveryInfo.cn2}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Call
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('2')">Call
                 </ion-button>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">SMS
+                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn2}}">SMS
                 </ion-button>
             </ion-item>
             <ion-item>

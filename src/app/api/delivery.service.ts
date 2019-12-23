@@ -49,13 +49,13 @@ export class DeliveryService {
 
   getDelivery(info: any, today) {
     let params = {
-      // email: info.email_address,
-      // password: info.password,
-      // driverid: info.id,
+      email: info.email_address,
+      password: info.password,
+      driverid: info.id,
       date: today,
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      "driverid": "109",
+      // "email": "it01.azaza@gmail.com",
+      // "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      // "driverid": "109",
       // "date": "2019-11-21"
     }
 
@@ -124,12 +124,12 @@ export class DeliveryService {
   postponeDelivery(info, deliveryDate, deliverytime, selectedDelivery, reasonofpostpone) {
 
     let params = {
-      // "email" : info.email_address,
-      // "password": info.password,
-      // "name": info.name,
-      "email": "davidchia@cottoncare.com.sg",
-      "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
-      "name": "DummyDriver",
+      "email" : info.email_address,
+      "password": info.password,
+      "name": info.name,
+      // "email": "davidchia@cottoncare.com.sg",
+      // "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
+      // "name": "DummyDriver",
       "id":  selectedDelivery,
       "date": deliveryDate,
       "time": deliverytime,

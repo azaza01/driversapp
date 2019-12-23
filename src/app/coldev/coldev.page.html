@@ -14,133 +14,103 @@
 
   <ion-segment [(ngModel)]="selectedView" class="ion-padding">
     <ion-segment-button value="COLLECTION">COL
-      <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
+      <ion-img src="../assets/images/collection_icon.png" style="width:50%;height: 50%;padding-bottom: 10px;"></ion-img>
     </ion-segment-button>
     <ion-segment-button value="DELIVERIES">DEL
-      <ion-img src="../assets/images/delivery_icon.png" style="padding:5px;"></ion-img>
+      <ion-img src="../assets/images/delivery_icon.png" style="width:50%;height: 50%;padding-bottom: 10px;"></ion-img>
     </ion-segment-button>
     <ion-segment-button value="PAYMENT">PAY
-        <ion-img src="../assets/images/payment_icon.png" style="padding:5px;"></ion-img>
+        <ion-img src="../assets/images/payment_icon.png" style="width:50%;height: 50%;padding-bottom: 10px;"></ion-img>
       </ion-segment-button>
   </ion-segment>
 
 </ion-header>
 
 <ion-content>
-  <div [ngSwitch]="selectedView">
+  <div [ngSwitch]="selectedView" style="padding-left: 10px;padding-right: 10px;">
     <div *ngSwitchCase="'COLLECTION'">
       <ion-list [hidden]="item.coldel_type != 'collection' && item.sts != 'collected'" *ngFor="let item of myColDev; let i = index">
-        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="colView(item)">
+        <ion-item-group  ng-selected="selected[i]" (click)="colView(item)">
           <ion-item-divider style="background-color: yellow;">
             <ion-label style="font-size: large;color: black;" >{{ item.cot }}</ion-label>
-            <ion-label style="padding-left: 20px;font-size: large;color: black;">{{ item.cod }}</ion-label>
+            <ion-label style="padding-left: 20px;font-size: smaller;color: black;">{{ item.cod }}</ion-label>
           </ion-item-divider>
           <ion-item>
-            <ion-label>Name : {{ item.cun }}</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Address : {{ item.coa }}</ion-label>
-          </ion-item>
-          <ion-item>
-              <ion-label>Unit : {{ item.cuo }}</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Postal : {{ item.cpc }}</ion-label>
-          </ion-item>
-          <ion-item>
-              <ion-label>Building : {{ item.cob }}</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-textarea>NOTE : {{ item.con }}</ion-textarea>
+            <ion-row>
+              <ion-col>
+                <ion-label style="font-size: xx-small;">Name : {{ item.cun }}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label style="font-size: xx-small;">Address : {{ item.coa }} {{ item.cuo }} {{ item.cpc }} {{ item.cob }}</ion-label>
+              </ion-col>
+              <ion-col *ngIf="item.con != ''">
+                <ion-label style="font-size: xx-small;">Note : {{ item.con }}</ion-label>
+              </ion-col>
+            </ion-row>       
           </ion-item>
         </ion-item-group>
       </ion-list>
     </div>
 
     <div *ngSwitchCase="'DELIVERIES'">
-      <ion-list [hidden]="delitem.coldel_type != 'delivery'"  *ngFor="let delitem of myColDev; let i = index">
-        <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="delView(delitem)">
+      <ion-list  *ngFor="let delitem of myColDev; let i = index">
+        <ng-container *ngIf="delitem.coldel_type == 'delivery' && delitem.sts != 'Full Delivered, Partial Paid'">
+        <ion-item-group  ng-selected="selected[i]" (click)="delView(delitem)">
           <ion-item-divider style="background-color: yellow;font-style: bold;">
             <ion-label style="font-size: large;color: black;">{{ delitem.inn }}</ion-label>
-            <ion-label style="padding-left: 10px;font-size: large;color: black;"> {{ delitem.det }}</ion-label>
-            <ion-label style="padding-left: 20px;font-size: large;color: black;"> {{ delitem.ded }}</ion-label>
+            <ion-label style="padding-left: 10px;font-size: smaller;color: black;"> {{ delitem.det }}</ion-label>
+            <ion-label style="padding-left: 20px;font-size: smaller;color: black;"> {{ delitem.ded }}</ion-label>
           </ion-item-divider>
           <ion-item>
-            <ion-label>Name : {{ delitem.cun }}</ion-label>
+            <ion-row>
+              <ion-col>
+                <ion-label style="font-size: xx-small;">Name : {{ delitem.cun }}</ion-label>
+              </ion-col>
+              <ion-col>
+                <ion-label style="font-size: xx-small;">Address : {{ delitem.dea }} {{ delitem.dun }} S{{ delitem.dpc }} {{ delitem.deb }}</ion-label>
+              </ion-col>
+              <ion-col *ngIf="delitem.den != ''">
+                <ion-label style="font-size: xx-small;">NOTE : {{ delitem.den }}</ion-label>
+              </ion-col>
+            </ion-row>       
           </ion-item>
 
-          <ion-item>
-            <ion-label>Address : {{ delitem.dea }}</ion-label>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Unit : {{ delitem.dun }}</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Postal :S{{ delitem.dpc }}</ion-label>
-          </ion-item>
-          <ion-item>
-              <ion-label>Building : {{ delitem.deb }}</ion-label>
-            </ion-item>
-
-          <ion-item>
-            <ion-textarea>NOTE : {{ delitem.den }}</ion-textarea>
-          </ion-item>
-
-          <ion-item>
-            <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
+          <ion-item style="font-size: xx-small;color: black;" >
+            <ion-img src="../assets/images/hang.png" style="padding-left: 10px;width:20%;height: 30%;"></ion-img>
             <ion-label style="padding: 10px;"> {{ delitem.han }}</ion-label>
-            <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
+            <ion-img src="../assets/images/pack.png" style="padding-left: 10px;width:20%;height: 30%;"></ion-img>
             <ion-label style="padding: 10px;">{{ delitem.pac }}</ion-label>
-            <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
+            <ion-img src="../assets/images/roll.png" style="padding-left: 10px;width:20%;height: 30%;"></ion-img>
             <ion-label style="padding: 10px;">{{ delitem.rol }}</ion-label>
-            <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
+            <ion-img src="../assets/images/ret.png" style="padding-left: 10px;width:20%;height: 30%;"></ion-img>
             <ion-label style="padding: 10px;">{{ delitem.pax }}</ion-label>
           </ion-item>
         </ion-item-group>
+      </ng-container>
       </ion-list>
     </div>
 
     <div *ngSwitchCase="'PAYMENT'">
         <ion-list [hidden]="delitem.sts != 'Full Delivered, Partial Paid'" *ngFor="let delitem of myColDev; let i = index">
-          <ion-item-group class="ion-padding" ng-selected="selected[i]" (click)="delView(delitem)">
+          <ion-item-group ng-selected="selected[i]" (click)="delView(delitem)">
             <ion-item-divider style="background-color: yellow;font-style: bold;">
               <ion-label style="font-size: large;color: black;">{{ delitem.inn }}</ion-label>
-              <ion-label style="padding-left: 10px;font-size: large;color: black;"> {{ delitem.det }}</ion-label>
-              <ion-label style="padding-left: 20px;font-size: large;color: black;"> {{ delitem.ded }}</ion-label>
+              <ion-label style="padding-left: 10px;font-size: smaller;color: black;"> {{ delitem.det }}</ion-label>
+              <ion-label style="padding-left: 20px;font-size: smaller;color: black;"> {{ delitem.ded }}</ion-label>
             </ion-item-divider>
             <ion-item>
-              <ion-label>Name : {{ delitem.cun }}</ion-label>
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: xx-small;">Name : {{ delitem.cun }}</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-label style="font-size: xx-small;">Address : {{ delitem.dea }} {{ delitem.dun }} S{{ delitem.dpc }} {{ delitem.deb }}</ion-label>
+                </ion-col>
+                <ion-col *ngIf="delitem.den != ''">
+                  <ion-label style="font-size: xx-small;">NOTE : {{ delitem.den }}</ion-label>
+                </ion-col>
+              </ion-row>       
             </ion-item>
-  
-            <ion-item>
-              <ion-label>Address : {{ delitem.dea }}</ion-label>
-            </ion-item>
-  
-            <ion-item>
-              <ion-label>Unit : {{ delitem.dun }}</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-label>Postal :S{{ delitem.dpc }}</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Building : {{ delitem.deb }}</ion-label>
-              </ion-item>
-  
-            <ion-item>
-              <ion-textarea>NOTE : {{ delitem.den }}</ion-textarea>
-            </ion-item>
-  
-            <!-- <ion-item>
-              <ion-img src="../assets/images/hang.png" style="padding-left: 10px;"></ion-img>
-              <ion-label style="padding: 10px;"> {{ delitem.han }}</ion-label>
-              <ion-img src="../assets/images/pack.png" style="padding-left: 10px;"></ion-img>
-              <ion-label style="padding: 10px;">{{ delitem.pac }}</ion-label>
-              <ion-img src="../assets/images/roll.png" style="padding-left: 10px;"></ion-img>
-              <ion-label style="padding: 10px;">{{ delitem.rol }}</ion-label>
-              <ion-img src="../assets/images/ret.png" style="padding-left: 10px;"></ion-img>
-              <ion-label style="padding: 10px;">{{ delitem.pax }}</ion-label>
-            </ion-item> -->
           </ion-item-group>
         </ion-list>
       </div>

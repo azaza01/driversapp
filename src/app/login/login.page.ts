@@ -5,7 +5,7 @@ import { AccountsService } from '../api/accounts.service';
 import { NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { ItemsService } from '../api/items.service';
-import { CryptoJS } from 'crypto-js';
+// import { CryptoJS } from 'crypto-js';
 import { DefaultsService } from '../api/defaults.service';
 
 
@@ -18,6 +18,8 @@ export class LoginPage implements OnInit {
 
   loading: any = new LoadingController;
   hash: any
+  password: any
+  email: any
 
   // email: any = "davidchia@cottoncare.com.sg"
   // password: any = "fortune878"
@@ -37,26 +39,27 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    this.storage.remove('UNSYNCED_INVOICE_TABLE')
+    // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
+    // this.storage.remove('UNSYNCED_INVOICE_TABLE')
     // this.storage.remove('ENVNUM_TABLE')
-    let wew
-    let wew2 = []
+    // let wew
+    // let wew2 = []
 
-    wew = {
-      COLID: "142823",
-      INV_DATE: "2019-12-20",
-      INV_TYPE: "CC",
-      INV_RUNNING: 5,
-      INV_NO: "CC-191220Du05"
-    }
-    for (let index = 0; index < 1; index++) {
-      wew2.push(wew)
+    // wew = {
+    //   COLID: "142823",
+    //   INV_DATE: "2019-12-23",
+    //   INV_TYPE: "CC",
+    //   INV_RUNNING: 2,
+    //   INV_NO: "CC-191230Du02"      // DriverID: 53
+    // }
+    // for (let index = 0; index < 1; index++) {
+    //   wew2.push(wew)
 
-    }
-    this.storage.set('ENVNUM_TABLE', wew2).then(res => {
-      console.log(res);
-    })
-    return
+    // }
+    // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
+    //   console.log(res);
+    // })
+    // return
 
     this.storage.get('ENVNUM_TABLE').then(res => {
       console.log(res)
@@ -91,13 +94,15 @@ export class LoginPage implements OnInit {
 
   async login(user: NgForm) {
     console.log(user.value)
+    console.log(this.password)
 
-    await this.presentLoading('');
+    // if(user.value != "" && user.value != "" ){
+    await this.presentLoading('Validation credentials');
     // this.isLoading = true;
     // console.log(user.value)
     Promise.resolve(this.accSrvc.login(user.value)).then(data => {
       console.log(data);
-      console.log(this.accSrvc.driverData)
+      console.log(this.accSrvc.driverData.id)
       if (data) {
         this.storage.get('ENVNUM_TABLE').then(res => {
           let data = res
@@ -105,7 +110,7 @@ export class LoginPage implements OnInit {
           console.log(res)
         if(data != null){
           data.forEach(inv => {
-            if (inv.INV_DATE == this.defaultSrvc.getToday()) {
+            if (inv.INV_DATE == this.defaultSrvc.getToday()) { // && inv.DriverID == this.accSrvc.driverData.id
               console.log('yeah')
               newSet.push(inv)
             }
@@ -130,7 +135,11 @@ export class LoginPage implements OnInit {
 
     }).catch(e => {
       console.log(e);
+      this.loading.dismiss();
     });
+    // }else{
+    //   this.presentToast("Please type your credentials")
+    // }
 
   }
 

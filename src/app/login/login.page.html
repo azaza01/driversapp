@@ -6,12 +6,12 @@
     <ion-title ></ion-title>
   </ion-toolbar> -->
   <ion-toolbar class="menutoolbar">
-    <img object-fit: cover src="../assets/images/mainmenu_logo.png" style="padding: 50px;">
+    <img object-fit: cover src="../assets/images/cottoncarelogo.png" style="padding: 20px;">
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form #cred="ngForm">
+<ion-content >
+  <form #cred="ngForm" style="padding-top: 10px;">
 
     <ion-grid class="backgrounds ion-padding">
       <ion-row>
@@ -42,7 +42,7 @@
           <ion-item>
             <ion-label color="medium" position="floating">Password</ion-label>
             <ion-input autocorrect="on" clearInput color="medium"
-              inputmode="text" placeholder="Enter your password" required="true" name="password" ngModel ></ion-input>
+              type="password" placeholder="Enter your password" required="true" name="password" ngModel ></ion-input>
             <ion-icon name="lock" color="medium" slot="end"></ion-icon>
           </ion-item>
         </ion-col>
@@ -56,4 +56,18 @@
     </ion-row>
   </form>
 
+  
+
 </ion-content>
+
+<ion-footer>
+  <!-- <ion-toolbar class="menutoolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title ></ion-title>
+  </ion-toolbar> -->
+  <!-- <ion-toolbar class="menutoolbar">
+    <img object-fit: cover src="../assets/images/mainmenu_logo.png" style="padding: 50px;">
+  </ion-toolbar> -->
+</ion-footer>

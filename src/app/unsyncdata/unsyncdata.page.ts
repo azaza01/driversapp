@@ -10,6 +10,8 @@ import { SpecialinstructionService } from '../api/specialinstruction.service';
 import { formatDate } from '@angular/common';
 import { format } from 'util';
 import { SyncinvoiceService } from '../api/syncinvoice.service';
+import { SyncdeliveryService } from '../api/syncdelivery.service'
+
 
 @Component({
   selector: 'app-unsyncdata',
@@ -25,6 +27,7 @@ export class UnsyncdataPage implements OnInit {
   loading: any = new LoadingController;
   UNINV_AGREEDDELIVERYDATE: any
   UNINV_INVNO: any
+  ppdate : any
 
   constructor(
     private router: Router,
@@ -37,63 +40,124 @@ export class UnsyncdataPage implements OnInit {
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
     public syncinvoiceSrvs: SyncinvoiceService,
+    public syncdeliverySrvs: SyncdeliveryService
   ) { }
 
   async ngOnInit() {
     this.ionViewWillEnter();
+    // this.loading.dismiss();
   }
 
   async ionViewWillEnter(){
-    await this.presentLoading('Collecting Local Data');
-    Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-      this.unsyncCollection = res
-      console.log(res)
-      this.loading.dismiss();
-    })).then(data => {
-      
-      this.loading.dismiss();
-    })  
+    
+    // await this.presentLoading('Collecting Local Data');
+    await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      // console.log(res)
+      if(res != null){
+        this.unsyncCollection = res
+      }else{
+        this.unsyncCollection = ""
+      }
+     
+      // this.loading.dismiss();
+    }))
+
+    await Promise.resolve(this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
+      // console.log(ress)
+      if(ress != null){
+        this.unsyncDeliveries = ress
+      }else{
+        this.unsyncDeliveries = ""
+      }
+    }))
   }
 
-  syncCollection(selected) {
-    console.log(selected)
+  async syncCollection(selected) {
+    // console.log(selected)
     if (navigator.onLine == true) {
-      Promise.resolve(this.syncinvoiceSrvs.addinvoiceServiceLocal(selected)).then(data => {
+      await Promise.resolve(this.syncinvoiceSrvs.addinvoiceServiceLocal(selected)).then(data => {
         if (data == true) {
           //delete local
           this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
             let data
             data = res
             let filtered: any = []
-      
+            console.log(data)
             if(data != null){
               data.forEach(unsync => {
                 if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
-                 
+                  
                 } else {
                   filtered.push(unsync)
                 }
               });
-              console.log(filtered)
               this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
-              this.loading.dismiss();
+              this.presentAlert("Collection Successfully Sync")
             }
+      
           }).finally(() => {
-            this.storage.get('UNSYNCED_INVOICE_TABLE').then(datum => {
-              console.log(datum)
-              this.presentAlert("Invoice Successfully Sync")
+            // this.storage.get('UNSYNCED_INVOICE_TABLE').then(ress => {
+            //   console.log(ress)
               this.ionViewWillEnter();
-            })
+            // })
           })
+      
         } else {
           this.presentAlert("Cannot sync, poor internet connection. Please save later")
+          // this.loading.dismiss();
         }
       }).catch(e => {
         console.log(e);
         this.presentAlert("Cannot sync, poor internet connection. Please save later")
+        // this.loading.dismiss();
       });
     } else {
       this.presentAlert("Cannot sync, poor internet connection. Please save later")
+      // this.loading.dismiss();
+    }
+  }
+
+  async syncDelivery(selected) {
+    console.log(selected)
+    if (navigator.onLine == true) {
+      await Promise.resolve(this.syncdeliverySrvs.syncdeliverysrvcLocal(selected)).then(data => {
+        if (data == true) {
+          //delete local
+          this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+            let data
+            data = res
+            console.log(data)
+            let filtered: any = []
+      
+            if(data != null){
+              data.forEach(unsync => {
+                if (unsync.delid == selected.delid) {
+                  console.log("Deleted")
+                } else {
+                  filtered.push(unsync)
+                }
+              });
+              this.storage.set('UNSYNCED_PAYMENT_TABLE', filtered)
+              this.presentAlert("Delivery Successfully Sync")
+            }
+          }).finally(() => {
+            // this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
+            //   console.log(ress)
+            this.ionViewWillEnter();
+            // })
+          })
+        } else {
+          this.presentAlert("Cannot sync, poor internet connection. Please save later")
+          // this.loading.dismiss();
+        }
+      }).catch(e => {
+        console.log(e);
+        this.presentAlert("Cannot sync, poor internet connection. Please save later")
+        // this.loading.dismiss();
+      });
+    } else {
+      this.presentAlert("Cannot sync, poor internet connection. Please save later")
+      // this.loading.dismiss();
     }
   }
 

@@ -44,7 +44,7 @@ export class ColdevPage implements OnInit {
 
   async ngOnInit() {
     // this.storage.remove('COLDEL_TABLE')
-    this.ionViewWillEnter()
+    // this.ionViewWillEnter()
   }
 
   ionViewWillEnter() {
@@ -261,6 +261,7 @@ export class ColdevPage implements OnInit {
 
   async collection(info, today) {
     // await this.presentLoading('');
+    console.log(info)
     return new Promise(resolve => {
 
       Promise.resolve(this.cltnSrvc.getCollection(info, today)).then(data => {
@@ -321,6 +322,7 @@ export class ColdevPage implements OnInit {
 
   async delivery(info, today) {
     // await this.presentLoading('');
+    console.log(info)
     return new Promise(resolve => {
 
       Promise.resolve(this.delcltnSrvc.getDelivery(info, today)).then(data => {
@@ -398,12 +400,19 @@ export class ColdevPage implements OnInit {
           text: 'SERVER',
           handler: () => {
             // this.getToday()
+            alert.dismiss();
             this.LoadFromServer();
           }
         }, {
           text: 'LOCAL',
           handler: () => {
+            alert.dismiss();
             this.LoadFromLocal()
+          }
+        },{
+          text: 'CLOSE',
+          handler: () => {
+            alert.dismiss();
           }
         }
       ]
@@ -415,11 +424,11 @@ export class ColdevPage implements OnInit {
   LoadFromServer(){
     if (navigator.onLine == true) {
       this.presentLoading('Loading Data, Please Wait');
-      Promise.resolve(this.collection(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
         console.log(res);
-        Promise.resolve(this.delivery(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
           console.log(res);
-          Promise.resolve(this.getSInstruction(this.accSrvc.accountsDetails(), this.defaultSrvc.getToday())).then(res => {
+          Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
             console.log(res);
             this.loading.dismiss();
           }).catch(e => {

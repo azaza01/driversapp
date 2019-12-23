@@ -12,6 +12,8 @@ import {
 import { LoadingController, IonFooter } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
+// import * as CryptoJS from 'crypto-js';
+
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +52,7 @@ export class AccountsService {
     return await this.loading.present();
   }
 
-  accountsDetails() {
+  async accountsDetails() {
     return new Promise(resolve => {
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         console.log(res);
@@ -67,12 +69,40 @@ export class AccountsService {
     console.log(info.password)
 
 
-    //convert password to sha1 
+    // convert password to sha1 
     
     // var sha1 = require('sha1');
+    // var hash = CryptoJS.SHA1(info.password);
     // var generatedpassword  = sha1(info.password);
-    // info.password = generatedpassword;
-    // console.log(info.password);
+    if(info.email == "ken@cottoncare.com.sg" && info.password == "blessed878"){
+      info.password = "47cdb5462d98cef63f51176a007e93aea4b7f5b9";
+    }else if(info.email == "eddieang@cottoncare.com.sg" && info.password == "charmed878"){
+      info.password = "df09c6ab678521d4b937f4bd3087d5233575ae92";
+    }else if(info.email == "davidchia@cottoncare.com.sg" && info.password == "fortune878"){
+      info.password = "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d";
+    }else if(info.email == "riziano@cottoncare.com.sg" && info.password == "lucky878"){
+      info.password = "f3bd2a65e77ea0bc22eb0d5ce2b917a0acff51f2";
+    }else if(info.email == "dian@cottoncare.com.sg" && info.password == "goodluck878"){
+      info.password = "6fe2e53fa851cd6ffe4134f80b95aaad8a5ee6ea";
+    }else if(info.email == "ibrahim@cottoncare.com.sg" && info.password == "jammy878"){
+      info.password = "af968298964d79344879624ff2bce33a11dfb5e8";
+    }else if(info.email == "ting@cottoncare.com.sg" && info.password == "prosper878"){
+      info.password = "edc14f34351522e04fc9b76cd5ce06838f4c5693";
+    }else if(info.email == "selfcollect@cottoncare.com.sg" && info.password == "clover878"){
+      info.password = "5dda79f899fa627cb331737eaa4a96b68046d0c4";
+    }else if(info.email == "superb@cottoncare.com.sg" && info.password == "clover878"){
+      info.password = "hash";
+    }else if(info.email == "ckwoo@cottoncare.com.sg" && info.password == "escape@878"){
+      info.password = "hash";
+    }else if(info.email == "rosli@cottoncare.com.sg" && info.password == "escape@878"){
+      info.password = "hash";
+    }else if(info.email == "it01.azaza@gmail.com" && info.password == "12345678"){
+      info.password = "7c222fb2927d828af22f592134e8932480637c0d";
+    }
+
+
+
+    console.log(info.password);
 
     let infoi = {
       // email: "it01.azaza@gmail.com",
@@ -84,8 +114,8 @@ export class AccountsService {
     let infox = {
       // email: "it01.azaza@gmail.com",
       // password: "7c222fb2927d828af22f592134e8932480637c0d"
-      "email": "davidchia@cottoncare.com.sg",
-      "password": "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
+      "email": "riziano@cottoncare.com.sg",
+      "password": "f3bd2a65e77ea0bc22eb0d5ce2b917a0acff51f2",
     }
 
     if (navigator.onLine == true) {
@@ -115,7 +145,7 @@ export class AccountsService {
           this.storage.get('ACCOUNTS_TABLE').then(res => {
             console.log(res);
             this.driverData = res
-            if(res.email_address == infoi.email && res.password == infoi.password){
+            if(res.email_address == info.email && res.password == info.password){
               resolve(res)
             }else{
   
@@ -130,7 +160,7 @@ export class AccountsService {
         this.storage.get('ACCOUNTS_TABLE').then(res => {
           console.log(res);
           this.driverData = res
-          if(res.email_address == infoi.email && res.password == infoi.password){
+          if(res.email_address == info.email && res.password == info.password){
             resolve(res)
           }else{
 
@@ -146,17 +176,17 @@ export class AccountsService {
   }
 
   getStandingOrder(info) {
-    // let params = {
-    //   userid: info.id,
-    //   email: info.email_address,
-    //   password: info.password
-    // }
-
     let params = {
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      "userid": "109",
-     }
+      userid: info.id,
+      email: info.email_address,
+      password: info.password
+    }
+
+    // let params = {
+    //   "email": "it01.azaza@gmail.com",
+    //   "password": "7c222fb2927d828af22f592134e8932480637c0d",
+    //   "userid": "109",
+    //  }
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/standingorder.json", params).subscribe(

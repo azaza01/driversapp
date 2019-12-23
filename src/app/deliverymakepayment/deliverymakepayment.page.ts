@@ -17,6 +17,9 @@ export class DeliverymakepaymentPage implements OnInit {
 
   paymentMethod: any
   payAmount: any = 0
+  newamount: any = 0
+
+  datatrue: any
 
   invnum: any
   totalamount: any = 0
@@ -28,6 +31,7 @@ export class DeliverymakepaymentPage implements OnInit {
   LastPaid: any
   customerCredit: any
   outstandingbalance: any = 0
+  finaldeliverydata: any = []
 
   deliveryStatus: any
   deliveryDetails: any
@@ -36,6 +40,7 @@ export class DeliverymakepaymentPage implements OnInit {
   email_address: any
   password: any 
   name: any
+  inn: any
 
   todaydate: any
 
@@ -52,7 +57,7 @@ export class DeliverymakepaymentPage implements OnInit {
     this.getPaymentDetails()
     this.getToday() 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res)
+      // console.log(res)
       this.email_address = res.email_address
       this.password = res.password
       this.name = res.name
@@ -64,7 +69,7 @@ export class DeliverymakepaymentPage implements OnInit {
     if(this.payAmount == undefined){
       this.payAmount = 0
     }
-    console.log(payAmount)
+    // console.log(payAmount)
   }
 
   getPayemntMethod(paymentMethod) {
@@ -79,6 +84,7 @@ export class DeliverymakepaymentPage implements OnInit {
       this.isLoading = false
       this.deliveryDetails = res
       this.outstandingbalance = parseInt(this.deliveryDetails.toa) - (parseInt(this.deliveryDetails.dpa) + parseInt(this.deliveryDetails.bap))
+      this.inn = res.inn
     })
     // this.invnum = "inn" 
     // this.totalamount = "toa"
@@ -138,8 +144,6 @@ export class DeliverymakepaymentPage implements OnInit {
     this.getdeliveryStatus();
     // update summary table SUMMARY_TABLE +1 to deliver add value to (CASH or CREDIT, CHEQUE, BT  +1 to DC/CC)
 
-
-
     //update COLDEL_FLAG KIV 
 
     //update SUMMARY_TABLE KIV 
@@ -182,46 +186,144 @@ export class DeliverymakepaymentPage implements OnInit {
 
     today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
     this.todaydate = today
-    console.log(this.todaydate)
+    // console.log(this.todaydate)
   }
 
   async deliverysync(){
-    let params = {
-      email : this.email_address,
-      password : this.password,
-      delid : this.deliveryDetails.dei, //pass coldelID (actually is delID) and ws gets the invid
-      nowpaid : this.payAmount, // must add the Last Paid field together
-      lastpaid : this.deliveryDetails.bap, // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
-      balancepaid : this.deliveryDetails.dpa , // must add the Last Paid field together because we are updating the balance paid field
-      balancetype : this.deliveryDetails.dpt,
-      status : this.deliveryStatus,
-      ppdate : this.deliveryDetails.ded, //06-05-2013
-      pptimeslot : this.deliveryDetails.det, //06-05-2013
-      name : this.name,
-      savedon : this.todaydate
-     }
-     console.log(params)
 
-     await this.presentLoading('');
-     Promise.resolve(this.syncdelivery.syncdeliverysrvc(params)).then(data => {
-       console.log(data);
-       if (data) {
-        console.log(data)
-         this.presentToast("Delivery Successfully Sync")
-         this.router.navigate(['/home']);
-       } else {
-         this.presentToast("Cannot sync, please save later")
-         this.saveLocalPayment();
-         this.router.navigate(['/home']);
-         
-       }
-       this.loading.dismiss();
- 
-     }).catch(e => {
-       console.log(e);
-     });
-    
+    await Promise.resolve(this.deliveryndata()).then(coldata => {
+      if (navigator.onLine == true) {
+        Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
+          if (data == true) {
+            this.presentToast("Delivery Successfully Sync")
+            this.offlinedeliveryUpdate(coldata);
+          } else if (data == "duplicate") {
+            this.presentToast("Duplicate Invoice")
+            this.savePay(coldata);
+          } else {
+            this.presentToast("Cannot sync, poor internet connection. Please save later")
+            this.savePay(coldata);
+          }
+        }).catch(e => {
+          console.log(e);
+          this.presentToast("Error trying to connect on internet connection. Please save later")
+          this.savePay(coldata);
+        });
+      } else {
+        this.presentToast("No internet connection. Please save later")
+        this.savePay(coldata);
+      }
+    })
   }
+
+  deliveryndata() {
+    return new Promise(resolve => {
+      let params = {
+        email : this.email_address,
+        password : this.password,
+        delid : this.deliveryDetails.dei, //pass coldelID (actually is delID) and ws gets the invid
+        nowpaid : this.payAmount, // must add the Last Paid field together
+        lastpaid : this.deliveryDetails.bap, // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
+        balancepaid : this.deliveryDetails.dpa , // must add the Last Paid field together because we are updating the balance paid field
+        balancetype : this.deliveryDetails.dpt,
+        status : this.deliveryStatus,
+        ppdate : this.deliveryDetails.ded, //06-05-2013
+        pptimeslot : this.deliveryDetails.det, //06-05-2013
+        name : this.name,
+        savedon : this.todaydate,
+        inn : this.inn
+       }
+      // this.finaldeliverydata.push(params)
+      console.log(this.inn)
+      resolve(params)
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+
+
+  offlinedeliveryUpdate(offlinedata){
+    this.storage.get('COLDEL_TABLE').then(res => {
+      let data, colid, i
+      data = res
+      let filtered: any = []
+      // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
+      // console.log(colid)
+      //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
+      if(data  != ""){
+        data.forEach(coldelData => {
+          if(coldelData.coldel_type =='delivery'){
+            if (coldelData.dei == offlinedata.delid) {
+            } else {
+              filtered.push(coldelData)
+            }
+          }else{
+            filtered.push(coldelData)
+          }
+        });
+        this.storage.set('COLDEL_TABLE', filtered)
+        this.router.navigate(['/coldev']);
+      }
+    }).finally(() => {
+      // this.storage.get('COLDEL_TABLE').then(ress => {
+      //   console.log(ress)
+        
+      // })
+    })
+  }
+
+
+  async savePay(offlinedata) {
+    console.log(offlinedata)
+    // await this.presentLoading('Syncing local Data');
+    let params = {
+      email : offlinedata.email,
+      password : offlinedata.password,
+      delid : offlinedata.delid, //pass coldelID (actually is delID) and ws gets the invid
+      nowpaid : offlinedata.nowpaid, // must add the Last Paid field together
+      lastpaid : offlinedata.lastpaid, // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
+      balancepaid : offlinedata.balancepaid,  // must add the Last Paid field together because we are updating the balance paid field
+      balancetype : offlinedata.balancetype,
+      status : offlinedata.status,
+      ppdate : offlinedata.ppdate, //06-05-2013
+      pptimeslot : offlinedata.pptimeslot, //06-05-2013
+      name : offlinedata.name,
+      savedon : offlinedata.savedon,
+      inn : this.inn
+    }
+    console.log(this.inn)
+    this.finaldeliverydata.push(params)
+    // await this.presentLoading('Syncing local Data');
+    ////update UNSYNCED_INVOICE_TABLE
+    await this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+      let data
+      data = res
+      let filtered: any = []
+
+      if(data != null){
+        data.forEach(unsync => {
+          if (unsync.dei == offlinedata.delid) {
+            filtered.push(this.finaldeliverydata)
+          } else {
+            filtered.push(unsync)
+          }
+        });
+        this.storage.set('UNSYNCED_PAYMENT_TABLE', filtered)
+        // this.loading.dismiss();
+      }else{
+        this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
+        // this.loading.dismiss();
+      }
+
+    }).finally(() => {
+      this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
+        console.log(ress)
+      })
+    })
+
+    this.offlinedeliveryUpdate(offlinedata);
+  }
+
 
   async getdeliveryStatus() {
     const alert = await this.alertController.create({
@@ -252,9 +354,9 @@ export class DeliverymakepaymentPage implements OnInit {
     console.log(this.deliveryDetails.bap);
     console.log(this.deliveryDetails.dpa);
     console.log(this.payAmount);
-    var newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa)  + (this.payAmount);
-    console.log(newamount);
-    if (newamount >= this.outstandingbalance) {
+    this.newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa)  + (this.payAmount);
+    console.log(this.newamount);
+    if (this.newamount >= this.outstandingbalance) {
       //Log.d("spark", "paid amount is smaller than existing credits");
       //status = status + ", Full Paid";
       //if credit amount is less than the amount to pay, mark as partial paid

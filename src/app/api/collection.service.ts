@@ -50,13 +50,19 @@ export class CollectionService {
   }
 
   getCollection(info: any, today) {
+  
     
     let params = {
       date: today,
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      "driverid": "109",
+      "email": info.email_address,
+      "password": info.password ,
+      "driverid": info.id,
+      // "email": "it01.azaza@gmail.com",
+      // "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      // "driverid": "109",
     }
+    console.log(params)
+
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/gzipcollection.json", params).subscribe(
@@ -84,19 +90,20 @@ export class CollectionService {
   }
 
   updateEmail(info: any, customerEmail, customerId) {
-    // let params = {
-    //   "email": info.email_address,
-    //   "password": info.password,
-    //   "custid": customerId,
-    //   "custemail": customerEmail,
-    //  }
 
-     let params = {
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
+    let params = {
+      "email": info.email_address,
+      "password": info.password,
       "custid": customerId,
       "custemail": customerEmail,
-    }
+     }
+
+    //  let params = {
+    //   "email": "it01.azaza@gmail.com",
+    //   "password": "7c222fb2927d828af22f592134e8932480637c0d",
+    //   "custid": customerId,
+    //   "custemail": customerEmail,
+    // }
 
 
     return new Promise(resolve => {
@@ -123,24 +130,26 @@ export class CollectionService {
   }
 
   postPone(info: any, selectedDate, selectedTime, collectionID, reasonofpostpone) {
-  //   let params = {
-  //     "email": info.email_address,
-  //     "password": info.password,
-  //     "name": info.name,
-  //     "id": collectionID,
-  //     "date": selectedDate,
-  //     "time": selectedTime,
-  //  }
-
-     let params = {
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      "name": "DummyDriver",
+    
+    let params = {
+      "email": info.email_address,
+      "password": info.password,
+      "name": info.name,
       "id": collectionID,
       "date": selectedDate,
       "time": selectedTime,
       "reasontopostpone": reasonofpostpone
-    }
+   }
+
+    //  let params = {
+    //   "email": "it01.azaza@gmail.com",
+    //   "password": "7c222fb2927d828af22f592134e8932480637c0d",
+    //   "name": "DummyDriver",
+    //   "id": collectionID,
+    //   "date": selectedDate,
+    //   "time": selectedTime,
+    //   "reasontopostpone": reasonofpostpone
+    // }
 
 
 

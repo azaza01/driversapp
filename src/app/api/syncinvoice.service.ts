@@ -100,7 +100,7 @@ export class SyncinvoiceService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          // console.log(res)
           resolve(res)
           this.loading.dismiss();
 
@@ -119,6 +119,7 @@ export class SyncinvoiceService {
 
     }).catch(err => {
       console.log(err)
+      this.loading.dismiss();
     })
   }
 
@@ -126,30 +127,6 @@ export class SyncinvoiceService {
   async addinvoiceService(info: any) {
     console.log(info)
 
-    let infox = {
-      "email": "it01.azaza@gmail.com",
-      "password": "7c222fb2927d828af22f592134e8932480637c0d",
-      "initial": "DC",
-      "customerid": "24047",
-      "collectionid": "142819",
-      "invoiceno": "CC-191215Du02",
-      "type": "39",
-      "depositamount": "0.00",
-      "deposittype": "Cash",
-      "balancepaid": "0.00",
-      "name": "DummyDriver",
-      "agreeddeliverydate": "2019-12-23",
-      "deliverytimeslot": "O Any Time",
-      "invoiceitem": "[{\\\"cat_type\\\":\\\"Additional\\\",\\\"description\\\":\\\"Hangers\\\",\\\"clean_type\\\":\\\"-\\\",\\\"ready_type\\\":\\\"Pack\\\",\\\"price\\\":0.2,\\\"is_ready\\\":\\\"no\\\",\\\"qty\\\":200,\\\"pieces\\\":200}]",
-      "invoicenote": "[{\\\"name\\\":\\\"\\\"}]",
-      "hasdonate": "0",
-      "donatetotal": "0",
-      "discount": 0,
-      "express": "1.00",
-      "bags": "0",
-      "savedon": "2019-12-16 11:48:11"
-    }
-    console.log(info)
 
     await this.presentLoading('Syncing Collection');
     return new Promise(resolve => {
@@ -157,7 +134,7 @@ export class SyncinvoiceService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          // console.log(res)
           resolve(res)
           this.loading.dismiss();
 
@@ -176,6 +153,7 @@ export class SyncinvoiceService {
 
     }).catch(err => {
       console.log(err)
+      this.loading.dismiss();
     })
   }
 
