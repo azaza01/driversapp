@@ -43,8 +43,6 @@ export class ConfirminvoicePage implements OnInit {
 
   dataForCreateNewCollection: any
 
-  myprocessofpayment: any
-
   checkIfRepeat: any
 
   //sample default item
@@ -515,8 +513,8 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   alertCustomerType() {
-    if (this.customerTypes == "HDB" && (this.payableAmount < 20)) {
-      this.amountValue('HDB', 20)
+    if (this.customerTypes == "HDB" && (this.payableAmount < 30)) {
+      this.amountValue('HDB', 30)
     } else if (this.customerTypes == "Condo" && (this.payableAmount < 30)) {
       this.amountValue('Condo', 30)
     } else if (this.customerTypes == "Landed" && (this.payableAmount < 30)) {
@@ -537,10 +535,10 @@ export class ConfirminvoicePage implements OnInit {
         params.description = "Chain Promotion";
         params.clean_type = "Promotion";
         params.ready_type = "Promotion"
-        params.price = "0"
+        params.price = "-3"
         params.is_ready = "Yes"
         params.qty = "1"
-        params.pieces = "-3"
+        params.pieces = "1"
 
         this.promotionItem = params;
       })
@@ -631,97 +629,117 @@ export class ConfirminvoicePage implements OnInit {
   }
 
 
-  confirmAndCreatePayment(myprocessofdata) { //KIV
+  confirmAndCreatePayment() { //KIV
     //generate new invoice
-    console.log(myprocessofdata)
     if (this.invoiceType == "Repeat" && this.validationforsync == "false") {
       this.canSyncNow = "false"
+      Promise.resolve(this.collectiondata()).then(coldata => {
+        this.savePay(coldata)
+      }).finally(() => {
+        this.proceedtoWhat("false");
+      })
       //update summary_table for repeat -- later part(KIV)
     // } else if (this.invoiceType == "Pending") {
-      //update summary_table for pending -- later part(KIV)
-      if(myprocessofdata == 'proceedtopay'){
-        this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
-      }else if(myprocessofdata == 'proceedtosave'){
-        this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
-      }
+      //update summary_table for pending -- later part(KIV
     } else {
-      if(myprocessofdata == 'proceedtopay' && this.validationforsync == "true"){
-        this.canSyncNow = "true"
-        this.myprocessofpayment = myprocessofdata
-      }else if(myprocessofdata == 'proceedtosave'){
+      if(this.validationforsync == "true"){
         this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.savePay(coldata)
+        }).finally(() => {
+          this.proceedtoWhat("false");
+        })
+      }else {
+        this.canSyncNow = "false"
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.savePay(coldata)
+          this.validationforsync == "false"
+        }).finally(() => {
+          this.proceedtoWhat("false");
+        })
       }
       //update summary_table for new and others -- later part(KIV)
     }
 
-    if (navigator.onLine == true && this.invoiceType != 'Repeat') {
-      if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
-        this.syncPay()
-      }else if(myprocessofdata == 'proceedtosave'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }
-    } else {
-      if(myprocessofdata == 'proceedtopay'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }else if(myprocessofdata == 'proceedtosave'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }
-    }
+    // if (navigator.onLine == true && this.invoiceType != 'Repeat') {
+    //   if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
+    //     this.syncPay()
+    //   }else if(myprocessofdata == 'proceedtosave'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }
+    // } else {
+    //   if(myprocessofdata == 'proceedtopay'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }else if(myprocessofdata == 'proceedtosave'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }else{
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }
+    // }
   }
 
-  confirmPayment(myprocessofdata) {
-    console.log(myprocessofdata)
+  confirmPayment() {
+    console.log(this.invoiceType)
+    console.log(this.validationforsync)
     if (this.invoiceType == "Repeat" ) {
       this.canSyncNow = "false"
+      Promise.resolve(this.collectiondata()).then(coldata => {
+        this.savePay(coldata)
+        this.validationforsync == "true"
+      }).finally(() => {
+        this.proceedtoWhat("true");
+      })
       //update summary_table for repeat -- later part(KIV)
     // } else if (this.invoiceType == "Pending") {
       //update summary_table for pending -- later part(KIV)
-      if(myprocessofdata == 'proceedtopay'){
-        this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
-      }else if(myprocessofdata == 'proceedtosave'){
-        this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
-      }
     } else {
-      if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
+      if(this.validationforsync == "true"){
         this.canSyncNow = "true"
-        this.myprocessofpayment = myprocessofdata
-      }else if(myprocessofdata == 'proceedtosave'){
+        this.syncPay()
+      }else {
         this.canSyncNow = "false"
-        this.myprocessofpayment = myprocessofdata
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.savePay(coldata)
+        }).finally(() => {
+          console.log(this.validationforsync)
+          this.proceedtoWhat("true");
+        })
       }
       //update summary_table for new and others -- later part(KIV)
     }
 
-    if (navigator.onLine == true && this.invoiceType != 'Repeat') {
-      if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
-        this.syncPay()
-      }else if(myprocessofdata == 'proceedtosave'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }
-    } else {
-      if(myprocessofdata == 'proceedtopay'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }else if(myprocessofdata == 'proceedtosave'){
-        Promise.resolve(this.collectiondata()).then(coldata => {
-          this.savePay(coldata)
-        })
-      }
-    }
+    // if (navigator.onLine == true && this.invoiceType != 'Repeat') {
+    //   if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
+        
+    //   }else if(myprocessofdata == 'proceedtosave'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }
+    // } else {
+    //   if(myprocessofdata == 'proceedtopay'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }else if(myprocessofdata == 'proceedtosave'){
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }else{
+    //     Promise.resolve(this.collectiondata()).then(coldata => {
+    //       this.savePay(coldata)
+    //     })
+    //   }
+      
+    // }
 
   }
 
@@ -924,20 +942,32 @@ export class ConfirminvoicePage implements OnInit {
       console.log('wew');
       this.storage.get('COLDEL_TABLE').then(ress => {
         //console.log(ress)
-        this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-          console.log('removed ');
-          this.storage.remove('TEMP_RATES_TABLE').then(() => {
-            console.log('removed ');
-          }).finally(() => {
-            if(this.myprocessofpayment == "proceedtopay"){
-              this.router.navigate(['/coldev']);
-            }else if(this.myprocessofpayment == "proceedtosave"){
-              this.createNewInvoiceFromLocal();
-            }
-          })
-        })
+      
       })
     })
+  }
+
+  proceedtoWhat(proceedtowhere){
+    if(proceedtowhere == "true"){
+      this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+        console.log('removed ');
+        this.storage.remove('TEMP_RATES_TABLE').then(() => {
+          console.log('removed ');
+        }).finally(() => {
+          this.router.navigate(['/coldev']);
+        })
+      })
+    }else if(proceedtowhere== "false"){
+      this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+        console.log('removed ');
+        this.storage.remove('TEMP_RATES_TABLE').then(() => {
+          console.log('removed ');
+        }).finally(() => {
+          this.createNewInvoiceFromLocal();
+        })
+      })
+    
+    }
   }
 
   //with connection
@@ -946,7 +976,7 @@ export class ConfirminvoicePage implements OnInit {
     await Promise.resolve(this.collectiondata()).then(coldata => {
       console.log(coldata)
 
-      if (navigator.onLine == true) {
+      if (navigator.onLine == true && this.canSyncNow == "true") {
          Promise.resolve(this.syncinvoiceSrvs.addinvoiceService(coldata)).then(data => {
           if (data == true) {
             this.presentAlert2("Invoice Successfully Sync")

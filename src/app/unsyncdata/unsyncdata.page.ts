@@ -21,9 +21,9 @@ import { SyncdeliveryService } from '../api/syncdelivery.service'
 export class UnsyncdataPage implements OnInit {
 
   selectedViewSync = 'COLLECTION';
-  unsyncCollection: any = []
-  unsyncDeliveries: any = []
-  unsyncLocalollection: any = []
+  unsyncCollection: any 
+  unsyncDeliveries: any
+  unsyncLocalollection: any
 
   loading: any = new LoadingController;
   UNINV_AGREEDDELIVERYDATE: any
@@ -55,7 +55,7 @@ export class UnsyncdataPage implements OnInit {
     await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       console.log(res)
       if (res != null) {
-        this.unsyncCollection.push(res)
+        this.unsyncCollection = res
       } else {
         this.unsyncCollection = ""
       }
@@ -66,7 +66,7 @@ export class UnsyncdataPage implements OnInit {
     await Promise.resolve(this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
       console.log(ress)
       if (ress != null) {
-        this.unsyncDeliveries.push(ress)
+        this.unsyncDeliveries = ress
       } else {
         this.unsyncDeliveries = ""
       }
@@ -75,7 +75,7 @@ export class UnsyncdataPage implements OnInit {
     await Promise.resolve(this.storage.get('UNSYNCOLLECTIONLOCAL').then(data => {
       console.log(data)
       if (data != null) {
-        this.unsyncLocalollection.push(data)
+        this.unsyncLocalollection = data
       } else {
         this.unsyncLocalollection = ""
       }

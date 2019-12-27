@@ -475,7 +475,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
               params.UCOtimestamp = "UCOtimestamp", //new UCO will be generated in the collection loop if necessary
               params.UCOcusttype = this.deliveryDetails.cut, //30-11-2012 for checking minimum
-              params.UCOcollecttype = this.deliveryDetails.cut,
+              params.UCOcollecttype = this.deliveryDetails.del,
               params.UCOcollectdate = this.defaultSrvc.getToday(),
               params.UCOcollecttime = this.deliveryDetails.det,
               params.UCOcollectaddress = this.deliveryDetails.dea,
@@ -619,7 +619,7 @@ export class DeliverymakepaymentPage implements OnInit {
                 params.UCOcollectpostal = this.deliveryDetails.dpc,
                 params.UCOcollectbuilding = this.deliveryDetails.deb,
                 params.UCOcollectregion = this.deliveryDetails.ren,
-                params.UCOcollectnote = "none",
+                params.UCOcollectnote = "",
                 params.UCOcollectstatus = "collected",
                 params.UCOreturndate = "0000-00-00",
                 params.UCOreturntime = "A 10 - 12pm"
