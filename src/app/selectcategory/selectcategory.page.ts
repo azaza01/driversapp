@@ -18,13 +18,17 @@ import { CreatecustomitemPage } from '../createcustomitem/createcustomitem.page'
 export class SelectcategoryPage implements OnInit {
 
   dataReturned: any;
-  unsyncData: any;
+  unsyncData: any = ""
   isLoading: boolean = false
   driverInfo: any
-  collectionInfo: any
-  category: any
+  collectionInfo: any = ""
+  category: any = ""
   loading: any = new LoadingController;
-  tempItems: any
+  tempItems: any = ""
+  deliveryInfo: any = ""
+  myColID: any = ""
+  activeData: any
+
 
   constructor(
     private router: Router,
@@ -50,35 +54,69 @@ export class SelectcategoryPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.tempItems = ""
+    this.unsyncData = ""
+    this.myColID = ""
+    this.defaultSrvc.getTempItems = undefined;
+    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+      console.log('removed ');
+      this.storage.remove('TEMP_RATES_TABLE').then(() => {
+        console.log('removed ');
+      })
+    })
+
     this.isLoading = true
     await this.presentLoading('');
-
+    this.myColID
     this.activatedRoute.params.subscribe((params) => {
+      console.log(params)
       // let wew
       // wew = params
       // wew.com = "wew"
-      // console.log(wew);
+      // //console.log(wew);
+     
       this.collectionInfo = params
-      console.log(this.collectionInfo);
+      if(this.collectionInfo.coldel_type == "collection"){
+        this.myColID = this.collectionInfo.id
+      }else if (this.collectionInfo.coldel_type == "delivery"){
+        this.myColID = this.collectionInfo.dei
+      }
+      console.log(this.myColID)
+      // myColID = this.collectionInfo.id
+      // if(myColID = undefined){
+      //   myColID = this.collectionInfo.UNINV_COLLID
+      // }
+      // if(this.collectionInfo.UNINV_TYPE != "Repeat"){
+      //   myColID = params.UNINV_COLLID
+      // }else{
+      //   myColID = this.collectionInfo.id
+      // }
+      
+      //console.log(this.collectionInfo);
 
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         this.driverInfo = res
-        console.log(this.driverInfo)
+        //console.log(this.driverInfo)
 
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-          this.unsyncData = res
-          console.log(this.unsyncData)
+          var l = res.length, i;
+          for (i = 0; i < l; i++) {
+            if(res[i].UNINV_COLLID == this.myColID){
+              this.unsyncData = res[i]
+            }
+          }
+          console.log(this.unsyncData) 
 
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
-              console.log('ITEMS_TABLE', data);
+              //console.log('ITEMS_TABLE', data);
               this.tempItems = data
               this.tempItems.forEach(item => {
                 item.is_ready = "no"
                 item.qty = 0
                 item.pieces = 0
                 item.subtotal = 0
-                item.rid = this.collectionInfo.id
+                item.rid = this.myColID
               });
               console.log('TEMP_ITEMS_TABLE', this.tempItems);
               this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
@@ -88,7 +126,7 @@ export class SelectcategoryPage implements OnInit {
               this.loading.dismiss();
 
             }).catch(e => {
-              console.log(e);
+              //console.log(e);
               this.loading.dismiss();
 
             });
@@ -96,14 +134,14 @@ export class SelectcategoryPage implements OnInit {
 
           } else {
             Promise.resolve(this.defaultSrvc.getRates(this.driverInfo)).then(data => {
-              console.log('RATES_TABLE', data);
+              //console.log('RATES_TABLE', data);
               this.tempItems = data
               this.tempItems.forEach(item => {
                 item.is_ready = "no"
                 item.qty = 0
                 item.pieces = 0
                 item.subtotal = 0
-                item.rid = this.collectionInfo.id
+                item.rid = this.myColID
               });
               console.log('TEMP_RATES_TABLE', this.tempItems);
               this.storage.set('TEMP_RATES_TABLE', this.tempItems)
@@ -112,7 +150,7 @@ export class SelectcategoryPage implements OnInit {
               this.loading.dismiss();
 
             }).catch(e => {
-              console.log(e);
+              //console.log(e);
               this.loading.dismiss();
 
             });
@@ -142,13 +180,13 @@ export class SelectcategoryPage implements OnInit {
       if (flags[info[i].cat_type]) continue;
       flags[info[i].cat_type] = true;
       if (tag == 'items') {
-        if (this.unsyncData[0].UNINV_INITIAL == 'DC') {
+        if (this.unsyncData.UNINV_INITIAL == 'DC') {
           if (info[i].cat_type == "Curtains" || info[i].cat_type == "Sofa Covers" || info[i].cat_type == "Carpet") {
             output.push(info[i].cat_type);
             this.loading.dismiss();
 
           }
-        } else if (this.unsyncData[0].UNINV_INITIAL == 'CC') {
+        } else if (this.unsyncData.UNINV_INITIAL == 'CC') {
           if (info[i].cat_type != "Curtains" && info[i].cat_type != "Sofa Covers" && info[i].cat_type != "Carpet") {
             output.push(info[i].cat_type);
             this.loading.dismiss();
@@ -168,11 +206,10 @@ export class SelectcategoryPage implements OnInit {
 
 
   createInvoiceItem(data) {
-    console.log(data)
-    console.log(this.tempItems)
+    //console.log(data)
+    //console.log(this.tempItems)
     this.defaultSrvc.getCategory = data
     // this.defaultSrvc.getTempItems = this.tempItems
-
     this.router.navigate(['/selectitemlist']);
   }
 
@@ -191,12 +228,12 @@ export class SelectcategoryPage implements OnInit {
     myModal.onDidDismiss().then(async data => {
 
       if (data['data'] != undefined) {
-        console.log(data)
-        console.log(data['data'].data)
+        //console.log(data)
+        //console.log(data['data'].data)
         this.defaultSrvc.getTempItems = data['data'].data
 
         this.tempItems = await this.getList(data['data'].data)
-        console.log(this.tempItems)
+        //console.log(this.tempItems)
 
       } else {
 
@@ -209,14 +246,14 @@ export class SelectcategoryPage implements OnInit {
 
 
   confirmInvoice() {
-    console.log(this.defaultSrvc.getTempItems)
+    //console.log(this.defaultSrvc.getTempItems)
 
     if (this.defaultSrvc.getTempItems == undefined) {
       this.presentToast('Please select item first')
     } else {
       this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
         // this.defaultSrvc.getTempItems = this.item_List
-        this.router.navigate(['/confirminvoice']);
+        this.router.navigate(['/confirminvoice', this.collectionInfo]);
       })
     }
   }
@@ -227,7 +264,7 @@ export class SelectcategoryPage implements OnInit {
   }
 
   async viewItems(info) {
-    console.log(info)
+    //console.log(info)
     const myModal = await this.modalController.create({
       component: CollectionitemsPage,
       cssClass: 'viewItem-css',
@@ -238,7 +275,7 @@ export class SelectcategoryPage implements OnInit {
     myModal.onDidDismiss().then(async data => {
 
       if (data['data'] != undefined) {
-        console.log(data)
+        //console.log(data)
         // this.tempItems = await this.getList(data['data'].data)
 
       } else {

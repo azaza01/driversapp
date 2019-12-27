@@ -21,13 +21,14 @@ import { SyncdeliveryService } from '../api/syncdelivery.service'
 export class UnsyncdataPage implements OnInit {
 
   selectedViewSync = 'COLLECTION';
-  unsyncCollection: any 
-  unsyncDeliveries: any
+  unsyncCollection: any = []
+  unsyncDeliveries: any = []
+  unsyncLocalollection: any = []
 
   loading: any = new LoadingController;
   UNINV_AGREEDDELIVERYDATE: any
   UNINV_INVNO: any
-  ppdate : any
+  ppdate: any
 
   constructor(
     private router: Router,
@@ -44,32 +45,43 @@ export class UnsyncdataPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.ionViewWillEnter();
+    // this.ionViewWillEnter();
     // this.loading.dismiss();
   }
 
-  async ionViewWillEnter(){
-    
+  async ionViewWillEnter() {
+
     // await this.presentLoading('Collecting Local Data');
     await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-      // console.log(res)
-      if(res != null){
-        this.unsyncCollection = res
-      }else{
+      console.log(res)
+      if (res != null) {
+        this.unsyncCollection.push(res)
+      } else {
         this.unsyncCollection = ""
       }
-     
+
       // this.loading.dismiss();
     }))
 
     await Promise.resolve(this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
-      // console.log(ress)
-      if(ress != null){
-        this.unsyncDeliveries = ress
-      }else{
+      console.log(ress)
+      if (ress != null) {
+        this.unsyncDeliveries.push(ress)
+      } else {
         this.unsyncDeliveries = ""
       }
     }))
+
+    await Promise.resolve(this.storage.get('UNSYNCOLLECTIONLOCAL').then(data => {
+      console.log(data)
+      if (data != null) {
+        this.unsyncLocalollection.push(data)
+      } else {
+        this.unsyncLocalollection = ""
+      }
+    }))
+
+
   }
 
   async syncCollection(selected) {
@@ -83,10 +95,10 @@ export class UnsyncdataPage implements OnInit {
             data = res
             let filtered: any = []
             console.log(data)
-            if(data != null){
+            if (data != null) {
               data.forEach(unsync => {
                 if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
-                  
+
                 } else {
                   filtered.push(unsync)
                 }
@@ -94,14 +106,14 @@ export class UnsyncdataPage implements OnInit {
               this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
               this.presentAlert("Collection Successfully Sync")
             }
-      
+
           }).finally(() => {
             // this.storage.get('UNSYNCED_INVOICE_TABLE').then(ress => {
             //   console.log(ress)
-              this.ionViewWillEnter();
+            this.ionViewWillEnter();
             // })
           })
-      
+
         } else {
           this.presentAlert("Cannot sync, poor internet connection. Please save later")
           // this.loading.dismiss();
@@ -128,8 +140,8 @@ export class UnsyncdataPage implements OnInit {
             data = res
             console.log(data)
             let filtered: any = []
-      
-            if(data != null){
+
+            if (data != null) {
               data.forEach(unsync => {
                 if (unsync.delid == selected.delid) {
                   console.log("Deleted")
@@ -143,6 +155,97 @@ export class UnsyncdataPage implements OnInit {
           }).finally(() => {
             // this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
             //   console.log(ress)
+            this.ionViewWillEnter();
+            // })
+          })
+        } else {
+          this.presentAlert("Cannot sync, poor internet connection. Please save later")
+          // this.loading.dismiss();
+        }
+      }).catch(e => {
+        console.log(e);
+        this.presentAlert("Cannot sync, poor internet connection. Please save later")
+        // this.loading.dismiss();
+      });
+    } else {
+      this.presentAlert("Cannot sync, poor internet connection. Please save later")
+      // this.loading.dismiss();
+    }
+  }
+
+  async syncColLoc(selected) {
+    console.log(selected)
+    if (navigator.onLine == true) {
+      await Promise.resolve(this.syncinvoiceSrvs.addinvoiceFromLocal(selected)).then(returnID => {
+        console.log(returnID)
+        if (returnID == "" || returnID != false) {
+          //delete local
+
+          this.presentAlert("Local Collection Synced, You can now sync invoice")
+
+          this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+            let data
+            data = res
+            console.log(data)
+            let filtered: any = []
+            console.log(selected.UNINV_COLLTS)
+            if (data != null) {
+              console.log("papasok ba")
+              data.forEach(unsync => {
+                console.log("pumasok naman")
+                if (unsync.UNINV_COLLTS == selected.rid) {
+                  let params: any = {
+                    UNINV_COLLTS: returnID,
+                    UNINV_COLLID: returnID,
+                    UNINV_INVNO: unsync.UNINV_INVNO,
+                    UNINV_CUSTID: unsync.UNINV_CUSTID,
+                    UNINV_INITIAL: unsync.UNINV_INITIAL,
+                    UNINV_TYPE: unsync.UNINV_TYPE,
+                    UNINV_DEPOAMT: unsync.UNINV_DEPOAMT,
+                    UNINV_DEPOTYPE: unsync.UNINV_DEPOTYPE,
+                    UNINV_BALANCE: unsync.UNINV_BALANCE,
+                    UNINV_AGREEDDELIVERYDATE: unsync.UNINV_AGREEDDELIVERYDATE,
+                    UNINV_DELIVERYTIMESLOT: unsync.UNINV_DELIVERYTIMESLOT,
+                    UNINV_INVOICENOTE: unsync.UNINV_INVOICENOTE,
+                    UNINV_DISCOUNT: unsync.UNINV_DISCOUNT,
+                    UNINV_EXPRESS: unsync.UNINV_EXPRESS,
+                    UNINV_HASDONATE: unsync.UNINV_HASDONATE,
+                    UNINV_DONATE: unsync.UNINV_DONATE,
+                    UNINV_BAGS: unsync.UNINV_BAGS,
+                    drvna: unsync.drvna,
+                    drvpa: unsync.drvpa,
+                    drvem: unsync.drvem,
+                    colitem: unsync.colitem,
+                    UNINV_SAVEDON: unsync.UNINV_SAVEDON,
+                    syncserver: "true"
+                  }
+                  console.log(params)
+                  filtered.push(params)
+                } else {
+                  filtered.push(unsync)
+                }
+              });
+              this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+            }
+          }).finally(() => {
+            this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+              let data
+              data = res
+              console.log(data)
+              let filtered: any = []
+              console.log(selected.UNINV_COLLTS)
+              if (data != null) {
+                data.forEach(unsync => {
+                  if (unsync.rid == selected.rid) {
+                    
+                  } else {
+                    filtered.push(unsync)
+                  }
+                });
+                this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
+              }
+            })
+
             this.ionViewWillEnter();
             // })
           })
@@ -184,6 +287,6 @@ export class UnsyncdataPage implements OnInit {
 
   }
 
-  
+
 }
 

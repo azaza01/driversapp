@@ -17,6 +17,14 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
+            <ion-item (click)="showAlert('Please choose below')" routerDirection="backward">
+              <ion-icon slot="start" name="md-create"></ion-icon>
+              <ion-label >
+                create Invoice
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
             <ion-item (click)="logout('Are you sure you want to logout?')" routerDirection="backward">
               <ion-icon slot="start" name="power"></ion-icon>
               <ion-label class="ion-padding">

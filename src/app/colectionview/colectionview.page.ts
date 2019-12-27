@@ -8,6 +8,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 // import { SMS } from '@ionic-native/sms/ngx';
 import { CollectionService } from '../api/collection.service';
 import { AccountsService } from '../api/accounts.service';
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: 'app-colectionview',
@@ -35,6 +36,8 @@ export class ColectionviewPage implements OnInit {
   formatedDate: any
   reasonofpostpone: any = "";
 
+  mySpecialID: any
+
 
   loading: any = new LoadingController;
   require: any
@@ -50,6 +53,7 @@ export class ColectionviewPage implements OnInit {
     private cltnSrvc: CollectionService,
     private callNumber: CallNumber,
     public loadingCtrl: LoadingController,
+    // private geolocation: Geolocation
 
     // private sms: SMS
   ) { }
@@ -57,7 +61,7 @@ export class ColectionviewPage implements OnInit {
   ngOnInit() {
     this.isLoading = true
     this.activatedRoute.params.subscribe((params) => {
-      // console.log(params);
+      console.log(params);
       this.collectionInfo = params
       this.selectedtime = this.collectionInfo.cot
       this.customerName = this.collectionInfo.cun
@@ -72,9 +76,9 @@ export class ColectionviewPage implements OnInit {
       let yyyy = new Date(this.originalDate).getFullYear();
       //todays = dd + "-" + mm + "-" + yyyy
       todays = yyyy + "-" + mm + "-" + dd
-
-      this.today = todays
+      this.today = this.collectionInfo.cod
       // console.log(todays)
+      this.getTodayID();
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -104,6 +108,24 @@ export class ColectionviewPage implements OnInit {
 
   }
 
+  // getMylocation(){
+  //   this.geolocation.getCurrentPosition().then((resp) => {
+  //     // resp.coords.latitude
+  //     // resp.coords.longitude
+  //     this.presentAlert(resp.coords.latitude)
+  //    }).catch((error) => {
+  //      console.log('Error getting location', error);
+  //    });
+     
+  //    let watch = this.geolocation.watchPosition();
+  //    watch.subscribe((data) => {
+  //     // data can be a set of coordinates, or an error (if an error occurred).
+  //     // data.coords.latitude
+  //     // data.coords.longitude
+  //     this.presentAlert(data.coords.latitude)
+  //    });
+  // }
+
   // sendMessage(number){
   //   if(number == "1"){
   //     this.sendNumber = this.collectionInfo.cn1
@@ -130,6 +152,26 @@ export class ColectionviewPage implements OnInit {
     });
     return await this.loading.present();
   }
+
+  getTodayID() {
+    let today;
+    let todayId
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let hr = new Date().getHours();
+    let mn = new Date().getMinutes();
+    let sec = new Date().getSeconds();
+    let yy = (yyyy + '').substr(2, 2);
+
+    //2019-12-24 17:14:19
+    today = yyyy + '-' + mm + '-' + dd;
+    todayId = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + mn + ":" + sec ;
+    this.mySpecialID = todayId
+    console.log(today)
+    return today
+  }
+
 
 
   callNow(number) {
@@ -269,7 +311,7 @@ export class ColectionviewPage implements OnInit {
     console.log(selectedtime);
   }
 
-  async createInvoiceSelectItem(info) {
+  async createInvoiceSelectItem(info: any = []) {
     console.log(info)
     // console.log(this.collectionInfo)
     let tag;
@@ -284,12 +326,13 @@ export class ColectionviewPage implements OnInit {
             //function herer
             // console.log(this.selected);
             tag = "DC"
+            // info.tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
             //   console.log(data);
             let params: any = {};
-            params.UNINV_COLLTS = new Date() + ''
+            params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = info.id
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = info.cui
@@ -310,7 +353,8 @@ export class ColectionviewPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.defaultSrvc.getToday()
+            params.UNINV_SAVEDON = this.mySpecialID
+            params.syncserver = "false"
             // console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -357,12 +401,13 @@ export class ColectionviewPage implements OnInit {
             //function herer
             // console.log(this.selected);
             tag = "CC"
+            // info.tag(tag)
             // this.collectionInfo. = ""
             // this.defaultSrvc.createInvSeries(tag)
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag,this.collectionId)).then(data => {
             //   console.log(data);
             let params: any = {};
-            params.UNINV_COLLTS = new Date() + ''
+            params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = info.id
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = info.cui
@@ -383,7 +428,8 @@ export class ColectionviewPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.defaultSrvc.getToday()
+            params.UNINV_SAVEDON = this.mySpecialID
+            params.syncserver = "false"
             // console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {

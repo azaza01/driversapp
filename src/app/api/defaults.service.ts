@@ -152,10 +152,11 @@ export class DefaultsService {
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
-            this.storage.set('ENVNUM_TABLE', seriesTbl)
+            //this.storage.set('ENVNUM_TABLE', seriesTbl)
+
             // console.log(seriesNo)
             // console.log(seriesTbl)
-            resolve(seriesNo)
+            resolve(params)
           } else {
             // res.forEach(coldelData => {
             //   if (coldelData.COLID == info) {
@@ -175,10 +176,12 @@ export class DefaultsService {
             params.INV_NO = seriesNo
             // console.log(params)
             seriesTbl.push(params)
-            this.storage.set('ENVNUM_TABLE', seriesTbl)
+
+            //this.storage.set('ENVNUM_TABLE', seriesTbl)
+
             // console.log(seriesNo)
             // console.log(seriesTbl)
-            resolve(seriesNo)
+            resolve(params)
             // }else{
             //   console.log(this.myInvoiceNumber)
             //   resolve(this.myInvoiceNumber)
@@ -193,10 +196,11 @@ export class DefaultsService {
           params.INV_NO = seriesNo
           seriesTbl.push(params)
 
-          this.storage.set('ENVNUM_TABLE', seriesTbl)
+          //this.storage.set('ENVNUM_TABLE', seriesTbl)
+
           // console.log(seriesNo)
           // console.log(seriesTbl)
-          resolve(seriesNo)
+          resolve(params)
         }
       })
 
@@ -250,13 +254,13 @@ export class DefaultsService {
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
                     // console.log('FB_FORM_TABLE', data);
 
-                    this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                    // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
 
                       this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
                         this.loading.dismiss();
                         resolve(true)
                       });
-                    });
+                    // });
 
                   }).catch(e => {
                     console.log(e);

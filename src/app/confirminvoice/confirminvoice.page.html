@@ -26,8 +26,8 @@
         <ion-label>{{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
         <!-- <ion-datetime  min="2019-12-12" max="2100-12-31"  displayFormat="DD-MMMM-YYYY" [(ngModel)]="today"></ion-datetime> -->
       </ion-item>
-      <ion-item>
-        <ion-button *ngIf="initDELIVERYDATE == '0000-00-00'" (click)="openDatePicker()" shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change
+      <ion-item *ngIf="initDELIVERYDATE == '0000-00-00'">
+        <ion-button  (click)="openDatePicker()" shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">Change
         </ion-button>
       </ion-item>
       <ion-item>
@@ -35,7 +35,7 @@
           <ion-label>{{customerData.UNINV_DELIVERYTIMESLOT}}</ion-label> -->
           <ion-label>Time : </ion-label>
           <ion-label>{{ UNINV_DELIVERYTIMESLOT }}</ion-label>
-          <ion-select  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
+          <ion-select *ngIf="initDELIVERYDATE == '0000-00-00'"  cancelText="Dismiss"[(ngModel)]="selectedtime" (ngModelChange)="getTime(selectedtime)" >
               <div *ngFor="let selectedtime of timeslots; let i = index">
                 <ion-select-option  value="{{ selectedtime }}">{{ selectedtime }}</ion-select-option>
               </div>
@@ -111,16 +111,17 @@
         </ion-item-group> -->
   
  
-    <ion-row>
+    <ion-row >
       <ion-col>
-        <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="confirmPayment()">
+        <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="confirmPayment('proceedtopay')">
           Confirm payments</ion-button>
       </ion-col>
     </ion-row>
-    <!-- <ion-row>
+    <ion-row *ngIf="invoiceType == 'Repeat'">
         <ion-col >
-          <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
+          <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment('proceedtosave')">Confirm and create another invoice</ion-button>
         </ion-col>
-    </ion-row> -->
+    </ion-row>
+
   
   </ion-content>

@@ -12,7 +12,7 @@
       </ion-buttons> -->
     </ion-toolbar>
   
-    <ion-segment [(ngModel)]="selectedViewSync" class="ion-padding">
+    <!-- <ion-segment [(ngModel)]="selectedViewSync" class="ion-padding">
       <ion-segment-button value="COLLECTION">COL
         <ion-img src="../assets/images/collection_icon.png" style="padding:5px;"></ion-img>
       </ion-segment-button>
@@ -20,41 +20,23 @@
         <ion-img src="../assets/images/delivery_icon.png" style="padding:5px;"></ion-img>
       </ion-segment-button>
     </ion-segment>
-  
+   -->
   </ion-header>
   
   <ion-content (onload)="ionViewWillEnter()">
-    <div [ngSwitch]="selectedViewSync">
-      <div *ngSwitchCase="'COLLECTION'">
-        <ion-list *ngFor="let unsyncItems of unsyncCollection; let i = index">
-          <ion-item-group class="ion-padding"  >
+    <!-- <div [ngSwitch]="selectedViewSync">
+      <div *ngSwitchCase="'COLLECTION'"> -->
+        
+        <ion-list [hidden]="unsyncItems.syncserver == 'false'" *ngFor="let unsyncItems of unsyncCollection; let i = index">
+          <ion-item-group  class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;">
               <ion-label style="padding-left: 20px;font-size: large;color: black;" >{{ unsyncItems.UNINV_INVNO }}</ion-label>
+              <ion-label style="padding-left: 20px;font-size: large;color: black;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE }} </ion-label>
               <ion-button style="padding-left: 60px;"  color="success" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)">Sync</ion-button>
             </ion-item-divider> 
-            <!-- <ion-item>
-              <ion-label>Name : {{ item.cun }}</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-label>Address : {{ item.coa }}</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Unit : {{ item.cuo }}</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-label>Postal : {{ item.cpc }}</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-label>Building : {{ item.cob }}</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-textarea>NOTE : {{ item.con }}</ion-textarea>
-            </ion-item> -->
           </ion-item-group>
         </ion-list>
-      </div>
-  
-      <div *ngSwitchCase="'DELIVERIES'">
+
         <ion-list *ngFor="let unsyncDel of unsyncDeliveries; let i = index">
           <ion-item-group class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;">
@@ -63,8 +45,18 @@
             </ion-item-divider> 
           </ion-item-group>
         </ion-list>
-      </div>
-    </div>
+
+        <ion-list *ngFor="let unsyncLocalCol of unsyncLocalollection; let i = index">
+          <ion-item-group class="ion-padding"  >
+            <ion-item-divider style="background-color: yellow;">
+              <ion-label style="padding-left: 20px;font-size: large;color: black;" >{{ unsyncLocalCol.invoicetype }}  {{ unsyncLocalCol.invcompany }}</ion-label>
+              <ion-button style="padding-left: 60px;"  color="success" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
+            </ion-item-divider> 
+          </ion-item-group>
+        </ion-list>
+      
+      <!-- </div>
+    </div> -->
   </ion-content>
   
   <ion-row>

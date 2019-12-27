@@ -45,9 +45,9 @@ export class AppComponent {
     // },
     // {
     //   title: 'Create Invoice',
-    //   url: '',
+    //   url: this.showAlert("Please Pick"),
     //   icon: 'md-document'
-    // },
+    // }
     // {
     //   title: 'Print',
     //   url: '',
@@ -117,6 +117,29 @@ export class AppComponent {
         this.router.navigate(['/home']);
       }
     });
+  }
+
+  async showAlert(msg){
+    const alert = await this.alertController.create({
+      header: '',
+      message: msg,
+      cssClass: 'ion-alertCSS',
+      buttons: [
+        {
+          text: 'CREATE INVOICE',
+          handler: async () => {
+            this.router.navigate(['/createlocalinvoice']);
+          }
+        }, {
+          text: 'ADD CUSTOMER',
+          handler: async () => {
+            this.router.navigate(['/createlocalcustomer']);
+          }
+        }
+      ],
+    });
+
+    await alert.present();
   }
 
   async logout(msg) {

@@ -111,7 +111,7 @@ export class DeliveryviewPage implements OnInit {
   }
 
   createInvoiceItem(){
-    this.router.navigate(['/selectcategory']);
+    this.router.navigate(['/selectcategory'], this.deliveryInfo);
   }
 
   makePayment(){

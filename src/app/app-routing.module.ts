@@ -26,7 +26,9 @@ const routes: Routes = [
   { path: 'confirminvoice', loadChildren: './confirminvoice/confirminvoice.module#ConfirminvoicePageModule' },
   { path: 'collectionitems', loadChildren: './collectionitems/collectionitems.module#CollectionitemsPageModule' },
   { path: 'createcustomitem', loadChildren: './createcustomitem/createcustomitem.module#CreatecustomitemPageModule' },
-  { path: 'unsyncdata', loadChildren: './unsyncdata/unsyncdata.module#UnsyncdataPageModule' }
+  { path: 'unsyncdata', loadChildren: './unsyncdata/unsyncdata.module#UnsyncdataPageModule' },
+  { path: 'createlocalinvoice', loadChildren: './createlocalinvoice/createlocalinvoice.module#CreatelocalinvoicePageModule' },
+  { path: 'createlocalcustomer', loadChildren: './createlocalcustomer/createlocalcustomer.module#CreatelocalcustomerPageModule' }
 ];
 
 @NgModule({

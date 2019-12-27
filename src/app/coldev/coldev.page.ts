@@ -9,6 +9,7 @@ import { DeliveryService } from '../api/delivery.service';
 import { SpecialinstructionService } from '../api/specialinstruction.service';
 import { formatDate } from '@angular/common';
 import { format } from 'util';
+import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'app-coldev',
@@ -24,6 +25,8 @@ export class ColdevPage implements OnInit {
 
   specialIns: any
   colDelToCheck: any
+  deliveryCount: any = 0
+  collectionCount: any = 0
 
 
 
@@ -128,7 +131,7 @@ export class ColdevPage implements OnInit {
                   } else if(i < 0){
 
                   }
-                  // this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), spI.id)
+
                   console.log(this.myColDev)
 
                 }
@@ -142,7 +145,6 @@ export class ColdevPage implements OnInit {
 
             // for (i = 0; i < specialCounts; i++) {
             //   if (this.specialIns[i].action == "remove") {
-
 
             //     for (i2 = 0; i2 < coldevCounts; i2++) {
             //       if (res[i2].id == this.specialIns[i].against && (res[i2].cod == this.specialIns[i].against || res[i2].dei == this.specialIns[i].against) && res[i2].coldel_type == this.specialIns[i].type) {
@@ -401,6 +403,8 @@ export class ColdevPage implements OnInit {
           handler: () => {
             // this.getToday()
             alert.dismiss();
+            this.collectionCount = 0
+            this.deliveryCount = 0
             this.LoadFromServer();
           }
         }, {
@@ -412,6 +416,7 @@ export class ColdevPage implements OnInit {
         },{
           text: 'CLOSE',
           handler: () => {
+            this.countColAndDel()
             alert.dismiss();
           }
         }
@@ -431,6 +436,7 @@ export class ColdevPage implements OnInit {
           Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
             console.log(res);
             this.loading.dismiss();
+            this.countColAndDel()
           }).catch(e => {
             console.log(e);
           });
@@ -440,7 +446,9 @@ export class ColdevPage implements OnInit {
         });
       }).catch(e => {
         console.log(e);
-      });
+      }).finally(() => {
+      
+      })
     } else {
       this.presentAlert("Please check your internet connection")
     }
@@ -452,5 +460,35 @@ export class ColdevPage implements OnInit {
       this.myColDev = res
     })
   }
+  
+  countColAndDel(){
+    this.storage.get('COLDEL_TABLE').then(res => {
+      var flags = [], output = [], l = res.length, i;
+      for (i = 0; i < l; i++) {
+        console.log(res[i].coldel_type)
+        if(res[i].coldel_type == "collection"){
+          console.log("wew")
+          this.collectionCount = (this.collectionCount * 1) + 1
+        }else if(res[i].coldel_type == "delivery"){
+          console.log("w0w")
+          this.deliveryCount = (this.deliveryCount * 1) + 1
+        }
+      }
+      console.log(this.collectionCount)
+      console.log(this.deliveryCount)
+    })
+  }
+
+  // onRenderItems(event) {
+  //   console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
+  //    let draggedItem = this.myColDev.splice(event.detail.from,1)[0];
+  //    this.myColDev.splice(event.detail.to,0,draggedItem)
+  //   //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);
+  //   event.detail.complete();
+  // }
+ 
+  // getList() {
+  //   console.table(this.myColDev);
+  // }
 
 }

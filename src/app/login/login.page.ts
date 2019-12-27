@@ -41,16 +41,20 @@ export class LoginPage implements OnInit {
 
     // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
     // this.storage.remove('UNSYNCED_INVOICE_TABLE')
+    // this.storage.remove('UNSYNCOLLECTIONLOCAL')
+    // this.storage.remove('TEMP_RATES_TABLE')
+    // this.storage.remove('TEMP_ITEMS_TABLE')
+    
     // this.storage.remove('ENVNUM_TABLE')
     // let wew
     // let wew2 = []
 
     // wew = {
-    //   COLID: "142823",
-    //   INV_DATE: "2019-12-23",
+    //   // COLID: "142823",
+    //   INV_DATE: "2019-12-27",
     //   INV_TYPE: "CC",
     //   INV_RUNNING: 2,
-    //   INV_NO: "CC-191230Du02"      // DriverID: 53
+    //   INV_NO: "CC-191270Du02"      // DriverID: 53
     // }
     // for (let index = 0; index < 1; index++) {
     //   wew2.push(wew)
@@ -61,6 +65,15 @@ export class LoginPage implements OnInit {
     // })
     // return
 
+    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      console.log(res)
+    })
+    this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+      console.log(res)
+    })
+    this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+      console.log(res)
+    })
     this.storage.get('ENVNUM_TABLE').then(res => {
       console.log(res)
     })
