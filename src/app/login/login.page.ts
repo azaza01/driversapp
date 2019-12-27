@@ -39,13 +39,13 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
-    // this.storage.remove('UNSYNCED_INVOICE_TABLE')
-    // this.storage.remove('UNSYNCOLLECTIONLOCAL')
-    // this.storage.remove('TEMP_RATES_TABLE')
-    // this.storage.remove('TEMP_ITEMS_TABLE')
+    this.storage.remove('UNSYNCED_PAYMENT_TABLE')
+    this.storage.remove('UNSYNCED_INVOICE_TABLE')
+    this.storage.remove('UNSYNCOLLECTIONLOCAL')
+    this.storage.remove('TEMP_RATES_TABLE')
+    this.storage.remove('TEMP_ITEMS_TABLE')
     
-    // this.storage.remove('ENVNUM_TABLE')
+    this.storage.remove('ENVNUM_TABLE')
     // let wew
     // let wew2 = []
 

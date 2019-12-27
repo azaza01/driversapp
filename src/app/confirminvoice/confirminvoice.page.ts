@@ -166,6 +166,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   ngOnInit() {
+    this.customerData = ""
     this.dataForCreateNewCollection = ""
     this.getToday();
     this.isLoading = true
@@ -184,7 +185,7 @@ export class ConfirminvoicePage implements OnInit {
         this.customerTypes = res.cut;
         this.invoiceId = res.id
         console.log(this.invoiceId)
-        this.validationforsync = "false"
+        this.validationforsync = "true"
       } else if (res.coldel_type == "delivery") {
         this.dataForCreateNewCollection = res
         this.invoiceId = res.dei
@@ -192,7 +193,7 @@ export class ConfirminvoicePage implements OnInit {
         this.returnDate = "0000-00-00"
         this.customercredit = res.cca;
         this.customerTypes = res.cut;
-        this.validationforsync = "true"
+        this.validationforsync = "false"
         console.log(this.invoiceId)
       }
    
