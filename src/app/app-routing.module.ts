@@ -29,7 +29,8 @@ const routes: Routes = [
   { path: 'unsyncdata', loadChildren: './unsyncdata/unsyncdata.module#UnsyncdataPageModule' },
   { path: 'createlocalinvoice', loadChildren: './createlocalinvoice/createlocalinvoice.module#CreatelocalinvoicePageModule' },
   { path: 'createlocalcustomer', loadChildren: './createlocalcustomer/createlocalcustomer.module#CreatelocalcustomerPageModule' },
-  { path: 'viewmap', loadChildren: './viewmap/viewmap.module#ViewmapPageModule' }
+  { path: 'viewmap', loadChildren: './viewmap/viewmap.module#ViewmapPageModule' },
+  { path: 'driversummary', loadChildren: './driversummary/driversummary.module#DriversummaryPageModule' }
 ];
 
 @NgModule({

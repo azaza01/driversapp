@@ -40,9 +40,9 @@ export class AppComponent {
     // ,
     // {
     //   title: 'Driver Summary',
-    //   url: '',
+    //   url: '/driversummary',
     //   icon: 'logo-usd'
-    // },
+    // }
     // {
     //   title: 'Create Invoice',
     //   url: this.showAlert("Please Pick"),
