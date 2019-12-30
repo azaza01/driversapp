@@ -12,14 +12,14 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-segment [(ngModel)]="selectedView" class="ion-padding">
+  <!-- <ion-segment [(ngModel)]="selectedView" class="ion-padding">
     <ion-segment-button value="COLLECTION">COL
       <ion-img src="../assets/images/collection_icon.png" style="width:50%;height: 50%;padding-bottom: 10px;"></ion-img>
     </ion-segment-button>
     <ion-segment-button value="DELIVERIES">DEL
       <ion-img src="../assets/images/delivery_icon.png" style="width:50%;height: 50%;padding-bottom: 10px;"></ion-img>
     </ion-segment-button>
-  </ion-segment>
+  </ion-segment> -->
 
 </ion-header>
 
@@ -72,8 +72,6 @@
           </ion-item-divider>
         </ion-item-group>
       </ion-list>
-    </div>
-    <div *ngSwitchCase="'DELIVERIES'">
       <ion-list [hidden]="delitem.coldel_type != 'delivery'"  *ngFor="let delitem of myColDev; let i = index">
         <!-- <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false" reorder="true" side="start"> -->
         <!-- <ng-container *ngIf="delitem.coldel_type == 'delivery' && delitem.sts != 'Full Delivered, Partial Paid'"> -->
@@ -82,8 +80,8 @@
             <ion-item>
               <ion-row>
                 <ion-col>
-                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:50%;height: 50%;"></ion-img>
-                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:50%;height: 50%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
                   <ion-label style="font-size: medium;;color: black;"> {{ delitem.det }}</ion-label>
                 </ion-col>
@@ -106,8 +104,8 @@
             <ion-item>
               <ion-row>
                 <ion-col>
-                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:50%;height: 50%;"></ion-img>
-                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:50%;height: 50%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
                   <ion-label style="font-size: medium;;color: black;"> {{ delitem.det }}</ion-label>
                 </ion-col>
@@ -128,6 +126,9 @@
         </ion-item-group>
       </ion-list>
     </div>
+    <!-- <div *ngSwitchCase="'DELIVERIES'">
+    
+    </div> -->
   </div>
 </ion-content>
 

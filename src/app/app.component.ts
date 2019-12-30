@@ -76,10 +76,24 @@ export class AppComponent {
 
   }
 
+
+  // ionViewDidEnter() {
+  //   document.addEventListener("backbutton",function(e) {
+  //     console.log("disable back button")
+  //   }, false);
+  // }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.platform.backButton.subscribeWithPriority(9999, () => {
+        document.addEventListener('backbutton', function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          console.log('hello');
+        }, false);
+      });
     });
   }
 

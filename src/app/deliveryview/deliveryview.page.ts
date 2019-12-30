@@ -133,26 +133,76 @@ export class DeliveryviewPage implements OnInit {
 
   async updateMyEmail(){
     //var validator = require("email-validator"); //need to check
-    await this.presentLoading('');
+    await this.presentLoading('Syncing Email Data');
     //if(validator.validate(this.customerEmail) == true){
 
-      await Promise.resolve(this.cltnSrvc.updateEmail(this.accSrvc.driverData, this.customerEmail, this.customerId )).then(data => {
-        if(data == true){
+      let params = {
+        customerID: this.customerId,
+        customerEmail: this.customerEmail
+      }
+
+      await Promise.resolve(this.cltnSrvc.updateEmail(this.driverInfo, this.customerEmail, this.customerId )).then(data => {
+        if (data != "false") {
           this.presentAlert("Email Successfully Change");
           this.loading.dismiss();
-        }else{
+        } else {
           this.presentAlert("Connection error");
-          this.loading.dismiss();
+  
+          this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+            let data
+            data = res
+            let filtered: any = []
+            if (data != "") {
+              data.forEach(unsync => {
+                if (unsync.customerID == this.customerId) {
+                  filtered.push(params)
+                } else {
+                  filtered.push(unsync)
+                }
+              });
+              this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
+              this.loading.dismiss();
+            }else{
+              this.storage.set('UNSYNCED_EMAILS_TABLE', params)
+              this.loading.dismiss();
+            }
+          }).finally(() => {
+            this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+              // console.log(res)
+              this.loading.dismiss();
+            })
+            
+          })
         }
       }).catch(e => {
         console.log(e);
-        this.presentAlert("Connection error");
+        this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+          let data
+          data = res
+          let filtered: any = []
+          if (data != "") {
+            data.forEach(unsync => {
+              if (unsync.customerID == this.customerId) {
+                filtered.push(params)
+              } else {
+                filtered.push(unsync)
+              }
+            });
+            this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
+            this.loading.dismiss();
+          }else{
+            this.storage.set('UNSYNCED_EMAILS_TABLE', params)
+            this.loading.dismiss();
+          }
+        }).finally(() => {
+          this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
+            // console.log(res)
+            this.loading.dismiss();
+          })
+        })
         this.loading.dismiss();
       });
-    // }else{
-    //   this.presentAlert("Invalid Email! Please check.");
-    //   this.loading.dismiss();
-    // }
+      this.loading.dismiss();
   }
 
   async postphone(){
@@ -175,8 +225,9 @@ export class DeliveryviewPage implements OnInit {
     }else{
       if(this.reasonofpostpone != ""){
       await this.presentLoading('');
-      await Promise.resolve(this.delSrvc.postponeDelivery(this.accSrvc.driverData, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone )).then(data => {
-        if(data == true){
+      await Promise.resolve(this.delSrvc.postponeDelivery(this.driverInfo, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone )).then(data => {
+        if(data != "false" || data != ""){
+          this.removepostpone(this.selectedDelivery)
           this.presentAlert("Delivery Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
           this.loading.dismiss();
           //need to check
@@ -193,6 +244,34 @@ export class DeliveryviewPage implements OnInit {
       this.presentAlert("Please add reason to postpone");
      }
     }
+  }
+
+  removepostpone(collectionid){
+    this.storage.get('COLDEL_TABLE').then(res => {
+      let data, colid, i
+      data = res
+      let filtered: any = []
+      // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
+      // console.log(colid)
+      //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
+      if (data != "") {
+        data.forEach(coldelData => {
+          if (coldelData.coldel_type == 'delivery') {
+            if (coldelData.dei == collectionid) {
+              
+            } else {
+              filtered.push(coldelData)
+            }
+          } else {
+            filtered.push(coldelData)
+          }
+        });
+        
+        this.storage.set('COLDEL_TABLE', filtered)
+      }
+    }).finally(() => {
+        this.router.navigate(['/coldev']);
+    })
   }
 
 

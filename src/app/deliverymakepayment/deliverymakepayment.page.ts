@@ -242,7 +242,7 @@ export class DeliverymakepaymentPage implements OnInit {
           this.checkIfRepeat = "yes";
           this.savePay(coldata);
         }else if(kindoftransaction == 'maypayment'){
-        this.checkIfRepeat = "no";
+          this.checkIfRepeat = "no";
           Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
           if (data == true) {
             this.presentToast("Delivery Successfully Sync")
@@ -265,7 +265,7 @@ export class DeliverymakepaymentPage implements OnInit {
           this.savePay(coldata);
           this.checkIfRepeat = "yes";
         }else if(kindoftransaction == 'maypayment'){
-          this.presentToast("No internet connection. Please save later")
+          this.checkIfRepeat = "no";
           this.savePay(coldata);
         }
       }
@@ -311,58 +311,58 @@ export class DeliverymakepaymentPage implements OnInit {
         data.forEach(coldelData => {
           if (coldelData.coldel_type == 'delivery') {
             if (coldelData.dei == offlinedata.delid) {
-              let params = {
-                dei: coldelData.dei,
-                aid: coldelData.aid,
-                cui: coldelData.cui,
-                sts: coldelData.sts,
-                ded: coldelData.ded,
-                ren: coldelData.ren,
-                det: coldelData.det,
-                cun: coldelData.cun,
-                cut: coldelData.cut,
-                com: coldelData.com,
-                na2: coldelData.na2,
-                dea: coldelData.dea,
-                deb: coldelData.deb,
-                lil: coldelData.lil,
-                dun: coldelData.dun,
-                cue: coldelData.cue,
-                uby: coldelData.uby,
-                uon: coldelData.uon,
-                dpc: coldelData.dpc,
-                cn1: coldelData.cn1,
-                cn2: coldelData.cn2,
-                cn3: coldelData.cn3,
-                noe: coldelData.noe,
-                den: coldelData.den,
-                han: coldelData.han,
-                pac: coldelData.pac,
-                rol: coldelData.rol,
-                ret: coldelData.ret,
-                del: coldelData.del,
-                pax: coldelData.pax,
-                id: coldelData.id,
-                inn: coldelData.inn,
-                coi: coldelData.coi,
-                toa: coldelData.toa,
-                dis: coldelData.dis,
-                dpt: coldelData.dpt,
-                dpa: coldelData.dpa,
-                delivery_driver_id: coldelData.delivery_driver_id,
-                delivery_driver: coldelData.delivery_driver,
-                cca: coldelData.cca,
-                exp: coldelData.exp,
-                baa: coldelData.baa,
-                bap: coldelData.bap,
-                invn: coldelData.invn,
-                accu: coldelData.accu,
-                coldel_type: coldelData.coldel_type,
-                coldel_returndate: coldelData.coldel_returndate,
-                coldel_returntime: coldelData.coldel_returntime,
-                coldel_flag: "updated"
-              }
-              filtered.push(params)
+              // let params = {
+              //   dei: coldelData.dei,
+              //   aid: coldelData.aid,
+              //   cui: coldelData.cui,
+              //   sts: coldelData.sts,
+              //   ded: coldelData.ded,
+              //   ren: coldelData.ren,
+              //   det: coldelData.det,
+              //   cun: coldelData.cun,
+              //   cut: coldelData.cut,
+              //   com: coldelData.com,
+              //   na2: coldelData.na2,
+              //   dea: coldelData.dea,
+              //   deb: coldelData.deb,
+              //   lil: coldelData.lil,
+              //   dun: coldelData.dun,
+              //   cue: coldelData.cue,
+              //   uby: coldelData.uby,
+              //   uon: coldelData.uon,
+              //   dpc: coldelData.dpc,
+              //   cn1: coldelData.cn1,
+              //   cn2: coldelData.cn2,
+              //   cn3: coldelData.cn3,
+              //   noe: coldelData.noe,
+              //   den: coldelData.den,
+              //   han: coldelData.han,
+              //   pac: coldelData.pac,
+              //   rol: coldelData.rol,
+              //   ret: coldelData.ret,
+              //   del: coldelData.del,
+              //   pax: coldelData.pax,
+              //   id: coldelData.id,
+              //   inn: coldelData.inn,
+              //   coi: coldelData.coi,
+              //   toa: coldelData.toa,
+              //   dis: coldelData.dis,
+              //   dpt: coldelData.dpt,
+              //   dpa: coldelData.dpa,
+              //   delivery_driver_id: coldelData.delivery_driver_id,
+              //   delivery_driver: coldelData.delivery_driver,
+              //   cca: coldelData.cca,
+              //   exp: coldelData.exp,
+              //   baa: coldelData.baa,
+              //   bap: coldelData.bap,
+              //   invn: coldelData.invn,
+              //   accu: coldelData.accu,
+              //   coldel_type: coldelData.coldel_type,
+              //   coldel_returndate: coldelData.coldel_returndate,
+              //   coldel_returntime: coldelData.coldel_returntime,
+              //   coldel_flag: "updated"
+              // }
+              //filtered.push(params)
             } else {
               filtered.push(coldelData)
             }
@@ -372,8 +372,6 @@ export class DeliverymakepaymentPage implements OnInit {
         });
         
         this.storage.set('COLDEL_TABLE', filtered)
-       
-
       }
     }).finally(() => {
       if(this.checkIfRepeat == "no"){
@@ -458,7 +456,7 @@ export class DeliverymakepaymentPage implements OnInit {
               }
             }).finally(() =>  {
               // console.log(this.unsyncData);
-              this.checkIfRepeat = "yes";
+              // this.checkIfRepeat = "yes";
               // Promise.resolve(this.deliveryndata()).then(coldata => {
               // this.savePay(coldata);
               // })
@@ -483,7 +481,7 @@ export class DeliverymakepaymentPage implements OnInit {
               params.UCOcollectpostal = this.deliveryDetails.dpc,
               params.UCOcollectbuilding = this.deliveryDetails.deb,
               params.UCOcollectregion = this.deliveryDetails.ren,
-              params.UCOcollectnote = "none",
+              params.UCOcollectnote = "",
               params.UCOcollectstatus = "collected",
               params.UCOreturndate = "0000-00-00",
               params.UCOreturntime = "A 10 - 12pm"
@@ -597,7 +595,7 @@ export class DeliverymakepaymentPage implements OnInit {
               // console.log(this.unsyncData);
               // this.defaultSrvc.getTempItems = null
 
-              this.checkIfRepeat = "yes";
+              // this.checkIfRepeat = "yes";
 
               let params: any = {}
                 params.rid = this.mySpecialID,
@@ -722,9 +720,10 @@ export class DeliverymakepaymentPage implements OnInit {
       this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
         console.log(ress)
       })
+      this.offlinedeliveryUpdate(offlinedata);
     })
 
-    this.offlinedeliveryUpdate(offlinedata);
+   
   }
 
 

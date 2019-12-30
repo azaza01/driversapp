@@ -110,7 +110,7 @@ export class LoginPage implements OnInit {
     console.log(this.password)
 
     // if(user.value != "" && user.value != "" ){
-    await this.presentLoading('Validation credentials');
+    await this.presentLoading('Validating credentials');
     // this.isLoading = true;
     // console.log(user.value)
     Promise.resolve(this.accSrvc.login(user.value)).then(data => {

@@ -27,6 +27,7 @@ export class AccountsService {
   driverData: any;
   require: any 
 
+
   constructor(
     private httpclient: HttpClient,
     public loadingCtrl: LoadingController,
@@ -59,6 +60,96 @@ export class AccountsService {
         this.driverData = res
         resolve(res)
       })
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  getCustomer(info) {
+
+    let params: any = {
+     email : "it01.azaza@gmail.com",
+     password : "7c222fb2927d828af22f592134e8932480637c0d",
+     userid : "109",
+     drivername : "dummydriver",
+     contactno : info.contactno,
+     postal : info.postal
+    }
+  
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/customer.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          console.log(res)
+          this.storage.set('SELECTED_CUSTOMER', res[0]).then(() => {
+
+          });
+          resolve(res)
+        },
+        err => {
+          console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+
+  addCustomerStandingOrder(info) {
+    console.log(info)
+    // this.storage.get('ACCOUNTS_TABLE').then(res => {
+    //   console.log(res);
+    //   this.driverData = res
+    // })
+
+    let params: any = {}
+      params.email = "it01.azaza@gmail.com"
+      params.password = "7c222fb2927d828af22f592134e8932480637c0d"
+      params.userid = "109",
+      params.drivername = "dummydriver",
+      //params.userid = this.driverData.id,
+      //params.email = this.driverData.email_address,
+      //params.password = this.driverData.password,
+      //params.name = this.driverData.name,
+      params.companyagent = info.companyagent,
+      params.contactperson1 = info.contactperson1,
+      params.contactno1 = info.contactno1,
+      params.mailingaddress = info.mailingaddress,
+      params.unitno = info.unitno,
+      params.builidngname = info.builidngname,
+      params.postalcode = info.postalcode,
+      params.liftlobby = info.liftlobby,
+      params.areacode = info.areacode,
+      params.contactno2 = info.contactno2,
+      params.emailcus = info.emailcus,
+      params.contactperson2 = info.contactperson2,
+      params.customertype = info.customertype,
+
+
+    console.log(params)
+    
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/addcustomerdata.json", params).subscribe(
+        response => {
+          let returndata = response
+          params.customerid = returndata
+          let newdata: any [] = params
+          resolve(newdata)
+        },
+        err => {
+          console.log(err)
+          resolve(err)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
     }).catch(err => {
       console.log(err)
     })

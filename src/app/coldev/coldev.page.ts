@@ -48,6 +48,11 @@ export class ColdevPage implements OnInit {
   async ngOnInit() {
     // this.storage.remove('COLDEL_TABLE')
     // this.ionViewWillEnter()
+
+    // const pos = {
+    //   lat: this.latitude,
+    //   lng: this.longitude
+    // };
   }
 
   ionViewWillEnter() {

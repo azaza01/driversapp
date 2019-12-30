@@ -8,5 +8,79 @@
 </ion-header>
 
 <ion-content>
+  <form #cred="ngForm" style="padding-top: 10px;">
+
+    <ion-grid class="backgrounds ion-padding">
+      <ion-row>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <!-- <ion-label class="myfirsttext">Login</ion-label> -->
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label color="medium" position="floating">Contact No</ion-label>
+            <ion-input autocorrect="on" clearInput color="medium"
+            inputmode="text" placeholder="Enter contact" required="false" name="contactno" ngModel></ion-input>
+            <ion-icon  color="medium" slot="end"></ion-icon>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label color="medium" position="floating">Postal No.</ion-label>
+            <ion-input autocorrect="on" clearInput color="medium"
+              type="text" placeholder="Enter postal" required="false" name="postal" ngModel ></ion-input>
+            <ion-icon  color="medium" slot="end"></ion-icon>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" shape="round" color="warning" (click)="getCustomer(cred)">SEARCH</ion-button>
+        <!-- <ion-button  expand="full" shape="round" color="warning" (click)="showFingerprintAuthDlg()">LOGIN</ion-button> -->
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-list *ngFor="let custlist of customerlist; let i = index" >
+    <ion-item-group  ng-selected="selected[i]" (click)="selectCus(custlist)" style="border-color: rgb(0, 0, 0);">
+        <ion-item-divider >
+        <ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-label style="font-size: medium;color: black;" >{{ custlist.name }} <br/> </ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label style="font-size: medium;">Mailing Address : {{ custlist.mail_address }}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label style="font-size: medium;">Customer Type : {{ custlist.customer_type }}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label style="font-size: medium;">Address : {{ custlist.unit_no }} {{ custlist.postal_code }} <br/> {{ custlist.building }}  {{ custlist.lift_lobby }} {{ custlist.region }}</ion-label>
+            </ion-col>
+          </ion-row>       
+        </ion-item>
+        <ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-label ></ion-label>
+            </ion-col>
+          </ion-row>       
+        </ion-item>
+      </ion-item-divider>
+    </ion-item-group>
+  </ion-list>
 
 </ion-content>

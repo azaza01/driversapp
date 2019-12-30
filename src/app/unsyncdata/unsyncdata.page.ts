@@ -178,7 +178,7 @@ export class UnsyncdataPage implements OnInit {
     if (navigator.onLine == true) {
       await Promise.resolve(this.syncinvoiceSrvs.addinvoiceFromLocal(selected)).then(returnID => {
         console.log(returnID)
-        if (returnID == "" || returnID != false) {
+        if (returnID != false) {
           //delete local
 
           this.presentAlert("Local Collection Synced, You can now sync invoice")
@@ -189,7 +189,7 @@ export class UnsyncdataPage implements OnInit {
             console.log(data)
             let filtered: any = []
             console.log(selected.UNINV_COLLTS)
-            if (data != null) {
+            if (data != false) {
               console.log("papasok ba")
               data.forEach(unsync => {
                 console.log("pumasok naman")
@@ -226,26 +226,28 @@ export class UnsyncdataPage implements OnInit {
                 }
               });
               this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+
+              this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+                let data
+                data = res
+                console.log(data)
+                let filtered: any = []
+                console.log(selected.UNINV_COLLTS)
+                if (data != null) {
+                  data.forEach(unsync => {
+                    if (unsync.rid == selected.rid) {
+                      
+                    } else {
+                      filtered.push(unsync)
+                    }
+                  });
+                  this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
+                }
+              })
+  
             }
           }).finally(() => {
-            this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-              let data
-              data = res
-              console.log(data)
-              let filtered: any = []
-              console.log(selected.UNINV_COLLTS)
-              if (data != null) {
-                data.forEach(unsync => {
-                  if (unsync.rid == selected.rid) {
-                    
-                  } else {
-                    filtered.push(unsync)
-                  }
-                });
-                this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
-              }
-            })
-
+           
             this.ionViewWillEnter();
             // })
           })

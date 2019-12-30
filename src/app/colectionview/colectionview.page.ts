@@ -206,8 +206,9 @@ export class ColectionviewPage implements OnInit {
     } else {
       if (this.reasonofpostpone != "") {
         await this.presentLoading('');
-        await Promise.resolve(this.cltnSrvc.postPone(this.accSrvc.accountsDetails(), this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
-          if (data == true) {
+        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
+          if (data != "false" || data != "") {
+            this.removepostpone(this.collectionId)
             this.presentAlert("Collection Postponed to " + selectedDate2 + " with timing " + this.selectedtime);
             this.loading.dismiss();
             //need to check
@@ -226,19 +227,47 @@ export class ColectionviewPage implements OnInit {
     }
   }
 
+  removepostpone(collectionid){
+      this.storage.get('COLDEL_TABLE').then(res => {
+        let data, colid, i
+        data = res
+        let filtered: any = []
+        // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
+        // console.log(colid)
+        //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
+        if (data != "") {
+          data.forEach(coldelData => {
+            if (coldelData.coldel_type == 'collection') {
+              if (coldelData.id == collectionid) {
+                
+              } else {
+                filtered.push(coldelData)
+              }
+            } else {
+              filtered.push(coldelData)
+            }
+          });
+          
+          this.storage.set('COLDEL_TABLE', filtered)
+        }
+      }).finally(() => {
+          this.router.navigate(['/coldev']);
+      })
+  }
+
 
   async updateMyEmail() {
     // var validator = require("email-validator"); //need to check
-    this.presentLoading('Syncing local Data');
+    this.presentLoading('Syncing Email Data');
     // if(validator.validate(this.customerEmail) == true){
     let params = {
       customerID: this.customerId,
       customerEmail: this.customerEmail
     }
 
-    await Promise.resolve(this.cltnSrvc.updateEmail(this.accSrvc.accountsDetails(), this.customerEmail, this.customerId)).then(data => {
+    await Promise.resolve(this.cltnSrvc.updateEmail(this.driverInfo, this.customerEmail, this.customerId)).then(data => {
 
-      if (data == true) {
+      if (data != "false") {
         this.presentAlert("Email Successfully Change");
         this.loading.dismiss();
       } else {

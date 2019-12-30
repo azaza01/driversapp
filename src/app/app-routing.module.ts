@@ -28,7 +28,8 @@ const routes: Routes = [
   { path: 'createcustomitem', loadChildren: './createcustomitem/createcustomitem.module#CreatecustomitemPageModule' },
   { path: 'unsyncdata', loadChildren: './unsyncdata/unsyncdata.module#UnsyncdataPageModule' },
   { path: 'createlocalinvoice', loadChildren: './createlocalinvoice/createlocalinvoice.module#CreatelocalinvoicePageModule' },
-  { path: 'createlocalcustomer', loadChildren: './createlocalcustomer/createlocalcustomer.module#CreatelocalcustomerPageModule' }
+  { path: 'createlocalcustomer', loadChildren: './createlocalcustomer/createlocalcustomer.module#CreatelocalcustomerPageModule' },
+  { path: 'viewmap', loadChildren: './viewmap/viewmap.module#ViewmapPageModule' }
 ];
 
 @NgModule({

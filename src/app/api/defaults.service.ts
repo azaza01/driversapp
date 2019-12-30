@@ -253,14 +253,24 @@ export class DefaultsService {
 
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
                     // console.log('FB_FORM_TABLE', data);
-
+                    Promise.resolve(this.getAreas(driverInfo)).then(data => {
                     // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                      Promise.resolve(this.customerType(driverInfo)).then(data => {
+                        // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
 
                       this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
                         this.loading.dismiss();
                         resolve(true)
                       });
                     // });
+
+                  }).catch(e => {
+                    console.log(e);
+                  });
+
+                  }).catch(e => {
+                    console.log(e);
+                  });
 
                   }).catch(e => {
                     console.log(e);
@@ -328,6 +338,90 @@ export class DefaultsService {
     } else {
       return new Promise(resolve => {
         this.storage.get('ITEMS_TABLE').then(res => {
+          // console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  }
+
+  customerType(info: any) {
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/customertype.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            console.log(res)
+
+            this.storage.set('CUSTOMERTYPE_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('CUSTOMERTYPE_TABLE').then(res => {
+          // console.log(res);
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  }
+
+  getAreas(info: any) {
+    if (navigator.onLine == true) {
+      let params = {
+        email: info.email_address,
+        password: info.password
+      }
+
+      return new Promise(resolve => {
+        this.httpclient.post(this.url + "/getAreas.json", params).subscribe(
+          response => {
+            let res;
+            res = response;
+            console.log(res)
+
+            this.storage.set('AREAS_TABLE', res).then(() => {
+              resolve(res)
+            });
+
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+
+            // alert(JSON.stringify(err));
+          }
+        );
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
+      return new Promise(resolve => {
+        this.storage.get('AREAS_TABLE').then(res => {
           // console.log(res);
           resolve(res)
         })

@@ -3,10 +3,183 @@
       <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
       </ion-buttons>
-      <ion-title>Create Customer</ion-title>
+      <ion-title>Create Account</ion-title>
   </ion-toolbar>
+
+
+<ion-toolbar class="menutoolbar">
+  <img object-fit: cover src="../assets/images/cottoncarelogo.png" style="padding: 20px;">
+</ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content >
+<form #cred="ngForm" style="padding-top: 10px;">
+
+  <ion-grid class="backgrounds ion-padding">
+    <ion-row>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <!-- <ion-label class="myfirsttext">Login</ion-label> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Company/Agent</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="companyagent" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Contact Person</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Required" required="true" name="contactperson1" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Contact No 1</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Required" required="true" name="contactno1" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Mailing Address</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Required" required="true" name="mailingaddress" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Unit No</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="unitno" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Building Name</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="builidngname" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Postal Code</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Required" required="true" name="postalcode" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Lift/Lobby</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="liftlobby" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Customer Type</ion-label>
+          <ion-select cancelText="Dismiss" id="customertype" name="customertype" [(ngModel)]="customertype">
+            <div *ngFor="let customertype of custtypelist; let i = index" slot="end">
+              <ion-select-option value="{{ customertype }}">{{ customertype }}</ion-select-option>
+            </div>
+          </ion-select>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+        <ion-label color="medium" position="floating" name="areacode" >Area</ion-label>
+         <ion-select  cancelText="Dismiss" id="areacode" name="areacode" [(ngModel)]="areacode">
+            <div *ngFor="let areacode of arealist; let i = index"  slot="end">
+              <ion-select-option value="{{ areacode }}">{{ areacode }}</ion-select-option>
+            </div>
+         </ion-select>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+        <!-- <ion-label color="medium" position="floating" ngModel name="areacode" >Area</ion-label>
+      <ion-select  cancelText="Dismiss" (ngModelChange)="getArea(areacode)" >
+          <div *ngFor="let areacode of arealist; let i = index">
+            <ion-select-option value="{{ areacode }}">{{ areacode }}</ion-select-option>
+          </div>
+      </ion-select> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Contact No 2</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="contactno2" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Email</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="emailcus" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Alternate Contact Person</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="optional" required="false" name="contactperson2" ngModel></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+ 
+  
+  </ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-button expand="full" shape="round" color="warning" (click)="registerCustomer(cred)">Register</ion-button>
+      <!-- <ion-button  expand="full" shape="round" color="warning" (click)="showFingerprintAuthDlg()">LOGIN</ion-button> -->
+    </ion-col>
+  </ion-row>
+</form>
 
 </ion-content>
