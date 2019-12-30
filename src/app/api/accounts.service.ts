@@ -68,10 +68,14 @@ export class AccountsService {
   getCustomer(info) {
 
     let params: any = {
-     email : "it01.azaza@gmail.com",
-     password : "7c222fb2927d828af22f592134e8932480637c0d",
-     userid : "109",
-     drivername : "dummydriver",
+    //  email : "it01.azaza@gmail.com",
+    //  password : "7c222fb2927d828af22f592134e8932480637c0d",
+    //  userid : "109",
+    //  drivername : "dummydriver",
+     userid : this.driverData.id,
+     email : this.driverData.email_address,
+     password : this.driverData.password,
+     drivername : this.driverData.name,
      contactno : info.contactno,
      postal : info.postal
     }
@@ -109,14 +113,14 @@ export class AccountsService {
     // })
 
     let params: any = {}
-      params.email = "it01.azaza@gmail.com"
-      params.password = "7c222fb2927d828af22f592134e8932480637c0d"
-      params.userid = "109",
-      params.drivername = "dummydriver",
-      //params.userid = this.driverData.id,
-      //params.email = this.driverData.email_address,
-      //params.password = this.driverData.password,
-      //params.name = this.driverData.name,
+      // params.email = "it01.azaza@gmail.com"
+      // params.password = "7c222fb2927d828af22f592134e8932480637c0d"
+      // params.userid = "109",
+      // params.drivername = "dummydriver",
+      params.userid = this.driverData.id,
+      params.email = this.driverData.email_address,
+      params.password = this.driverData.password,
+      params.name = this.driverData.name,
       params.companyagent = info.companyagent,
       params.contactperson1 = info.contactperson1,
       params.contactno1 = info.contactno1,

@@ -105,7 +105,6 @@ export class CollectionService {
     //   "custemail": customerEmail,
     // }
 
-
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/updatecustomeremail.json", params).subscribe(
         response => {
