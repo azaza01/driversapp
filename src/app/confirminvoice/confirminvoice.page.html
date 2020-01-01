@@ -14,7 +14,7 @@
         <ion-label>Customer Details</ion-label>
       </ion-item-divider>
       <ion-item>
-        <ion-label >Invoice : {{UNINV_INVNO}}</ion-label>
+        <ion-label style="font-size: smaller;">Invoice : {{UNINV_INVNO}}</ion-label>
         <ion-label >Type : {{UNINV_TYPE}}</ion-label>
       </ion-item>
       <ion-item>
@@ -22,8 +22,8 @@
           <ion-label style="margin-right: -5px;" >{{ company }}</ion-label>
         </ion-item>
       <ion-item>
-        <ion-label>Agreed Delivery Date : </ion-label>
-        <ion-label>{{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
+        <ion-label style="font-size: smaller;">Agreed Delivery Date : </ion-label>
+        <ion-label style="font-size: smaller;">{{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
         <!-- <ion-datetime  min="2019-12-12" max="2100-12-31"  displayFormat="DD-MMMM-YYYY" [(ngModel)]="today"></ion-datetime> -->
       </ion-item>
       <ion-item *ngIf="initDELIVERYDATE == '0000-00-00'">
@@ -42,8 +42,8 @@
           </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label>Inv. Notes : </ion-label>
-        <ion-input placeholder="Please put a note" [(ngModel)]="UNINV_INVOICENOTE" ></ion-input>
+        <ion-label style="font-size: smaller;">Inv. Notes : </ion-label>
+        <ion-input style="font-size: smaller;" placeholder="Please put a note" [(ngModel)]="UNINV_INVOICENOTE" ></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Donated : </ion-label>
@@ -113,7 +113,7 @@
  
     <ion-row >
       <ion-col>
-        <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="confirmPayment()">
+        <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="confirmPayment('true')">
           Confirm payments</ion-button>
       </ion-col>
     </ion-row>

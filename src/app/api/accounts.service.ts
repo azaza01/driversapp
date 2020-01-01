@@ -169,6 +169,8 @@ export class AccountsService {
     // var sha1 = require('sha1');
     // var hash = CryptoJS.SHA1(info.password);
     // var generatedpassword  = sha1(info.password);
+
+    //coded for adjustment of shar //thisis unsafe change it
     if(info.email == "ken@cottoncare.com.sg" && info.password == "blessed878"){
       info.password = "47cdb5462d98cef63f51176a007e93aea4b7f5b9";
     }else if(info.email == "eddieang@cottoncare.com.sg" && info.password == "charmed878"){
@@ -200,22 +202,18 @@ export class AccountsService {
     console.log(info.password);
 
     let infoi = {
-      // email: "it01.azaza@gmail.com",
-      // password: "7c222fb2927d828af22f592134e8932480637c0d"
       "email": "it01.azaza@gmail.com",
       "password": "7c222fb2927d828af22f592134e8932480637c0d",
     }
 
     let infox = {
-      // email: "it01.azaza@gmail.com",
-      // password: "7c222fb2927d828af22f592134e8932480637c0d"
       "email": "riziano@cottoncare.com.sg",
       "password": "f3bd2a65e77ea0bc22eb0d5ce2b917a0acff51f2",
     }
 
     if (navigator.onLine == true) {
       return new Promise(resolve => {
-        this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
+        this.httpclient.post(this.url + "/logon.json", info).subscribe(
           response => {
             let res;
             res = response[0];

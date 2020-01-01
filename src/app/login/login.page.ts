@@ -51,10 +51,10 @@ export class LoginPage implements OnInit {
 
     // wew = {
     //   // COLID: "142823",
-    //   INV_DATE: "2019-12-27",
+    //   INV_DATE: "2020-01-01",
     //   INV_TYPE: "CC",
-    //   INV_RUNNING: 2,
-    //   INV_NO: "CC-191270Du02"      // DriverID: 53
+    //   INV_RUNNING: 1,
+    //   INV_NO: "CC-200101Du01"      // DriverID: 53
     // }
     // for (let index = 0; index < 1; index++) {
     //   wew2.push(wew)
@@ -63,7 +63,7 @@ export class LoginPage implements OnInit {
     // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
     //   console.log(res);
     // })
-    // return
+
 
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       console.log(res)

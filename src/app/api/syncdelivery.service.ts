@@ -80,7 +80,7 @@ export class SyncdeliveryService {
           res = response;
           // console.log(res)
           // this.storage.set('SYNCED_DELIVERY_TABLE', res).then(() => {
-            resolve(res)
+          resolve(res)
           // });
           this.loading.dismiss();
         },
@@ -91,7 +91,6 @@ export class SyncdeliveryService {
           // alert(JSON.stringify(err));
         }
       );
-
     }).catch(err => {
       console.log(err)
       this.loading.dismiss();
@@ -116,7 +115,7 @@ export class SyncdeliveryService {
     //   savedon   :  this.today
     //   //CC-191207Ch23
     // }
-    await this.presentLoading('Syncing Collection');
+    await this.presentLoading('Syncing Payments');
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/updateinvoicestatus.json", info).subscribe(
         response => {

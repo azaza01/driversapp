@@ -24,50 +24,55 @@
 </ion-header>
 
 <ion-content >
-  <div [ngSwitch]="selectedView" style="padding-left: 10px;padding-right: 10px;">
-    <div *ngSwitchCase="'COLLECTION'">
+  <div >
+    <div >
       <ion-list [hidden]="item.coldel_type != 'collection'" *ngFor="let item of myColDev; let i = index" >
         <ion-item-group  ng-selected="selected[i]" (click)="colView(item)" style="border-color: rgb(0, 0, 0);">
-            <ion-item-divider *ngIf="item.coldel_flag == 'updated'" style="border-color: rgb(0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
+            <ion-item-divider *ngIf="item.coldel_flag == 'updated'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
             <ion-item>
               <ion-row>
                 <ion-col>
                   <ion-img src="../assets/images/collection_icon.png" style="width:50%;height: 50%;"></ion-img>
-                  <ion-label style="font-size: medium;color: black;" >{{ item.cot }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;" >{{ item.cot }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-label style="font-size: large;">{{ item.cun }}</ion-label>
+                  <ion-label style="font-size: medium;">{{ item.cun }}<br/>{{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }}</ion-label>
                 </ion-col>
-                <ion-col>
-                  <ion-label style="font-size: medium;">{{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }}</ion-label>
-                </ion-col>
-                <ion-col *ngIf="item.con != ''">
+                <!-- <ion-col>
+                  <ion-label style="font-size: medium;"></ion-label>
+                </ion-col> -->
+                <!-- <ion-col *ngIf="item.con != ''">
                   <ion-label style="font-size: medium;">Note : {{ item.con }}</ion-label>
-                </ion-col>
+                </ion-col> -->
               </ion-row>       
             </ion-item>
           </ion-item-divider>
-          <ion-item-divider *ngIf="item.coldel_flag == 'old'" style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+          <ion-item-divider *ngIf="item.coldel_flag == 'old'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
             <ion-item>
               <ion-row>
                 <ion-col>
                   <ion-img src="../assets/images/collection_icon.png" style="width:50%;height: 50%;"></ion-img>
-                  <ion-label style="font-size: medium;color: black;" >{{ item.cot }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;" >{{ item.cot }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-label style="font-size: large;">{{ item.cun }}</ion-label>
+                  <ion-label style="font-size: medium;">{{ item.cun }} <br/> {{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }} </ion-label>
                 </ion-col>
-                <ion-col>
-                  <ion-label style="font-size: medium;">{{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }}</ion-label>
-                </ion-col>
-                <ion-col *ngIf="item.con != ''">
+                <!-- <ion-col>
+                  <ion-label style="font-size: medium;"></ion-label>
+                </ion-col> -->
+                <!-- <ion-col *ngIf="item.con != ''">
                   <ion-label style="font-size: medium;">Note : {{ item.con }}</ion-label>
-                </ion-col>
+                </ion-col> -->
               </ion-row>       
+            </ion-item>
+          </ion-item-divider>
+          <ion-item-divider  style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item style="width:20%;height: 20%;">
+             
             </ion-item>
           </ion-item-divider>
         </ion-item-group>
@@ -76,54 +81,73 @@
         <!-- <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false" reorder="true" side="start"> -->
         <!-- <ng-container *ngIf="delitem.coldel_type == 'delivery' && delitem.sts != 'Full Delivered, Partial Paid'"> -->
         <ion-item-group ng-selected="selected[i]" (click)="delView(delitem)">
-          <ion-item-divider *ngIf="delitem.coldel_flag == 'updated'" style="border-color: rgb(0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
+          <!-- <ion-item-divider *ngIf="delitem.coldel_flag == 'updated'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
             <ion-item>
               <ion-row>
                 <ion-col>
-                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-img  *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Paid'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
-                  <ion-label style="font-size: medium;;color: black;"> {{ delitem.det }}</ion-label>
+                  <ion-label style="font-size: smaller;;color: black;"> {{ delitem.det }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-label style="font-size: large;">Name : {{ delitem.cun }}</ion-label>
+                  <ion-label style="font-size: medium;">{{ delitem.cun }} <br/> {{ delitem.dea }} <br/> {{ delitem.dun }} S{{ delitem.dpc }}<br/> {{ delitem.deb }}</ion-label>
                 </ion-col>
+            
+              </ion-row>       
+            </ion-item>
+          </ion-item-divider> -->
+          
+          <ion-item-divider *ngIf="delitem.coldel_flag == 'old'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item>
+              <ion-row>
                 <ion-col>
-                  <ion-label style="font-size: medium;">Address : {{ delitem.dea }} <br/>{{ delitem.dun }} S{{ delitem.dpc }}<br/> {{ delitem.deb }}</ion-label>
+                  <ion-img *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Pai'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid' || delitem.sts == 'Full Delivered, Unpaid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
+                  <ion-label style="font-size: smaller;;color: black;"> {{ delitem.det }}</ion-label>
                 </ion-col>
-                <ion-col *ngIf="delitem.den != ''">
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: medium;">{{ delitem.cun }} <br/> {{ delitem.dea }} <br/>{{ delitem.dun }} S{{ delitem.dpc }}<br/> {{ delitem.deb }}</ion-label>
+                </ion-col>
+                <!-- <ion-col>
+                  <ion-label style="font-size: medium;"></ion-label>
+                </ion-col> -->
+                <!-- <ion-col *ngIf="delitem.den != ''">
                   <ion-label style="font-size: medium;">NOTE : {{ delitem.den }}</ion-label>
-                </ion-col>
+                </ion-col> -->
               </ion-row>       
             </ion-item>
           </ion-item-divider>
-          
-          <ion-item-divider *ngIf="delitem.coldel_flag == 'old'" style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+        
+          <ion-item-divider  *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Paid'" style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
             <ion-item>
-              <ion-row>
-                <ion-col>
-                  <ion-img *ngIf="delitem.sts == 'Pending Delivery'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
-                  <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
-                  <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
-                  <ion-label style="font-size: medium;;color: black;"> {{ delitem.det }}</ion-label>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <ion-label style="font-size: large;">Name : {{ delitem.cun }}</ion-label>
-                </ion-col>
-                <ion-col>
-                  <ion-label style="font-size: medium;">Address : {{ delitem.dea }} <br/>{{ delitem.dun }} S{{ delitem.dpc }}<br/> {{ delitem.deb }}</ion-label>
-                </ion-col>
-                <ion-col *ngIf="delitem.den != ''">
-                  <ion-label style="font-size: medium;">NOTE : {{ delitem.den }}</ion-label>
-                </ion-col>
-              </ion-row>       
+              <ion-img src="../assets/images/hang.png" style="height: 30px;width: 30px;"></ion-img>
+              <ion-label style="font-size: smaller;"> {{ delitem.han }}</ion-label>
             </ion-item>
+
+            <ion-item>
+              <ion-img src="../assets/images/pack.png" style="height: 30px;width: 30px;" ></ion-img>
+              <ion-label style="font-size: smaller;">{{ delitem.pac }}</ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-img src="../assets/images/roll.png" style="height: 30px;width: 30px;" ></ion-img>
+              <ion-label fstyle="font-size: smaller;">{{ delitem.rol }}</ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-img src="../assets/images/ret.png" style="height: 30px;width: 30px;" ></ion-img>
+              <ion-label  style="font-size: smaller;">{{ delitem.ret }}</ion-label>
+            </ion-item>
+
           </ion-item-divider>
         </ion-item-group>
+
       </ion-list>
     </div>
     <!-- <div *ngSwitchCase="'DELIVERIES'">

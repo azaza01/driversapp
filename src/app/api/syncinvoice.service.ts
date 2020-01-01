@@ -102,9 +102,10 @@ export class SyncinvoiceService {
         response => {
           let res;
           res = response;
-          // console.log(res)
-          resolve(res)
+          console.log(res)
           this.loading.dismiss();
+          resolve(res)
+         
 
           // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
           //   resolve(res)
@@ -127,59 +128,55 @@ export class SyncinvoiceService {
 
   async addinvoiceFromLocal(info: any) {
     console.log(info)
-
-    this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res)
-      this.driversDetails = res
-    })
-
-    let infox = {
-      "email" : this.driversDetails.email_address,
-      "password" : this.driversDetails.password,
-      "name" : this.driversDetails.name,
-      "driverid" : this.driversDetails.id,
-      "customerid" : info.custID,
-      "collecttype" : info.del,
-      "collectdate" : info.UCOcollectdate,
-      "collecttime" : info.UCOreturntime,
-      "collectaddress" : info.UCOcollectaddress,
-      "collectunit" : info.UCOcollectunit,
-      "collectpostal" : info.UCOcollectpostal,
-      "collectbuilding" : info.UCOcollectbuilding,
-      "collectregion" : info.UCOcollectregion,
-      "collectnote" : info.UCOcollectnote,
-      "status" : "Collected",
-      "saved_on" : info.rid
-    }
-    console.log(infox)
-
-    await this.presentLoading('Syncing Collection');
     return new Promise(resolve => {
-      this.httpclient.post(this.url + "/addcollection.json", infox).subscribe(
-        response => {
-          let res;
-          res = response;
+        this.storage.get('ACCOUNTS_TABLE').then(res => {
           console.log(res)
-          resolve(res)
-          this.loading.dismiss();
-
-          // this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
-          //   resolve(res)
-          // });
-
-        },
-        err => {
-          console.log(err)
-          resolve(false)
-          this.loading.dismiss();
-          // alert(JSON.stringify(err));
-        }
-      );
-
-    }).catch(err => {
-      console.log(err)
-      this.loading.dismiss();
+          this.driversDetails = res
+          
+        }).finally(() =>{
+          let infox = {
+            "email" : this.driversDetails.email_address,
+            "password" : this.driversDetails.password,
+            "name" : this.driversDetails.name,
+            "driverid" : this.driversDetails.id,
+            "customerid" : info.custID,
+            "collecttype" : info.UCOcollecttype,
+            "collectdate" : info.UCOcollectdate,
+            "collecttime" : info.UCOreturntime,
+            "collectaddress" : info.UCOcollectaddress,
+            "collectunit" : info.UCOcollectunit,
+            "collectpostal" : info.UCOcollectpostal,
+            "collectbuilding" : info.UCOcollectbuilding,
+            "collectregion" : info.UCOcollectregion,
+            "collectnote" : info.UCOcollectnote,
+            "status" : "Collected",
+            "saved_on" : info.rid
+          }
+          console.log(infox)
+        
+          this.httpclient.post(this.url + "/addcollection.json", infox).subscribe(
+          response => {
+            let res;
+            res = response;
+            console.log(res)
+            resolve(res)
+          },
+          err => {
+            console.log(err)
+            resolve(false)
+   
+            // alert(JSON.stringify(err));
+          }
+        );
+  
+      }).catch(err => {
+        console.log(err)
+        this.loading.dismiss();
+      })
     })
+
+
+ 
   }
 
 

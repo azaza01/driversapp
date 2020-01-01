@@ -144,7 +144,6 @@ export class DeliveryviewPage implements OnInit {
       await Promise.resolve(this.cltnSrvc.updateEmail(this.driverInfo, this.customerEmail, this.customerId )).then(data => {
         if (data != "false") {
           this.presentAlert("Email Successfully Change");
-          this.loading.dismiss();
         } else {
           this.presentAlert("Connection error");
   
@@ -161,15 +160,12 @@ export class DeliveryviewPage implements OnInit {
                 }
               });
               this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
-              this.loading.dismiss();
             }else{
               this.storage.set('UNSYNCED_EMAILS_TABLE', params)
-              this.loading.dismiss();
             }
           }).finally(() => {
             this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
               // console.log(res)
-              this.loading.dismiss();
             })
             
           })
@@ -189,23 +185,20 @@ export class DeliveryviewPage implements OnInit {
               }
             });
             this.storage.set('UNSYNCED_EMAILS_TABLE', filtered)
-            this.loading.dismiss();
           }else{
             this.storage.set('UNSYNCED_EMAILS_TABLE', params)
-            this.loading.dismiss();
           }
         }).finally(() => {
           this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
             // console.log(res)
-            this.loading.dismiss();
           })
         })
-        this.loading.dismiss();
       });
       this.loading.dismiss();
   }
 
   async postphone(){
+    await this.presentLoading('trying to postpone delivery');
     console.log(this.today)
     console.log(this.selectedtime)
     let selectedDate;
@@ -224,36 +217,35 @@ export class DeliveryviewPage implements OnInit {
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
     }else{
       if(this.reasonofpostpone != ""){
-      await this.presentLoading('');
       await Promise.resolve(this.delSrvc.postponeDelivery(this.driverInfo, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone )).then(data => {
         if(data != "false" || data != ""){
           this.removepostpone(this.selectedDelivery)
           this.presentAlert("Delivery Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
-          this.loading.dismiss();
           //need to check
         }else{
           this.presentAlert("Connection error");
-          this.loading.dismiss();
         }
       }).catch(e => {
         console.log(e);
         this.presentAlert("Connection error");
-        this.loading.dismiss();
       });
      }else{
       this.presentAlert("Please add reason to postpone");
      }
     }
+
+    this.loading.dismiss();
   }
 
   removepostpone(collectionid){
+    this.presentLoading('Removing on list');
     this.storage.get('COLDEL_TABLE').then(res => {
       let data, colid, i
       data = res
       let filtered: any = []
       // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
       // console.log(colid)
-      //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
+      // i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
       if (data != "") {
         data.forEach(coldelData => {
           if (coldelData.coldel_type == 'delivery') {
@@ -270,7 +262,8 @@ export class DeliveryviewPage implements OnInit {
         this.storage.set('COLDEL_TABLE', filtered)
       }
     }).finally(() => {
-        this.router.navigate(['/coldev']);
+      this.loading.dismiss();
+      this.router.navigate(['/coldev']);
     })
   }
 

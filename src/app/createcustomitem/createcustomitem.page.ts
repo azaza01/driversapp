@@ -712,7 +712,8 @@ export class CreatecustomitemPage implements OnInit {
 
 
   addCustomItem() {
-    if ((this.myquan == null || this.myquan == 0) || (this.myprice == null || this.myprice == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
+   // if ((this.myquan == null || this.myquan == 0) || (this.myprice == null || this.myprice == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
+    if ((this.myquan == null || this.myquan == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
       this.presentAlert();
     } else {
       if (this.selectedCategory == "Carpet") {

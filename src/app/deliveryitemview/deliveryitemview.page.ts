@@ -34,7 +34,8 @@ export class DeliveryitemviewPage implements OnInit {
     public loadingCtrl: LoadingController,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.presentLoading('Getting Item');
     this.getItems();
   }
 
@@ -81,6 +82,7 @@ export class DeliveryitemviewPage implements OnInit {
            let items: any
            items = data;
            this.info = data;
+           this.loading.dismiss();
            console.log(items);
         }).catch(e => {
             console.log(e);

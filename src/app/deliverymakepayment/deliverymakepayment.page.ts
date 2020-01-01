@@ -16,9 +16,10 @@ export class DeliverymakepaymentPage implements OnInit {
 
   loading: any = new LoadingController;
 
-  paymentMethod: any
-  payAmount: any = 0
+  paymentMethod: any = "Cash"
+  payAmount: any = 0 
   newamount: any = 0
+
 
   datatrue: any
 
@@ -64,15 +65,15 @@ export class DeliverymakepaymentPage implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getPaymentDetails()
-    this.getToday()
-    this.getTodayID()
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       // console.log(res)
       this.email_address = res.email_address
       this.password = res.password
       this.name = res.name
+    }).finally(() =>{
+      // this.loading.dismiss();
     })
   }
 
@@ -121,26 +122,11 @@ export class DeliverymakepaymentPage implements OnInit {
       this.deliveryDetails = res
       this.outstandingbalance = parseInt(this.deliveryDetails.toa) - (parseInt(this.deliveryDetails.dpa) + parseInt(this.deliveryDetails.bap))
       this.inn = res.inn
+    }).then(() =>{
+      this.getToday()
+    }).finally(() => {
+      this.getTodayID()
     })
-    // this.invnum = "inn" 
-    // this.totalamount = "toa"
-    // this.billFromCompany = "coi"
-    // this.discounts = "dis"
-    // this.depositamount = "dpa"
-    // this.deposittype = "dpt"
-    // this.LastPaid = "bap"
-    // this.outstandingbalance = this.totalamount - (this.depositamount  + this.LastPaid )
-    // this.customerCredit = "100"
-
-    // this.invnum = "inn"
-    // this.totalamount = 108
-    // this.billFromCompany = "CC"
-    // this.discounts = 20
-    // this.depositamount = 60
-    // this.deposittype = "CASH"
-    // this.LastPaid = 40
-    // this.outstandingbalance = this.totalamount - (this.depositamount + this.LastPaid)
-    // this.customerCredit = "100"
   }
 
   saveSummury() {
@@ -178,6 +164,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
   async makePayment(kindoftransaction) {
     console.log(kindoftransaction)
+    this.checkIfRepeat = kindoftransaction;
     this.getdeliveryStatus(kindoftransaction);
     // update summary table SUMMARY_TABLE +1 to deliver add value to (CASH or CREDIT, CHEQUE, BT  +1 to DC/CC)
 
@@ -199,17 +186,6 @@ export class DeliverymakepaymentPage implements OnInit {
 
   }
 
-  // makePaymentAndCreateNew() {
-  //   this.getdeliveryStatus();
-
-  //   // update COLDEL_TABLE
-
-  //   // update SUMMARY_TABLE
-
-  //   // UNSYNCED_PAYMENT_TABLE
-
-
-  // }
 
   getToday() {
     let today;
@@ -235,42 +211,100 @@ export class DeliverymakepaymentPage implements OnInit {
     // console.log(this.todaydate)
   }
 
-  async deliverysync(kindoftransaction) {      
-    await Promise.resolve(this.deliveryndata()).then(coldata => {
-      if (navigator.onLine == true) {
-        if(kindoftransaction == 'repeat'){
-          this.checkIfRepeat = "yes";
-          this.savePay(coldata);
-        }else if(kindoftransaction == 'maypayment'){
-          this.checkIfRepeat = "no";
-          Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
-          if (data == true) {
-            this.presentToast("Delivery Successfully Sync")
-            this.offlinedeliveryUpdate(coldata);
-          } else if (data == "duplicate") {
-            this.presentToast("Duplicate Invoice")
+
+  async getdeliveryStatus(kindoftransaction) {
+    const alert = await this.alertController.create({
+      header: 'Delivery Status',
+      message: "Please choose below for current selected delivery to proceed",
+      cssClass: 'ion-alertCSS',
+      buttons: [
+        {
+          text: 'Full Delivered',
+          handler: () => {
+            this.deliveryStatus = "Full Delivered"
+            this.getDeliveryPaymentStatus(kindoftransaction);
+          }
+        }, {
+          text: 'Partial Delivered',
+          handler: () => {
+            this.deliveryStatus = "Partial Delivered"
+            this.getDeliveryPaymentStatus(kindoftransaction);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  getDeliveryPaymentStatus(kindoftransaction) {
+    console.log(this.deliveryDetails.bap);
+    console.log(this.deliveryDetails.dpa);
+    console.log(this.payAmount);
+    this.newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa) + (this.payAmount);
+    var checkunpaid =  this.outstandingbalance - this.payAmount
+    console.log(checkunpaid);
+
+    console.log(this.paymentMethod);
+    if(this.paymentMethod == "Credit"){
+      if(checkunpaid <= 0){
+        this.deliveryStatus = this.deliveryStatus + ", Full Paid";
+        this.newCustomerCredit = this.deliveryDetails.cca - this.outstandingbalance
+        this.deliverysync(kindoftransaction);
+      }else{
+        this.presentToast("Credit amount is less than outstanding balance")
+        this.deliveryStatus = this.deliveryStatus + ", Partial Paid"
+        this.deliverysync(kindoftransaction);
+      }
+    }else{
+      if (checkunpaid <= 0) {
+        this.deliveryStatus = this.deliveryStatus + ", Full Paid";
+        this.deliverysync(kindoftransaction);
+      }else{
+        this.deliveryStatus = this.deliveryStatus + ", Partial Paid";
+        this.deliverysync(kindoftransaction);
+      }
+    }
+  }
+
+
+  async deliverysync(kindoftransaction) {   
+      await this.presentLoading('Syncing Payments');     
+      await Promise.resolve(this.deliveryndata()).then(coldata => {
+        if (navigator.onLine == true) {
+          if(kindoftransaction == 'repeat'){
+            this.presentToast("Current Transaction will save locally")
+            console.log("2")
             this.savePay(coldata);
-          } else {
-            this.presentToast("Cannot sync, poor internet connection. Please save later")
+          }else if(kindoftransaction == 'maypayment'){
+            Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
+            if (data == true) {
+              this.presentToast("Delivery Successfully Sync")
+              this.offlinedeliveryUpdate(coldata);
+            } else if (data == "duplicate") {
+              this.presentToast("Duplicate Invoice")
+              this.savePay(coldata);
+            } else {
+              this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+              this.savePay(coldata);
+            }
+          }).catch(e => {
+            console.log(e);
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+            this.savePay(coldata);
+          });
+         }
+        } else {
+          if(kindoftransaction == 'repeat'){
+            console.log("1")
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+            this.savePay(coldata);
+          }else if(kindoftransaction == 'maypayment'){
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
             this.savePay(coldata);
           }
-        }).catch(e => {
-          console.log(e);
-          this.presentToast("Error trying to connect on internet connection. Please save later")
-          this.savePay(coldata);
-        });
-       }
-      } else {
-        if(kindoftransaction == 'repeat'){
-          this.savePay(coldata);
-          this.checkIfRepeat = "yes";
-        }else if(kindoftransaction == 'maypayment'){
-          this.checkIfRepeat = "no";
-          this.savePay(coldata);
         }
-      }
-    })
-   
+      })
   }
 
   deliveryndata() {
@@ -373,14 +407,46 @@ export class DeliverymakepaymentPage implements OnInit {
         
         this.storage.set('COLDEL_TABLE', filtered)
       }
-    }).finally(() => {
-      if(this.checkIfRepeat == "no"){
-        this.router.navigate(['/coldev']);
-      }else if(this.checkIfRepeat == "yes"){
-        this.repeatInvoice()
-      }
+    }).finally(() => { 
+      this.proceedtoWhere(this.checkIfRepeat, offlinedata)
     })
   }
+
+  proceedtoWhere(kindoftransaction, offlinedata){
+    if(kindoftransaction == "maypayment"){
+      this.removeCurrentTransaction(offlinedata)
+    }else if(kindoftransaction == "repeat"){
+      this.loading.dismiss();
+      this.repeatInvoice()
+    }
+  }
+
+  removeCurrentTransaction(offlinedata){
+    this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+      let data
+      data = res
+      let filtered: any = []
+      if (data != "") {
+        data.forEach(coldelData => {
+            if (coldelData.delid  == offlinedata.delid ) {
+             //delete data
+            } else {
+              filtered.push(coldelData)
+            }
+        });
+        
+        this.storage.set('UNSYNCED_PAYMENT_TABLE', filtered)
+      }
+    }).finally(() => {
+      this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+        console.log(res)
+        this.loading.dismiss();
+        this.router.navigate(['/coldev']);
+      })
+    })
+  }
+
+ 
 
   async repeatInvoice() {
     let tag;
@@ -388,6 +454,7 @@ export class DeliverymakepaymentPage implements OnInit {
       header: 'Bill from which company?',
       message: 'For curtains, carpets and sofa covers, please bill from DC. For any others, please bill from CC.',
       cssClass: 'ion-alertCSS',
+      backdropDismiss:false,
       buttons: [
         {
           text: 'DC',
@@ -696,26 +763,36 @@ export class DeliverymakepaymentPage implements OnInit {
     this.finaldeliverydata.push(params)
     // await this.presentLoading('Syncing local Data');
     ////update UNSYNCED_INVOICE_TABLE
+
     await this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
-      let data
-      data = res
-      let filtered: any = []
-      console.log(data)
+      this.finaldeliverydata = res
+      // console.log(this.unsyncData)
 
-      if (data == null) {
+      if (res == null) {
+        this.finaldeliverydata = []
+        this.finaldeliverydata.push(params)
         this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
-      } else {
-        data.forEach(unsync => {
-          if (unsync.dei == offlinedata.delid) {
-            filtered.push(this.finaldeliverydata)
-          } else {
-            filtered.push(unsync)
-          }
-        });
-        this.storage.set('UNSYNCED_PAYMENT_TABLE', filtered)
-        // this.loading.dismiss();
-      }
+        // console.log(this.unsyncData)
 
+      } else {
+        let result;
+        result = this.finaldeliverydata.filter((item) => {
+          return (item.delid.indexOf(offlinedata.delid) !== -1)
+        })
+        if (result.length < 1) {
+          this.finaldeliverydata.push(params)
+          this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
+          // console.log(this.unsyncData)
+
+        } else {
+          // console.log(result)
+          let i;
+          i = this.finaldeliverydata.findIndex(x => x.id == result[0].id)
+          this.finaldeliverydata.splice(i, 1, params);
+          // console.log(this.unsyncData)
+          this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
+        }
+      }
     }).finally(() => {
       this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
         console.log(ress)
@@ -723,61 +800,34 @@ export class DeliverymakepaymentPage implements OnInit {
       this.offlinedeliveryUpdate(offlinedata);
     })
 
+    // await this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+    //   let data
+    //   data = res
+    //   let filtered: any = []
+    //   console.log(data)
+
+    //   if (data != "") {
+    //     data.forEach(unsync => {
+    //       if (unsync.delid == offlinedata.delid) {
+    //         filtered.push(this.finaldeliverydata)
+    //       } else {
+    //         filtered.push(unsync)
+    //       }
+    //     });
+    //     this.storage.set('UNSYNCED_PAYMENT_TABLE', filtered)
+    //   } else {
+    //     this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
+    //     // this.loading.dismiss();
+    //   }
+
+    // }).finally(() => {
+    //   this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
+    //     console.log(ress)
+    //   })
+    //   this.offlinedeliveryUpdate(offlinedata);
+    // })
+
    
-  }
-
-
-  async getdeliveryStatus(kindoftransaction) {
-    const alert = await this.alertController.create({
-      header: 'Delivery Status',
-      message: "Please choose below for current selected delivery to proceed",
-      cssClass: 'ion-alertCSS',
-      buttons: [
-        {
-          text: 'Full Delivered',
-          handler: () => {
-            this.deliveryStatus = "Full Delivered"
-            this.getDeliveryPaymentStatus(kindoftransaction);
-          }
-        }, {
-          text: 'Partial Delivered',
-          handler: () => {
-            this.deliveryStatus = "Partial Delivered"
-            this.getDeliveryPaymentStatus(kindoftransaction);
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  getDeliveryPaymentStatus(kindoftransaction) {
-    console.log(this.deliveryDetails.bap);
-    console.log(this.deliveryDetails.dpa);
-    console.log(this.payAmount);
-    this.newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa) + (this.payAmount);
-    console.log(this.newamount);
-    if (this.newamount >= this.outstandingbalance) {
-      //Log.d("spark", "paid amount is smaller than existing credits");
-      //status = status + ", Full Paid";
-      //if credit amount is less than the amount to pay, mark as partial paid
-      if ((this.deliveryDetails.cca < this.outstandingbalance) && (this.paymentMethod == "CREDIT")) { //outstandingPaid is > than creditsBalance 2015-01-13
-        this.deliveryStatus = this.deliveryStatus + ", Partial Paid"
-          this.deliverysync(kindoftransaction);
-      } else {
-        this.deliveryStatus = this.deliveryStatus + ", Full Paid";
-        this.newCustomerCredit = this.deliveryDetails.cca - this.outstandingbalance
-          this.deliverysync(kindoftransaction);
-      }
-    } else if (this.outstandingbalance == 0) {
-      this.deliveryStatus = this.deliveryStatus + ", Unpaid";   
-        this.deliverysync(kindoftransaction);
-    } else {
-      this.deliveryStatus = this.deliveryStatus + ", Partial Paid";
-        this.deliverysync(kindoftransaction);
-    }
-
   }
 
   createInvoiceItem() {

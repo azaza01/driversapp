@@ -19,6 +19,7 @@ export class SelectcategoryPage implements OnInit {
 
   dataReturned: any;
   unsyncData: any = ""
+
   isLoading: boolean = false
   driverInfo: any
   collectionInfo: any = ""
@@ -57,7 +58,9 @@ export class SelectcategoryPage implements OnInit {
     this.tempItems = ""
     this.unsyncData = ""
     this.myColID = ""
+
     this.defaultSrvc.getTempItems = undefined;
+
     this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
       console.log('removed ');
       this.storage.remove('TEMP_RATES_TABLE').then(() => {
@@ -74,11 +77,11 @@ export class SelectcategoryPage implements OnInit {
       // wew = params
       // wew.com = "wew"
       // //console.log(wew);
-     
+
       this.collectionInfo = params
-      if(this.collectionInfo.coldel_type == "collection"){
+      if (this.collectionInfo.coldel_type == "collection") {
         this.myColID = this.collectionInfo.id
-      }else if (this.collectionInfo.coldel_type == "delivery"){
+      } else if (this.collectionInfo.coldel_type == "delivery") {
         this.myColID = this.collectionInfo.dei
       }
       console.log(this.myColID)
@@ -91,7 +94,7 @@ export class SelectcategoryPage implements OnInit {
       // }else{
       //   myColID = this.collectionInfo.id
       // }
-      
+
       //console.log(this.collectionInfo);
 
       this.storage.get('ACCOUNTS_TABLE').then(res => {
@@ -101,11 +104,11 @@ export class SelectcategoryPage implements OnInit {
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           var l = res.length, i;
           for (i = 0; i < l; i++) {
-            if(res[i].UNINV_COLLID == this.myColID){
+            if (res[i].UNINV_COLLID == this.myColID) {
               this.unsyncData = res[i]
             }
           }
-          console.log(this.unsyncData) 
+          console.log(this.unsyncData)
 
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
@@ -123,14 +126,14 @@ export class SelectcategoryPage implements OnInit {
               // this.defaultSrvc.getTempItems = this.tempItems
               this.category = this.getItem(this.tempItems, 'items')
               this.isLoading = false
-              this.loading.dismiss();
+
 
             }).catch(e => {
               //console.log(e);
-              this.loading.dismiss();
+              // this.loading.dismiss();
 
             });
-            this.loading.dismiss();
+
 
           } else {
             Promise.resolve(this.defaultSrvc.getRates(this.driverInfo)).then(data => {
@@ -147,14 +150,14 @@ export class SelectcategoryPage implements OnInit {
               this.storage.set('TEMP_RATES_TABLE', this.tempItems)
               this.category = this.getItem(this.tempItems, 'rates')
               this.isLoading = false
-              this.loading.dismiss();
+
 
             }).catch(e => {
               //console.log(e);
-              this.loading.dismiss();
+
 
             });
-            this.loading.dismiss();
+            // this.loading.dismiss();
 
           }
         })
@@ -163,6 +166,78 @@ export class SelectcategoryPage implements OnInit {
 
     });
 
+  }
+
+  async removeCurrentTransaction(msg) {
+    if (this.collectionInfo.coldel_type == "collection") {
+
+    } else {
+      const alert = await this.alertController.create({
+        header: '',
+        message: msg,
+        cssClass: 'ion-alertCSS',
+        buttons: [
+          {
+            text: 'Yes',
+            handler: () => {
+              alert.dismiss();
+              this.tansProceed()
+            }
+          }, {
+            text: 'No',
+            handler: () => {
+              alert.dismiss();
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    }
+  }
+
+  tansProceed() {
+    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+      let data
+      data = res
+      let filtered: any = []
+      if (data != "") {
+        data.forEach(coldelData => {
+          if (coldelData.UNINV_COLLID == this.myColID) {
+            //delete data
+          } else {
+            filtered.push(coldelData)
+          }
+        });
+
+        this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+      }
+    }).finally(() => {
+      this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+        console.log(res)
+      })
+      this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+        let data
+        data = res
+        let filtered: any = []
+        if (data != "") {
+          data.forEach(coldelData => {
+            if (coldelData.coldelID == this.myColID) {
+              //delete data
+            } else {
+              filtered.push(coldelData)
+            }
+          });
+
+          this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
+        }
+      }).finally(() => {
+        this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+          console.log(res)
+          this.router.navigate(['/coldev']);
+        })
+      })
+    })
   }
 
   async presentLoading(msg) {
@@ -183,23 +258,24 @@ export class SelectcategoryPage implements OnInit {
         if (this.unsyncData.UNINV_INITIAL == 'DC') {
           if (info[i].cat_type == "Curtains" || info[i].cat_type == "Sofa Covers" || info[i].cat_type == "Carpet") {
             output.push(info[i].cat_type);
-            this.loading.dismiss();
+            // this.loading.dismiss();
 
           }
         } else if (this.unsyncData.UNINV_INITIAL == 'CC') {
           if (info[i].cat_type != "Curtains" && info[i].cat_type != "Sofa Covers" && info[i].cat_type != "Carpet") {
             output.push(info[i].cat_type);
-            this.loading.dismiss();
+            // this.loading.dismiss();
 
           }
         }
       } else {
         output.push(info[i].cat_type);
-        this.loading.dismiss();
+        // this.loading.dismiss();
 
       }
     }
     console.log(output);
+    this.loading.dismiss();
     return output
   }
 
@@ -246,15 +322,50 @@ export class SelectcategoryPage implements OnInit {
 
 
   confirmInvoice() {
-    //console.log(this.defaultSrvc.getTempItems)
-
-    if (this.defaultSrvc.getTempItems == undefined) {
+    var checkitems = "false"
+    if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
       this.presentToast('Please select item first')
     } else {
-      this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
-        // this.defaultSrvc.getTempItems = this.item_List
-        this.router.navigate(['/confirminvoice', this.collectionInfo]);
-      })
+      if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+        this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
+          // this.defaultSrvc.getTempItems = this.item_List
+    
+          this.storage.get("TEMP_ITEMS_TABLE").then(res => {
+            var flags = [], output = [], l = res.length, i;
+            for (i = 0; i < l; i++) {
+              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+                checkitems = "true"
+              } else {
+                //checkitems = "false"
+              }
+            }
+            if (checkitems == "true") {
+              this.router.navigate(['/confirminvoice', this.collectionInfo]);
+            } else {
+              this.presentToast('Please select item first')
+            }
+          })
+        })
+      } else {
+        this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
+          // this.defaultSrvc.getTempItems = this.item_List
+          this.storage.get("TEMP_RATES_TABLE").then(res => {
+            var flags = [], output = [], l = res.length, i;
+            for (i = 0; i < l; i++) {
+              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+                checkitems = "true"
+              } else {
+                //checkitems = "false"
+              }
+            }
+            if (checkitems == "true") {
+              this.router.navigate(['/confirminvoice', this.collectionInfo]);
+            } else {
+              this.presentToast('Please select item first')
+            }
+          })
+        })
+      }
     }
   }
 
@@ -264,27 +375,73 @@ export class SelectcategoryPage implements OnInit {
   }
 
   async viewItems(info) {
-    //console.log(info)
-    const myModal = await this.modalController.create({
-      component: CollectionitemsPage,
-      cssClass: 'viewItem-css',
-      componentProps: { value: info },
-      backdropDismiss: false,
-    });
 
-    myModal.onDidDismiss().then(async data => {
-
-      if (data['data'] != undefined) {
-        //console.log(data)
-        // this.tempItems = await this.getList(data['data'].data)
-
+    if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
+      this.presentToast('Please select item first')
+    } else {
+      var checkitems = "false"
+      if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+        this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
+          // this.defaultSrvc.getTempItems = this.item_List
+          this.storage.get("TEMP_ITEMS_TABLE").then(res => {
+            var flags = [], output = [], l = res.length, i;
+            for (i = 0; i < l; i++) {
+              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+                checkitems = "true"
+              } else {
+                //checkitems = "false"
+              }
+            }
+            this.checkitems(checkitems,info)
+          })
+        })
       } else {
-
+        this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
+          // this.defaultSrvc.getTempItems = this.item_List
+          this.storage.get("TEMP_RATES_TABLE").then(res => {
+            var flags = [], output = [], l = res.length, i;
+            for (i = 0; i < l; i++) {
+              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+                checkitems = "true"
+              } else {
+                //checkitems = "false"
+              }
+            }
+            this.checkitems(checkitems,info)
+          })
+        })
       }
 
-    })
+    }
+  }
 
-    myModal.present();
+  async checkitems(checkitems,info){
+    if (checkitems == "true") {
+      const myModal = await this.modalController.create({
+        component: CollectionitemsPage,
+        cssClass: 'viewItem-css',
+        componentProps: { value: info },
+        backdropDismiss: false,
+      });
+
+      myModal.onDidDismiss().then(async data => {
+
+        if (data['data'] != undefined) {
+          //console.log(data)
+          // this.tempItems = await this.getList(data['data'].data)
+
+        } else {
+
+        }
+
+      })
+
+      myModal.present();
+    } else {
+      this.presentToast('Please select item first')
+    }
+  
+
   }
 
   async getList(data) {
@@ -295,13 +452,12 @@ export class SelectcategoryPage implements OnInit {
 
     if (res != undefined) {
       res.forEach(temp => {
-        if (temp.qty != 0) {
+        if (temp.qty != 0 && temp.qty != null) {
           filtered.push(temp)
         }
       });
     }
 
-    this.loading.dismiss()
     return filtered
   }
 
