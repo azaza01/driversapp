@@ -60,7 +60,11 @@ export class ColdevPage implements OnInit {
     let dd = new Date().getDate();
     let mm = new Date().getMonth() + 1;
     let yy = new Date().getFullYear();
-    today = yy + '-' + mm + '-' + dd;
+
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+    today = yy + '-' + mmm + '-' + ddd;
     console.log(today)
     this.storage.get('COLDEL_TABLE').then(res => {
       console.log(res)

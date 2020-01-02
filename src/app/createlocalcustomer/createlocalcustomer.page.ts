@@ -16,10 +16,11 @@ export class CreatelocalcustomerPage implements OnInit {
   selectedarea: any
   selectedcusttype: any
   arealist: any = []
-  areacode: any = "A"
-  customertype: any = "HDB"
+  areacode: any
+  customertype: any
   description: any
   loading: any = new LoadingController;
+
 
   constructor(
     private storage: Storage,
@@ -32,15 +33,6 @@ export class CreatelocalcustomerPage implements OnInit {
 
   ngOnInit() {
    
-    this.storage.get('AREAS_TABLE').then(res => {
-      console.log(res)
-      var l = res.length, i;
-      for (i = 0; i < l; i++) {
-        this.arealist.push(res[i].region);          
-      }
-      console.log(this.arealist)
-    })
-
     this.storage.get('CUSTOMERTYPE_TABLE').then(res => {
       console.log(res)
       var l = res.length, i;
@@ -72,20 +64,39 @@ export class CreatelocalcustomerPage implements OnInit {
     return await this.loading.present();
   }
 
+  getAreas(user: NgForm){
+    console.log(user.value.postalcode)
+    let postalcode  = user.value.postalcode
+    var member = postalcode.toString();
+    var last2 = member.slice(0,2); 
+    console.log(last2)
+    this.storage.get('AREAS_TABLE').then(res => {
+      console.log(res)
+      var l = res.length, i;
+      for (i = 0; i < l; i++) {
+        if(res[i].postal_json.includes(last2) ){
+          this.areacode = res[i].region
+          // this.arealist.push(res[i].region)
+        }  
+      }
+      console.log(this.areacode)
+    })
+  }
+
 
   async registerCustomer(user: NgForm){
     console.log(user)
 
     if (navigator.onLine == true) {
     await this.presentLoading('Creating Customer');
-    Promise.resolve(this.accSrvc.addCustomerStandingOrder(user.value)).then(data => {
+    Promise.resolve(this.accSrvc.addCustomerStandingOrder(user.value, this.areacode)).then(data => {
 
       var newdata: any = [];
       newdata.push(data);
       console.log(newdata.customerid )
-      if (newdata.customerid != "") {
-        // this.presentToast("Successfully added")
-        this.asktoAdd(data)
+      if (data != "" &&  data != false) {
+        this.presentToast("Successfully added")
+        this.router.navigate(['/home']);
       } else {
         this.loading.dismiss();
         this.presentToast("Please check required details")

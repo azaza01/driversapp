@@ -61,15 +61,15 @@ export class SelectcategoryPage implements OnInit {
 
     this.defaultSrvc.getTempItems = undefined;
 
-    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-      console.log('removed ');
-      this.storage.remove('TEMP_RATES_TABLE').then(() => {
-        console.log('removed ');
-      })
-    })
+    // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+    //   console.log('removed ');
+    //   this.storage.remove('TEMP_RATES_TABLE').then(() => {
+    //     console.log('removed ');
+    //   })
+    // })
 
     this.isLoading = true
-    await this.presentLoading('');
+    await this.presentLoading('Loading Items');
     this.myColID
     this.activatedRoute.params.subscribe((params) => {
       console.log(params)
@@ -165,12 +165,64 @@ export class SelectcategoryPage implements OnInit {
       })
 
     });
+    this.loading.dismiss();
+  }
 
+  removeItems(){
+    this.unsyncData.UNINV_INITIAL = ""
+    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+      console.log('removed ');
+      this.storage.remove('TEMP_RATES_TABLE').then(() => {
+        console.log('removed ');
+
+        this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+          let data
+          data = res
+          let filtered: any = []
+          if (data != "") {
+            data.forEach(coldelData => {
+              if (coldelData.UNINV_COLLID == this.myColID) {
+                //delete data
+              } else {
+                filtered.push(coldelData)
+              }
+            });
+    
+            this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+          }
+        }).finally(() => {
+          this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+            console.log(res)
+          })
+          this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+            let data
+            data = res
+            let filtered: any = []
+            if (data != "") {
+              data.forEach(coldelData => {
+                if (coldelData.coldelID == this.myColID) {
+                  //delete data
+                } else {
+                  filtered.push(coldelData)
+                }
+              });
+    
+              this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
+            }
+          }).finally(() => {
+            this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+              console.log(res)
+     
+            })
+          })
+        })
+      })
+    })     
   }
 
   async removeCurrentTransaction(msg) {
     if (this.collectionInfo.coldel_type == "collection") {
-
+      
     } else {
       const alert = await this.alertController.create({
         header: '',
@@ -457,6 +509,7 @@ export class SelectcategoryPage implements OnInit {
         }
       });
     }
+    this.loading.dismiss();
 
     return filtered
   }

@@ -105,7 +105,7 @@ export class AccountsService {
   }
 
 
-  addCustomerStandingOrder(info) {
+  addCustomerStandingOrder(info, areacode) {
     console.log(info)
     // this.storage.get('ACCOUNTS_TABLE').then(res => {
     //   console.log(res);
@@ -120,7 +120,7 @@ export class AccountsService {
       params.userid = this.driverData.id,
       params.email = this.driverData.email_address,
       params.password = this.driverData.password,
-      params.name = this.driverData.name,
+      params.drivername = this.driverData.name,
       params.companyagent = info.companyagent,
       params.contactperson1 = info.contactperson1,
       params.contactno1 = info.contactno1,
@@ -129,7 +129,7 @@ export class AccountsService {
       params.builidngname = info.builidngname,
       params.postalcode = info.postalcode,
       params.liftlobby = info.liftlobby,
-      params.areacode = info.areacode,
+      params.areacode = areacode,
       params.contactno2 = info.contactno2,
       params.emailcus = info.emailcus,
       params.contactperson2 = info.contactperson2,
@@ -144,7 +144,7 @@ export class AccountsService {
           let returndata = response
           params.customerid = returndata
           let newdata: any [] = params
-          resolve(newdata)
+          resolve(returndata)
         },
         err => {
           console.log(err)
@@ -213,7 +213,7 @@ export class AccountsService {
 
     if (navigator.onLine == true) {
       return new Promise(resolve => {
-        this.httpclient.post(this.url + "/logon.json", info).subscribe(
+        this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
           response => {
             let res;
             res = response[0];

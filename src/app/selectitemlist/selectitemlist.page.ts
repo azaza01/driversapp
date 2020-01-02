@@ -18,6 +18,8 @@ export class SelectitemlistPage implements OnInit {
   temp_List: any
   item_List: any = []
   subtotal: any = 0;
+  qty: any
+  price: any
 
   constructor(
     public modalController: ModalController,
@@ -107,6 +109,10 @@ export class SelectitemlistPage implements OnInit {
 
     myModal.present();
   }
+
+  // changedata(){
+  //   this.subtotal = this.qty * this.price
+  // }
 
   async confirmInvoice() {
     this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {

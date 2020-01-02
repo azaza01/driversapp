@@ -4,7 +4,7 @@
             <ion-button (click)="removeCurrentTransaction('Current Transaction will cancel. Proceed?')"> <ion-icon name="md-arrow-back"></ion-icon></ion-button>
         </ion-buttons>
         <ion-buttons slot="start" *ngIf="collectionInfo.coldel_type == 'collection'">
-            <ion-back-button ></ion-back-button>
+            <ion-back-button (click)="removeItems()"></ion-back-button>
         </ion-buttons>
         <ion-title>Category</ion-title>
     </ion-toolbar>

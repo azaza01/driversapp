@@ -180,8 +180,16 @@ export class AppComponent {
                 //   this.storage.remove('UNSYNCED_PAYMENT_TABLE').then(() => {
                 //     console.log('removed '); 
                   this.storage.remove('SO_TABLE').then(() => {
-                    console.log('removed ');                  
-                  this.router.navigate(['/login']);
+                    console.log('removed ');           
+                    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+                      console.log('removed ');
+                      this.storage.remove('TEMP_RATES_TABLE').then(() => {
+                        console.log('removed ');
+                      }).finally(() => {
+                        this.router.navigate(['/login']);
+                      })
+                    })       
+  
               //   })
               // })
              })

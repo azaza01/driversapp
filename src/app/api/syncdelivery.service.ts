@@ -49,8 +49,10 @@ export class SyncdeliveryService {
     let mm = new Date().getMonth() + 1;
     let yyyy = new Date().getFullYear();
     let yy = (yyyy + '').substr(2, 2);
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
 
-    today = yyyy + '-' + mm + '-' + dd;
+    today = yyyy + '-' + mmm + '-' + ddd;
     // console.log(today)
     return today
   }
@@ -115,7 +117,8 @@ export class SyncdeliveryService {
     //   savedon   :  this.today
     //   //CC-191207Ch23
     // }
-    await this.presentLoading('Syncing Payments');
+    
+    //await this.presentLoading('Syncing Payments');
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/updateinvoicestatus.json", info).subscribe(
         response => {

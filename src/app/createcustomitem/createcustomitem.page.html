@@ -52,7 +52,7 @@
                       <ion-select cancelText="Dismiss" [(ngModel)]="readytype" (ngModelChange)="readyTypes(readytype)">
                         <ion-select-option value="Hang">Hang</ion-select-option>
                         <ion-select-option value="Pack">Pack</ion-select-option>
-                        <ion-select-option *ngIf="selectedCategory == 'Carpet'" value="Roll">Roll</ion-select-option>
+                        <ion-select-option *ngIf="selectedCategory == 'Carpet' || selectedCategory == 'Custom' || selectedCategory == 'Others'" value="Roll">Roll</ion-select-option>
                   </ion-select>
             </ion-item>
             <ion-item *ngIf="selectedCategory == 'Curtains'" >

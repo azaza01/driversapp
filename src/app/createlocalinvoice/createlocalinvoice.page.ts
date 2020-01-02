@@ -118,7 +118,8 @@ export class CreatelocalinvoicePage implements OnInit {
       cut : custlist.customer_type,
       id : custlist.id,
       dei : this.mySpecialID,
-      com : custlist.account_id
+      com : custlist.account_id,
+      del : "Laundry"
     }
 
     this.customerDetails = custlist
@@ -149,7 +150,7 @@ export class CreatelocalinvoicePage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
@@ -212,7 +213,7 @@ export class CreatelocalinvoicePage implements OnInit {
 
               params.UCOtimestamp =  "UCOtimestamp", //new UCO will be generated in the collection loop if necessary
               params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
-              params.UCOcollecttype = custlist.del,
+              params.UCOcollecttype = paramsselected.del,
               params.UCOcollectdate = this.defaultSrvc.getToday(),
               params.UCOcollecttime = "A 10 - 12pm" ,
               params.UCOcollectaddress = custlist.mail_address,
@@ -283,7 +284,7 @@ export class CreatelocalinvoicePage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
@@ -347,7 +348,7 @@ export class CreatelocalinvoicePage implements OnInit {
 
               params.UCOtimestamp =  this.mySpecialID , //new UCO will be generated in the collection loop if necessary
               params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
-              params.UCOcollecttype = custlist.del,
+              params.UCOcollecttype = paramsselected.del,
               params.UCOcollectdate =this.defaultSrvc.getToday(),
               params.UCOcollecttime = "A 10 - 12pm",
               params.UCOcollectaddress = custlist.mail_address,

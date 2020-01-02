@@ -75,7 +75,9 @@ export class ColectionviewPage implements OnInit {
       let mm = new Date(this.originalDate).getMonth() + 1;
       let yyyy = new Date(this.originalDate).getFullYear();
       //todays = dd + "-" + mm + "-" + yyyy
-      todays = yyyy + "-" + mm + "-" + dd
+      let ddd = dd < 10 ? "0" + dd : dd
+      let mmm = mm < 10 ? "0" + mm : mm
+      todays = yyyy + "-" + mmm + "-" + ddd
       this.today = this.collectionInfo.cod
       // console.log(todays)
       this.getTodayID();
@@ -163,10 +165,16 @@ export class ColectionviewPage implements OnInit {
     let mn = new Date().getMinutes();
     let sec = new Date().getSeconds();
     let yy = (yyyy + '').substr(2, 2);
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+    let hhr = hr < 10 ? "0" + hr : hr
+    let mmin = mn < 10 ? "0" + mn : mn
+    let sss = sec < 10 ? "0" + sec : sec
+
 
     //2019-12-24 17:14:19
-    today = yyyy + '-' + mm + '-' + dd;
-    todayId = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + mn + ":" + sec ;
+    today = yyyy + '-' + mmm + '-' + ddd;
+    todayId = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss ;
     this.mySpecialID = todayId
     console.log(today)
     return today
@@ -192,14 +200,25 @@ export class ColectionviewPage implements OnInit {
     let dd = new Date(this.today).getDate();
     let mm = new Date(this.today).getMonth() + 1;
     let yyyy = new Date(this.today).getFullYear();
-    selectedDate = yyyy + "-" + mm + "-" + dd
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+    // let hhr = hr < 10 ? "0" + hr : hr
+    // let mmin = mn < 10 ? "0" + mn : mn
+    // let sss = sec < 10 ? "0" + sec : sec
+    
+    selectedDate = yyyy + "-" + mmm + "-" + ddd
     let selectedDate2;
-    let ddd = new Date(this.today).getDate();
-    let mmm = new Date(this.today).getMonth() + 1;
+    let dddd = new Date(this.today).getDate();
+    let mmmm = new Date(this.today).getMonth() + 1;
     let yyyyy = new Date(this.today).getFullYear();
-    selectedDate2 = ddd + "-" + mmm + "-" + yyyyy
+    let myday = dd < 10 ? "0" + dddd : dddd
+    let mymonth = mm < 10 ? "0" + mmmm : mmmm
+    selectedDate2 = myday + "-" + mymonth + "-" + yyyyy
 
     // console.log(this.reasonofpostpone)
+
+    console.log(selectedDate)
+    console.log(this.originalDate)
 
     if (selectedDate == this.originalDate) {
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
@@ -209,7 +228,7 @@ export class ColectionviewPage implements OnInit {
         await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
           if (data != "false" || data != "") {
             this.removepostpone(this.collectionId)
-            this.presentAlert("Collection Postponed to " + selectedDate2 + " with timing " + this.selectedtime);
+            this.presentAlert("Collection Re-scheduled to " + selectedDate2 + " with timing " + this.selectedtime);
             this.loading.dismiss();
             //need to check
           } else {

@@ -52,7 +52,10 @@ export class SyncinvoiceService {
     let yyyy = new Date().getFullYear();
     let yy = (yyyy + '').substr(2, 2);
 
-    today = yyyy + '-' + mm + '-' + dd;
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+    today = yyyy + '-' + mmm + '-' + ddd;
     // console.log(today)
     return today
   }

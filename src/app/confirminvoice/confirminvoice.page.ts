@@ -98,6 +98,8 @@ export class ConfirminvoicePage implements OnInit {
   itemsArray: any = []
   itemObject: any = {}
 
+  servicetype: any
+
   invoiceNotesArray: any = []
   invoiceNotesObject: any = {}
 
@@ -185,6 +187,7 @@ export class ConfirminvoicePage implements OnInit {
         this.customercredit = res.cca;
         this.customerTypes = res.cut;
         this.invoiceId = res.id
+        this.servicetype = res.col
         console.log(this.invoiceId)
         this.validationforsync = "true"
       } else if (res.coldel_type == "delivery") {
@@ -195,6 +198,7 @@ export class ConfirminvoicePage implements OnInit {
         this.customercredit = res.cca;
         this.customerTypes = res.cut;
         this.validationforsync = "false"
+        this.servicetype = res.del
         console.log(this.invoiceId)
       }
    
@@ -317,6 +321,8 @@ export class ConfirminvoicePage implements OnInit {
         //console.log(this.allinvoiceitems)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
+        }else if(this.finalSubtotal <= 0){
+          this.coldev("Final amout is zero please back to previous page to refresh the page");
         }
 
       })
@@ -347,9 +353,12 @@ export class ConfirminvoicePage implements OnInit {
         // //console.log(this.finalSubtotal)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
+        }else if(this.finalSubtotal <= 0){
+          this.coldev("Final amout is zero please back to previous page to refresh the page");
         }
       })
     }
+
 
   }
 
@@ -436,9 +445,9 @@ export class ConfirminvoicePage implements OnInit {
     await alert.present();
   }
 
-  async amountValue(protype, value) {
+  async amountValue(protype) {
     const alert = await this.alertController.create({
-      message: "minimum for " + protype + " is " + value,
+      message: protype,
       backdropDismiss: false,
       buttons: ['OK']
     });
@@ -489,14 +498,12 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   alertCustomerType() {
-    if (this.customerTypes == "HDB" && (this.payableAmount < 30)) {
-      this.amountValue('HDB', 30)
-    } else if (this.customerTypes == "Condo" && (this.payableAmount < 30)) {
-      this.amountValue('Condo', 30)
-    } else if (this.customerTypes == "Landed" && (this.payableAmount < 30)) {
-      this.amountValue('Landed', 30)
+    if (this.servicetype== "R & I" && (this.finalSubtotal < 30)) {
+      this.amountValue('Minimum transaction amout for R & I is 160')
     } else {
-
+      if(this.finalSubtotal < 30){
+        this.amountValue('Minimum transaction amout is 30')
+      }
     }
   }
 
@@ -607,6 +614,7 @@ export class ConfirminvoicePage implements OnInit {
 
   confirmAndCreatePayment() { //KIV
     //generate new invoice
+    if(this.finalSubtotal > 0 ){
     if (this.invoiceType == "Repeat" && this.validationforsync == "false") {
       this.canSyncNow = "false"
       Promise.resolve(this.collectiondata()).then(coldata => {
@@ -642,11 +650,15 @@ export class ConfirminvoicePage implements OnInit {
       }
       //update summary_table for new and others -- later part(KIV)
     }
+    }else{
+      this.coldev("Final amout is zero please back to previous page to refresh the page");
+    }
 
   
   }
 
   confirmPayment(pageto) {
+  if(this.finalSubtotal > 0 ){
     console.log(this.invoiceType)
     console.log(this.validationforsync)
     if (this.invoiceType == "Repeat" ) {
@@ -682,6 +694,9 @@ export class ConfirminvoicePage implements OnInit {
       }
       //update summary_table for new and others -- later part(KIV)
     }
+  }else{
+    this.coldev("Final amout is zero please back to previous page to refresh the page");
+  }
 
     // if (navigator.onLine == true && this.invoiceType != 'Repeat') {
     //   if(myprocessofdata == 'proceedtopay'  && this.validationforsync == "true"){
@@ -1176,7 +1191,7 @@ export class ConfirminvoicePage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
@@ -1310,7 +1325,7 @@ export class ConfirminvoicePage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
@@ -1436,6 +1451,26 @@ export class ConfirminvoicePage implements OnInit {
     await alert.present();
 
   }
+
+  async coldev(msg) {
+    const alert = await this.alertController.create({
+      header: '',
+      message: msg,
+      cssClass: 'ion-alertCSS',
+      backdropDismiss:false,
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            alert.dismiss();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
 
 

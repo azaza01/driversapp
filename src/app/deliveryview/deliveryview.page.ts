@@ -71,7 +71,9 @@ export class DeliveryviewPage implements OnInit {
       let mm = new Date(this.originalDate).getMonth() + 1;
       let yyyy = new Date(this.originalDate).getFullYear();
       //todays = dd + "-" + mm + "-" + yyyy
-      todays = yyyy + "-" + mm + "-" + dd
+      let ddd = dd < 10 ? "0" + dd : dd
+      let mmm = mm < 10 ? "0" + mm : mm
+      todays = yyyy + "-" + mmm + "-" + ddd
 
       this.today = todays
       console.log(todays)
@@ -205,12 +207,17 @@ export class DeliveryviewPage implements OnInit {
     let dd = new Date(this.today).getDate();
     let mm = new Date(this.today).getMonth() + 1;
     let yyyy = new Date(this.today).getFullYear();
-    selectedDate = yyyy + "-" + mm + "-" + dd
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+    selectedDate = yyyy + "-" + mmm + "-" + ddd
     let selectedDate2;
-    let ddd = new Date(this.today).getDate();
-    let mmm = new Date(this.today).getMonth() + 1;
+    let dddd = new Date(this.today).getDate();
+    let mmmm = new Date(this.today).getMonth() + 1;
     let yyyyy = new Date(this.today).getFullYear();
-    selectedDate2 = ddd + "-" + mmm + "-" + yyyyy
+    let myday = dd < 10 ? "0" + dddd : dddd
+    let mymonth = mm < 10 ? "0" + mmmm : mmmm
+    selectedDate2 = myday + "-" + mymonth + "-" + yyyyy
+
 
 
     if(selectedDate == this.originalDate){

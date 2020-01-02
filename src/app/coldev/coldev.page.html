@@ -104,7 +104,7 @@
             <ion-item>
               <ion-row>
                 <ion-col>
-                  <ion-img *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Pai'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-img *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Paid'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid' || delitem.sts == 'Full Delivered, Unpaid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
                   <ion-label style="font-size: smaller;;color: black;"> {{ delitem.det }}</ion-label>

@@ -64,7 +64,6 @@ export class LoginPage implements OnInit {
     //   console.log(res);
     // })
 
-
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       console.log(res)
     })

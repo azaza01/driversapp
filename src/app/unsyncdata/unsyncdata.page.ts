@@ -96,14 +96,14 @@ export class UnsyncdataPage implements OnInit {
             let filtered: any = []
             console.log(data)
             if (data != null) {
-              // data.forEach(unsync => {
-              //   if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
+              data.forEach(unsync => {
+                if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
 
-              //   } else {
-              //     filtered.push(unsync)
-              //   }
-              // });
-              // this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+                } else {
+                  filtered.push(unsync)
+                }
+              });
+              this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
               this.presentAlert("Collection Successfully Sync")
             }
 

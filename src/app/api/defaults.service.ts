@@ -94,7 +94,12 @@ export class DefaultsService {
     let yyyy = new Date().getFullYear();
     let yy = (yyyy + '').substr(2, 2);
 
-    today = yyyy + '-' + mm + '-' + dd;
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+
+    today = yyyy + '-' + mmm + '-' + ddd ;
+
     console.log(today)
     return today
   }
@@ -121,6 +126,7 @@ export class DefaultsService {
       let yy = (yyyy + '').substr(2, 2);
 
       this.prepended_number = String(dd).padStart(2, '0')
+      let mmm = String(mm).padStart(2, '0')
 
       let seriesNo;
       let driver;
@@ -148,7 +154,7 @@ export class DefaultsService {
             // console.log("1st");
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mmm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)
 
@@ -172,7 +178,7 @@ export class DefaultsService {
             let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
             params.INV_RUNNING = parseInt(maxSeries) + 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-            seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
+            seriesNo = params.INV_TYPE + "-" + yy + mmm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
             // console.log(params)
             seriesTbl.push(params)
@@ -192,7 +198,7 @@ export class DefaultsService {
           params.INV_RUNNING = 1
           seriesTbl = []
           let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
-          seriesNo = params.INV_TYPE + "-" + yy + mm + (dd < 10 ? '0' + dd : dd) + driver.code + num
+          seriesNo = params.INV_TYPE + "-" + yy + mmm + (dd < 10 ? '0' + dd : dd) + driver.code + num
           params.INV_NO = seriesNo
           seriesTbl.push(params)
 

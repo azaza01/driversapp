@@ -94,7 +94,7 @@
         <ion-item>
           <ion-label color="medium" position="floating">Postal Code</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="Required" required="true" name="postalcode" ngModel></ion-input>
+          inputmode="text" placeholder="Required" required="true" (ionBlur)="getAreas(cred)" name="postalcode" ngModel ></ion-input>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
       </ion-col>
@@ -122,10 +122,11 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <!-- <ion-row>
       <ion-col>
-        <ion-item>
         <ion-label color="medium" position="floating" name="areacode" >Area</ion-label>
+        <ion-item>
+    
          <ion-select  cancelText="Dismiss" id="areacode" name="areacode" [(ngModel)]="areacode">
             <div *ngFor="let areacode of arealist; let i = index"  slot="end">
               <ion-select-option value="{{ areacode }}">{{ areacode }}</ion-select-option>
@@ -133,14 +134,9 @@
          </ion-select>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
-        <!-- <ion-label color="medium" position="floating" ngModel name="areacode" >Area</ion-label>
-      <ion-select  cancelText="Dismiss" (ngModelChange)="getArea(areacode)" >
-          <div *ngFor="let areacode of arealist; let i = index">
-            <ion-select-option value="{{ areacode }}">{{ areacode }}</ion-select-option>
-          </div>
-      </ion-select> -->
+    
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     <ion-row>
       <ion-col>
         <ion-item>

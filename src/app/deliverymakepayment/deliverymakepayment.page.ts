@@ -253,7 +253,7 @@ export class DeliverymakepaymentPage implements OnInit {
         this.deliverysync(kindoftransaction);
       }else{
         this.presentToast("Credit amount is less than outstanding balance")
-        this.deliveryStatus = this.deliveryStatus + ", Partial Paid"
+        this.deliveryStatus = this.deliveryStatus + ", Full Paid"
         this.deliverysync(kindoftransaction);
       }
     }else{
@@ -269,41 +269,46 @@ export class DeliverymakepaymentPage implements OnInit {
 
 
   async deliverysync(kindoftransaction) {   
-      await this.presentLoading('Syncing Payments');     
+    
+      //await this.presentLoading('Syncing Payments');     
       await Promise.resolve(this.deliveryndata()).then(coldata => {
-        if (navigator.onLine == true) {
-          if(kindoftransaction == 'repeat'){
-            this.presentToast("Current Transaction will save locally")
-            console.log("2")
-            this.savePay(coldata);
-          }else if(kindoftransaction == 'maypayment'){
-            Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
-            if (data == true) {
-              this.presentToast("Delivery Successfully Sync")
-              this.offlinedeliveryUpdate(coldata);
-            } else if (data == "duplicate") {
-              this.presentToast("Duplicate Invoice")
-              this.savePay(coldata);
-            } else {
-              this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-              this.savePay(coldata);
-            }
-          }).catch(e => {
-            console.log(e);
-            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-            this.savePay(coldata);
-          });
-         }
-        } else {
-          if(kindoftransaction == 'repeat'){
-            console.log("1")
-            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-            this.savePay(coldata);
-          }else if(kindoftransaction == 'maypayment'){
-            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-            this.savePay(coldata);
-          }
-        }
+
+        console.log(coldata)
+
+        // if (navigator.onLine == true) {
+        //   if(kindoftransaction == 'repeat'){
+        //     this.presentToast("Current Transaction will save locally")
+        //     console.log("2")
+        //     this.savePay(coldata);
+        //   }else if(kindoftransaction == 'maypayment'){
+        //     Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
+        //     if (data == true) {
+        //       this.presentToast("Delivery Successfully Sync")
+        //       this.offlinedeliveryUpdate(coldata);
+        //     } else if (data == "duplicate") {
+        //       this.presentToast("Duplicate Invoice")
+        //       this.savePay(coldata);
+        //     } else {
+        //       this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+        //       this.savePay(coldata);
+        //     }
+        //   }).catch(e => {
+        //     console.log(e);
+        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+        //     this.savePay(coldata);
+        //   });
+        //  }
+        // } else {
+        //   if(kindoftransaction == 'repeat'){
+        //     console.log("1")
+        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+        //     this.savePay(coldata);
+        //   }else if(kindoftransaction == 'maypayment'){
+        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+        //     this.savePay(coldata);
+        //   }
+        // }
+
       })
   }
 
@@ -315,7 +320,7 @@ export class DeliverymakepaymentPage implements OnInit {
         delid: this.deliveryDetails.dei, //pass coldelID (actually is delID) and ws gets the invid
         nowpaid: this.payAmount, // must add the Last Paid field together
         lastpaid: this.deliveryDetails.bap, // should have a field that sends back the previous payment to add up the last deposit with last paid so this current payment can be tracked in settlement
-        balancepaid: this.deliveryDetails.dpa, // must add the Last Paid field together because we are updating the balance paid field
+        balancepaid: this.payAmount, // must add the Last Paid field together because we are updating the balance paid field
         balancetype: this.deliveryDetails.dpt,
         status: this.deliveryStatus,
         ppdate: this.deliveryDetails.ded, //06-05-2013
@@ -477,7 +482,7 @@ export class DeliverymakepaymentPage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
@@ -612,7 +617,7 @@ export class DeliverymakepaymentPage implements OnInit {
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
             params.UNINV_AGREEDDELIVERYDATE = '0000-00-00'
-            params.UNINV_DELIVERYTIMESLOT = 'C 11 - 1pm'
+            params.UNINV_DELIVERYTIMESLOT = 'A 10 - 12pm'
             params.UNINV_INVOICENOTE = ''
             params.UNINV_DISCOUNT = '0'
             params.UNINV_EXPRESS = '1.00'
