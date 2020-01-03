@@ -840,7 +840,7 @@ export class CreatecustomitemPage implements OnInit {
 
   closeModal(info) {
     this.modalCtrl.dismiss({
-      data: info
+      data: 'close'
     });
   }
 }

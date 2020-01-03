@@ -59,7 +59,7 @@ export class SelectcategoryPage implements OnInit {
     this.unsyncData = ""
     this.myColID = ""
 
-    this.defaultSrvc.getTempItems = undefined;
+    // this.defaultSrvc.getTempItems = undefined;
 
     // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
     //   console.log('removed ');
@@ -73,6 +73,8 @@ export class SelectcategoryPage implements OnInit {
     this.myColID
     this.activatedRoute.params.subscribe((params) => {
       console.log(params)
+      console.log(this.defaultSrvc.getTempItems)
+
       // let wew
       // wew = params
       // wew.com = "wew"
@@ -168,7 +170,7 @@ export class SelectcategoryPage implements OnInit {
     this.loading.dismiss();
   }
 
-  removeItems(){
+  removeItems() {
     this.unsyncData.UNINV_INITIAL = ""
     this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
       console.log('removed ');
@@ -187,7 +189,7 @@ export class SelectcategoryPage implements OnInit {
                 filtered.push(coldelData)
               }
             });
-    
+
             this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
           }
         }).finally(() => {
@@ -206,23 +208,23 @@ export class SelectcategoryPage implements OnInit {
                   filtered.push(coldelData)
                 }
               });
-    
+
               this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
             }
           }).finally(() => {
             this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
               console.log(res)
-     
+
             })
           })
         })
       })
-    })     
+    })
   }
 
   async removeCurrentTransaction(msg) {
     if (this.collectionInfo.coldel_type == "collection") {
-      
+
     } else {
       const alert = await this.alertController.create({
         header: '',
@@ -358,9 +360,14 @@ export class SelectcategoryPage implements OnInit {
       if (data['data'] != undefined) {
         //console.log(data)
         //console.log(data['data'].data)
-        this.defaultSrvc.getTempItems = data['data'].data
+        if (data['data'].data == 'close') {
+          // this.defaultSrvc.getTempItems
+        } else {
+          this.defaultSrvc.getTempItems = data['data'].data
+          this.tempItems = await this.getList(data['data'].data)
 
-        this.tempItems = await this.getList(data['data'].data)
+        }
+
         //console.log(this.tempItems)
 
       } else {
@@ -381,7 +388,7 @@ export class SelectcategoryPage implements OnInit {
       if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
-    
+
           this.storage.get("TEMP_ITEMS_TABLE").then(res => {
             var flags = [], output = [], l = res.length, i;
             for (i = 0; i < l; i++) {
@@ -444,7 +451,7 @@ export class SelectcategoryPage implements OnInit {
                 //checkitems = "false"
               }
             }
-            this.checkitems(checkitems,info)
+            this.checkitems(checkitems, info)
           })
         })
       } else {
@@ -459,7 +466,7 @@ export class SelectcategoryPage implements OnInit {
                 //checkitems = "false"
               }
             }
-            this.checkitems(checkitems,info)
+            this.checkitems(checkitems, info)
           })
         })
       }
@@ -467,7 +474,7 @@ export class SelectcategoryPage implements OnInit {
     }
   }
 
-  async checkitems(checkitems,info){
+  async checkitems(checkitems, info) {
     if (checkitems == "true") {
       const myModal = await this.modalController.create({
         component: CollectionitemsPage,
@@ -492,7 +499,7 @@ export class SelectcategoryPage implements OnInit {
     } else {
       this.presentToast('Please select item first')
     }
-  
+
 
   }
 
