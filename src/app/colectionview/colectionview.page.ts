@@ -35,6 +35,7 @@ export class ColectionviewPage implements OnInit {
   collectionId: any
   formatedDate: any
   reasonofpostpone: any = "";
+  currentInstruction: any
 
   mySpecialID: any
 
@@ -69,6 +70,10 @@ export class ColectionviewPage implements OnInit {
       this.customerId = this.collectionInfo.cui
       this.originalDate = this.collectionInfo.cod
       this.collectionId = this.collectionInfo.id
+
+      this.currentInstruction =  this.collectionInfo.con
+      console.log(this.currentInstruction)
+
 
       let todays;
       let dd = new Date(this.originalDate).getDate();
@@ -225,7 +230,7 @@ export class ColectionviewPage implements OnInit {
     } else {
       if (this.reasonofpostpone != "") {
         await this.presentLoading('');
-        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone)).then(data => {
+        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone, this.currentInstruction)).then(data => {
           if (data != "false" || data != "") {
             this.removepostpone(this.collectionId)
             this.presentAlert("Collection Re-scheduled to " + selectedDate2 + " with timing " + this.selectedtime);

@@ -110,9 +110,12 @@ export class SelectitemlistPage implements OnInit {
     myModal.present();
   }
 
-  // changedata(){
-  //   this.subtotal = this.qty * this.price
-  // }
+  getSubtotal(){
+    this.subtotal = this.qty * this.price
+    if(this.subtotal = "NaN"){
+      this.subtotal = 0
+    }
+  }
 
   async confirmInvoice() {
     this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {

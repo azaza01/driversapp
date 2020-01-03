@@ -128,7 +128,7 @@ export class CollectionService {
     })
   }
 
-  postPone(info: any, selectedDate, selectedTime, collectionID, reasonofpostpone) {
+  postPone(info: any, selectedDate, selectedTime, collectionID, reasonofpostpone, currentInstruction) {
     
     let params = {
       "email": info.email_address,
@@ -137,8 +137,9 @@ export class CollectionService {
       "id": collectionID,
       "date": selectedDate,
       "time": selectedTime,
-      "reasontopostpone": reasonofpostpone
+      "reasontopostpone": " Instructions - " + currentInstruction + " Reason of Re-scheduled - " + reasonofpostpone
    }
+
 
     //  let params = {
     //   "email": "it01.azaza@gmail.com",

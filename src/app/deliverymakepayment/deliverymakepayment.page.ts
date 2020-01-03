@@ -39,7 +39,7 @@ export class DeliverymakepaymentPage implements OnInit {
   balanceAmount: any
   LastPaid: any
   customerCredit: any
-  outstandingbalance: any = 0
+  outstandingbalance: number = 0
   finaldeliverydata: any = []
 
   deliveryStatus: any
@@ -120,7 +120,8 @@ export class DeliverymakepaymentPage implements OnInit {
       console.log(res)
       this.isLoading = false
       this.deliveryDetails = res
-      this.outstandingbalance = parseInt(this.deliveryDetails.toa) - (parseInt(this.deliveryDetails.dpa) + parseInt(this.deliveryDetails.bap))
+      this.outstandingbalance = this.deliveryDetails.baa
+      //parseInt(this.deliveryDetails.toa) - (parseInt(this.deliveryDetails.dpa) + parseInt(this.deliveryDetails.bap))
       this.inn = res.inn
     }).then(() =>{
       this.getToday()
@@ -242,7 +243,8 @@ export class DeliverymakepaymentPage implements OnInit {
     console.log(this.deliveryDetails.dpa);
     console.log(this.payAmount);
     this.newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa) + (this.payAmount);
-    var checkunpaid =  this.outstandingbalance - this.payAmount
+
+    var checkunpaid = this.deliveryDetails.toa - this.newamount
     console.log(checkunpaid);
 
     console.log(this.paymentMethod);
@@ -270,49 +272,52 @@ export class DeliverymakepaymentPage implements OnInit {
 
   async deliverysync(kindoftransaction) {   
     
-      //await this.presentLoading('Syncing Payments');     
+      await this.presentLoading('Syncing Payments');     
       await Promise.resolve(this.deliveryndata()).then(coldata => {
 
         console.log(coldata)
 
-        // if (navigator.onLine == true) {
-        //   if(kindoftransaction == 'repeat'){
-        //     this.presentToast("Current Transaction will save locally")
-        //     console.log("2")
-        //     this.savePay(coldata);
-        //   }else if(kindoftransaction == 'maypayment'){
-        //     Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
-        //     if (data == true) {
-        //       this.presentToast("Delivery Successfully Sync")
-        //       this.offlinedeliveryUpdate(coldata);
-        //     } else if (data == "duplicate") {
-        //       this.presentToast("Duplicate Invoice")
-        //       this.savePay(coldata);
-        //     } else {
-        //       this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-        //       this.savePay(coldata);
-        //     }
-        //   }).catch(e => {
-        //     console.log(e);
-        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-        //     this.savePay(coldata);
-        //   });
-        //  }
-        // } else {
-        //   if(kindoftransaction == 'repeat'){
-        //     console.log("1")
-        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-        //     this.savePay(coldata);
-        //   }else if(kindoftransaction == 'maypayment'){
-        //     this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
-        //     this.savePay(coldata);
-        //   }
-        // }
+        if (navigator.onLine == true) {
+          if(kindoftransaction == 'repeat'){
+            this.presentToast("Current Transaction will save locally")
+            console.log("2")
+            this.savePay(coldata);
+          }else if(kindoftransaction == 'maypayment'){
+            Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
+            if (data == true) {
+              this.presentToast("Delivery Successfully Sync")
+              this.offlinedeliveryUpdate(coldata);
+            } else if (data == "duplicate") {
+              this.presentToast("Duplicate Invoice")
+              this.savePay(coldata);
+            } else {
+              this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+              this.savePay(coldata);
+            }
+          }).catch(e => {
+            console.log(e);
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+            this.savePay(coldata);
+          });
+         }
+        } else {
+          if(kindoftransaction == 'repeat'){
+            console.log("1")
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+            this.savePay(coldata);
+          }else if(kindoftransaction == 'maypayment'){
+            this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
+            this.savePay(coldata);
+          }
+        }
 
       })
   }
 
   deliveryndata() {
+    if(this.payAmount == null || this.payAmount == 0){
+      this.payAmount = "0.00"
+    }
     return new Promise(resolve => {
       let params = {
         email: this.email_address,

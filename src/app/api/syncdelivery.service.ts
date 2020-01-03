@@ -117,8 +117,8 @@ export class SyncdeliveryService {
     //   savedon   :  this.today
     //   //CC-191207Ch23
     // }
-    
-    //await this.presentLoading('Syncing Payments');
+
+    await this.presentLoading('Syncing Payments');
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/updateinvoicestatus.json", info).subscribe(
         response => {

@@ -31,6 +31,9 @@ export class DeliveryviewPage implements OnInit {
 
   callnumber: any
 
+  invoiceNo: any
+  invoiceID: any
+
   timeslots: any = []
   selectedtime: any
   originalDate: any
@@ -64,6 +67,8 @@ export class DeliveryviewPage implements OnInit {
       this.selectedtime = params.det
       this.originalDate = params.ded
       this.today = params.ded
+      this.invoiceNo = params.inn
+      this.invoiceID = params.id
 
 
       let todays;
@@ -218,13 +223,11 @@ export class DeliveryviewPage implements OnInit {
     let mymonth = mm < 10 ? "0" + mmmm : mmmm
     selectedDate2 = myday + "-" + mymonth + "-" + yyyyy
 
-
-
     if(selectedDate == this.originalDate){
       this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
     }else{
       if(this.reasonofpostpone != ""){
-      await Promise.resolve(this.delSrvc.postponeDelivery(this.driverInfo, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone )).then(data => {
+      await Promise.resolve(this.delSrvc.postponeDelivery(this.driverInfo, this.today, this.selectedtime, this.selectedDelivery, this.reasonofpostpone, this.invoiceNo, this.invoiceID )).then(data => {
         if(data != "false" || data != ""){
           this.removepostpone(this.selectedDelivery)
           this.presentAlert("Delivery Postponed to "+ selectedDate2 +  " with timing " + this.selectedtime);
