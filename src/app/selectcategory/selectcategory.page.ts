@@ -59,8 +59,6 @@ export class SelectcategoryPage implements OnInit {
     this.unsyncData = ""
     this.myColID = ""
 
-    // this.defaultSrvc.getTempItems = undefined;
-
     // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
     //   console.log('removed ');
     //   this.storage.remove('TEMP_RATES_TABLE').then(() => {
@@ -84,6 +82,7 @@ export class SelectcategoryPage implements OnInit {
       if (this.collectionInfo.coldel_type == "collection") {
         this.myColID = this.collectionInfo.id
       } else if (this.collectionInfo.coldel_type == "delivery") {
+        this.defaultSrvc.getTempItems = undefined;
         this.myColID = this.collectionInfo.dei
       }
       console.log(this.myColID)
@@ -171,7 +170,10 @@ export class SelectcategoryPage implements OnInit {
   }
 
   removeItems() {
-    this.unsyncData.UNINV_INITIAL = ""
+    this.defaultSrvc.getTempItems = undefined;
+    // this.defaultSrvc.getCategory = ""
+    this.unsyncData.UNINV_INITIAL = "";
+
     this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
       console.log('removed ');
       this.storage.remove('TEMP_RATES_TABLE').then(() => {

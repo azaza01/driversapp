@@ -131,24 +131,29 @@ export class CreatecustomitemPage implements OnInit {
 
   async ngOnInit() {
     this.storage.get('SELECTED_ITEM').then(res => {
-      console.log(res)
-      this.myRid =res.id
+      //console.log(res)
+      if (res.coldel_type == "collection") {
+        this.myRid =res.id
+      } else if (res.coldel_type == "delivery") {
+        this.myRid = res.dei
+      }
+      console.log(this.myRid)
     })
 
-    // console.log(this.defaultSrvc.getCategory)
-    console.log(this.defaultSrvc.getTempItems)
+    // //console.log(this.defaultSrvc.getCategory)
+    //console.log(this.defaultSrvc.getTempItems)
     this.category = this.defaultSrvc.getCategory
     this.temp_List = this.defaultSrvc.getTempItems
     this.item_List = await this.getList(this.temp_List)
-    console.log(this.item_List)
+    //console.log(this.item_List)
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res)
+      //console.log(res)
       this.email_address = res.email_address
       this.password = res.password
       this.name = res.name
     })
-
+  
     this.getItem();
     this.getItemPrices();
     this.getSofaPrices();
@@ -224,10 +229,10 @@ export class CreatecustomitemPage implements OnInit {
 
   // showSelectedSofa(selectedsofa){
   //   this.selectedsofa = selectedsofa;
-  //   console.log(this.selectedsofa);
+  //   //console.log(this.selectedsofa);
   //   if(this.selectedsofa == "Sofa Cover (S)" &&  this.selectedCleantype == "LD"){
   //     this.SofaSelectedPrice = this.SofaCoverLDS;
-  //     console.log(this.SofaSelectedPrice);
+  //     //console.log(this.SofaSelectedPrice);
   //   }else if(this.selectedsofa == "Sofa Cover (S)" &&  this.selectedCleantype == "DC"){
   //     this.SofaSelectedPrice = this.SofaCoverDCS;
   //   }else if(this.selectedsofa == "Sofa Cover (D)" &&  this.selectedCleantype == "LD"){
@@ -421,15 +426,22 @@ export class CreatecustomitemPage implements OnInit {
   //       output.push(info[i].cat_type);
   //     }
   //   }
-  //   console.log(output);
+  //   //console.log(output);
   //   return output
   // }
 
   getCompany() {
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       this.mycompany = res
-      console.log(this.mycompany)
-      this.company = this.mycompany[0].UNINV_INITIAL;
+      console.log(res)
+      var  l = res.length, i;
+      for (i = 0; i < l; i++) {
+        if (res[i].UNINV_COLLID == this.myRid) {
+          this.company = res[i].UNINV_INITIAL;
+          console.log(this.mycompany)
+        } 
+      }
+     
     })
   }
 
@@ -437,7 +449,7 @@ export class CreatecustomitemPage implements OnInit {
   getItem() {
     this.getCompany();
 
-    console.log(this.checkAccount);
+    //console.log(this.checkAccount);
     if (this.checkAccount == 1) {
       this.storage.get("RATES_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
@@ -763,7 +775,7 @@ export class CreatecustomitemPage implements OnInit {
         } else {
 
           this.concatDesc = this.normaldesc;
-          console.log(this.concatDesc)
+          //console.log(this.concatDesc)
           this.Category = this.selectedCategory
           if (this.cleantypes = "DC") {
             this.cleantype = ("Dry Clean"); //default
@@ -794,7 +806,7 @@ export class CreatecustomitemPage implements OnInit {
 
     this.loading.dismiss();
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      // console.log(res)
+      // //console.log(res)
       this.driverInfo = res
 
       let params: any = {};
@@ -815,7 +827,7 @@ export class CreatecustomitemPage implements OnInit {
       this.storage.get('TEMP_ITEMS_TABLE').then(async tempItems => {
         this.newitems = this.defaultSrvc.getTempItems == undefined ? tempItems : this.defaultSrvc.getTempItems
         this.newitems.push(params)
-        console.log(this.newitems)
+        //console.log(this.newitems)
         this.closeModal(this.newitems)
 
       })
@@ -823,9 +835,9 @@ export class CreatecustomitemPage implements OnInit {
 
       // this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
       //   this.newitems = res.push(params)
-      //   console.log(res)
+      //   //console.log(res)
       // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
-      //   console.log(ress);
+      //   //console.log(ress);
       // // })
       // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
       //   this.presentAddedItem();
