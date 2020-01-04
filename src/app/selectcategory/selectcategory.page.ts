@@ -123,8 +123,11 @@ export class SelectcategoryPage implements OnInit {
                 item.rid = this.myColID
               });
               console.log('TEMP_ITEMS_TABLE', this.tempItems);
+              this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
+
+              console.log(this.defaultSrvc.getTempItems)
+
               this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
-              // this.defaultSrvc.getTempItems = this.tempItems
               this.category = this.getItem(this.tempItems, 'items')
               this.isLoading = false
 
@@ -442,6 +445,8 @@ export class SelectcategoryPage implements OnInit {
     } else {
       var checkitems = "false"
       if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+        console.log('wow')
+
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
           this.storage.get("TEMP_ITEMS_TABLE").then(res => {
@@ -450,13 +455,15 @@ export class SelectcategoryPage implements OnInit {
               if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
                 checkitems = "true"
               } else {
-                //checkitems = "false"
+                checkitems = "false"
               }
             }
             this.checkitems(checkitems, info)
           })
         })
       } else {
+        console.log('wew')
+
         this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
           this.storage.get("TEMP_RATES_TABLE").then(res => {
@@ -465,7 +472,7 @@ export class SelectcategoryPage implements OnInit {
               if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
                 checkitems = "true"
               } else {
-                //checkitems = "false"
+                checkitems = "false"
               }
             }
             this.checkitems(checkitems, info)
