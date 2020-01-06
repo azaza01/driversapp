@@ -387,9 +387,9 @@ export class SelectcategoryPage implements OnInit {
 
   confirmInvoice() {
     var checkitems = "false"
-    if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
-      this.presentToast('Please select item first')
-    } else {
+    // if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
+    //   this.presentToast('Please select item first')
+    // } else {
       if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
@@ -403,11 +403,11 @@ export class SelectcategoryPage implements OnInit {
                 //checkitems = "false"
               }
             }
-            if (checkitems == "true") {
+            // if (checkitems == "true") {
               this.router.navigate(['/confirminvoice', this.collectionInfo]);
-            } else {
-              this.presentToast('Please select item first')
-            }
+            // } else {
+            //   this.presentToast('Please select item first')
+            // }
           })
         })
       } else {
@@ -422,15 +422,15 @@ export class SelectcategoryPage implements OnInit {
                 //checkitems = "false"
               }
             }
-            if (checkitems == "true") {
+            // if (checkitems == "true") {
               this.router.navigate(['/confirminvoice', this.collectionInfo]);
-            } else {
-              this.presentToast('Please select item first')
-            }
+            // } else {
+            //   this.presentToast('Please select item first')
+            // }
           })
         })
       }
-    }
+    // }
   }
 
   viewCollectionItem() {
@@ -440,9 +440,9 @@ export class SelectcategoryPage implements OnInit {
 
   async viewItems(info) {
 
-    if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
-      this.presentToast('Please select item first')
-    } else {
+    // if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
+    //   this.presentToast('Please select item first')
+    // } else {
       var checkitems = "false"
       if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
         console.log('wow')
@@ -480,11 +480,11 @@ export class SelectcategoryPage implements OnInit {
         })
       }
 
-    }
+    // }
   }
 
   async checkitems(checkitems, info) {
-    if (checkitems == "true") {
+    // if (checkitems == "true") {
       const myModal = await this.modalController.create({
         component: CollectionitemsPage,
         cssClass: 'viewItem-css',
@@ -505,9 +505,9 @@ export class SelectcategoryPage implements OnInit {
       })
 
       myModal.present();
-    } else {
-      this.presentToast('Please select item first')
-    }
+    // } else {
+    //   this.presentToast('Please select item first')
+    // }
 
 
   }

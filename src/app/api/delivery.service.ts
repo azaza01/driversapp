@@ -121,7 +121,7 @@ export class DeliveryService {
     })
   }
 
-  postponeDelivery(info, deliveryDate, deliverytime, selectedDelivery, reasonofpostpone, invoiceNo, invoiceId) {
+  postponeDelivery(info, deliveryDate, deliverytime, selectedDelivery, reasonofpostpone, invoiceNo, invoiceId, todaysdate, currentisntruction) {
 
     let params = {
       "email" : info.email_address,
@@ -133,7 +133,7 @@ export class DeliveryService {
       "id":  selectedDelivery,
       "date": deliveryDate,
       "time": deliverytime,
-      "reasontopostpone": reasonofpostpone,
+      "reasontopostpone": info.name + " " + todaysdate + " " + reasonofpostpone  + "\n\n" + currentisntruction, 
       "invoiceno" : invoiceNo,
       "invoiceid" : invoiceId
     }

@@ -230,7 +230,7 @@ export class ColectionviewPage implements OnInit {
     } else {
       if (this.reasonofpostpone != "") {
         await this.presentLoading('');
-        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone, this.currentInstruction)).then(data => {
+        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone, this.currentInstruction, this.originalDate)).then(data => {
           if (data != "false" || data != "") {
             this.removepostpone(this.collectionId)
             this.presentAlert("Collection Re-scheduled to " + selectedDate2 + " with timing " + this.selectedtime);

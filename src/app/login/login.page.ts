@@ -51,10 +51,10 @@ export class LoginPage implements OnInit {
 
     // wew = {
     //   // COLID: "142823",
-    //   INV_DATE: "2020-01-01",
+    //   INV_DATE: "2020-01-06",
     //   INV_TYPE: "CC",
-    //   INV_RUNNING: 1,
-    //   INV_NO: "CC-200101Du01"      // DriverID: 53
+    //   INV_RUNNING: 20,
+    //   INV_NO: "CC-200106Du20"      // DriverID: 53
     // }
     // for (let index = 0; index < 1; index++) {
     //   wew2.push(wew)

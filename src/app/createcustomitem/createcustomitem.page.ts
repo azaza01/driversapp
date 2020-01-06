@@ -220,11 +220,11 @@ export class CreatecustomitemPage implements OnInit {
       this.getSofaList();
     }
 
-    if (this.selectedCategory == "Carpet") {
-      this.readytype = "Roll"
-    } else {
-      this.readytype = ""
-    }
+    // if (this.selectedCategory == "Carpet") {
+    //   this.readytype = "Roll"
+    // } else {
+    //   this.readytype = ""
+    // }
   }
 
   // showSelectedSofa(selectedsofa){
@@ -730,7 +730,7 @@ export class CreatecustomitemPage implements OnInit {
     } else {
       if (this.selectedCategory == "Carpet") {
 
-        this.concatDesc = this.carpettype + " Carpet(" + this.lengths + this.unittype + " x " + this.breadthdata + this.unittype + ")"
+        this.concatDesc = this.carpettype + " Carpet " + this.lengths + this.unittype + " x " + this.breadthdata + this.unittype 
         this.Category = this.selectedCategory
         if (this.cleantypes = "DC") {
           this.cleantype = ("Dry Clean"); //default
@@ -742,7 +742,7 @@ export class CreatecustomitemPage implements OnInit {
 
         this.itemPrice = this.myprice
         this.itemQty = this.myquan
-        this.itemPcs = this.totalItemsCurtain
+        this.itemPcs = this.noOfPcs
         this.itemsubtotal = this.subtotal
 
         //save all above in temp_item_table
@@ -788,6 +788,7 @@ export class CreatecustomitemPage implements OnInit {
           this.itemPrice = this.myprice
           this.itemQty = this.myquan
           this.itemPcs = this.noOfPcs
+          console.log(this.itemPcs)
           this.subtotal = this.myprice * this.myquan
           this.itemsubtotal = this.subtotal
 
@@ -804,50 +805,77 @@ export class CreatecustomitemPage implements OnInit {
 
   saveData() {
 
-    this.loading.dismiss();
-    this.storage.get('ACCOUNTS_TABLE').then(res => {
-      // //console.log(res)
-      this.driverInfo = res
-
-      let params: any = {};
-      params.id = "999"
-      params.description = this.concatDesc
-      params.cat_type = this.Category
-      params.clean_type = this.cleantype
-      params.ready_type = this.readytype
-      params.price = this.itemPrice
-      params.is_ready = "no"
-      params.qty = this.itemQty
-      params.pieces = this.itemPcs
-      params.subtotal = this.itemsubtotal
-      params.updated_by = this.name
-      params.updated_on = this.defaultSrvc.getToday();
-      params.rid = this.myRid
-
-      this.storage.get('TEMP_ITEMS_TABLE').then(async tempItems => {
-        this.newitems = this.defaultSrvc.getTempItems == undefined ? tempItems : this.defaultSrvc.getTempItems
-        this.newitems.push(params)
-        //console.log(this.newitems)
-        this.closeModal(this.newitems)
-
+    if(this.concatDesc != "" && this.concatDesc != null && this.concatDesc != "undefined"){
+      this.presentAlert2("Please fill up description")
+    }if(this.Category != "" && this.Category != null && this.Category != "undefined"){
+      this.presentAlert2("Please fill up category")
+    }if(this.cleantype != "" && this.cleantype != null && this.cleantype != "undefined"){
+      this.presentAlert2("Please fill up clean type")
+    }if(this.readytype != "" && this.readytype != null && this.readytype != "undefined"){
+      this.presentAlert2("Please fill up ready type")
+    }if(this.itemPrice != "" && this.itemPrice != null && this.itemPrice != "undefined"){
+      this.presentAlert2("Please fill up price")
+    }if(this.itemQty != "" && this.itemQty != null && this.itemQty != "undefined"){
+      this.presentAlert2("Please fill up quantity")
+    }if(this.itemsubtotal != "" && this.itemsubtotal != null && this.itemsubtotal != "undefined"){
+      this.presentAlert2("Please fill up subtotal")
+    }else{    
+      this.loading.dismiss();
+      this.storage.get('ACCOUNTS_TABLE').then(res => {
+        // //console.log(res)
+        this.driverInfo = res
+  
+        let params: any = {};
+        params.id = "999"
+        params.description = this.concatDesc
+        params.cat_type = this.Category
+        params.clean_type = this.cleantype
+        params.ready_type = this.readytype
+        params.price = this.itemPrice
+        params.is_ready = "no"
+        params.qty = this.itemQty
+        params.pieces = this.itemPcs
+        params.subtotal = this.itemsubtotal
+        params.updated_by = this.name
+        params.updated_on = this.defaultSrvc.getToday();
+        params.rid = this.myRid
+  
+        this.storage.get('TEMP_ITEMS_TABLE').then(async tempItems => {
+          this.newitems = this.defaultSrvc.getTempItems == undefined ? tempItems : this.defaultSrvc.getTempItems
+          this.newitems.push(params)
+          //console.log(this.newitems)
+          this.closeModal(this.newitems)
+  
+        })
+  
+  
+        // this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
+        //   this.newitems = res.push(params)
+        //   //console.log(res)
+        // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
+        //   //console.log(ress);
+        // // })
+        // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+        //   this.presentAddedItem();
+        //   this.clearCalcu();
+        // })
+        // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
+        //   this.defaultSrvc.getTempItems = this.temp_List
+        // })
+        // })   
       })
+    }
 
 
-      // this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
-      //   this.newitems = res.push(params)
-      //   //console.log(res)
-      // this.storage.set('TEMP_ITEMS_TABLE', res).then(async ress => {
-      //   //console.log(ress);
-      // // })
-      // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
-      //   this.presentAddedItem();
-      //   this.clearCalcu();
-      // })
-      // this.storage.set('TEMP_ITEMS_TABLE', this.newitems).then(() => {
-      //   this.defaultSrvc.getTempItems = this.temp_List
-      // })
-      // })   
-    })
+  }
+
+  async presentAlert2(msg) {
+    const alert = await this.alertController.create({
+      message: msg,
+      backdropDismiss: false,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   closeModal(info) {

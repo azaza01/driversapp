@@ -262,8 +262,11 @@ export class DeliverymakepaymentPage implements OnInit {
       if (checkunpaid <= 0) {
         this.deliveryStatus = this.deliveryStatus + ", Full Paid";
         this.deliverysync(kindoftransaction);
-      }else{
+      }else if(checkunpaid > 0 && checkunpaid < this.deliveryDetails.toa){
         this.deliveryStatus = this.deliveryStatus + ", Partial Paid";
+        this.deliverysync(kindoftransaction);
+      }else if(this.newamount == 0) {
+        this.deliveryStatus = this.deliveryStatus + ", Unpaid";
         this.deliverysync(kindoftransaction);
       }
     }
@@ -806,8 +809,9 @@ export class DeliverymakepaymentPage implements OnInit {
     }).finally(() => {
       this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
         console.log(ress)
+      }).finally(() =>{
+        this.offlinedeliveryUpdate(offlinedata);
       })
-      this.offlinedeliveryUpdate(offlinedata);
     })
 
     // await this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
