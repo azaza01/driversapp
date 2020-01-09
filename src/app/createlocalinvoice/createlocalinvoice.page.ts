@@ -20,6 +20,7 @@ export class CreatelocalinvoicePage implements OnInit {
   unsyncData: any 
   unsyncDataCollection: any
   customerDetails: any
+  driverData: any
 
   constructor(
     private storage: Storage,
@@ -32,6 +33,9 @@ export class CreatelocalinvoicePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      this.driverData = res
+    })
     this.getToday()
   }
 
@@ -163,6 +167,8 @@ export class CreatelocalinvoicePage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
+            params.customerCredit = custlist.credit_amount
+            params.driversId = this.driverData.id
             console.log(params)
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -202,31 +208,32 @@ export class CreatelocalinvoicePage implements OnInit {
               // })
 
               let params: any = {}
-              params.rid = this.mySpecialID,
-              params.coldelID = this.mySpecialID,
-              params.custID = custlist.id,
-              params.accID = custlist.account_id,
-              params.credit = custlist.credit_amount,
-              params.invoiceno = "",
-              params.invoicetype = "New",
-              params.invcompany = tag,
+              params.rid = this.mySpecialID
+              params.coldelID = this.mySpecialID
+              params.custID = custlist.id
+              params.accID = custlist.account_id
+              params.credit = custlist.credit_amount
+              params.invoiceno = ""
+              params.invoicetype = "New"
+              params.invcompany = tag
 
-              params.UCOtimestamp =  "UCOtimestamp", //new UCO will be generated in the collection loop if necessary
-              params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
-              params.UCOcollecttype = paramsselected.del,
-              params.UCOcollectdate = this.defaultSrvc.getToday(),
-              params.UCOcollecttime = "A 10 - 12pm" ,
-              params.UCOcollectaddress = custlist.mail_address,
-              params.UCOcollectunit = custlist.unit_no,
-              params.UCOcollectpostal = custlist.postal_code,
-              params.UCOcollectbuilding = custlist.building,
-              params.UCOcollectregion = custlist.region,
-              params.UCOcollectnote = "",
-              params.UCOcollectstatus = "collected",
-              params.UCOreturndate = "0000-00-00",
+              params.UCOtimestamp =  "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+              params.UCOcusttype = custlist.customer_type //30-11-2012 for checking minimum
+              params.UCOcollecttype = paramsselected.del
+              params.UCOcollectdate = this.defaultSrvc.getToday()
+              params.UCOcollecttime = "A 10 - 12pm"
+              params.UCOcollectaddress = custlist.mail_address
+              params.UCOcollectunit = custlist.unit_no
+              params.UCOcollectpostal = custlist.postal_code
+              params.UCOcollectbuilding = custlist.building
+              params.UCOcollectregion = custlist.region
+              params.UCOcollectnote = ""
+              params.UCOcollectstatus = "collected"
+              params.UCOreturndate = "0000-00-00"
               params.UCOreturntime = "A 10 - 12pm"
               params.done = "A 10 - 12pm"
               params.syncserver = "false"
+              params.driversId = this.driverData.id
             
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then( datas => {
                 this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
@@ -298,6 +305,7 @@ export class CreatelocalinvoicePage implements OnInit {
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
             params.customerCredit = custlist.credit_amount
+            params.driversId = this.driverData.id
             console.log(params)
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -362,6 +370,7 @@ export class CreatelocalinvoicePage implements OnInit {
               params.UCOreturntime = "A 10 - 12pm"
               params.done = "A 10 - 12pm"
               params.syncserver = "false"
+              params.driversId = this.driverData.id
             
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then( datas => {
                 this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {

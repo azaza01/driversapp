@@ -4,10 +4,11 @@
       <ion-menu-button color="white"></ion-menu-button>
     </ion-buttons>
     <ion-title style="color: rgb(0, 0, 0);">
-      Col & Del {{ collectionCount }}/{{ deliveryCount }}
+      <ion-label style="font-size: smaller;color: black;" >{{ theSelectedDate  | date :  "dd MMM y"}}</ion-label>
+      <br/>Col & Del {{ collectionCount }}/{{ deliveryCount }} 
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="coldev('Load collections and deliveries from?')" expand="full" shape="round" >
+      <ion-button (click)="coldev()" expand="full" shape="round" >
         Reload</ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -26,9 +27,9 @@
 <ion-content >
   <div >
     <div >
-      <ion-list [hidden]="item.coldel_type != 'collection'" *ngFor="let item of myColDev; let i = index" >
+      <ion-list [hidden]="item.coldel_type != 'collection' && item.mydates != 'theSelectedDate'" *ngFor="let item of myColDev; let i = index" >
         <ion-item-group  ng-selected="selected[i]" (click)="colView(item)" style="border-color: rgb(0, 0, 0);">
-            <ion-item-divider *ngIf="item.coldel_flag == 'updated'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
+            <!-- <ion-item-divider style="border-color: rgba(0, 0, 0, 0);background-color: rgba(92, 148, 221, 0.568);font-style: bold;">
             <ion-item>
               <ion-row>
                 <ion-col>
@@ -40,16 +41,10 @@
                 <ion-col>
                   <ion-label style="font-size: medium;">{{ item.cun }}<br/>{{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }}</ion-label>
                 </ion-col>
-                <!-- <ion-col>
-                  <ion-label style="font-size: medium;"></ion-label>
-                </ion-col> -->
-                <!-- <ion-col *ngIf="item.con != ''">
-                  <ion-label style="font-size: medium;">Note : {{ item.con }}</ion-label>
-                </ion-col> -->
               </ion-row>       
             </ion-item>
-          </ion-item-divider>
-          <ion-item-divider *ngIf="item.coldel_flag == 'old'" style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+          </ion-item-divider> -->
+          <ion-item-divider  style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
             <ion-item>
               <ion-row>
                 <ion-col>
@@ -61,12 +56,6 @@
                 <ion-col>
                   <ion-label style="font-size: medium;">{{ item.cun }} <br/> {{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }} </ion-label>
                 </ion-col>
-                <!-- <ion-col>
-                  <ion-label style="font-size: medium;"></ion-label>
-                </ion-col> -->
-                <!-- <ion-col *ngIf="item.con != ''">
-                  <ion-label style="font-size: medium;">Note : {{ item.con }}</ion-label>
-                </ion-col> -->
               </ion-row>       
             </ion-item>
           </ion-item-divider>
@@ -77,7 +66,7 @@
           </ion-item-divider>
         </ion-item-group>
       </ion-list>
-      <ion-list [hidden]="delitem.coldel_type != 'delivery'"  *ngFor="let delitem of myColDev; let i = index">
+      <ion-list [hidden]="delitem.coldel_type != 'delivery' && delitem.mydates != 'theSelectedDate'"  *ngFor="let delitem of myColDev; let i = index">
         <!-- <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false" reorder="true" side="start"> -->
         <!-- <ng-container *ngIf="delitem.coldel_type == 'delivery' && delitem.sts != 'Full Delivered, Partial Paid'"> -->
         <ion-item-group ng-selected="selected[i]" (click)="delView(delitem)">
@@ -157,14 +146,14 @@
 </ion-content>
 
 <ion-row>
-  <!-- <ion-col>
-    <ion-button expand="full" shape="round" color="warning" class="ion-float-left" position="bottom">PREV</ion-button>
-  </ion-col> -->
-  <!-- <ion-col>
-    <ion-button (click)="getToday()"(click)="coldev('Load collections and deliveries from?')"  expand="full" shape="round" color="warning" class="ion-float-center" position="bottom">TODAY
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" class="ion-float-left" position="bottom" (click)="LoadFromServerPrev()">PREV</ion-button>
+  </ion-col>
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" class="ion-float-center" position="bottom" (click)="coldev()">TODAY
     </ion-button>
-  </ion-col> -->
-  <!-- <ion-col>
-    <ion-button expand="full" shape="round" color="warning" class="ion-float-right" position="bottom">NEXT</ion-button>
-  </ion-col> -->
+  </ion-col>
+  <ion-col>
+    <ion-button expand="full" shape="round" color="warning" class="ion-float-right" position="bottom" (click)="LoadFromServerNext()">NEXT</ion-button>
+  </ion-col>
 </ion-row>

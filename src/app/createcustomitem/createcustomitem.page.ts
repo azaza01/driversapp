@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { ModalController, LoadingController, ToastController } from '@ionic/angular';
 import { ThrowStmt } from '@angular/compiler';
 import { AlertController } from '@ionic/angular';
 import { CurrencyPipe } from '@angular/common';
@@ -29,6 +29,7 @@ export class CreatecustomitemPage implements OnInit {
   selectedsofa: any
   selectedCurtainService: any
   cleantypes: any
+  cleantype2: any
   selectedreadyTypes: any
   // cleantypetwo: any
   carpettype: any
@@ -96,7 +97,7 @@ export class CreatecustomitemPage implements OnInit {
   cleantype: any
   readytype: any
   itesmReady: any
-  itemPrice: any
+  itemPrice: any = 0
   itemQty: any
   itemPcs: any
   itemsubtotal: any
@@ -124,6 +125,7 @@ export class CreatecustomitemPage implements OnInit {
     public activatedRoute: ActivatedRoute,
     public alertController: AlertController,
     public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private defaultSrvc: DefaultsService,
     public modalCtrl: ModalController,
 
@@ -189,8 +191,8 @@ export class CreatecustomitemPage implements OnInit {
 
   clearCalcu() {
     this.lengths = "";
-    this.subtotal = "";
-    this.myprice = "";
+    this.subtotal = 0;
+    this.myprice = 0;
     this.myquan = "";
     this.noOfPcs = "";
     this.breadthdata = "";
@@ -335,7 +337,7 @@ export class CreatecustomitemPage implements OnInit {
 
 
   getSubtotal(subtotal) {
-    this.subtotal = subtotal;
+    this.subtotal = Math.round(subtotal * 100) / 100;
   }
 
   getdayCurtain(dayCurtain) {
@@ -629,7 +631,7 @@ export class CreatecustomitemPage implements OnInit {
     this.curtainDesc();
 
     if (this.myquan != 0) {
-      this.subtotal = this.myprice * this.myquan;
+      this.subtotal = Math.round((this.myprice * this.myquan) * 100) / 100;
     }
 
 
@@ -655,7 +657,7 @@ export class CreatecustomitemPage implements OnInit {
       }
 
     } else {
-      this.subtotal = this.myprice * this.myquan;
+      this.subtotal = Math.round((this.myprice * this.myquan) * 100) / 100;
     }
   }
 
@@ -722,20 +724,36 @@ export class CreatecustomitemPage implements OnInit {
 
   }
 
+  async presentAlert2(msg) {
+    const alert = await this.alertController.create({
+      message: msg,
+      backdropDismiss: false,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
 
   addCustomItem() {
    // if ((this.myquan == null || this.myquan == 0) || (this.myprice == null || this.myprice == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
+   console.log() 
+   
+    
     if ((this.myquan == null || this.myquan == 0) || (this.noOfPcs == null || this.noOfPcs == 0)) {
       this.presentAlert();
     } else {
+      if(this.myprice == ""){
+        this.myprice = 0
+      }
+
       if (this.selectedCategory == "Carpet") {
 
         this.concatDesc = this.carpettype + " Carpet " + this.lengths + this.unittype + " x " + this.breadthdata + this.unittype 
         this.Category = this.selectedCategory
         if (this.cleantypes = "DC") {
-          this.cleantype = ("Dry Clean"); //default
+          this.cleantype2 = ("Dry Clean"); //default
         } else {
-          this.cleantype = ("Laundry");
+          this.cleantype2 = ("Laundry");
         }
         this.readytype = this.selectedreadyTypes;
         this.itesmReady = "no";
@@ -746,7 +764,20 @@ export class CreatecustomitemPage implements OnInit {
         this.itemsubtotal = this.subtotal
 
         //save all above in temp_item_table
-        this.saveData();
+        if(this.concatDesc == "" || (this.concatDesc == null || this.concatDesc == "undefined")){
+          this.presentAlert2("Please fill up description")
+        }else if(this.Category == "" || (this.Category == null || this.Category == "undefined")){
+          this.presentAlert2("Please fill up category")
+        }else if(this.cleantypes == "" || this.cleantypes == null || this.cleantypes == "undefined"){
+          this.presentAlert2("Please fill up clean type")
+        }else if(this.readytype == "" || this.readytype == null || this.readytype == undefined){
+          this.presentAlert2("Please fill up ready type")
+        }else if(this.itemQty == "" || this.itemQty == null || this.itemQty == "undefined"){
+          this.presentAlert2("Please fill up quantity")
+        }else{
+          this.saveData();
+        }  
+
 
 
       } else if (this.selectedCategory == "Curtains") {
@@ -754,9 +785,9 @@ export class CreatecustomitemPage implements OnInit {
         this.concatDesc = this.concatDescripton
         this.Category = this.selectedCategory
         if (this.company = "DC") {
-          this.cleantype = ("Dry Clean"); //default
+          this.cleantype2 = ("Dry Clean"); //default
         } else {
-          this.cleantype = ("Dry Clean");
+          this.cleantype2 = ("Dry Clean");
         }
         this.readytype = this.selectedreadyTypes;
         this.itesmReady = "no";
@@ -767,7 +798,20 @@ export class CreatecustomitemPage implements OnInit {
         this.itemsubtotal = this.subtotal
 
         //save all above in temp_item_table
-        this.saveData();
+        if(this.concatDesc == "" || (this.concatDesc == null || this.concatDesc == "undefined")){
+          this.presentAlert2("Please fill up description")
+        }else if(this.Category == "" || (this.Category == null || this.Category == "undefined")){
+          this.presentAlert2("Please fill up category")
+        }else if(this.cleantypes == "" || this.cleantypes == null || this.cleantypes == "undefined"){
+          this.presentAlert2("Please fill up clean type")
+        }else if(this.readytype == "" || this.readytype == null || this.readytype == undefined){
+          this.presentAlert2("Please fill up ready type")
+        }else if(this.itemQty == "" || this.itemQty == null || this.itemQty == "undefined"){
+          this.presentAlert2("Please fill up quantity")
+        }else{
+          this.saveData();
+        }  
+
 
       } else {
         if (this.normaldesc == null || this.normaldesc == 0) {
@@ -778,9 +822,9 @@ export class CreatecustomitemPage implements OnInit {
           //console.log(this.concatDesc)
           this.Category = this.selectedCategory
           if (this.cleantypes = "DC") {
-            this.cleantype = ("Dry Clean"); //default
+            this.cleantype2 = ("Dry Clean"); //default
           } else {
-            this.cleantype = ("Laundry");
+            this.cleantype2 = ("Laundry");
           }
           this.readytype = this.selectedreadyTypes;
           this.itesmReady = "no";
@@ -795,7 +839,20 @@ export class CreatecustomitemPage implements OnInit {
 
 
           //save all above in temp_item_table
-          this.saveData();
+          if(this.concatDesc == "" || (this.concatDesc == null || this.concatDesc == "undefined")){
+            this.presentAlert2("Please fill up description")
+          }else if(this.Category == "" || (this.Category == null || this.Category == "undefined")){
+            this.presentAlert2("Please fill up category")
+          }else if(this.cleantypes == "" || this.cleantypes == null || this.cleantypes == "undefined"){
+            this.presentAlert2("Please fill up clean type")
+          }else if(this.readytype == "" || this.readytype == null || this.readytype == undefined){
+            this.presentAlert2("Please fill up ready type")
+          }else if(this.itemQty == "" || this.itemQty == null || this.itemQty == "undefined"){
+            this.presentAlert2("Please fill up quantity")
+          }else{
+            this.saveData();
+          }  
+  
 
 
         }
@@ -804,22 +861,6 @@ export class CreatecustomitemPage implements OnInit {
   }
 
   saveData() {
-
-    if(this.concatDesc != "" && this.concatDesc != null && this.concatDesc != "undefined"){
-      this.presentAlert2("Please fill up description")
-    }if(this.Category != "" && this.Category != null && this.Category != "undefined"){
-      this.presentAlert2("Please fill up category")
-    }if(this.cleantype != "" && this.cleantype != null && this.cleantype != "undefined"){
-      this.presentAlert2("Please fill up clean type")
-    }if(this.readytype != "" && this.readytype != null && this.readytype != "undefined"){
-      this.presentAlert2("Please fill up ready type")
-    }if(this.itemPrice != "" && this.itemPrice != null && this.itemPrice != "undefined"){
-      this.presentAlert2("Please fill up price")
-    }if(this.itemQty != "" && this.itemQty != null && this.itemQty != "undefined"){
-      this.presentAlert2("Please fill up quantity")
-    }if(this.itemsubtotal != "" && this.itemsubtotal != null && this.itemsubtotal != "undefined"){
-      this.presentAlert2("Please fill up subtotal")
-    }else{    
       this.loading.dismiss();
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         // //console.log(res)
@@ -829,7 +870,7 @@ export class CreatecustomitemPage implements OnInit {
         params.id = "999"
         params.description = this.concatDesc
         params.cat_type = this.Category
-        params.clean_type = this.cleantype
+        params.clean_type = this.cleantype2
         params.ready_type = this.readytype
         params.price = this.itemPrice
         params.is_ready = "no"
@@ -864,19 +905,22 @@ export class CreatecustomitemPage implements OnInit {
         // })
         // })   
       })
-    }
+    
 
 
   }
 
-  async presentAlert2(msg) {
-    const alert = await this.alertController.create({
+  async presentToast(msg) {
+    const toast = await this.toastCtrl.create({
       message: msg,
-      backdropDismiss: false,
-      buttons: ['OK']
+      duration: 3000,
+      position: 'bottom',
+      color: 'medium',
+      cssClass: 'customToast-class',
     });
-    await alert.present();
+    toast.present();
   }
+
 
   closeModal(info) {
     this.modalCtrl.dismiss({

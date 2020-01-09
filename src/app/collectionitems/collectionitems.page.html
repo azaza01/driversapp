@@ -43,7 +43,7 @@
             <ion-input type="number" [(ngModel)]="item.pieces"></ion-input>
           </ion-col>
           <ion-col size="2" style="padding-left: 10px; text-align: center;">
-            {{item.qty * item.price}}
+            {{item.subtotal | number : '1.2-2'}}
           </ion-col>
         </ion-row>
       </ion-card-content>

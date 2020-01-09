@@ -121,7 +121,7 @@ export class AccountsService {
       params.email = this.driverData.email_address,
       params.password = this.driverData.password,
       params.drivername = this.driverData.name,
-      params.companyagent = info.companyagent,
+      // params.companyagent = info.companyagent,
       params.contactperson1 = info.contactperson1,
       params.contactno1 = info.contactno1,
       params.mailingaddress = info.mailingaddress,
@@ -160,9 +160,9 @@ export class AccountsService {
   }
 
   login(info: any) {
-    console.log(info)
-    console.log(info.password)
-
+    // console.log(info)
+    // console.log(info.password)
+    this.storage.set('REMEMBER_ME', info).then(() => {});
 
     // convert password to sha1 
     
@@ -170,7 +170,7 @@ export class AccountsService {
     // var hash = CryptoJS.SHA1(info.password);
     // var generatedpassword  = sha1(info.password);
 
-    //coded for adjustment of shar //thisis unsafe change it
+    //coded for adjustment of sha //thisis unsafe change it
     if(info.email == "ken@cottoncare.com.sg" && info.password == "blessed878"){
       info.password = "47cdb5462d98cef63f51176a007e93aea4b7f5b9";
     }else if(info.email == "eddieang@cottoncare.com.sg" && info.password == "charmed878"){
@@ -198,7 +198,6 @@ export class AccountsService {
     }
 
 
-
     console.log(info.password);
 
     let infoi = {
@@ -213,7 +212,7 @@ export class AccountsService {
 
     if (navigator.onLine == true) {
       return new Promise(resolve => {
-        this.httpclient.post(this.url + "/logon.json", infoi).subscribe(
+        this.httpclient.post(this.url + "/logon.json", info).subscribe(
           response => {
             let res;
             res = response[0];
@@ -221,7 +220,8 @@ export class AccountsService {
             this.driverData = res
             this.storage.set('ACCOUNTS_TABLE', res).then(() => {
               // this.getStandingOrder(res)
-              resolve(res)
+                // this.getStandingOrder(res)
+                resolve(res)
             });
   
           },

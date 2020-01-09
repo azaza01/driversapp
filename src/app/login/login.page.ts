@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage';
 import { ItemsService } from '../api/items.service';
 // import { CryptoJS } from 'crypto-js';
 import { DefaultsService } from '../api/defaults.service';
+import { AppComponent } from '../app.component';
 
 
 @Component({
@@ -18,8 +19,13 @@ export class LoginPage implements OnInit {
 
   loading: any = new LoadingController;
   hash: any
-  password: any
-  email: any
+  password: any =""
+  email: any = ""
+
+  
+
+
+
 
   // email: any = "davidchia@cottoncare.com.sg"
   // password: any = "fortune878"
@@ -34,10 +40,15 @@ export class LoginPage implements OnInit {
     private accSrvc: AccountsService,
     private storage: Storage,
     private defaultSrvc: DefaultsService,
+    private mycomp: AppComponent
+  ) {
+    
 
-  ) { }
+   }
 
   ngOnInit() {
+
+
 
     // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
     // this.storage.remove('UNSYNCED_INVOICE_TABLE')
@@ -46,6 +57,7 @@ export class LoginPage implements OnInit {
     // this.storage.remove('TEMP_ITEMS_TABLE')
     
     // this.storage.remove('ENVNUM_TABLE')
+    //this.storage.remove('REMEMBER_ME')
     // let wew
     // let wew2 = []
 
@@ -53,8 +65,8 @@ export class LoginPage implements OnInit {
     //   // COLID: "142823",
     //   INV_DATE: "2020-01-06",
     //   INV_TYPE: "CC",
-    //   INV_RUNNING: 20,
-    //   INV_NO: "CC-200106Du20"      // DriverID: 53
+    //   INV_RUNNING: 4,
+    //   INV_NO: "CC-200106Tn04"      // DriverID: 53
     // }
     // for (let index = 0; index < 1; index++) {
     //   wew2.push(wew)
@@ -63,6 +75,20 @@ export class LoginPage implements OnInit {
     // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
     //   console.log(res);
     // })
+
+    // this.storage.get('REMEMBER_ME').then(accData => {
+    //   console.log(accData)
+    //   if (accData != undefined) {
+    //     this.cred.value.email = accData.email_address
+    //     this.cred.value.password = accData.password
+    //   }else{
+    //     this.cred.value.email = "@cottoncare.com.sg"
+    //   }
+    // });
+
+
+    // this.password = this.mycomp.mypassword
+    // this.email = this.mycomp.myusername
 
     this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       console.log(res)
@@ -79,6 +105,9 @@ export class LoginPage implements OnInit {
 
   }
 
+  // form.resetForm({ email: "@cottoncare.com.sg" });
+
+
   async presentLoading(msg) {
     this.loading = await this.loadingCtrl.create({
       message: msg,
@@ -89,6 +118,15 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.storage.get('REMEMBER_ME').then(accData => {
+      console.log(accData)
+      if(accData != "" && accData != null){
+        this.email = accData.email
+        this.password = accData.origpassword
+      }else{
+        this.email = "sample@cottoncare.com.sg"
+      }
+    });
     this.menuCtrl.enable(false);
   }
 
@@ -104,15 +142,19 @@ export class LoginPage implements OnInit {
     toast.present();
   }
 
-  async login(user: NgForm) {
-    console.log(user.value)
-    console.log(this.password)
+  async login() {
 
+    let user = {
+      "email" : this.email,
+      "password" : this.password, 
+      "origpassword" : this.password
+    }
+    
     // if(user.value != "" && user.value != "" ){
     await this.presentLoading('Validating credentials');
     // this.isLoading = true;
     // console.log(user.value)
-    Promise.resolve(this.accSrvc.login(user.value)).then(data => {
+    Promise.resolve(this.accSrvc.login(user)).then(data => {
       console.log(data);
       console.log(this.accSrvc.driverData.id)
       if (data) {
@@ -137,8 +179,6 @@ export class LoginPage implements OnInit {
           // console.log(data)
           // console.log(newSet)
         })
-
-
       } else {
         this.presentToast("Invalid credentials")
 

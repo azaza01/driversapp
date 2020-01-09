@@ -58,7 +58,8 @@ export class SelectcategoryPage implements OnInit {
     this.tempItems = ""
     this.unsyncData = ""
     this.myColID = ""
-
+    
+    this.defaultSrvc.getTempItems = undefined;
     // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
     //   console.log('removed ');
     //   this.storage.remove('TEMP_RATES_TABLE').then(() => {
@@ -423,6 +424,7 @@ export class SelectcategoryPage implements OnInit {
               }
             }
             // if (checkitems == "true") {
+          
               this.router.navigate(['/confirminvoice', this.collectionInfo]);
             // } else {
             //   this.presentToast('Please select item first')

@@ -14,6 +14,9 @@ import { DefaultsService } from './api/defaults.service';
 })
 export class AppComponent {
 
+  // myusername: any
+  // mypassword: any
+
   public appPages = [
     {
       title: 'Home',
@@ -71,7 +74,7 @@ export class AppComponent {
 
   ) {
     // this.autoLogin()
-
+    // this.getAccounts()
     this.initializeApp();
 
   }
@@ -123,6 +126,15 @@ export class AppComponent {
       });
     }
   }
+
+  // async getAccounts() {
+  //   this.storage.get('REMEMBER_ME').then(accData => {
+  //     console.log(accData)
+  //     this.myusername = accData.email_address
+  //     this.mypassword = accData.password
+    
+  //   });
+  // }
 
   async autoLogin() {
     this.storage.get('ACCOUNTS_TABLE').then(accData => {

@@ -45,9 +45,11 @@
                 <!-- <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom">MAP
                 </ion-button> -->
             </ion-item>
-            <ion-item>
-                <ion-label>Notes : </ion-label>
-                <ion-label>{{deliveryInfo.den}}</ion-label>
+            <ion-item *ngIf="deliveryInfo.noe != ''">
+                <ion-label><br/>Notes : </ion-label>
+            </ion-item>
+            <ion-item *ngIf="deliveryInfo.noe != ''">
+                    <ion-textarea disabled>{{deliveryInfo.noe}}</ion-textarea>
             </ion-item>
             <ion-item>
                 <ion-label>Number 1: </ion-label>
@@ -119,9 +121,11 @@
                 <ion-button *ngIf="driverInfo.postpone == 1" shape="round" fill="outline" color="Tertiary" class="ion-float-right" (click)="postphone()" position="bottom">Postpone
                 </ion-button>
             </ion-item>
-            <ion-item>
-                <ion-label>instruction : </ion-label>
-                <ion-textarea value="{{deliveryInfo.noe}}"></ion-textarea>
+            <ion-item *ngIf="deliveryInfo.den != ''" >
+                <ion-label><br/>instruction : </ion-label>
+            </ion-item>
+            <ion-item *ngIf="deliveryInfo.den != ''">
+                    <ion-textarea disabled value="{{deliveryInfo.den}}"></ion-textarea>
             </ion-item>
             <ion-item>
                 <ion-label>Updated by : </ion-label>

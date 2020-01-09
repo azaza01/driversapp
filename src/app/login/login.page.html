@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content >
-  <form #cred="ngForm" style="padding-top: 10px;">
+  <!-- <form  style="padding-top: 10px;"> -->
 
     <ion-grid class="backgrounds ion-padding">
       <ion-row>
@@ -32,7 +32,7 @@
           <ion-item>
             <ion-label color="medium" position="floating">Email</ion-label>
             <ion-input autocorrect="on" clearInput color="medium"
-            inputmode="text" placeholder="Enter your email" required="true" name="email" ngModel></ion-input>
+            inputmode="text" placeholder="Enter your Username" required="true" [(ngModel)]="email"></ion-input>
             <ion-icon name="md-mail" color="medium" slot="end"></ion-icon>
           </ion-item>
         </ion-col>
@@ -42,7 +42,7 @@
           <ion-item>
             <ion-label color="medium" position="floating">Password</ion-label>
             <ion-input autocorrect="on" clearInput color="medium"
-              type="password" placeholder="Enter your password" required="true" name="password" ngModel ></ion-input>
+              type="password" placeholder="Enter your password" required="true"[(ngModel)]="password"></ion-input>
             <ion-icon name="lock" color="medium" slot="end"></ion-icon>
           </ion-item>
         </ion-col>
@@ -50,11 +50,11 @@
     </ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button expand="full" shape="round" color="warning" (click)="login(cred)">LOGIN</ion-button>
+        <ion-button expand="full" shape="round" color="warning" (click)="login()">LOGIN</ion-button>
         <!-- <ion-button  expand="full" shape="round" color="warning" (click)="showFingerprintAuthDlg()">LOGIN</ion-button> -->
       </ion-col>
     </ion-row>
-  </form>
+  <!-- </form> -->
 
   
 

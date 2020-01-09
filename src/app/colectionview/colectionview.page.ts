@@ -39,6 +39,8 @@ export class ColectionviewPage implements OnInit {
 
   mySpecialID: any
 
+  isTodayCollection: any
+
 
   loading: any = new LoadingController;
   require: any
@@ -74,6 +76,7 @@ export class ColectionviewPage implements OnInit {
       this.currentInstruction =  this.collectionInfo.con
       console.log(this.currentInstruction)
 
+      this.isTodayCollection = this.defaultSrvc.getToday();
 
       let todays;
       let dd = new Date(this.originalDate).getDate();
@@ -408,6 +411,7 @@ export class ColectionviewPage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
+            params.driversId = this.driverInfo.id
             // console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -483,6 +487,7 @@ export class ColectionviewPage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
+            params.driversId = this.driverInfo.id
             // console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {

@@ -137,7 +137,7 @@ export class CollectionService {
       "id": collectionID,
       "date": selectedDate,
       "time": selectedTime,
-      "reasontopostpone": info.name + " " + todaysdate + " " + reasonofpostpone  + "\n\n" + currentInstruction 
+      "reasontopostpone": info.name + " " + todaysdate + " " + reasonofpostpone  + "\n \n" + currentInstruction 
    }
 
 

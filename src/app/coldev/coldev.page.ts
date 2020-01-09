@@ -28,7 +28,7 @@ export class ColdevPage implements OnInit {
   deliveryCount: any = 0
   collectionCount: any = 0
 
-
+  theSelectedDate: any
 
   selected: any = []
   loading: any = new LoadingController;
@@ -46,6 +46,8 @@ export class ColdevPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+
+
     // this.storage.remove('COLDEL_TABLE')
     // this.ionViewWillEnter()
 
@@ -53,9 +55,19 @@ export class ColdevPage implements OnInit {
     //   lat: this.latitude,
     //   lng: this.longitude
     // };
+
+    // this.storage.get('COLDEL_TABLE').then(res => {
+    //   //console.log(res)
+    //   if(res != null){
+    //     this.myColDev = res
+    //   }else if(res == null){
+    //     this.coldev("Load collections and deliveries from?")
+    //   }
+    // })
   }
 
   ionViewWillEnter() {
+
     let today;
     let dd = new Date().getDate();
     let mm = new Date().getMonth() + 1;
@@ -65,13 +77,13 @@ export class ColdevPage implements OnInit {
     let mmm = mm < 10 ? "0" + mm : mm
 
     today = yy + '-' + mmm + '-' + ddd;
-    console.log(today)
+    //console.log(today)
     this.storage.get('COLDEL_TABLE').then(res => {
-      console.log(res)
+      //console.log(res)
       if(res != null){
         this.myColDev = res
       }else if(res == null){
-        this.coldev("Load collections and deliveries from?")
+        this.coldev()
       }
     })
 
@@ -104,10 +116,10 @@ export class ColdevPage implements OnInit {
 
       Promise.resolve(this.SplSrvc.getSpecialInstruction(info, today)).then(data => {
         this.specialIns = data;
-        console.log(data)
+        //console.log(data)
         if (data != undefined) {
           this.storage.get('COLDEL_TABLE').then(res => {
-            console.log(res)
+            //console.log(res)
             let exData = res
             var specialCounts = this.specialIns.length, i;
             // var coldevCounts = res.length, i2;
@@ -116,32 +128,32 @@ export class ColdevPage implements OnInit {
               this.specialIns.forEach(async spI => {
 
                 if (spI.action == "remove") {
-                  this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getToday(), spI.id)
+                  this.delayToDeleteForCorsPolicy(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel(), spI.id)
 
                   i = spI.type == 'collection' ? exData.findIndex(x => x.id == spI.against) : exData.findIndex(x => x.dei == spI.against)
-                  console.log(i)
+                  //console.log(i)
                   if (spI.type == 'collection') {
-                    if (exData[i].cod != this.defaultSrvc.getToday()) {
+                    if (exData[i].cod != this.defaultSrvc.getTodayColDel()) {
                       exData.splice(i, 1);
                       this.storage.set('COLDEL_TABLE', exData).then(res => {
                         this.myColDev = exData;
-                        console.log(this.myColDev)
+                        //console.log(this.myColDev)
                       })
                     }
 
                   } else if(spI.type == 'delivery') {
-                    if (exData[i].ded != this.defaultSrvc.getToday()) {
+                    if (exData[i].ded != this.defaultSrvc.getTodayColDel()) {
                       exData.splice(i, 1);
                       this.storage.set('COLDEL_TABLE', exData).then(res => {
                         this.myColDev = exData;
-                        console.log(this.myColDev)
+                        //console.log(this.myColDev)
                       })
                     }
                   } else if(i < 0){
 
                   }
 
-                  console.log(this.myColDev)
+                  //console.log(this.myColDev)
 
                 }
                 resolve(true)
@@ -172,13 +184,13 @@ export class ColdevPage implements OnInit {
         }
 
       }).catch(e => {
-        console.log(e);
+        //console.log(e);
         this.loading.dismiss();
 
       });
 
     }).catch(err => {
-      console.log(err)
+      //console.log(err)
     })
   }
 
@@ -193,7 +205,7 @@ export class ColdevPage implements OnInit {
     await Promise.resolve(this.SplSrvc.delSpecialInstruction(info, today, coldelSplID)).then(data => {
 
     }).catch(e => {
-      console.log(e);
+      //console.log(e);
       // this.loading.dismiss();
 
     });
@@ -202,8 +214,8 @@ export class ColdevPage implements OnInit {
   }
 
   async checkDuplicate(serverData, localData) {
-    // console.log(serverData)
-    // console.log(localData)
+    // //console.log(serverData)
+    // //console.log(localData)
     return new Promise(resolve => {
 
       if (localData == null) {
@@ -235,11 +247,11 @@ export class ColdevPage implements OnInit {
         result = localData.filter((item) => {
           return (item.id.indexOf(serverData.id) !== -1)
         })
-        // console.log(result)
+        // //console.log(result)
         if (result.length < 1) {
           serverData.coldel_flag = "old"
           this.myColDev.push(serverData)
-          console.log(this.myColDev)
+          //console.log(this.myColDev)
           this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
             resolve(true)
 
@@ -247,10 +259,10 @@ export class ColdevPage implements OnInit {
         } else {
           let i;
           i = localData.findIndex(x => x.id == result[0].id)
-          // console.log(i);
+          // //console.log(i);
           serverData.coldel_flag = "old"
           this.myColDev.splice(i, 1, serverData);
-          console.log(this.myColDev)
+          //console.log(this.myColDev)
           this.storage.set('COLDEL_TABLE', this.myColDev).then(() => {
             resolve(true)
           })
@@ -259,7 +271,7 @@ export class ColdevPage implements OnInit {
       }
 
     }).catch(err => {
-      console.log(err)
+      //console.log(err)
     })
 
   }
@@ -272,11 +284,11 @@ export class ColdevPage implements OnInit {
 
   async collection(info, today) {
     // await this.presentLoading('');
-    console.log(info)
+    //console.log(info)
     return new Promise(resolve => {
 
       Promise.resolve(this.cltnSrvc.getCollection(info, today)).then(data => {
-        // console.log(data);
+        // //console.log(data);
         this.myCollection = []
         let collection: any
         collection = data;
@@ -290,22 +302,23 @@ export class ColdevPage implements OnInit {
             col.coldel_return = "nil"
             col.coldel_return = "nil"
             col.coldel_flag = "New"
+            col.mydates = col.cod
 
             this.myCollection.push(col)
           });
-          // console.log(this.myCollection);
+          // //console.log(this.myCollection);
           this.storage.get('COLDEL_TABLE').then(res => {
-            // console.log(res);
+            // //console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myCollection.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""
               // this.checkDuplicate(myC, this.myColDev)
               Promise.resolve(this.checkDuplicate(myC, this.myColDev)).then(res => {
-                console.log(res);
+                //console.log(res);
 
                 resolve(true)
               }).catch(e => {
-                console.log(e);
+                //console.log(e);
               });
               // this.loading.dismiss();
             });
@@ -320,24 +333,24 @@ export class ColdevPage implements OnInit {
         }
 
       }).catch(e => {
-        console.log(e);
+        //console.log(e);
         this.loading.dismiss();
 
       });
 
     }).catch(err => {
-      console.log(err)
+      //console.log(err)
     })
   }
 
 
   async delivery(info, today) {
     // await this.presentLoading('');
-    console.log(info)
+    //console.log(info)
     return new Promise(resolve => {
 
       Promise.resolve(this.delcltnSrvc.getDelivery(info, today)).then(data => {
-        // console.log(data);
+        // //console.log(data);
         this.myDeliveries = []
         let deliveries: any
         deliveries = data;
@@ -348,22 +361,23 @@ export class ColdevPage implements OnInit {
             del.coldel_returndate = ""
             del.coldel_returntime = ""
             del.coldel_flag = "New"
+            del.mydates = del.ded
 
             this.myDeliveries.push(del)
           });
-          // console.log(this.myDeliveries);
+          // //console.log(this.myDeliveries);
           this.storage.get('COLDEL_TABLE').then(res => {
-            // console.log(res);
+            // //console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myDeliveries.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""
               // this.checkDuplicate(myC, this.myColDev)
               Promise.resolve(this.checkDuplicate(myC, this.myColDev)).then(res => {
-                console.log(res);
+                //console.log(res);
 
                 resolve(true)
               }).catch(e => {
-                console.log(e);
+                //console.log(e);
               });
               // this.loading.dismiss();
             });
@@ -376,13 +390,13 @@ export class ColdevPage implements OnInit {
 
         }
       }).catch(e => {
-        console.log(e);
+        //console.log(e);
         this.loading.dismiss();
 
       });
 
     }).catch(err => {
-      console.log(err)
+      //console.log(err)
     })
 
   }
@@ -401,10 +415,10 @@ export class ColdevPage implements OnInit {
     })
   }
 
-  async coldev(msg) {
+  async coldev() {
     const alert = await this.alertController.create({
-      header: '',
-      message: msg,
+      header: 'Load collections and deliveries from?',
+      message: '',
       cssClass: 'ion-alertCSS',
       buttons: [
         {
@@ -412,6 +426,8 @@ export class ColdevPage implements OnInit {
           handler: () => {
             // this.getToday()
             alert.dismiss();
+            this.storage.remove('COLDEL_TABLE')
+            this.myColDev = []
             this.collectionCount = 0
             this.deliveryCount = 0
             this.LoadFromServer();
@@ -421,6 +437,7 @@ export class ColdevPage implements OnInit {
           handler: () => {
             alert.dismiss();
             this.LoadFromLocal()
+
           }
         },{
           text: 'CLOSE',
@@ -435,28 +452,105 @@ export class ColdevPage implements OnInit {
     await alert.present();
   }
 
+  LoadFromServerPrev(){
+    if (navigator.onLine == true) {
+
+      this.storage.remove('COLDEL_TABLE')
+      this.myColDev = []
+      this.collectionCount = 0
+      this.deliveryCount = 0
+
+      this.presentLoading('Loading Collection, Please Wait');
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("-1"))).then(res => {
+        //console.log(res);
+        this.loading.dismiss();
+        this.theSelectedDate = this.defaultSrvc.mySelectedDate
+        console.log(this.defaultSrvc.mySelectedDate)
+         this.presentLoading('Loading Delivery, Please Wait');
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("-1"))).then(res => {
+          //console.log(res);
+          this.loading.dismiss();
+            this.countColAndDel()
+        }).catch(e => {
+          //console.log(e);
+          this.loading.dismiss();
+        });
+      }).catch(e => {
+        //console.log(e);
+        this.loading.dismiss();
+      }).finally(() => {
+        this.loading.dismiss();
+      })
+    } else {
+      this.presentAlert("Please check your internet connection")
+    }
+  }
+
+  LoadFromServerNext(){
+    if (navigator.onLine == true) {
+
+      this.storage.remove('COLDEL_TABLE')
+      this.myColDev = []
+      this.collectionCount = 0
+      this.deliveryCount = 0
+
+      this.presentLoading('Loading Collection, Please Wait');
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("1"))).then(res => {
+        //console.log(res);
+        this.loading.dismiss();
+        this.theSelectedDate = this.defaultSrvc.mySelectedDate
+        console.log(this.defaultSrvc.mySelectedDate)
+         this.presentLoading('Loading Delivery, Please Wait');
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("1"))).then(res => {
+          //console.log(res);
+          this.loading.dismiss();
+          this.countColAndDel()
+        }).catch(e => {
+          //console.log(e);
+          this.loading.dismiss();
+        });
+      }).catch(e => {
+        //console.log(e);
+        this.loading.dismiss();
+      }).finally(() => {
+        this.loading.dismiss();
+      })
+    } else {
+      this.presentAlert("Please check your internet connection")
+    }
+  }
+
   LoadFromServer(){
     if (navigator.onLine == true) {
-      this.presentLoading('Loading Data, Please Wait');
-      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-        console.log(res);
-        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-          console.log(res);
-          Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getToday())).then(res => {
-            console.log(res);
+      this.presentLoading('Loading Collection, Please Wait');
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+        //console.log(res);
+        this.loading.dismiss();
+        this.theSelectedDate = this.defaultSrvc.mySelectedDate
+        console.log(this.defaultSrvc.mySelectedDate)
+         this.presentLoading('Loading Delivery, Please Wait');
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+          //console.log(res);
+          this.loading.dismiss();
+          this.presentLoading('Loading Special Instruction');
+          Promise.resolve(this.getSInstruction(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+            //console.log(res);
             this.loading.dismiss();
             this.countColAndDel()
           }).catch(e => {
-            console.log(e);
+            //console.log(e);
+            this.loading.dismiss();
           });
 
         }).catch(e => {
-          console.log(e);
+          //console.log(e);
+          this.loading.dismiss();
         });
       }).catch(e => {
-        console.log(e);
+        //console.log(e);
+        this.loading.dismiss();
       }).finally(() => {
-      
+        this.loading.dismiss();
       })
     } else {
       this.presentAlert("Please check your internet connection")
@@ -465,31 +559,37 @@ export class ColdevPage implements OnInit {
 
   LoadFromLocal(){
     this.storage.get('COLDEL_TABLE').then(res => {
-      console.log(res);
+      //console.log(res);
       this.myColDev = res
     })
+
+    
   }
   
   countColAndDel(){
+    this.presentLoading('Counting Collection');
     this.storage.get('COLDEL_TABLE').then(res => {
-      var flags = [], output = [], l = res.length, i;
-      for (i = 0; i < l; i++) {
-        console.log(res[i].coldel_type)
-        if(res[i].coldel_type == "collection"){
-          console.log("wew")
-          this.collectionCount = (this.collectionCount * 1) + 1
-        }else if(res[i].coldel_type == "delivery"){
-          console.log("w0w")
-          this.deliveryCount = (this.deliveryCount * 1) + 1
+      console.log(res)
+      if(res == "" || res == null){
+        this.presentAlert("No collection and Deliveries")
+      }else{
+        var flags = [], output = [], l = res.length, i;
+        for (i = 0; i < l; i++) {
+          //console.log(res[i].coldel_type)
+          if(res[i].coldel_type == "collection" && res[i].mydates == this.theSelectedDate){
+            this.collectionCount = (this.collectionCount * 1) + 1
+          }else if(res[i].coldel_type == "delivery" && res[i].mydates == this.theSelectedDate){
+            this.deliveryCount = (this.deliveryCount * 1) + 1
+          }
         }
       }
-      console.log(this.collectionCount)
-      console.log(this.deliveryCount)
+    
+      this.loading.dismiss();
     })
   }
 
   // onRenderItems(event) {
-  //   console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
+  //   //console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
   //    let draggedItem = this.myColDev.splice(event.detail.from,1)[0];
   //    this.myColDev.splice(event.detail.to,0,draggedItem)
   //   //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);

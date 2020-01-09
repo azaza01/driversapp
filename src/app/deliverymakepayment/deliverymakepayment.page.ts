@@ -55,6 +55,8 @@ export class DeliverymakepaymentPage implements OnInit {
 
   todaydate: any
 
+  driversDetails: any
+
   constructor(
     public alertController: AlertController,
     private storage: Storage,
@@ -68,7 +70,8 @@ export class DeliverymakepaymentPage implements OnInit {
   async ngOnInit() {
     this.getPaymentDetails()
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      // console.log(res)
+      // //console.log(res)
+      this.driversDetails = res
       this.email_address = res.email_address
       this.password = res.password
       this.name = res.name
@@ -96,7 +99,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
     // this.mySpecialID = today
-    // console.log(today)
+    // //console.log(today)
     return today
   }
 
@@ -106,18 +109,18 @@ export class DeliverymakepaymentPage implements OnInit {
     if (this.payAmount == undefined) {
       this.payAmount = 0
     }
-    // console.log(payAmount)
+    // //console.log(payAmount)
   }
 
   getPayemntMethod(paymentMethod) {
     this.paymentMethod = paymentMethod
-    console.log(this.paymentMethod)
+    //console.log(this.paymentMethod)
   }
 
   getPaymentDetails() {
     this.isLoading = true
     this.storage.get('SELECTED_ITEM').then(res => {
-      console.log(res)
+      //console.log(res)
       this.isLoading = false
       this.deliveryDetails = res
       this.outstandingbalance = this.deliveryDetails.baa
@@ -164,7 +167,7 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   async makePayment(kindoftransaction) {
-    console.log(kindoftransaction)
+    //console.log(kindoftransaction)
     this.checkIfRepeat = kindoftransaction;
     this.getdeliveryStatus(kindoftransaction);
     // update summary table SUMMARY_TABLE +1 to deliver add value to (CASH or CREDIT, CHEQUE, BT  +1 to DC/CC)
@@ -209,7 +212,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
     this.mySpecialID = today
     return today
-    // console.log(this.todaydate)
+    // //console.log(this.todaydate)
   }
 
 
@@ -239,15 +242,16 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   getDeliveryPaymentStatus(kindoftransaction) {
-    console.log(this.deliveryDetails.bap);
-    console.log(this.deliveryDetails.dpa);
-    console.log(this.payAmount);
-    this.newamount = parseFloat(this.deliveryDetails.bap + this.deliveryDetails.dpa) + (this.payAmount);
+    //console.log(this.deliveryDetails.bap);
+    //console.log(this.deliveryDetails.dpa);
+    ////console.log(this.payAmount);
 
+    this.newamount = ((this.deliveryDetails.bap * 1) + (this.deliveryDetails.dpa * 1) * 1) + ((this.payAmount) * 1);
+    //console.log(this.newamount);
     var checkunpaid = this.deliveryDetails.toa - this.newamount
-    console.log(checkunpaid);
+    //console.log(checkunpaid);
 
-    console.log(this.paymentMethod);
+    //console.log(this.paymentMethod);
     if(this.paymentMethod == "Credit"){
       if(checkunpaid <= 0){
         this.deliveryStatus = this.deliveryStatus + ", Full Paid";
@@ -274,16 +278,17 @@ export class DeliverymakepaymentPage implements OnInit {
 
 
   async deliverysync(kindoftransaction) {   
-    
+    //console.log(this.deliveryStatus )
+     
       await this.presentLoading('Syncing Payments');     
       await Promise.resolve(this.deliveryndata()).then(coldata => {
 
-        console.log(coldata)
+        //console.log(coldata)
 
         if (navigator.onLine == true) {
           if(kindoftransaction == 'repeat'){
             this.presentToast("Current Transaction will save locally")
-            console.log("2")
+            //console.log("2")
             this.savePay(coldata);
           }else if(kindoftransaction == 'maypayment'){
             Promise.resolve(this.syncdelivery.syncdeliverysrvc(coldata)).then(data => {
@@ -298,14 +303,14 @@ export class DeliverymakepaymentPage implements OnInit {
               this.savePay(coldata);
             }
           }).catch(e => {
-            console.log(e);
+            //console.log(e);
             this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
             this.savePay(coldata);
           });
          }
         } else {
           if(kindoftransaction == 'repeat'){
-            console.log("1")
+            //console.log("1")
             this.presentToast("Cannot sync, poor internet connection. Please save later, Payment saved locally")
             this.savePay(coldata);
           }else if(kindoftransaction == 'maypayment'){
@@ -338,10 +343,10 @@ export class DeliverymakepaymentPage implements OnInit {
         inn: this.inn
       }
       // this.finaldeliverydata.push(params)
-      console.log(this.inn)
+      //console.log(this.inn)
       resolve(params)
     }).catch(e => {
-      console.log(e);
+      //console.log(e);
     });
   }
 
@@ -352,7 +357,7 @@ export class DeliverymakepaymentPage implements OnInit {
       data = res
       let filtered: any = []
       // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
-      // console.log(colid)
+      // //console.log(colid)
       //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
       if (data != "") {
         data.forEach(coldelData => {
@@ -452,7 +457,7 @@ export class DeliverymakepaymentPage implements OnInit {
       }
     }).finally(() => {
       this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
-        console.log(res)
+        //console.log(res)
         this.loading.dismiss();
         this.router.navigate(['/coldev']);
       })
@@ -473,12 +478,12 @@ export class DeliverymakepaymentPage implements OnInit {
           text: 'DC',
           handler: async () => {
             //function herer
-            // console.log(this.selected);
+            // //console.log(this.selected);
             tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
-            //   console.log(data);
+            //   //console.log(data);
             let params: any = {};
             params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = this.mySpecialID
@@ -503,17 +508,19 @@ export class DeliverymakepaymentPage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
-            console.log(params)
+            params.customerCredit = this.newCustomerCredit
+            params.driversId = this.driversDetails.id
+            //console.log(params)
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              console.log(this.unsyncData)
+              //console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // //console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -523,61 +530,62 @@ export class DeliverymakepaymentPage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // //console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
                 }
               }
             }).finally(() =>  {
-              // console.log(this.unsyncData);
+              // //console.log(this.unsyncData);
               // this.checkIfRepeat = "yes";
               // Promise.resolve(this.deliveryndata()).then(coldata => {
               // this.savePay(coldata);
               // })
 
               let params: any = {}
-              params.rid = this.mySpecialID,
-              params.coldelID = this.mySpecialID,
-              params.custID = this.deliveryDetails.cui,
-              params.accID = this.deliveryDetails.com,
-              params.credit = this.newCustomerCredit,
-              params.invoiceno = "",
-              params.invoicetype = "Repeat",
-              params.invcompany = tag,
+              params.rid = this.mySpecialID
+              params.coldelID = this.mySpecialID
+              params.custID = this.deliveryDetails.cui
+              params.accID = this.deliveryDetails.com
+              params.credit = this.newCustomerCredit
+              params.invoiceno = ""
+              params.invoicetype = "Repeat"
+              params.invcompany = tag
 
-              params.UCOtimestamp = "UCOtimestamp", //new UCO will be generated in the collection loop if necessary
-              params.UCOcusttype = this.deliveryDetails.cut, //30-11-2012 for checking minimum
-              params.UCOcollecttype = this.deliveryDetails.del,
-              params.UCOcollectdate = this.defaultSrvc.getToday(),
-              params.UCOcollecttime = this.deliveryDetails.det,
-              params.UCOcollectaddress = this.deliveryDetails.dea,
-              params.UCOcollectunit = this.deliveryDetails.dun,
-              params.UCOcollectpostal = this.deliveryDetails.dpc,
-              params.UCOcollectbuilding = this.deliveryDetails.deb,
-              params.UCOcollectregion = this.deliveryDetails.ren,
-              params.UCOcollectnote = "",
-              params.UCOcollectstatus = "collected",
-              params.UCOreturndate = "0000-00-00",
+              params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+              params.UCOcusttype = this.deliveryDetails.cut //30-11-2012 for checking minimum
+              params.UCOcollecttype = this.deliveryDetails.del
+              params.UCOcollectdate = this.defaultSrvc.getToday()
+              params.UCOcollecttime = this.deliveryDetails.det
+              params.UCOcollectaddress = this.deliveryDetails.dea
+              params.UCOcollectunit = this.deliveryDetails.dun
+              params.UCOcollectpostal = this.deliveryDetails.dpc
+              params.UCOcollectbuilding = this.deliveryDetails.deb
+              params.UCOcollectregion = this.deliveryDetails.ren
+              params.UCOcollectnote = ""
+              params.UCOcollectstatus = "collected"
+              params.UCOreturndate = "0000-00-00"
               params.UCOreturntime = "A 10 - 12pm"
               params.done = "A 10 - 12pm"
               params.syncserver = "false"
+              params.driversId = this.driversDetails.id
             
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then( datas => {
                 this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
                   this.unsyncDataCollection = res
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
     
                   if (res == null) {
                     this.unsyncDataCollection = []
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // console.log(this.unsyncData)
+                    // //console.log(this.unsyncData)
     
                   } else {
                     let result;
@@ -587,14 +595,14 @@ export class DeliverymakepaymentPage implements OnInit {
                     if (result.length < 1) {
                       this.unsyncDataCollection.push(params)
                       this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                      // console.log(this.unsyncData)
+                      // //console.log(this.unsyncData)
     
                     } else {
-                      // console.log(result)
+                      // //console.log(result)
                       let i;
                       i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
                       this.unsyncDataCollection.splice(i, 1, params);
-                      // console.log(this.unsyncData)
+                      // //console.log(this.unsyncData)
                       this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                     }
                   }
@@ -607,7 +615,7 @@ export class DeliverymakepaymentPage implements OnInit {
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   //console.log(e);
             // });
           }
         }, {
@@ -639,18 +647,19 @@ export class DeliverymakepaymentPage implements OnInit {
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
             params.customerCredit = this.newCustomerCredit
-            console.log(params)
+            params.driversId = this.driversDetails.id
+            //console.log(params)
 
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              // console.log(this.unsyncData)
+              // //console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // //console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -660,59 +669,60 @@ export class DeliverymakepaymentPage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // //console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                 }
               }
             }).finally(() => {
-              // console.log(this.unsyncData);
+              // //console.log(this.unsyncData);
               // this.defaultSrvc.getTempItems = null
 
               // this.checkIfRepeat = "yes";
 
               let params: any = {}
-                params.rid = this.mySpecialID,
-                params.coldelID = this.mySpecialID,
-                params.custID = this.deliveryDetails.cui,
-                params.accID = this.deliveryDetails.com,
-                params.credit = this.newCustomerCredit,
-                params.invoiceno = "",
-                params.invoicetype = "Repeat",
-                params.invcompany = tag,
+                params.rid = this.mySpecialID
+                params.coldelID = this.mySpecialID
+                params.custID = this.deliveryDetails.cui
+                params.accID = this.deliveryDetails.com
+                params.credit = this.newCustomerCredit
+                params.invoiceno = ""
+                params.invoicetype = "Repeat"
+                params.invcompany = tag
 
                 params.UCOtimestamp = this.mySpecialID, //new UCO will be generated in the collection loop if necessary
                 params.UCOcusttype = this.deliveryDetails.cut, //30-11-2012 for checking minimum
-                params.UCOcollecttype = this.deliveryDetails.del,
-                params.UCOcollectdate = this.defaultSrvc.getToday(),
+                params.UCOcollecttype = this.deliveryDetails.del
+                params.UCOcollectdate = this.defaultSrvc.getToday()
                 params.UCOcollecttime = this.deliveryDetails.det,
-                params.UCOcollectaddress = this.deliveryDetails.dea,
-                params.UCOcollectunit = this.deliveryDetails.dun,
-                params.UCOcollectpostal = this.deliveryDetails.dpc,
-                params.UCOcollectbuilding = this.deliveryDetails.deb,
-                params.UCOcollectregion = this.deliveryDetails.ren,
-                params.UCOcollectnote = "",
-                params.UCOcollectstatus = "collected",
-                params.UCOreturndate = "0000-00-00",
+                params.UCOcollectaddress = this.deliveryDetails.dea
+                params.UCOcollectunit = this.deliveryDetails.dun
+                params.UCOcollectpostal = this.deliveryDetails.dpc
+                params.UCOcollectbuilding = this.deliveryDetails.deb
+                params.UCOcollectregion = this.deliveryDetails.ren
+                params.UCOcollectnote = ""
+                params.UCOcollectstatus = "collected"
+                params.UCOreturndate = "0000-00-00"
                 params.UCOreturntime = "A 10 - 12pm"
                 params.syncserver = "false"
+                params.driversId = this.driversDetails.id
               
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(datas => {
                 this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
                   this.unsyncDataCollection = res
-                  // console.log(this.unsyncData)
+                  // //console.log(this.unsyncData)
     
                   if (res == null) {
                     this.unsyncDataCollection = []
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // console.log(this.unsyncData)
+                    // //console.log(this.unsyncData)
     
                   } else {
                     let result;
@@ -722,14 +732,14 @@ export class DeliverymakepaymentPage implements OnInit {
                     if (result.length < 1) {
                       this.unsyncDataCollection.push(params)
                       this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                      // console.log(this.unsyncData)
+                      // //console.log(this.unsyncData)
     
                     } else {
-                      // console.log(result)
+                      // //console.log(result)
                       let i;
                       i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
                       this.unsyncDataCollection.splice(i, 1, params);
-                      // console.log(this.unsyncData)
+                      // //console.log(this.unsyncData)
                       this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                     }
                   }
@@ -742,7 +752,7 @@ export class DeliverymakepaymentPage implements OnInit {
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   //console.log(e);
             // });
           }
         }
@@ -755,7 +765,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
 
   async savePay(offlinedata) {
-    console.log(offlinedata)
+    //console.log(offlinedata)
     // await this.presentLoading('Syncing local Data');
     let params = {
       email: offlinedata.email,
@@ -770,22 +780,23 @@ export class DeliverymakepaymentPage implements OnInit {
       pptimeslot: offlinedata.pptimeslot, //06-05-2013
       name: offlinedata.name,
       savedon: offlinedata.savedon,
-      inn: this.inn
+      inn: this.inn,
+      driversId : this.driversDetails.id
     }
-    console.log(this.inn)
+    //console.log(this.inn)
     this.finaldeliverydata.push(params)
     // await this.presentLoading('Syncing local Data');
     ////update UNSYNCED_INVOICE_TABLE
 
     await this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
       this.finaldeliverydata = res
-      // console.log(this.unsyncData)
+      // //console.log(this.unsyncData)
 
       if (res == null) {
         this.finaldeliverydata = []
         this.finaldeliverydata.push(params)
         this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
-        // console.log(this.unsyncData)
+        // //console.log(this.unsyncData)
 
       } else {
         let result;
@@ -795,20 +806,20 @@ export class DeliverymakepaymentPage implements OnInit {
         if (result.length < 1) {
           this.finaldeliverydata.push(params)
           this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
-          // console.log(this.unsyncData)
+          // //console.log(this.unsyncData)
 
         } else {
-          // console.log(result)
+          // //console.log(result)
           let i;
           i = this.finaldeliverydata.findIndex(x => x.id == result[0].id)
           this.finaldeliverydata.splice(i, 1, params);
-          // console.log(this.unsyncData)
+          // //console.log(this.unsyncData)
           this.storage.set('UNSYNCED_PAYMENT_TABLE', this.finaldeliverydata)
         }
       }
     }).finally(() => {
       this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
-        console.log(ress)
+        //console.log(ress)
       }).finally(() =>{
         this.offlinedeliveryUpdate(offlinedata);
       })
@@ -818,7 +829,7 @@ export class DeliverymakepaymentPage implements OnInit {
     //   let data
     //   data = res
     //   let filtered: any = []
-    //   console.log(data)
+    //   //console.log(data)
 
     //   if (data != "") {
     //     data.forEach(unsync => {
@@ -836,7 +847,7 @@ export class DeliverymakepaymentPage implements OnInit {
 
     // }).finally(() => {
     //   this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
-    //     console.log(ress)
+    //     //console.log(ress)
     //   })
     //   this.offlinedeliveryUpdate(offlinedata);
     // })

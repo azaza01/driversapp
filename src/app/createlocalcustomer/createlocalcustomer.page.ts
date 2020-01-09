@@ -17,10 +17,22 @@ export class CreatelocalcustomerPage implements OnInit {
   selectedcusttype: any
   arealist: any = []
   areacode: any
-  customertype: any
+
   description: any
   loading: any = new LoadingController;
 
+  contactperson1: any
+  contactno1: any
+  mailingaddress: any
+  unitno: any
+  builidngname: any
+  postalcode: any
+  liftlobby: any
+  customertype: any
+  contactno2: any
+  emailcus: any
+  contactperson2: any
+  user: NgForm
 
   constructor(
     private storage: Storage,
@@ -41,6 +53,7 @@ export class CreatelocalcustomerPage implements OnInit {
       }
       console.log(this.custtypelist)
     })
+
   }
 
   async presentToast(msg) {
@@ -64,7 +77,16 @@ export class CreatelocalcustomerPage implements OnInit {
     return await this.loading.present();
   }
 
-  getAreas(user: NgForm){
+  setDef(user){
+    if(user.value.customertype == "Self Collect"){
+      user.value.postalcode = "408934"
+      user.value.mailingaddress = "53 Ubi Ave 1"
+      user.value.unitno = "01-29"
+      user.value.builidngname = "Paya Ubi Industrial Park"
+    }
+  }
+
+  getAreas(user){
     console.log(user.value.postalcode)
     let postalcode  = user.value.postalcode
     var member = postalcode.toString();
@@ -83,9 +105,15 @@ export class CreatelocalcustomerPage implements OnInit {
     })
   }
 
-
-  async registerCustomer(user: NgForm){
+  async registerCustomer(user){
     console.log(user)
+    this.getAreas(user)
+    if(user.value.customertype == "Self Collect"){
+      user.value.postalcode = user.value.postalcode == "" ? "408934" : user.value.postalcode
+      user.value.mailingaddress = user.value.mailingaddress == "" ? "53 Ubi Ave 1" : user.value.mailingaddress
+      user.value.unitno = user.value.unitno == "" ? "01-29" : user.value.unitno
+      user.value.builidngname =  user.value.builidngname == "" ? "Paya Ubi Industrial Park" : user.value.builidngname
+    }
 
     if (navigator.onLine == true) {
     await this.presentLoading('Creating Customer');
@@ -95,6 +123,7 @@ export class CreatelocalcustomerPage implements OnInit {
       newdata.push(data);
       console.log(newdata.customerid )
       if (data != "" &&  data != false) {
+        user.reset();
         this.presentToast("Successfully added")
         this.router.navigate(['/home']);
       } else {

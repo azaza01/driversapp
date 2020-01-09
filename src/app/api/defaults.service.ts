@@ -29,6 +29,14 @@ export class DefaultsService {
   resultINVNUM: any
   myInvoiceNumber: any
 
+  driversDetails: any
+  nextcountdaysCol: any = 0
+  nextcountdaysDel: any = 0
+  prevcountdaysCol: any = 0
+  prevcountdaysDel: any = 0
+
+  mySelectedDate: any 
+
   _category: any;
   set getCategory(value: any) {
     this._category = value;
@@ -88,6 +96,10 @@ export class DefaultsService {
   }
 
   getToday() {
+    this.nextcountdaysCol = 0
+    this.nextcountdaysDel = 0
+
+
     let today;
     let dd = new Date().getDate();
     let mm = new Date().getMonth() + 1;
@@ -103,6 +115,108 @@ export class DefaultsService {
     console.log(today)
     return today
   }
+
+  getTodayColDel() {
+    this.nextcountdaysCol = 0
+    this.nextcountdaysDel = 0
+
+
+    let today;
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let yy = (yyyy + '').substr(2, 2);
+
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+
+    today = yyyy + '-' + mmm + '-' + ddd ;
+
+    this.mySelectedDate = today
+    console.log(today)
+    return today
+  }
+
+  getOthersCol(countdays) {
+    this.nextcountdaysCol = (this.nextcountdaysCol * 1) + (countdays * 1)
+    console.log(this.nextcountdaysCol)
+    let today;
+    
+    let dd = new Date().getDate() + this.nextcountdaysCol;
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let yy = (yyyy + '').substr(2, 2);
+
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+
+    today = yyyy + '-' + mmm + '-' + ddd ;
+
+    this.mySelectedDate = today
+    console.log(today)
+    return today
+  }
+
+  getOthersDel(countdays) {
+    this.nextcountdaysDel = (this.nextcountdaysDel * 1) + (countdays * 1)
+    console.log(this.nextcountdaysDel)
+    let today;
+    let dd = new Date().getDate() + this.nextcountdaysDel;
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let yy = (yyyy + '').substr(2, 2);
+
+    let ddd = dd < 10 ? "0" + dd : dd
+    let mmm = mm < 10 ? "0" + mm : mm
+
+
+    today = yyyy + '-' + mmm + '-' + ddd ;
+
+    this.mySelectedDate = today
+    console.log(today)
+    return today
+  }
+
+  // getPrevDayCol(countdays) {
+  //   this.prevcountdaysCol = (this.prevcountdaysCol * 1) -  (countdays * 1)
+  //   console.log(this.prevcountdaysCol)
+  //   let today;
+    
+  //   let dd = new Date().getDate() - this.prevcountdaysCol;
+  //   let mm = new Date().getMonth() + 1;
+  //   let yyyy = new Date().getFullYear();
+  //   let yy = (yyyy + '').substr(2, 2);
+
+  //   let ddd = dd < 10 ? "0" + dd : dd
+  //   let mmm = mm < 10 ? "0" + mm : mm
+
+
+  //   today = yyyy + '-' + mmm + '-' + ddd ;
+  //   this.mySelectedDate = today
+  //   console.log(today)
+  //   return today
+  // }
+
+  // getPrevDayDel(countdays) {
+  //   this.prevcountdaysDel = (this.prevcountdaysDel * 1) -  (countdays * 1)
+  //   console.log(this.prevcountdaysDel)
+  //   let today;
+  //   let dd = new Date().getDate() - this.prevcountdaysDel;
+  //   let mm = new Date().getMonth() + 1;
+  //   let yyyy = new Date().getFullYear();
+  //   let yy = (yyyy + '').substr(2, 2);
+
+  //   let ddd = dd < 10 ? "0" + dd : dd
+  //   let mmm = mm < 10 ? "0" + mm : mm
+
+
+  //   today = yyyy + '-' + mmm + '-' + ddd ;
+  //   this.mySelectedDate = today
+  //   console.log(today)
+  //   return today
+  // }
 
   createInvSeries() {
     // this.storage.remove('ENVNUM_TABLE').then(res => {
@@ -132,6 +246,7 @@ export class DefaultsService {
       let driver;
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         driver = res
+        params.drivercode = res.code
         // console.log(driver)
       })
 
@@ -144,16 +259,16 @@ export class DefaultsService {
         // console.log(seriesTbl)
         // return
         if (seriesTbl != null) {
-
           let result;
           result = seriesTbl.filter((item) => {
-            return (item.INV_DATE.indexOf(params.INV_DATE) !== -1)
+            return (item.INV_DATE.indexOf(params.INV_DATE) !== -1 && item.drivercode == params.drivercode )
           })
 
           if (result.length < 1) {
             // console.log("1st");
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
+
             seriesNo = params.INV_TYPE + "-" + yy + mmm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
             seriesTbl.push(params)

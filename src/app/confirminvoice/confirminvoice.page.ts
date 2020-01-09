@@ -321,8 +321,10 @@ export class ConfirminvoicePage implements OnInit {
         console.log(this.allinvoiceitems)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
-        } else if (this.finalSubtotal <= 0) {
-          this.coldev("Final amout is zero please back to previous page to refresh the page");
+        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
+          this.coldev("Final amount is zero please click back button to refresh the amount");
+        } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+          this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
         }
 
       })
@@ -353,8 +355,10 @@ export class ConfirminvoicePage implements OnInit {
         // ////console.log(this.finalSubtotal)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
-        } else if (this.finalSubtotal <= 0) {
-          this.coldev("Final amout is zero please back to previous page to refresh the page");
+        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
+          this.coldev("Final amount is zero please click back button to refresh the amount");
+        } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+          this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
         }
       })
     }
@@ -650,10 +654,46 @@ export class ConfirminvoicePage implements OnInit {
         }
         //update summary_table for new and others -- later part(KIV)
       }
-    } else {
-      this.coldev("Final amout is zero please back to previous page to refresh the page");
-    }
+    } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
+      this.coldev("Final amout is zero please click back button to refresh the amount");
+    } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
 
+      if (this.invoiceType == "Repeat" && this.validationforsync == "false") {
+        this.canSyncNow = "false"
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.proceedtoWherePage = "false"
+          this.savePay(coldata)
+        })
+        // .finally(() => {
+        //   this.proceedtoWhat("false");
+        // })
+        //update summary_table for repeat -- later part(KIV)
+        // } else if (this.invoiceType == "Pending") {
+        //update summary_table for pending -- later part(KIV
+      } else {
+        if (this.validationforsync == "true") {
+          this.canSyncNow = "false"
+          Promise.resolve(this.collectiondata()).then(coldata => {
+            this.proceedtoWherePage = "false"
+            this.savePay(coldata)
+          })
+          // .finally(() => {
+          //   this.proceedtoWhat("false");
+          // })
+        } else {
+          this.canSyncNow = "false"
+          Promise.resolve(this.collectiondata()).then(coldata => {
+            this.validationforsync == "false"
+            this.proceedtoWherePage = "false"
+            this.savePay(coldata)
+          })
+          // .finally(() => {
+          //   this.proceedtoWhat("false");
+          // })
+        }
+        //update summary_table for new and others -- later part(KIV)
+      }
+    }
 
   }
 
@@ -694,8 +734,43 @@ export class ConfirminvoicePage implements OnInit {
         }
         //update summary_table for new and others -- later part(KIV)
       }
-    } else {
-      this.coldev("Final amout is zero please back to previous page to refresh the page");
+    } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
+      this.coldev("Final amout is zero please click back button to refresh the amount");
+    } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+      
+      if (this.invoiceType == "Repeat") {
+        this.canSyncNow = "false"
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.validationforsync = "true"
+          this.proceedtoWherePage = "true"
+          this.savePay(coldata)
+        })
+        // .finally(() => {
+        //   this.proceedtoWhat("true");
+        // })
+        //update summary_table for repeat -- later part(KIV)
+        // } else if (this.invoiceType == "Pending") {
+        //update summary_table for pending -- later part(KIV)
+      } else {
+        if (this.validationforsync == "true") {
+          this.validationforsync = "true"
+          this.proceedtoWherePage = "true"
+          this.canSyncNow = "true"
+          this.syncPay()
+        } else {
+          this.canSyncNow = "false"
+          Promise.resolve(this.collectiondata()).then(coldata => {
+            this.validationforsync = "true"
+            this.proceedtoWherePage = "true"
+            this.savePay(coldata)
+          })
+          // .finally(() => {
+          //   //console.log(this.validationforsync)
+          //   this.proceedtoWhat("true");
+          // })
+        }
+        //update summary_table for new and others -- later part(KIV)
+      }
     }
 
     // if (navigator.onLine == true && this.invoiceType != 'Repeat') {
@@ -766,7 +841,8 @@ export class ConfirminvoicePage implements OnInit {
                 drvpa: offlinedata.password,
                 drvem: offlinedata.email,
                 colitem: offlinedata.invoiceitem,
-                syncserver: this.canSyncNow
+                syncserver: this.canSyncNow,
+                driversId : this.driversDetails.id
               }
               filtered.push(params)
             } else {
@@ -797,7 +873,8 @@ export class ConfirminvoicePage implements OnInit {
                 drvpa: offlinedata.password,
                 drvem: offlinedata.email,
                 colitem: offlinedata.invoiceitem,
-                syncserver: this.canSyncNow
+                syncserver: this.canSyncNow,
+                driversId : this.driversDetails.id
               }
               filtered.push(params)
             } else {
@@ -831,7 +908,8 @@ export class ConfirminvoicePage implements OnInit {
           drvpa: offlinedata.password,
           drvem: offlinedata.email,
           colitem: offlinedata.invoiceitem,
-          syncserver: this.canSyncNow
+          syncserver: this.canSyncNow,
+          driversId : this.driversDetails.id
         }
         ////console.log(params)
         this.storage.set('UNSYNCED_INVOICE_TABLE', params)
@@ -1107,7 +1185,8 @@ export class ConfirminvoicePage implements OnInit {
         params.discount = this.percentPromo,
         params.express = this.expressData,
         params.bags = this.UNINV_BAGS,
-        params.savedon = this.invoiceId
+        params.savedon = this.invoiceId,
+        params.driversId = this.driversDetails.id
       resolve(params)
     }).catch(e => {
       ////console.log(e);
@@ -1204,6 +1283,7 @@ export class ConfirminvoicePage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
+            params.driversId = this.driversDetails.id
             //console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -1240,31 +1320,32 @@ export class ConfirminvoicePage implements OnInit {
               this.checkIfRepeat = "yes";
 
               let params: any = {}
-              params.rid = this.mySpecialID,
-                params.coldelID = this.mySpecialID,
-                params.custID = this.dataForCreateNewCollection.cui,
-                params.accID = this.dataForCreateNewCollection.com,
-                params.credit = "",
-                params.invoiceno = "",
-                params.invoicetype = "New",
-                params.invcompany = tag,
+              params.rid = this.mySpecialID
+                params.coldelID = this.mySpecialID
+                params.custID = this.dataForCreateNewCollection.cui
+                params.accID = this.dataForCreateNewCollection.com
+                params.credit = ""
+                params.invoiceno = ""
+                params.invoicetype = "New"
+                params.invcompany = tag
 
-                params.UCOtimestamp = "UCOtimestamp", //new UCO will be generated in the collection loop if necessary
-                params.UCOcusttype = this.dataForCreateNewCollection.cut, //30-11-2012 for checking minimum
-                params.UCOcollecttype = this.dataForCreateNewCollection.cut,
-                params.UCOcollectdate = this.defaultSrvc.getToday(),
-                params.UCOcollecttime = this.dataForCreateNewCollection.det,
-                params.UCOcollectaddress = this.dataForCreateNewCollection.dea,
-                params.UCOcollectunit = this.dataForCreateNewCollection.dun,
-                params.UCOcollectpostal = this.dataForCreateNewCollection.dpc,
-                params.UCOcollectbuilding = this.dataForCreateNewCollection.deb,
-                params.UCOcollectregion = this.dataForCreateNewCollection.ren,
-                params.UCOcollectnote = "",
-                params.UCOcollectstatus = "collected",
-                params.UCOreturndate = "0000-00-00",
+                params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+                params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
+                params.UCOcollecttype = this.dataForCreateNewCollection.cut
+                params.UCOcollectdate = this.defaultSrvc.getToday()
+                params.UCOcollecttime = this.dataForCreateNewCollection.det
+                params.UCOcollectaddress = this.dataForCreateNewCollection.dea
+                params.UCOcollectunit = this.dataForCreateNewCollection.dun
+                params.UCOcollectpostal = this.dataForCreateNewCollection.dpc
+                params.UCOcollectbuilding = this.dataForCreateNewCollection.deb
+                params.UCOcollectregion = this.dataForCreateNewCollection.ren
+                params.UCOcollectnote = ""
+                params.UCOcollectstatus = "collected"
+                params.UCOreturndate = "0000-00-00"
                 params.UCOreturntime = "A 10 - 12pm"
-              params.done = "A 10 - 12pm"
-              params.syncserver = "false"
+                params.done = "A 10 - 12pm"
+                params.syncserver = "false"
+                params.driversId = this.driversDetails.id
 
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(datas =>{
               this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
@@ -1339,6 +1420,7 @@ export class ConfirminvoicePage implements OnInit {
             params.UNINV_SAVEDON = this.mySpecialID
             params.syncserver = "false"
             params.customerCredit = ""
+            params.driversId = this.driversDetails.id
             //console.log(params)
 
 
@@ -1376,30 +1458,31 @@ export class ConfirminvoicePage implements OnInit {
               // this.defaultSrvc.getTempItems = null
 
               let params: any = {}
-              params.rid = this.mySpecialID,
-                params.coldelID = this.mySpecialID,
-                params.custID = this.dataForCreateNewCollection.cui,
-                params.accID = this.dataForCreateNewCollection.com,
-                params.credit = "",
-                params.invoiceno = "",
-                params.invoicetype = "New",
-                params.invcompany = tag,
+              params.rid = this.mySpecialID
+                params.coldelID = this.mySpecialID
+                params.custID = this.dataForCreateNewCollection.cui
+                params.accID = this.dataForCreateNewCollection.com
+                params.credit = ""
+                params.invoiceno = ""
+                params.invoicetype = "New"
+                params.invcompany = tag
 
-                params.UCOtimestamp = this.mySpecialID, //new UCO will be generated in the collection loop if necessary
-                params.UCOcusttype = this.dataForCreateNewCollection.cut, //30-11-2012 for checking minimum
-                params.UCOcollecttype = this.dataForCreateNewCollection.del,
-                params.UCOcollectdate = this.defaultSrvc.getToday(),
-                params.UCOcollecttime = this.dataForCreateNewCollection.det,
-                params.UCOcollectaddress = this.dataForCreateNewCollection.dea,
-                params.UCOcollectunit = this.dataForCreateNewCollection.dun,
-                params.UCOcollectpostal = this.dataForCreateNewCollection.dpc,
-                params.UCOcollectbuilding = this.dataForCreateNewCollection.deb,
-                params.UCOcollectregion = this.dataForCreateNewCollection.ren,
-                params.UCOcollectnote = "",
-                params.UCOcollectstatus = "collected",
-                params.UCOreturndate = "0000-00-00",
+                params.UCOtimestamp = this.mySpecialID //new UCO will be generated in the collection loop if necessary
+                params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
+                params.UCOcollecttype = this.dataForCreateNewCollection.del
+                params.UCOcollectdate = this.defaultSrvc.getToday()
+                params.UCOcollecttime = this.dataForCreateNewCollection.det
+                params.UCOcollectaddress = this.dataForCreateNewCollection.dea
+                params.UCOcollectunit = this.dataForCreateNewCollection.dun
+                params.UCOcollectpostal = this.dataForCreateNewCollection.dpc
+                params.UCOcollectbuilding = this.dataForCreateNewCollection.deb
+                params.UCOcollectregion = this.dataForCreateNewCollection.ren
+                params.UCOcollectnote = ""
+                params.UCOcollectstatus = "collected"
+                params.UCOreturndate = "0000-00-00"
                 params.UCOreturntime = "A 10 - 12pm"
-              params.syncserver = "false"
+                params.syncserver = "false"
+                params.driversId = this.driversDetails.id
 
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(data =>{
               this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {

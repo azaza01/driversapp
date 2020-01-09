@@ -15,9 +15,9 @@
         <ion-list [hidden]="unsyncItems.syncserver == 'false'" *ngFor="let unsyncItems of unsyncCollection; let i = index">
           <ion-item-group  class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;" >
-              <ion-label style="padding-left: 20px;font-size: smaller;color: black;" >{{ unsyncItems.UNINV_INVNO }}</ion-label>
-              <ion-label style="padding-left: 20px;font-size: smaller;color: black;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE }} </ion-label>
-              <ion-button style="padding-left: 60px;size: smaller"  color="success" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
+              <ion-label style="font-size: smaller;color: black;" >{{ unsyncItems.UNINV_INVNO }}<br/></ion-label>
+              <ion-label style="padding-left: 10px;font-size: smaller;color: black;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE }}<br/></ion-label>
+              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
             </ion-item-divider> 
           </ion-item-group>
         </ion-list>
@@ -25,8 +25,8 @@
         <ion-list *ngFor="let unsyncDel of unsyncDeliveries; let i = index">
           <ion-item-group class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;">
-              <ion-label style="padding-left: 20px;font-size: smaller;color: black;" >{{ unsyncDel.inn }}</ion-label>
-              <ion-button style="padding-left: 60px;"  color="success" ng-selected="selected[i]" (click)="syncDelivery(unsyncDel)">Sync</ion-button>
+              <ion-label style="font-size: smaller;color: black;" >{{ unsyncDel.inn }}</ion-label>
+              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncDelivery(unsyncDel)">Sync</ion-button>
             </ion-item-divider> 
           </ion-item-group>
         </ion-list>
@@ -34,8 +34,8 @@
         <ion-list *ngFor="let unsyncLocalCol of unsyncLocalollection; let i = index">
           <ion-item-group class="ion-padding"  >
             <ion-item-divider style="background-color: yellow;">
-              <ion-label style="padding-left: 20px;font-size: smaller;color: black;" >{{ unsyncLocalCol.invoicetype }}  {{ unsyncLocalCol.invcompany }}</ion-label>
-              <ion-button style="padding-left: 60px;"  color="success" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
+              <ion-label style="font-size: smaller;color: black;" >{{ unsyncLocalCol.invoicetype }}  {{ unsyncLocalCol.invcompany }}</ion-label>
+              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
             </ion-item-divider> 
           </ion-item-group>
         </ion-list>

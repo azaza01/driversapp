@@ -133,7 +133,7 @@ export class DeliveryService {
       "id":  selectedDelivery,
       "date": deliveryDate,
       "time": deliverytime,
-      "reasontopostpone": info.name + " " + todaysdate + " " + reasonofpostpone  + "\n\n" + currentisntruction, 
+      "reasontopostpone": info.name + " " + todaysdate + " " + reasonofpostpone  + "\n \n" + currentisntruction, 
       "invoiceno" : invoiceNo,
       "invoiceid" : invoiceId
     }

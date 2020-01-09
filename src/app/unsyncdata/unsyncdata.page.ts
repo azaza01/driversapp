@@ -29,6 +29,7 @@ export class UnsyncdataPage implements OnInit {
   UNINV_AGREEDDELIVERYDATE: any
   UNINV_INVNO: any
   ppdate: any
+  driverInfo: any
 
   constructor(
     private router: Router,
@@ -47,15 +48,33 @@ export class UnsyncdataPage implements OnInit {
   async ngOnInit() {
     // this.ionViewWillEnter();
     // this.loading.dismiss();
+
+
   }
 
   async ionViewWillEnter() {
-
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      this.driverInfo = res
+      console.log(res)
+    })
     // await this.presentLoading('Collecting Local Data');
     await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
       console.log(res)
       if (res != null) {
-        this.unsyncCollection = res
+        let filtered: any = []
+         res.forEach(unsyncin => {
+              if (unsyncin.driversId == this.driverInfo.id) {
+                filtered.push(unsyncin)
+              } else {
+
+              }
+          });
+          this.storage.set('TEMP_UNSYNCED_INVOICE_TABLE', filtered).then(()=>{
+          }).finally(() => {
+            this.storage.get('TEMP_UNSYNCED_INVOICE_TABLE').then(res => {
+              this.unsyncCollection = res
+            })
+          })       
       } else {
         this.unsyncCollection = ""
       }
@@ -66,7 +85,20 @@ export class UnsyncdataPage implements OnInit {
     await Promise.resolve(this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
       console.log(ress)
       if (ress != null) {
-        this.unsyncDeliveries = ress
+        let filtered: any = []
+        ress.forEach(unsyncpay => {
+             if (unsyncpay.driversId == this.driverInfo.id) {
+               filtered.push(unsyncpay)
+             } else {
+
+             }
+         });
+         this.storage.set('TEMP_UNSYNCED_PAYMENT_TABLE', filtered).then(()=>{
+         }).finally(() => {
+           this.storage.get('TEMP_UNSYNCED_PAYMENT_TABLE').then(res => {
+             this.unsyncDeliveries = res
+           })
+         })  
       } else {
         this.unsyncDeliveries = ""
       }
@@ -75,7 +107,20 @@ export class UnsyncdataPage implements OnInit {
     await Promise.resolve(this.storage.get('UNSYNCOLLECTIONLOCAL').then(data => {
       console.log(data)
       if (data != null) {
-        this.unsyncLocalollection = data
+        let filtered: any = []
+        data.forEach(unsyncinloc => {
+             if (unsyncinloc.driversId == this.driverInfo.id) {
+               filtered.push(unsyncinloc)
+             } else {
+
+             }
+         });
+         this.storage.set('TEMP_UNSYNCOLLECTIONLOCAL', filtered).then(()=>{
+         }).finally(() => {
+           this.storage.get('TEMP_UNSYNCOLLECTIONLOCAL').then(res => {
+             this.unsyncLocalollection = res
+           })
+         })  
       } else {
         this.unsyncLocalollection = ""
       }
