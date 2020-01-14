@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="menutoolbar">
       <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
       </ion-buttons>
@@ -62,13 +62,13 @@
               <ion-label style="font-size: medium;color: black;" >{{ custlist.name }} <br/> </ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="font-size: medium;">Mailing Address : {{ custlist.mail_address }}</ion-label>
+              <ion-label style="font-size: medium;">Address : {{ custlist.mail_address }}<br/></ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="font-size: medium;">Customer Type : {{ custlist.customer_type }}</ion-label>
+              <ion-label style="font-size: medium;">{{ custlist.customer_type }}<br/></ion-label>
             </ion-col>
             <ion-col>
-              <ion-label style="font-size: medium;">Address : {{ custlist.unit_no }} {{ custlist.postal_code }} <br/> {{ custlist.building }}  {{ custlist.lift_lobby }} {{ custlist.region }}</ion-label>
+              <ion-label style="font-size: medium;">{{ custlist.unit_no }} {{ custlist.postal_code }} <br/> {{ custlist.building }} <br/> {{ custlist.lift_lobby }} {{ custlist.region }}</ion-label>
             </ion-col>
           </ion-row>       
         </ion-item>

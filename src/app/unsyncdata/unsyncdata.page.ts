@@ -306,7 +306,8 @@ export class UnsyncdataPage implements OnInit {
                     drvem: unsync.drvem,
                     colitem: unsync.colitem,
                     UNINV_SAVEDON: unsync.UNINV_SAVEDON,
-                    syncserver: "true"
+                    syncserver: "true",
+                    driversId : this.driverInfo.id
                   }
                   console.log(params)
                   filtered.push(params)

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar class="menutoolbar">
         <ion-buttons slot="start" *ngIf="collectionInfo.coldel_type == 'delivery'">
             <ion-button (click)="removeCurrentTransaction('Current Transaction will cancel. Proceed?')"> <ion-icon name="md-arrow-back"></ion-icon></ion-button>
         </ion-buttons>
@@ -15,8 +15,8 @@
     <ion-grid>
 
         <ion-item-group>
-            <ion-item-divider style="background-color: yellow;">
-                <ion-label>Category</ion-label>
+            <ion-item-divider style="background-color: #000000;">
+                <ion-label  style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">Category</ion-label>
             </ion-item-divider>
             <ion-item *ngFor="let cat of category" (click)="createInvoiceItem(cat)">
                 <ion-label>{{cat}}</ion-label>

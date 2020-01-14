@@ -59,7 +59,8 @@ export class SelectcategoryPage implements OnInit {
     this.unsyncData = ""
     this.myColID = ""
     
-    this.defaultSrvc.getTempItems = undefined;
+    //this.defaultSrvc.getTempItems = undefined;
+
     // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
     //   console.log('removed ');
     //   this.storage.remove('TEMP_RATES_TABLE').then(() => {
@@ -83,7 +84,6 @@ export class SelectcategoryPage implements OnInit {
       if (this.collectionInfo.coldel_type == "collection") {
         this.myColID = this.collectionInfo.id
       } else if (this.collectionInfo.coldel_type == "delivery") {
-        this.defaultSrvc.getTempItems = undefined;
         this.myColID = this.collectionInfo.dei
       }
       console.log(this.myColID)
@@ -113,26 +113,28 @@ export class SelectcategoryPage implements OnInit {
           console.log(this.unsyncData)
 
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
-            Promise.resolve(this.defaultSrvc.getItems(this.driverInfo)).then(data => {
-              //console.log('ITEMS_TABLE', data);
-              this.tempItems = data
-              this.tempItems.forEach(item => {
-                item.is_ready = "no"
-                item.qty = 0
-                item.pieces = 0
-                item.subtotal = 0
-                item.rid = this.myColID
-              });
-              console.log('TEMP_ITEMS_TABLE', this.tempItems);
-              this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
-
-              console.log(this.defaultSrvc.getTempItems)
-
-              this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
-              this.category = this.getItem(this.tempItems, 'items')
-              this.isLoading = false
-
-
+            Promise.resolve(this.defaultSrvc.getitemsLocal(this.driverInfo)).then(data => {
+              console.log('ITEMS_TABLE', data);
+              if(data != "" || data != undefined || data != null){
+                this.tempItems = data
+                this.tempItems.forEach(item => {
+                  item.is_ready = "no"
+                  item.qty = 0
+                  item.pieces = 0
+                  item.subtotal = 0
+                  item.rid = this.myColID
+                });
+                console.log('TEMP_ITEMS_TABLE', this.tempItems);
+                this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
+  
+                console.log(this.defaultSrvc.getTempItems)
+  
+                this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
+                this.category = this.getItem(this.tempItems, 'items')
+                this.isLoading = false
+              }else{
+                this.presentToast("Invoice item not sync")
+              }
             }).catch(e => {
               //console.log(e);
               // this.loading.dismiss();
@@ -141,8 +143,9 @@ export class SelectcategoryPage implements OnInit {
 
 
           } else {
-            Promise.resolve(this.defaultSrvc.getRates(this.driverInfo)).then(data => {
-              //console.log('RATES_TABLE', data);
+            Promise.resolve(this.defaultSrvc.getRatesLocal(this.driverInfo)).then(data => {
+              console.log('RATES_TABLE', data);
+              if(data != "" || data != undefined || data != null){
               this.tempItems = data
               this.tempItems.forEach(item => {
                 item.is_ready = "no"
@@ -155,7 +158,9 @@ export class SelectcategoryPage implements OnInit {
               this.storage.set('TEMP_RATES_TABLE', this.tempItems)
               this.category = this.getItem(this.tempItems, 'rates')
               this.isLoading = false
-
+            }else{
+              this.presentToast("Invoice item not sync")
+            }
 
             }).catch(e => {
               //console.log(e);
@@ -272,7 +277,7 @@ export class SelectcategoryPage implements OnInit {
 
         this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
       }
-    }).finally(() => {
+    }).then(() => {
       this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
         console.log(res)
       })
@@ -291,11 +296,19 @@ export class SelectcategoryPage implements OnInit {
 
           this.storage.set('UNSYNCOLLECTIONLOCAL', filtered)
         }
-      }).finally(() => {
+      }).then(() => {
         this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
           console.log(res)
           this.router.navigate(['/coldev']);
         })
+      }).finally(() =>{
+
+    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+      console.log('removed ');
+      this.storage.remove('TEMP_RATES_TABLE').then(() => {
+        console.log('removed ');
+      })
+      })
       })
     })
   }

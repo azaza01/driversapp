@@ -105,7 +105,7 @@ export class AccountsService {
   }
 
 
-  addCustomerStandingOrder(info, areacode) {
+  addCustomerStandingOrder(info) {
     console.log(info)
     // this.storage.get('ACCOUNTS_TABLE').then(res => {
     //   console.log(res);
@@ -129,11 +129,13 @@ export class AccountsService {
       params.builidngname = info.builidngname,
       params.postalcode = info.postalcode,
       params.liftlobby = info.liftlobby,
-      params.areacode = areacode,
+      params.areacode = info.areacode,
       params.contactno2 = info.contactno2,
       params.emailcus = info.emailcus,
       params.contactperson2 = info.contactperson2,
       params.customertype = info.customertype,
+
+
 
 
     console.log(params)

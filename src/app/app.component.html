@@ -2,15 +2,15 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-header >
-        <ion-toolbar >
-          <ion-title >Menu</ion-title>
+        <ion-toolbar class="menutoolbar">
+          <ion-title style="color: rgb(255, 255, 255);">Menu</ion-title>
         </ion-toolbar>
       </ion-header >
-      <ion-content>
-        <ion-list>
+      <ion-content >
+        <ion-list >
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]" (click)="onTap(p)">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+              <ion-icon  color="warning" slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
                 {{p.title}}
               </ion-label>
@@ -18,7 +18,7 @@
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item (click)="showAlert('Please choose below')" routerDirection="backward">
-              <ion-icon slot="start" name="md-create"></ion-icon>
+              <ion-icon color="warning" slot="start" name="md-create"></ion-icon>
               <ion-label >
                 Create Invoice
               </ion-label>
@@ -26,7 +26,7 @@
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item (click)="logout('Are you sure you want to logout?')" routerDirection="backward">
-              <ion-icon slot="start" name="power"></ion-icon>
+              <ion-icon color="warning" slot="start" name="power"></ion-icon>
               <ion-label class="ion-padding">
                 Logout
               </ion-label>

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar class="menutoolbar">
         <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
@@ -11,18 +11,19 @@
   <ion-content *ngIf="!isLoading">
   
     <ion-item-group>
-          <ion-item-divider style="background-color: yellow;">
-            <ion-label>Customer Details</ion-label>
+          <ion-item-divider style="background-color: #000000;">
+            <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">Customer Details</ion-label>
           </ion-item-divider>
           <ion-item>
-            <ion-label>Invoice No:</ion-label>
-            <ion-label style="padding-left: 1px;">{{ deliveryDetails.inn }} </ion-label>
+            <ion-label>Invoice No: {{ deliveryDetails.inn }}</ion-label>
+          </ion-item>
+          <ion-item>
+              <ion-label>Billed From : </ion-label>
+              <ion-label style="padding-right: 1px;">{{ deliveryDetails.coi }} </ion-label>
           </ion-item>
           <ion-item>
               <ion-label>Total : </ion-label>
               <ion-label>$ {{ deliveryDetails.toa }} </ion-label>
-                <ion-label>Billed From : </ion-label>
-                <ion-label style="padding-right: 1px;">{{ deliveryDetails.coi }} </ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Others : </ion-label>

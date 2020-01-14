@@ -33,6 +33,7 @@ export class CreatelocalinvoicePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.mySpecialID = ""
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       this.driverData = res
     })
@@ -165,7 +166,7 @@ export class CreatelocalinvoicePage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.customerCredit = custlist.credit_amount
             params.driversId = this.driverData.id
@@ -302,7 +303,7 @@ export class CreatelocalinvoicePage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.customerCredit = custlist.credit_amount
             params.driversId = this.driverData.id

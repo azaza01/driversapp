@@ -39,6 +39,8 @@ export class ColectionviewPage implements OnInit {
 
   mySpecialID: any
 
+  postponeDate: any
+
   isTodayCollection: any
 
 
@@ -184,6 +186,7 @@ export class ColectionviewPage implements OnInit {
     today = yyyy + '-' + mmm + '-' + ddd;
     todayId = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss ;
     this.mySpecialID = todayId
+    this.postponeDate = ddd + '-' + mmm + '-' + yyyy
     console.log(today)
     return today
   }
@@ -229,11 +232,11 @@ export class ColectionviewPage implements OnInit {
     console.log(this.originalDate)
 
     if (selectedDate == this.originalDate) {
-      this.presentAlert("Selected Date is the same as today. Please choose other day to postpone");
+      this.presentAlert("Selected Date is the same as today. Please choose other day to Re-Schedule");
     } else {
       if (this.reasonofpostpone != "") {
         await this.presentLoading('');
-        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone, this.currentInstruction, this.originalDate)).then(data => {
+        await Promise.resolve(this.cltnSrvc.postPone(this.driverInfo, this.today, this.selectedtime, this.collectionId, this.reasonofpostpone, this.currentInstruction, this.postponeDate)).then(data => {
           if (data != "false" || data != "") {
             this.removepostpone(this.collectionId)
             this.presentAlert("Collection Re-scheduled to " + selectedDate2 + " with timing " + this.selectedtime);
@@ -409,7 +412,7 @@ export class ColectionviewPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
             // console.log(params)
@@ -485,7 +488,7 @@ export class ColectionviewPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
             // console.log(params)

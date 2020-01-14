@@ -1,5 +1,5 @@
 .menutoolbar{
-    --background: #9e8516;
+    --background: #ffce00;
 }
 
 ion-label{
@@ -11,3 +11,12 @@ ion-label{
 //     min-height: 30% !important;
 //     max-height: 50% !important;
 // }
+
+.round {
+    --width: 100px;
+    --height: 80px;
+    --border-radius: 10%;
+    --vertical-align: middle;
+    --padding-start: 20px;
+    --padding-end: 20px;
+}

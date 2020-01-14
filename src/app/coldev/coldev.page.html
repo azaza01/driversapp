@@ -1,15 +1,15 @@
 <ion-header>
   <ion-toolbar class="menutoolbar">
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" style="color: rgb(0, 0, 0);">
       <ion-menu-button color="white"></ion-menu-button>
     </ion-buttons>
     <ion-title style="color: rgb(0, 0, 0);">
-      <ion-label style="font-size: smaller;color: black;" >{{ theSelectedDate  | date :  "dd MMM y"}}</ion-label>
+      <ion-label style="font-size: smaller;">{{ theSelectedDate  | date :  "dd MMM y"}}</ion-label>
       <br/>Col & Del {{ collectionCount }}/{{ deliveryCount }} 
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="coldev()" expand="full" shape="round" >
-        Reload</ion-button>
+        <ion-label style="font-size: smaller;color: rgb(0, 0, 0);">Reload</ion-label></ion-button>
     </ion-buttons>
   </ion-toolbar>
 
@@ -49,18 +49,18 @@
               <ion-row>
                 <ion-col>
                   <ion-img src="../assets/images/collection_icon.png" style="width:50%;height: 50%;"></ion-img>
-                  <ion-label style="font-size: smaller;color: black;" >{{ item.cot }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ item.cot }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-label style="font-size: medium;">{{ item.cun }} <br/> {{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }} </ion-label>
+                  <ion-label style="font-size: medium;padding-left: 25px;">{{ item.cun }} <br/> {{ item.coa }} <br/> {{ item.cuo }} {{ item.cpc }} <br/> {{ item.cob }} </ion-label>
                 </ion-col>
               </ion-row>       
             </ion-item>
           </ion-item-divider>
           <ion-item-divider  style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
-            <ion-item style="width:20%;height: 20%;">
+            <ion-item style="width:18%;height: 18%;">
              
             </ion-item>
           </ion-item-divider>
@@ -95,8 +95,8 @@
                 <ion-col>
                   <ion-img *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Paid'" src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
                   <ion-img *ngIf="delitem.sts == 'Full Delivered, Partial Paid' || delitem.sts == 'Full Delivered, Unpaid'" src="../assets/images/payment_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-label style="font-size: smaller;;color: black;padding-top: 3px;"> {{ delitem.det }}</ion-label>
                   <ion-label style="font-size: smaller;color: black;">{{ delitem.inn }}</ion-label>
-                  <ion-label style="font-size: smaller;;color: black;"> {{ delitem.det }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -112,6 +112,11 @@
               </ion-row>       
             </ion-item>
           </ion-item-divider>
+          <ion-item-divider *ngIf="delitem.sts == 'Full Delivered, Partial Paid' || delitem.sts == 'Full Delivered, Unpaid'" style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item style="width:15%;height: 15%;">
+             
+            </ion-item>
+            </ion-item-divider>
         
           <ion-item-divider  *ngIf="delitem.sts == 'Pending Delivery' || delitem.sts == 'Postponed' || delitem.sts == 'Partial Delivered, Full Paid' || delitem.sts == 'Undelivered, Full Paid' || delitem.sts == 'Partial Delivered, Unpaid' || delitem.sts == 'Partial Delivered, Partial Pai' || delitem.sts == 'Partial Delivered, Partial Paid'" style="border-color: rgb(0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
             <ion-item>

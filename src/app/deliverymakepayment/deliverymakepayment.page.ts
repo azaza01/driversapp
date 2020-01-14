@@ -78,6 +78,7 @@ export class DeliverymakepaymentPage implements OnInit {
     }).finally(() =>{
       // this.loading.dismiss();
     })
+    this.getToday()
   }
 
   getTodayID() {
@@ -98,7 +99,7 @@ export class DeliverymakepaymentPage implements OnInit {
     let sss = sec < 10 ? "0" + sec : sec
 
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
-    // this.mySpecialID = today
+    this.mySpecialID = today
     // //console.log(today)
     return today
   }
@@ -432,7 +433,9 @@ export class DeliverymakepaymentPage implements OnInit {
 
   proceedtoWhere(kindoftransaction, offlinedata){
     if(kindoftransaction == "maypayment"){
-      this.removeCurrentTransaction(offlinedata)
+      this.loading.dismiss();
+      this.router.navigate(['/coldev']);
+      // this.removeCurrentTransaction(offlinedata)
     }else if(kindoftransaction == "repeat"){
       this.loading.dismiss();
       this.repeatInvoice()
@@ -506,7 +509,7 @@ export class DeliverymakepaymentPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.customerCredit = this.newCustomerCredit
             params.driversId = this.driversDetails.id
@@ -644,7 +647,7 @@ export class DeliverymakepaymentPage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.customerCredit = this.newCustomerCredit
             params.driversId = this.driversDetails.id

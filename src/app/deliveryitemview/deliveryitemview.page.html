@@ -4,31 +4,29 @@
           <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title>Delivery Items</ion-title>
-      </ion-toolbar>
+</ion-toolbar>
+<ion-row class="headerCss">
+    <ion-col size="3.5">
+      Description
+    </ion-col>
+    <ion-col size="2" style="text-align: left;">
+      Price
+    </ion-col>
+    <ion-col size="2">
+      Qty
+    </ion-col>
+    <ion-col size="2">
+      Pcs
+    </ion-col>
+    <ion-col size="2">
+      SubTotal
+    </ion-col>
+  </ion-row>
 </ion-header>
 
 <ion-content>
 
     <ion-item-group >
-        <ion-item-divider style="background-color: yellow;">
-          <ion-row>
-            <ion-col class="ion-padding">
-                <ion-label >Description</ion-label>
-            </ion-col>
-            <ion-col class="ion-padding" style="padding-left: 50px;">
-                <ion-label >Price</ion-label>
-            </ion-col>
-            <ion-col class="ion-padding">
-                <ion-label >Qty</ion-label>
-            </ion-col>
-            <ion-col class="ion-padding">
-                <ion-label >No.</ion-label>  
-            </ion-col >
-            <ion-col class="ion-padding">
-                <ion-label >Total</ion-label>
-            </ion-col>
-          </ion-row>
-        </ion-item-divider>
         <ion-item  *ngFor="let item of info; let i = index">
         <ion-row>
             <ion-col class="ion-padding">

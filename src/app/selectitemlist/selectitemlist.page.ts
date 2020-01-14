@@ -46,9 +46,11 @@ export class SelectitemlistPage implements OnInit {
 
   ionViewWillLeave() {
     // this.storage.set('TEMP_ITEMS_TABLE', this.temp_List).then(() => {
-    this.defaultSrvc.getTempItems = this.item_List
+      this.defaultSrvc.getTempItems = this.temp_List
+    //this.defaultSrvc.getTempItems = this.item_List
     // })
   }
+
 
   updateSubtotal(item) {
     if (item.qty != 0) {

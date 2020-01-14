@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar class="menutoolbar">
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
@@ -10,28 +10,26 @@
 <ion-content *ngIf="isLoading == false">
 
         <ion-item-group>
-            <ion-item-divider style="background-color: yellow;">
-                <ion-label>Customer Details</ion-label>
+            <ion-item-divider style="background-color: #000000;">
+                <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">Customer Details</ion-label>
             </ion-item-divider>
-            <ion-item>
+            <ion-item *ngIf="deliveryInfo.com != ''">
                 <ion-label>Com/Agent:</ion-label>
+            </ion-item>
+            <ion-item *ngIf="deliveryInfo.com != ''">
                 <ion-label style="padding-left: 1px;">{{deliveryInfo.com}}</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label>Name : </ion-label>
-                <ion-label>{{deliveryInfo.cun}}</ion-label>
+                <ion-label>Name : {{deliveryInfo.cun}} </ion-label>
             </ion-item>
-            <ion-item>
-                <ion-label>Address : </ion-label>
-                <ion-label style="padding-right: 1px;">{{deliveryInfo.dea}}</ion-label>
+            <ion-item  *ngIf="deliveryInfo.dea != ''">
+                <ion-label>Address : {{deliveryInfo.dea}}</ion-label>
             </ion-item>
-            <ion-item>
-                <ion-label>Building : </ion-label>
-                <ion-label>{{deliveryInfo.deb}}</ion-label>
+            <ion-item  *ngIf="deliveryInfo.deb != ''">
+                <ion-label>Building : {{deliveryInfo.deb}}</ion-label>
             </ion-item>
-            <ion-item>
-                <ion-label>Lift/Lobby : </ion-label>
-                <ion-label>{{deliveryInfo.lil}}</ion-label>
+            <ion-item  *ngIf="deliveryInfo.lil != ''">
+                <ion-label>Lift/Lobby : {{deliveryInfo.lil}}</ion-label>
             </ion-item>
             <ion-item>
                 <ion-label>Unit : </ion-label>
@@ -51,23 +49,23 @@
             <ion-item *ngIf="deliveryInfo.noe != ''">
                     <ion-textarea disabled>{{deliveryInfo.noe}}</ion-textarea>
             </ion-item>
-            <ion-item>
+            <ion-item  *ngIf="deliveryInfo.cn1 != ''">
                 <ion-label>Number 1: </ion-label>
                 <ion-label>{{deliveryInfo.cn1}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('1')">Call
+                <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" (click)="callNow('1')">Call
                 </ion-button>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn1}}">SMS
+                <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn1}}">SMS
                 </ion-button>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="deliveryInfo.cn2 != ''">
                 <ion-label>Number 2 : </ion-label>
                 <ion-label>{{deliveryInfo.cn2}}</ion-label>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="callNow('2')">Call
+                <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" (click)="callNow('2')">Call
                 </ion-button>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn2}}">SMS
+                <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" href="sms: +65{{deliveryInfo.cn2}}">SMS
                 </ion-button>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="deliveryInfo.na2 != ''">
                 <ion-label>Alt name : </ion-label>
                 <ion-label>{{deliveryInfo.na2}}</ion-label>
             </ion-item>
@@ -78,14 +76,14 @@
             <ion-item>
                 <ion-label>Email : </ion-label>
                 <ion-input type="email" [(ngModel)]="customerEmail" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"></ion-input>
-                <ion-button shape="round" fill="outline" color="Tertiary" class="ion-float-right" position="bottom" (click)="updateMyEmail()">Update
+                <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" (click)="updateMyEmail()">Update
                 </ion-button>
             </ion-item>
         </ion-item-group>
     
         <ion-item-group>
-            <ion-item-divider style="background-color: yellow;">
-                <ion-label>Delivery Details</ion-label>
+            <ion-item-divider style="background-color: #000000;">
+                <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">Delivery Details</ion-label>
             </ion-item-divider>
             <ion-item>
                 <ion-label>Job type:</ion-label>
@@ -118,7 +116,7 @@
                     <ion-input [(ngModel)]="reasonofpostpone"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-button *ngIf="driverInfo.postpone == 1" shape="round" fill="outline" color="Tertiary" class="ion-float-right" (click)="postphone()" position="bottom">Postpone
+                <ion-button *ngIf="driverInfo.postpone == 1" shape="round"  color="warning" class="ion-float-right" (click)="postphone()" position="bottom">Postpone
                 </ion-button>
             </ion-item>
             <ion-item *ngIf="deliveryInfo.den != ''" >
@@ -133,7 +131,7 @@
             </ion-item>
             <ion-item>
                 <ion-label>Update on : </ion-label>
-                <ion-label >{{deliveryInfo.uon}}</ion-label>
+                <ion-label >{{deliveryInfo.uon | date: 'dd MMM yyyy'}}</ion-label>
             </ion-item>
         </ion-item-group>
     

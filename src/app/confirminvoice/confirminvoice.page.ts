@@ -124,6 +124,8 @@ export class ConfirminvoicePage implements OnInit {
   selectedtime: any
   newSeriesofInvoice: any
 
+  driversId: any
+
   constructor(
     public alertController: AlertController,
     private defaultSrvc: DefaultsService,
@@ -174,6 +176,14 @@ export class ConfirminvoicePage implements OnInit {
     this.getToday();
     this.isLoading = true
 
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      ////console.log(res)
+      this.driversDetails = res
+      this.driver_email = res.email_address
+      this.driver_password = res.password
+      this.driver_name = res.name
+    })
+
 
     this.storage.get('SELECTED_ITEM').then(res => {
       this.isLoading = false
@@ -212,7 +222,7 @@ export class ConfirminvoicePage implements OnInit {
         for (i = 0; i < l; i++) {
           if (res[i].UNINV_COLLID == this.invoiceId) {
             this.customerData = res[i];
-            //console.log(this.customerData)
+            console.log(this.customerData)
           }
         }
 
@@ -224,14 +234,6 @@ export class ConfirminvoicePage implements OnInit {
           });
           // ////console.log(this.timeslots)
           this.isLoading = false
-        })
-
-        this.storage.get('ACCOUNTS_TABLE').then(res => {
-          ////console.log(res)
-          this.driversDetails = res
-          this.driver_email = res.email_address
-          this.driver_password = res.password
-          this.driver_name = res.name
         })
 
         Promise.resolve(this.defaultSrvc.createInvSeries()).then(data => {
@@ -275,6 +277,7 @@ export class ConfirminvoicePage implements OnInit {
         this.drvpa = this.driver_password
         this.drvem = this.driver_email
         this.colitem = this.allinvoiceitems
+        this.driversId = this.driversDetails.id
 
 
         this.storage.get('INVOICE_TYPES_TABLE').then(res => {
@@ -1012,6 +1015,7 @@ export class ConfirminvoicePage implements OnInit {
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
           //console.log('removed ');
         }).finally(() => {
+          this.defaultSrvc.getTempItems = undefined;
           this.loading.dismiss();
           this.router.navigate(['/coldev']);
         })
@@ -1022,6 +1026,7 @@ export class ConfirminvoicePage implements OnInit {
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
           //console.log('removed ');
         }).finally(() => {
+          this.defaultSrvc.getTempItems = undefined;
           this.loading.dismiss();
           this.createNewInvoiceFromLocal();
         })
@@ -1185,7 +1190,7 @@ export class ConfirminvoicePage implements OnInit {
         params.discount = this.percentPromo,
         params.express = this.expressData,
         params.bags = this.UNINV_BAGS,
-        params.savedon = this.invoiceId,
+        params.savedon = this.todaydate,
         params.driversId = this.driversDetails.id
       resolve(params)
     }).catch(e => {
@@ -1281,7 +1286,7 @@ export class ConfirminvoicePage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.driversId = this.driversDetails.id
             //console.log(params)
@@ -1331,7 +1336,7 @@ export class ConfirminvoicePage implements OnInit {
 
                 params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
                 params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
-                params.UCOcollecttype = this.dataForCreateNewCollection.cut
+                params.UCOcollecttype = this.dataForCreateNewCollection.del
                 params.UCOcollectdate = this.defaultSrvc.getToday()
                 params.UCOcollecttime = this.dataForCreateNewCollection.det
                 params.UCOcollectaddress = this.dataForCreateNewCollection.dea
@@ -1417,7 +1422,7 @@ export class ConfirminvoicePage implements OnInit {
             params.drvpa = '0'
             params.drvem = '0'
             params.colitem = '0'
-            params.UNINV_SAVEDON = this.mySpecialID
+            params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.customerCredit = ""
             params.driversId = this.driversDetails.id

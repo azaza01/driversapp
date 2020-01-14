@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
     // this.storage.remove('TEMP_ITEMS_TABLE')
     
     // this.storage.remove('ENVNUM_TABLE')
-    //this.storage.remove('REMEMBER_ME')
+    // this.storage.remove('REMEMBER_ME')
     // let wew
     // let wew2 = []
 

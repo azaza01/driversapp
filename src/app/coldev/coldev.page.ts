@@ -28,7 +28,7 @@ export class ColdevPage implements OnInit {
   deliveryCount: any = 0
   collectionCount: any = 0
 
-  theSelectedDate: any
+  theSelectedDate: any = ""
 
   selected: any = []
   loading: any = new LoadingController;
@@ -78,6 +78,9 @@ export class ColdevPage implements OnInit {
 
     today = yy + '-' + mmm + '-' + ddd;
     //console.log(today)
+    if(this.theSelectedDate == ""){
+      this.theSelectedDate = today
+    }
     this.storage.get('COLDEL_TABLE').then(res => {
       //console.log(res)
       if(res != null){

@@ -3,7 +3,7 @@
       <ion-buttons slot="start">
         <ion-menu-button color="white"></ion-menu-button>
       </ion-buttons>
-      <ion-title style="color: cornsilk;">
+      <ion-title>
         Unsync Data
       </ion-title>
     </ion-toolbar>
@@ -13,31 +13,100 @@
   <ion-content (onload)="ionViewWillEnter()">
         
         <ion-list [hidden]="unsyncItems.syncserver == 'false'" *ngFor="let unsyncItems of unsyncCollection; let i = index">
-          <ion-item-group  class="ion-padding"  >
-            <ion-item-divider style="background-color: yellow;" >
-              <ion-label style="font-size: smaller;color: black;" >{{ unsyncItems.UNINV_INVNO }}<br/></ion-label>
+          <!-- <ion-item-group  class="ion-padding"  >
+            <ion-item-divider style="background-color: #000000;" >
+              <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">{{ unsyncItems.UNINV_INVNO }}<br/></ion-label>
               <ion-label style="padding-left: 10px;font-size: smaller;color: black;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE }}<br/></ion-label>
-              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
+              <ion-button slot="end"  expand="full"  color="warning" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
             </ion-item-divider> 
-          </ion-item-group>
+          </ion-item-group> -->
+
+        <ion-item-divider  style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item>
+              <ion-row>
+                <ion-col>
+                  <ion-img src="../assets/images/collection_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncItems.UNINV_DELIVERYTIMESLOT }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncItems.UNINV_INVNO }}</ion-label>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: small;" >{{ unsyncItems.UNINV_INITIAL }} - {{ unsyncItems.UNINV_SAVEDON | date: 'dd MMM yyyy'}}</ion-label>
+                  <ion-label style="font-size: small;" >Collection</ion-label>
+                  <ion-label style="font-size: small;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
+                  <ion-button style="font-size: small;" class="round" color="warning" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
+                </ion-col>
+              </ion-row>       
+            </ion-item>
+          </ion-item-divider>
+
         </ion-list>
 
+
+
         <ion-list *ngFor="let unsyncDel of unsyncDeliveries; let i = index">
-          <ion-item-group class="ion-padding"  >
-            <ion-item-divider style="background-color: yellow;">
-              <ion-label style="font-size: smaller;color: black;" >{{ unsyncDel.inn }}</ion-label>
-              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncDelivery(unsyncDel)">Sync</ion-button>
+          <!-- <ion-item-group class="ion-padding"  >
+            <ion-item-divider style="background-color: #000000;">
+              <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);" >{{ unsyncDel.inn }}</ion-label>
+              <ion-button slot="end"  expand="full"  color="warning" ng-selected="selected[i]" (click)="syncDelivery(unsyncDel)">Sync</ion-button>
             </ion-item-divider> 
-          </ion-item-group>
+          </ion-item-group> -->
+
+          <ion-item-divider  style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item>
+              <ion-row>
+                <ion-col>
+                  <ion-img src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncDel.pptimeslot }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncDel.inn }}</ion-label>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: small;" >{{ unsyncDel.ppdate | date: 'dd MMM yyyy'}}</ion-label>
+                  <ion-label style="font-size: small;" >Delivery</ion-label>
+                  <ion-label style="font-size: small;" >{{ unsyncDel.status }}</ion-label>
+                  <ion-button style="font-size: small;" class="round"  color="warning" ng-selected="selected[i]" (click)="syncDelivery(unsyncDel)">Sync</ion-button>
+                </ion-col>
+              </ion-row>       
+            </ion-item>
+          </ion-item-divider>
+
+
         </ion-list>
 
         <ion-list *ngFor="let unsyncLocalCol of unsyncLocalollection; let i = index">
-          <ion-item-group class="ion-padding"  >
-            <ion-item-divider style="background-color: yellow;">
-              <ion-label style="font-size: smaller;color: black;" >{{ unsyncLocalCol.invoicetype }}  {{ unsyncLocalCol.invcompany }}</ion-label>
-              <ion-button slot="end"  color="success" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
+          <!-- <ion-item-group class="ion-padding"  >
+            <ion-item-divider style="background-color: #000000;">
+              <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);" >{{ unsyncLocalCol.invoicetype }}  {{ unsyncLocalCol.invcompany }}</ion-label>
+              <ion-button slot="end"  expand="full"  color="warning" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
             </ion-item-divider> 
-          </ion-item-group>
+          </ion-item-group> -->
+
+          <ion-item-divider  style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+            <ion-item>
+              <ion-row>
+                <ion-col>
+                  <ion-img src="../assets/images/collection_icon.png" style="width:45%;height: 45%;"></ion-img>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncLocalCol.UCOcollecttime }}</ion-label>
+                  <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ unsyncLocalCol.invoicetype }}</ion-label>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+                  <ion-label style="font-size: small;padding-left: 25px;" >{{ unsyncLocalCol.invcompany}} - {{ unsyncLocalCol.UCOcollectdate | date: 'dd MMM yyyy'}}</ion-label>
+                  <ion-label style="font-size: small;padding-left: 25px;">{{ unsyncLocalCol.UCOcollectaddress }}  <br/> {{ unsyncLocalCol.UCOcollectunit }} {{ unsyncLocalCol.UCOcollectpostal }} {{ unsyncLocalCol.UCOcollectregion }} <br/> {{ unsyncLocalCol.UCOcollectbuilding }}</ion-label>
+                  <ion-button style="font-size: small;padding-left: 25px;" class="round"  color="warning" ng-selected="selected[i]" (click)="syncColLoc(unsyncLocalCol)">Sync</ion-button>
+                </ion-col>
+              </ion-row>       
+            </ion-item>
+          </ion-item-divider>
+
+
         </ion-list>
       
   </ion-content>

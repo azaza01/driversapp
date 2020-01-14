@@ -37,6 +37,8 @@ export class DefaultsService {
 
   mySelectedDate: any 
 
+  checkAllSucess: any = "1"
+
   _category: any;
   set getCategory(value: any) {
     this._category = value;
@@ -351,84 +353,163 @@ export class DefaultsService {
   }
 
   async syncAll(driverInfo) {
-    await this.presentLoading('Please wait...');
-
+    this.checkAllSucess =  "1"
     return new Promise(resolve => {
       Promise.resolve(this.getItems(driverInfo)).then(data => {
-        // console.log('ITEMS_TABLE', data);
-
+        console.log('ITEMS_TABLE', data);
+        this.loading.dismiss();
+        if(data != "false"){
+          this.checkAllSucess = this.checkAllSucess + "2"
+        }else{
+          resolve(this.checkAllSucess)
+        }
         Promise.resolve(this.getRates(driverInfo)).then(data => {
-          // console.log('RATES_TABLE', data);
-
+          console.log('RATES_TABLE', data);
+          this.loading.dismiss();
+          if(data != "false"){
+            this.checkAllSucess = this.checkAllSucess + "3"
+          }else{
+            resolve(this.checkAllSucess)
+          }
           Promise.resolve(this.getRegions(driverInfo)).then(data => {
-            // console.log('AREAS_TABLE', data);
-
+            console.log('AREAS_TABLE', data);
+            this.loading.dismiss();
+            if(data != "false"){
+              this.checkAllSucess = this.checkAllSucess + "4"
+            }else{
+              resolve(this.checkAllSucess)
+            }
+            
             Promise.resolve(this.getInvoicetypes(driverInfo)).then(data => {
-              // console.log('INVOICE_TYPES_TABLE', data);
-
+              console.log('INVOICE_TYPES_TABLE', data);
+              this.loading.dismiss();
+              if(data != "false"){
+                this.checkAllSucess = this.checkAllSucess + "5"
+              }else{
+                resolve(this.checkAllSucess)
+              }
               Promise.resolve(this.getDiscounts(driverInfo)).then(data => {
-                // console.log('DISCOUNT_TYPES_TABLE', data);
-
+                console.log('DISCOUNT_TYPES_TABLE', data);
+                this.loading.dismiss();
+                if(data != "false"){
+                  this.checkAllSucess = this.checkAllSucess + "6"
+                }else{
+                  resolve(this.checkAllSucess)
+                }
                 Promise.resolve(this.getTimeslot(driverInfo)).then(data => {
-                  // console.log('TIMESLOT_TABLE', data);
-
+                  console.log('TIMESLOT_TABLE', data);
+                  this.loading.dismiss();
+                  if(data != "false"){
+                    this.checkAllSucess = this.checkAllSucess + "7"
+                  }else{
+                    resolve(this.checkAllSucess)
+                  }
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
-                    // console.log('FB_FORM_TABLE', data);
+                    console.log('FB_FORM_TABLE', data);
+                    this.loading.dismiss();
+                    if(data != "false"){
+                      this.checkAllSucess = this.checkAllSucess + "8"
+                    }else{
+                      resolve(this.checkAllSucess)
+                    }
                     Promise.resolve(this.getAreas(driverInfo)).then(data => {
+                      console.log('areas', data);
+                      this.loading.dismiss();
+                      if(data != "false"){
+                        this.checkAllSucess = this.checkAllSucess + "9"
+                      }else{
+                        resolve(this.checkAllSucess)
+                      }
                     // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
                       Promise.resolve(this.customerType(driverInfo)).then(data => {
-                        // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
-
-                      this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
+                        console.log('customertyp', data);
                         this.loading.dismiss();
-                        resolve(true)
-                      });
+                        if(data != "false"){
+                          this.checkAllSucess = this.checkAllSucess + "10"
+                          resolve(this.checkAllSucess)
+                        }else{
+                          resolve(this.checkAllSucess)
+                        }
+                        // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
+                      // this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
+                 
+                      // });
                     // });
 
                   }).catch(e => {
+                    this.checkAllSucess = "1"
+                    this.loading.dismiss();
                     console.log(e);
                   });
 
                   }).catch(e => {
+                    this.checkAllSucess = "1"
+                    this.loading.dismiss();
                     console.log(e);
                   });
 
                   }).catch(e => {
+                    this.checkAllSucess = "1"
+                    this.loading.dismiss();
                     console.log(e);
                   });
 
                 }).catch(e => {
+                  this.checkAllSucess = "1"
+                  this.loading.dismiss();
                   console.log(e);
                 });
 
               }).catch(e => {
+                this.checkAllSucess = "1"
+                this.loading.dismiss();
                 console.log(e);
               });
 
             }).catch(e => {
+              this.checkAllSucess = "1"
+              this.loading.dismiss();
               console.log(e);
             });
 
           }).catch(e => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(e);
           });
 
         }).catch(e => {
+          this.checkAllSucess = "1"
+          this.loading.dismiss();
           console.log(e);
         });
 
       }).catch(e => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(e);
       });
-
     }).catch(err => {
+      this.checkAllSucess = "1"
+      this.loading.dismiss();
       console.log(err)
     })
 
   }
 
+  getitemsLocal(info: any){
+        return new Promise(resolve => {
+          this.storage.get('ITEMS_TABLE').then(res => {
+            resolve(res)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+  }
+
   getItems(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching items');
       let params = {
         email: info.email_address,
         password: info.password
@@ -438,14 +519,15 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
-
+            console.log(res)
             this.storage.set('ITEMS_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
-
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -454,15 +536,19 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('ITEMS_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -470,6 +556,7 @@ export class DefaultsService {
 
   customerType(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching customer types');
       let params = {
         email: info.email_address,
         password: info.password
@@ -483,11 +570,14 @@ export class DefaultsService {
             console.log(res)
 
             this.storage.set('CUSTOMERTYPE_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -496,15 +586,20 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('CUSTOMERTYPE_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -512,6 +607,7 @@ export class DefaultsService {
 
   getAreas(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching areas');
       let params = {
         email: info.email_address,
         password: info.password
@@ -525,11 +621,14 @@ export class DefaultsService {
             console.log(res)
 
             this.storage.set('AREAS_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -538,22 +637,41 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('AREAS_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
   }
 
+  getRatesLocal(info: any){
+        return new Promise(resolve => {
+          this.storage.get('RATES_TABLE').then(res => {
+            // console.log(res);
+            this.loading.dismiss();
+            resolve(res)
+          })
+        }).catch(err => {
+          this.checkAllSucess = "1"
+          this.loading.dismiss();
+          console.log(err)
+        })
+  }
+
   getRates(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching items');
       let params = {
         email: info.email_address,
         password: info.password
@@ -567,28 +685,35 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('RATES_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
-
             // alert(JSON.stringify(err));
           }
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('RATES_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -597,6 +722,7 @@ export class DefaultsService {
 
   getRegions(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching regions');
       let params = {
         email: info.email_address,
         password: info.password
@@ -610,11 +736,13 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('AREAS_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
-
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -623,15 +751,20 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('AREAS_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -639,6 +772,7 @@ export class DefaultsService {
 
   getInvoicetypes(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching invoice types');
       let params = {
         email: info.email_address,
         password: info.password
@@ -652,11 +786,14 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -665,15 +802,20 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('INVOICE_TYPES_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -681,6 +823,7 @@ export class DefaultsService {
 
   getDiscounts(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching discounts');
       let params = {
         email: info.email_address,
         password: info.password
@@ -694,11 +837,14 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -707,15 +853,19 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('DISCOUNT_TYPES_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -723,6 +873,7 @@ export class DefaultsService {
 
   getTimeslot(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching timeslots');
       let params = {
         email: info.email_address,
         password: info.password
@@ -736,11 +887,14 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('TIMESLOT_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -749,15 +903,20 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('TIMESLOT_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
@@ -765,6 +924,7 @@ export class DefaultsService {
 
   getFeedback(info: any) {
     if (navigator.onLine == true) {
+      this.presentLoading('synching feedbacks');
       let params = {
         email: info.email_address,
         password: info.password
@@ -778,11 +938,14 @@ export class DefaultsService {
             // console.log(res)
 
             this.storage.set('FB_FORM_TABLE', res).then(() => {
+              this.loading.dismiss();
               resolve(res)
             });
 
           },
           err => {
+            this.checkAllSucess = "1"
+            this.loading.dismiss();
             console.log(err)
             resolve(false)
 
@@ -791,19 +954,25 @@ export class DefaultsService {
         );
 
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('FB_FORM_TABLE').then(res => {
           // console.log(res);
+          this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
+        this.checkAllSucess = "1"
+        this.loading.dismiss();
         console.log(err)
       })
     }
   }
+
 
   getSpecialIns(info: any) {
     let params = {
@@ -855,6 +1024,7 @@ export class DefaultsService {
 
         },
         err => {
+          this.checkAllSucess = "1"
           console.log(err)
           resolve(false)
 
@@ -863,6 +1033,7 @@ export class DefaultsService {
       );
 
     }).catch(err => {
+      this.checkAllSucess = "1"
       console.log(err)
     })
   }

@@ -115,15 +115,23 @@ export class AppComponent {
   onTap(info) {
     console.log(info)
     if (info.title == 'Sync Data') {
+      if (navigator.onLine == true) {
       this.storage.get('ACCOUNTS_TABLE').then(accData => {
         console.log(accData)
         Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
-          console.log(data);
-          this.presentAlert('Syncing Successful')
+          if(data == "12345678910"){
+            this.presentAlert('Syncing Successful')
+          }else{
+            this.presentAlert('Connection interrupted, please try again')
+          }
+
         }).catch(e => {
           console.log(e);
         });
       });
+    }else{
+      this.presentAlert('No internet connection')
+    }
     }
   }
 
