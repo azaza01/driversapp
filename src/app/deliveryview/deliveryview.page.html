@@ -155,7 +155,7 @@
       <ion-col >
         <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="makePayment()">MAKE PAYMENT</ion-button>
       </ion-col>
-      <ion-col >
+      <ion-col *ngIf="deliveryInfo.sts == 'Pending Delivery' || deliveryInfo.sts == 'Postponed' || deliveryInfo.sts == 'Partial Delivered, Full Paid' || deliveryInfo.sts == 'Undelivered, Full Paid' || deliveryInfo.sts == 'Partial Delivered, Unpaid' || deliveryInfo.sts == 'Partial Delivered, Partial Pai' || deliveryInfo.sts == 'Partial Delivered, Partial Paid'">
         <ion-button expand="full" shape="round" color="warning" position="bottom" (click)="viewItems()">VIEW ITEMS</ion-button>
       </ion-col>
    </ion-row>
