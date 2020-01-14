@@ -47,6 +47,16 @@
     <ion-row>
       <ion-col>
         <ion-item>
+          <ion-label color="medium" position="floating">Email</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Optional" required="false" [(ngModel)]="emailcus"></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
           <ion-label color="medium" position="floating">Mailing Address</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
           inputmode="text" placeholder="Required" required="true" [(ngModel)]="mailingaddress"></ion-input>
@@ -79,7 +89,7 @@
         <ion-item>
           <ion-label color="medium" position="floating">Unit No</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false" [(ngModel)]="unitno"></ion-input>
+          inputmode="text" placeholder="Optional" required="false" [(ngModel)]="unitno"></ion-input>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
       </ion-col>
@@ -89,7 +99,7 @@
         <ion-item>
           <ion-label color="medium" position="floating">Building Name</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false"  [(ngModel)]="builidngname"></ion-input>
+          inputmode="text" placeholder="Optional" required="false"  [(ngModel)]="builidngname"></ion-input>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
       </ion-col>
@@ -99,7 +109,7 @@
         <ion-item>
           <ion-label color="medium" position="floating">Lift/Lobby</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false"[(ngModel)]="liftlobby"></ion-input>
+          inputmode="text" placeholder="Optional" required="false"[(ngModel)]="liftlobby"></ion-input>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
       </ion-col>
@@ -123,42 +133,39 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label color="medium" position="floating">Contact No 2</ion-label>
-          <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false" [(ngModel)]="contactno2"></ion-input>
-          <ion-icon  color="medium" slot="end"></ion-icon>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label color="medium" position="floating">Email</ion-label>
-          <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false" [(ngModel)]="emailcus"></ion-input>
-          <ion-icon  color="medium" slot="end"></ion-icon>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
           <ion-label color="medium" position="floating">Alternate Contact Person</ion-label>
           <ion-input autocorrect="on" clearInput color="medium"
-          inputmode="text" placeholder="optional" required="false" [(ngModel)]="contactperson2"></ion-input>
+          inputmode="text" placeholder="Optional" required="false" [(ngModel)]="contactperson2"></ion-input>
+          <ion-icon  color="medium" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="medium" position="floating">Contact No 2</ion-label>
+          <ion-input autocorrect="on" clearInput color="medium"
+          inputmode="text" placeholder="Optional" required="false" [(ngModel)]="contactno2"></ion-input>
           <ion-icon  color="medium" slot="end"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
  
+ 
   
   </ion-grid>
-  <ion-row>
-    <ion-col>
-      <ion-button expand="full" shape="round" color="warning" (click)="registerCustomer(cred)">Register</ion-button>
-      <!-- <ion-button  expand="full" shape="round" color="warning" (click)="showFingerprintAuthDlg()">LOGIN</ion-button> -->
-    </ion-col>
-  </ion-row>
+
 <!-- </form> -->
 
 </ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col >
+      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="goToHome()">Close</ion-button>
+    </ion-col>
+    <ion-col >
+      <ion-button expand="full" shape="round" color="warning" (click)="registerCustomer(cred)">Register</ion-button>
+    </ion-col>
+</ion-row>
+</ion-footer>

@@ -35,7 +35,12 @@ export class HomePage {
     // Promise.all([this.storage.get('SO_TABLE').then((data)=>{this.currentPromo=data;})]);
     // console.log(this.currentPromo);
 
-    this.gePromotion(this.accSrvc.driverData)
+    this.storage.get('ACCOUNTS_TABLE').then(res => {
+      console.log(res);
+      this.gePromotion(res)
+    })
+
+    
     // console.log(info)
     // if (info.title == 'Sync Data') {
     // if (navigator.onLine == true) {

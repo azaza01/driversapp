@@ -40,6 +40,10 @@ export class CreatelocalinvoicePage implements OnInit {
     this.getToday()
   }
 
+  goToHome(){
+    this.router.navigate(['/home']);
+  }
+
   getToday() {
     let today;
     let todays;

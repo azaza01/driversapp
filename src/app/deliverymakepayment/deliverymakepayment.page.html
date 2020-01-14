@@ -67,15 +67,6 @@
                         <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="createInvoiceItem()">POSTPONE</ion-button>
                     </ion-col>
             </ion-row> -->
-            <ion-row>
-                    <ion-col >
-                      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment('repeat')">REPEAT</ion-button>
-                    </ion-col>
-                    <ion-col >
-                        <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment('maypayment')">MAKE PAYMENT</ion-button>
-                    </ion-col>
-            </ion-row>
-            
     </ion-item-group>
   
     <!-- <ion-item-group>
@@ -88,4 +79,16 @@
   
      
   </ion-content>
+
+  <ion-footer>
+    <ion-row>
+      <ion-col >
+        <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment('repeat')">REPEAT</ion-button>
+      </ion-col>
+      <ion-col >
+          <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="makePayment('maypayment')">MAKE PAYMENT</ion-button>
+      </ion-col>
+   </ion-row>
+  </ion-footer>
+  
   

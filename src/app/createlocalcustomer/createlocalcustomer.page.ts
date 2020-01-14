@@ -56,6 +56,11 @@ export class CreatelocalcustomerPage implements OnInit {
 
   }
 
+  goToHome(){
+    this.router.navigate(['/home']);
+  }
+
+
   async presentToast(msg) {
 
     const toast = await this.toastCtrl.create({
