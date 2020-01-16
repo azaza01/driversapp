@@ -20,6 +20,8 @@ export class HomePage {
   currentPromo: any = []
   loading: any = new LoadingController;
 
+  checksync: any
+
 
   constructor(
     private menuCtrl: MenuController,
@@ -33,25 +35,48 @@ export class HomePage {
 
   async ngOnInit(info) {
     // Promise.all([this.storage.get('SO_TABLE').then((data)=>{this.currentPromo=data;})]);
-    // console.log(this.currentPromo);
+    // ////console.log(this.currentPromo);
+    this.storage.get('SyncData').then(accData => {
+      this.checksync = accData
+      ////console.log(this.checksync)
+      if (navigator.onLine == true && this.checksync != "12345678910") {
+        this.storage.get('ACCOUNTS_TABLE').then(accData => {
+          ////console.log(accData)
+          this.gePromotion(accData)
+          Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
+            if (data == "12345678910") {
+              this.storage.set('SyncData', data).then(() => {
+              });
+              this.presentAlert('Syncing Successful')
+            } else {
+              this.presentAlert('Connection interrupted, please try again')
+            }
+  
+          }).catch(e => {
+            ////console.log(e);
+          });
+        });
+      } else if(navigator.onLine == true && this.checksync == "12345678910"){
 
-    this.storage.get('ACCOUNTS_TABLE').then(res => {
-      console.log(res);
-      this.gePromotion(res)
+      } else {
+        this.presentAlert('No internet connection')
+      }
+  
     })
 
+   
     
-    // console.log(info)
+    // ////console.log(info)
     // if (info.title == 'Sync Data') {
     // if (navigator.onLine == true) {
     //   await this.storage.get('ACCOUNTS_TABLE').then(accData => {
-    //     console.log(accData)
+    //     ////console.log(accData)
     //       if (accData == null) {
     //         Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
-    //           console.log(data);
+    //           ////console.log(data);
     //           this.presentAlert('Syncing Successful')
     //         }).catch(e => {
-    //           console.log(e);
+    //           ////console.log(e);
     //         });
     //       } else {
     //         // this.presentAlert('Problem Syncing, Please check internet Connection')
@@ -83,12 +108,12 @@ export class HomePage {
 
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      // console.log(res)
+      // ////console.log(res)
       this.accInfo = res;
       // let totalArray = [];
       // totalArray.push(res);
       this.driversdata = res
-      console.log(this.driversdata)
+      ////console.log(this.driversdata)
 
     });
 
@@ -108,12 +133,12 @@ export class HomePage {
     // this.loading.present();
     // this.currentPromo = "";
     await Promise.resolve(this.accSrvc.getStandingOrder(info)).then(data => {
-      console.log(data)
+      ////console.log(data)
       this.currentPromo.push(data)
 
       //    this.storasge.get('SO_TABLE').then(res => {
-      //     console.log(res)
-      //     console.log(this.currentPromo);
+      //     ////console.log(res)
+      //     ////console.log(this.currentPromo);
 
       //  })
       // this.storage.set('SO_TABLE', data).then(() => {
@@ -121,7 +146,7 @@ export class HomePage {
       // })
 
     }).catch(e => {
-      console.log(e);
+      ////console.log(e);
       // this.loading.dismiss();
     });
   }
@@ -132,10 +157,10 @@ export class HomePage {
     this.defaultSrvc.clearsyncsStorage()
     return
     Promise.resolve(this.cltnSrvc.getCollection(this.accInfo, '')).then(data => {
-      console.log(data);
+      ////console.log(data);
 
     }).catch(e => {
-      console.log(e);
+      ////console.log(e);
     });
   }
 

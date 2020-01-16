@@ -61,7 +61,7 @@ export class CollectionService {
       // "password": "7c222fb2927d828af22f592134e8932480637c0d",
       // "driverid": "109",
     }
-    console.log(params)
+    ////console.log(params)
 
 
     return new Promise(resolve => {
@@ -69,7 +69,7 @@ export class CollectionService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
@@ -77,7 +77,7 @@ export class CollectionService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -85,7 +85,7 @@ export class CollectionService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -110,13 +110,13 @@ export class CollectionService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
           // });
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -124,7 +124,7 @@ export class CollectionService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -158,7 +158,7 @@ export class CollectionService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
@@ -166,7 +166,7 @@ export class CollectionService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -174,7 +174,7 @@ export class CollectionService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 

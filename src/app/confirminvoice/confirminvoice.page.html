@@ -120,9 +120,14 @@
         Confirm payments</ion-button>
     </ion-col>
   </ion-row>
-  <ion-row *ngIf="invoiceType == 'Repeat'">
+  <ion-row >
+    <ion-col >
+      <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreateNew()">Create another invoice</ion-button>
+    </ion-col>
+</ion-row>
+  <!-- <ion-row *ngIf="invoiceType == 'Repeat'">
       <ion-col >
         <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="confirmAndCreatePayment()">Confirm and create another invoice</ion-button>
       </ion-col>
-  </ion-row>
+  </ion-row> -->
 </ion-footer>

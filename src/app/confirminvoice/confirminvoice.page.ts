@@ -30,7 +30,7 @@ export class ConfirminvoicePage implements OnInit {
   checkAccount = 0;
   company: any;
 
-  mySpecialID: any
+  mySpecialIDCol: any
 
   invoiceId: any = ""
   invoiceType: any;
@@ -124,7 +124,12 @@ export class ConfirminvoicePage implements OnInit {
   selectedtime: any
   newSeriesofInvoice: any
 
+  newInvoiceCollection: any = "false"
+
   driversId: any
+
+  typeofSync: any
+  isCollection: any
 
   constructor(
     public alertController: AlertController,
@@ -170,14 +175,18 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   async ngOnInit() {
+
     await this.presentLoading('Syncing local Data');
+    this.invoiceType = ""
     this.customerData = ""
+    this.invoiceId = ""
+    this.typeofSync = ""
     this.dataForCreateNewCollection = ""
     this.getToday();
     this.isLoading = true
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
-      ////console.log(res)
+      //////console.log(res)
       this.driversDetails = res
       this.driver_email = res.email_address
       this.driver_password = res.password
@@ -194,26 +203,31 @@ export class ConfirminvoicePage implements OnInit {
         } else {
           this.returnDate = res.coldel_return;
         }
-        this.customercredit = res.cca;
+        // this.customercredit = res.cca;
         this.customerTypes = res.cut;
         this.invoiceId = res.id
         this.servicetype = res.col
-        //console.log(this.invoiceId)
+        ////console.log(this.invoiceId)
+        this.dataForCreateNewCollection = res
         this.validationforsync = "true"
+        this.isCollection = "true"
       } else if (res.coldel_type == "delivery") {
+        this.newInvoiceCollection = "false"
         this.dataForCreateNewCollection = res
         this.invoiceId = res.dei
-        ////console.log(this.invoiceId)
+        //////console.log(this.invoiceId)
         this.returnDate = "0000-00-00"
-        this.customercredit = res.cca;
+        // this.customercredit = res.cca;
         this.customerTypes = res.cut;
         this.validationforsync = "false"
         this.servicetype = res.del
-        //console.log(this.invoiceId)
+        this.isCollection = "false"
+        console.log(this.invoiceId)
+        ////console.log(this.invoiceId)
       }
 
 
-      //console.log(this.dataForCreateNewCollection);
+      ////console.log(this.dataForCreateNewCollection);
     }).finally(() => {
       this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
         this.isLoading = true
@@ -222,7 +236,8 @@ export class ConfirminvoicePage implements OnInit {
         for (i = 0; i < l; i++) {
           if (res[i].UNINV_COLLID == this.invoiceId) {
             this.customerData = res[i];
-            console.log(this.customerData)
+            this.typeofSync = res[i].invoicesynctype
+            //console.log(this.customerData)
           }
         }
 
@@ -232,17 +247,17 @@ export class ConfirminvoicePage implements OnInit {
           res.forEach(element => {
             this.timeslots.push(element.description)
           });
-          // ////console.log(this.timeslots)
+          // //////console.log(this.timeslots)
           this.isLoading = false
         })
 
         Promise.resolve(this.defaultSrvc.createInvSeries()).then(data => {
-          ////console.log(data)
+          //////console.log(data)
           this.newSeriesofInvoice = data
           this.UNINV_INVNO = this.newSeriesofInvoice.INV_NO
           this.invoiceNumber = this.newSeriesofInvoice.INV_NO
         }).catch(e => {
-          ////console.log(e);
+          //////console.log(e);
         });
 
         this.getItemSubtotal();
@@ -281,12 +296,12 @@ export class ConfirminvoicePage implements OnInit {
 
 
         this.storage.get('INVOICE_TYPES_TABLE').then(res => {
-          // ////console.log(res)
+          // //////console.log(res)
           var l = res.length, i;
           for (i = 0; i < l; i++) {
             if (res[i].description == this.invoiceType) {
               this.invoiceTypeID = res[i].id
-              // ////console.log(this.invoiceTypeID);
+              // //////console.log(this.invoiceTypeID);
             }
           }
         })
@@ -321,23 +336,23 @@ export class ConfirminvoicePage implements OnInit {
           }
         }
         this.alertCustomerType()
-        console.log(this.allinvoiceitems)
+        //console.log(this.allinvoiceitems)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
         } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
           this.coldev("Final amount is zero please click back button to refresh the amount");
-        } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
           this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
         }
 
       })
     } else if (this.checkAccount == 0) {
       this.storage.get("TEMP_ITEMS_TABLE").then(res => {
-        // ////console.log(res)
+        // //////console.log(res)
         var str1, flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           if (res[i].rid == this.invoiceId && (res[i].qty != 0 && res[i].qty != null)) {
-            // ////console.log(res[i])
+            // //////console.log(res[i])
 
             let params = {
               "cat_type": res[i].cat_type,
@@ -354,13 +369,13 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        console.log(this.allinvoiceitems)
-        // ////console.log(this.finalSubtotal)
+        //console.log(this.allinvoiceitems)
+        // //////console.log(this.finalSubtotal)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
         } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
           this.coldev("Final amount is zero please click back button to refresh the amount");
-        } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
           this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
         }
       })
@@ -377,7 +392,7 @@ export class ConfirminvoicePage implements OnInit {
     let yy = (yyyy + '').substr(2, 2);
 
     // today = yyyy + '-' + mm + '-' + dd;
-    // ////console.log(today)
+    // //////console.log(today)
     var now = new Date();
     var mydays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
     if (dd > mydays) {
@@ -401,7 +416,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   async openDatePicker() {
-    ////console.log("Open Date PIcker");
+    //////console.log("Open Date PIcker");
     const modalCtrl = await this.modalCtrl.create({
       component: Ionic4DatepickerModalComponent,
       cssClass: "li-ionic4-datePicker",
@@ -411,10 +426,10 @@ export class ConfirminvoicePage implements OnInit {
 
     modalCtrl.onDidDismiss().then(data => {
       // this.isModalOpen = false;
-      ////console.log(data.data.date)
+      //////console.log(data.data.date)
       this.customerData.UNINV_AGREEDDELIVERYDATE = this.datepipe.transform(new Date(data.data.date), 'yyyy-MM-dd')
       this.UNINV_AGREEDDELIVERYDATE = this.datepipe.transform(new Date(data.data.date), 'yyyy-MM-dd')
-      // ////console.log(data['data'].date);
+      // //////console.log(data['data'].date);
       // this.selectedDate = data.data.date;
     });
   }
@@ -431,7 +446,7 @@ export class ConfirminvoicePage implements OnInit {
 
   //   today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
   //   this.todaydate = today
-  //   // ////console.log(this.todaydate)
+  //   // //////console.log(this.todaydate)
   // }
 
   async presentAlert2(msg) {
@@ -466,8 +481,8 @@ export class ConfirminvoicePage implements OnInit {
   //   mode: 'date',
   //   androidTheme: this.datePicker.ANDROID_THEMES.THEME_TRADITIONAL
   // }).then(
-  //   date => ////console.log('Got date: ', date),
-  //   err => ////console.log('Error occurred while getting date: ', err)
+  //   date => //////console.log('Got date: ', date),
+  //   err => //////console.log('Error occurred while getting date: ', err)
   // );
   // }
 
@@ -500,7 +515,7 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   getTime(selectedtime) {
-    // ////console.log(selectedtime);
+    // //////console.log(selectedtime);
     this.UNINV_DELIVERYTIMESLOT = this.selectedtime
   }
 
@@ -519,7 +534,7 @@ export class ConfirminvoicePage implements OnInit {
       //create promotion object
       let params: any = {};
       this.storage.get('ACCOUNTS_TABLE').then(res => {
-        // ////console.log(res)
+        // //////console.log(res)
 
         params.cat_type = "Promotion";
         params.description = "Chain Promotion";
@@ -561,7 +576,7 @@ export class ConfirminvoicePage implements OnInit {
     } else if (this.expressCharge == "100") {
       this.expressData = "2.00"
     }
-    // ////console.log(this.expressCharge)
+    // //////console.log(this.expressCharge)
     this.getTotalPayable();
   }
 
@@ -575,7 +590,7 @@ export class ConfirminvoicePage implements OnInit {
 
   getPayemntMethod(paymentMethod) {
     this.paymentMethod = paymentMethod
-    // ////console.log(this.paymentMethod)
+    // //////console.log(this.paymentMethod)
   }
 
   // overDueAmount(overDue){
@@ -590,11 +605,11 @@ export class ConfirminvoicePage implements OnInit {
       this.percentPromoAmount = Math.round(this.percentPromoAmountFM * 100) / 100
       this.afterLessAmount = this.finalSubtotal - this.percentPromoAmount
       this.payableAmount = this.afterLessAmount
-      // ////console.log(this.payableAmount);
+      // //////console.log(this.payableAmount);
     } else if (this.percentPromo <= 0 || this.percentPromo == "") {
       this.afterLessAmount = this.finalSubtotal
       this.payableAmount = this.finalSubtotal
-      // ////console.log(this.payableAmount);
+      // //////console.log(this.payableAmount);
     }
 
     if (this.expressCharge != "None" && this.expressCharge != "" && this.expressCharge != 0 && this.expressCharge != undefined) {
@@ -618,6 +633,28 @@ export class ConfirminvoicePage implements OnInit {
 
   }
 
+  confirmAndCreateNew() {
+    this.getToday()
+    if (this.invoiceType == "New" && this.typeofSync == "New") {
+      Promise.resolve(this.collectiondata()).then(coldata => {
+        this.newInvoiceCollection = "true"
+        this.canSyncNow = "true"
+        this.proceedtoWherePage = "false"
+        this.validationforsync = "false"
+        this.savePay(coldata)
+      })
+    } else {
+      Promise.resolve(this.collectiondata()).then(coldata => {
+        this.newInvoiceCollection = "true"
+        this.canSyncNow = "false"
+        this.proceedtoWherePage = "false"
+        this.validationforsync = "false"
+        this.savePay(coldata)
+      })
+    }
+
+  }
+
 
   confirmAndCreatePayment() { //KIV
     //generate new invoice
@@ -625,6 +662,7 @@ export class ConfirminvoicePage implements OnInit {
       if (this.invoiceType == "Repeat" && this.validationforsync == "false") {
         this.canSyncNow = "false"
         Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "true"
           this.proceedtoWherePage = "false"
           this.savePay(coldata)
         })
@@ -638,6 +676,7 @@ export class ConfirminvoicePage implements OnInit {
         if (this.validationforsync == "true") {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "true"
             this.proceedtoWherePage = "false"
             this.savePay(coldata)
           })
@@ -647,6 +686,7 @@ export class ConfirminvoicePage implements OnInit {
         } else {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "true"
             this.validationforsync == "false"
             this.proceedtoWherePage = "false"
             this.savePay(coldata)
@@ -659,11 +699,12 @@ export class ConfirminvoicePage implements OnInit {
       }
     } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
       this.coldev("Final amout is zero please click back button to refresh the amount");
-    } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
+    } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
 
       if (this.invoiceType == "Repeat" && this.validationforsync == "false") {
         this.canSyncNow = "false"
         Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "true"
           this.proceedtoWherePage = "false"
           this.savePay(coldata)
         })
@@ -677,6 +718,7 @@ export class ConfirminvoicePage implements OnInit {
         if (this.validationforsync == "true") {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "true"
             this.proceedtoWherePage = "false"
             this.savePay(coldata)
           })
@@ -686,6 +728,7 @@ export class ConfirminvoicePage implements OnInit {
         } else {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "true"
             this.validationforsync == "false"
             this.proceedtoWherePage = "false"
             this.savePay(coldata)
@@ -701,12 +744,15 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   confirmPayment(pageto) {
+    //console.log(this.invoiceType)
+    //console.log(this.typeofSync)
     if (this.finalSubtotal > 0) {
-      //console.log(this.invoiceType)
-      //console.log(this.validationforsync)
-      if (this.invoiceType == "Repeat") {
+      ////console.log(this.invoiceType)
+      ////console.log(this.validationforsync)
+      if (this.invoiceType == "Repeat" && this.typeofSync == "Repeat") {
         this.canSyncNow = "false"
         Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "false"
           this.validationforsync = "true"
           this.proceedtoWherePage = "true"
           this.savePay(coldata)
@@ -717,8 +763,18 @@ export class ConfirminvoicePage implements OnInit {
         //update summary_table for repeat -- later part(KIV)
         // } else if (this.invoiceType == "Pending") {
         //update summary_table for pending -- later part(KIV)
-      } else {
+
+      } else if (this.invoiceType == "New" && this.typeofSync == "NewandAnother") {
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "false"
+          this.validationforsync = "true"
+          this.proceedtoWherePage = "true"
+          this.canSyncNow = "false"
+          this.savePay(coldata)
+        })
+      } else if (this.invoiceType == "New" && this.typeofSync == "New") {
         if (this.validationforsync == "true") {
+          this.newInvoiceCollection = "false"
           this.validationforsync = "true"
           this.proceedtoWherePage = "true"
           this.canSyncNow = "true"
@@ -726,12 +782,13 @@ export class ConfirminvoicePage implements OnInit {
         } else {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "false"
             this.validationforsync = "true"
             this.proceedtoWherePage = "true"
             this.savePay(coldata)
           })
           // .finally(() => {
-          //   //console.log(this.validationforsync)
+          //   ////console.log(this.validationforsync)
           //   this.proceedtoWhat("true");
           // })
         }
@@ -739,11 +796,12 @@ export class ConfirminvoicePage implements OnInit {
       }
     } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
       this.coldev("Final amout is zero please click back button to refresh the amount");
-    } else if(this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC"){
-      
-      if (this.invoiceType == "Repeat") {
+    } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
+
+      if (this.invoiceType == "Repeat" && this.typeofSync == "Repeat") {
         this.canSyncNow = "false"
         Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "false"
           this.validationforsync = "true"
           this.proceedtoWherePage = "true"
           this.savePay(coldata)
@@ -754,8 +812,18 @@ export class ConfirminvoicePage implements OnInit {
         //update summary_table for repeat -- later part(KIV)
         // } else if (this.invoiceType == "Pending") {
         //update summary_table for pending -- later part(KIV)
-      } else {
+
+      } else if (this.invoiceType == "New" && this.typeofSync == "NewandAnother") {
+        Promise.resolve(this.collectiondata()).then(coldata => {
+          this.newInvoiceCollection = "false"
+          this.validationforsync = "true"
+          this.proceedtoWherePage = "true"
+          this.canSyncNow = "false"
+          this.savePay(coldata)
+        })
+      } else if (this.invoiceType == "New" && this.typeofSync == "New") {
         if (this.validationforsync == "true") {
+          this.newInvoiceCollection = "false"
           this.validationforsync = "true"
           this.proceedtoWherePage = "true"
           this.canSyncNow = "true"
@@ -763,12 +831,13 @@ export class ConfirminvoicePage implements OnInit {
         } else {
           this.canSyncNow = "false"
           Promise.resolve(this.collectiondata()).then(coldata => {
+            this.newInvoiceCollection = "false"
             this.validationforsync = "true"
             this.proceedtoWherePage = "true"
             this.savePay(coldata)
           })
           // .finally(() => {
-          //   //console.log(this.validationforsync)
+          //   ////console.log(this.validationforsync)
           //   this.proceedtoWhat("true");
           // })
         }
@@ -805,7 +874,7 @@ export class ConfirminvoicePage implements OnInit {
 
   //no connection
   async savePay(offlinedata) {
-    ////console.log(offlinedata)
+    //////console.log(offlinedata)
     await this.presentLoading('Syncing local Data');
     ////update UNSYNCED_INVOICE_TABLE
     await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -816,17 +885,17 @@ export class ConfirminvoicePage implements OnInit {
       if (data != null) {
         data.forEach(unsync => {
           if (this.invoiceType == "Repeat") {
-            ////console.log("puampasok ba dito")
-            ////console.log(offlinedata.savedon)
-            ////console.log(unsync.UNINV_COLLTS)
-            if (unsync.UNINV_COLLID == offlinedata.savedon) {
-              ////console.log("parang hindi")
+            //////console.log("puampasok ba dito")
+            //////console.log(offlinedata.savedon)
+            //////console.log(unsync.UNINV_COLLTS)
+            if (unsync.UNINV_COLLID == offlinedata.collectionid) {
+              //////console.log("parang hindi")
               let params = {
                 UNINV_AGREEDDELIVERYDATE: offlinedata.agreeddeliverydate,
                 UNINV_BAGS: offlinedata.bags,
                 UNINV_BALANCE: offlinedata.balancepaid,
                 UNINV_COLLID: offlinedata.collectionid,
-                UNINV_COLLTS: offlinedata.savedon,
+                UNINV_COLLTS: offlinedata.collectionid,
                 UNINV_CUSTID: offlinedata.customerid,
                 UNINV_DELIVERYTIMESLOT: offlinedata.deliverytimeslot,
                 UNINV_DEPOAMT: offlinedata.depositamount,
@@ -845,7 +914,8 @@ export class ConfirminvoicePage implements OnInit {
                 drvem: offlinedata.email,
                 colitem: offlinedata.invoiceitem,
                 syncserver: this.canSyncNow,
-                driversId : this.driversDetails.id
+                driversId: this.driversDetails.id,
+                invoiceType: this.typeofSync
               }
               filtered.push(params)
             } else {
@@ -858,7 +928,7 @@ export class ConfirminvoicePage implements OnInit {
                 UNINV_BAGS: offlinedata.bags,
                 UNINV_BALANCE: offlinedata.balancepaid,
                 UNINV_COLLID: offlinedata.collectionid,
-                UNINV_COLLTS: offlinedata.savedon,
+                UNINV_COLLTS: offlinedata.collectionid,
                 UNINV_CUSTID: offlinedata.customerid,
                 UNINV_DELIVERYTIMESLOT: offlinedata.deliverytimeslot,
                 UNINV_DEPOAMT: offlinedata.depositamount,
@@ -877,7 +947,8 @@ export class ConfirminvoicePage implements OnInit {
                 drvem: offlinedata.email,
                 colitem: offlinedata.invoiceitem,
                 syncserver: this.canSyncNow,
-                driversId : this.driversDetails.id
+                driversId: this.driversDetails.id,
+                invoiceType: this.typeofSync
               }
               filtered.push(params)
             } else {
@@ -885,7 +956,7 @@ export class ConfirminvoicePage implements OnInit {
             }
           }
         });
-        ////console.log(filtered)
+        //////console.log(filtered)
         this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
       } else {
         let params = {
@@ -893,7 +964,7 @@ export class ConfirminvoicePage implements OnInit {
           UNINV_BAGS: offlinedata.bags,
           UNINV_BALANCE: offlinedata.balancepaid,
           UNINV_COLLID: offlinedata.collectionid,
-          UNINV_COLLTS: offlinedata.savedon,
+          UNINV_COLLTS: offlinedata.collectionid,
           UNINV_CUSTID: offlinedata.customerid,
           UNINV_DELIVERYTIMESLOT: offlinedata.deliverytimeslot,
           UNINV_DEPOAMT: offlinedata.depositamount,
@@ -912,15 +983,16 @@ export class ConfirminvoicePage implements OnInit {
           drvem: offlinedata.email,
           colitem: offlinedata.invoiceitem,
           syncserver: this.canSyncNow,
-          driversId : this.driversDetails.id
+          driversId: this.driversDetails.id,
+          invoiceType: this.typeofSync
         }
-        ////console.log(params)
+        //////console.log(params)
         this.storage.set('UNSYNCED_INVOICE_TABLE', params)
       }
 
     }).finally(() => {
       this.storage.get('UNSYNCED_INVOICE_TABLE').then(ress => {
-        ////console.log(ress)
+        //////console.log(ress)
       })
     })
 
@@ -934,7 +1006,7 @@ export class ConfirminvoicePage implements OnInit {
       let filtered: any = []
 
       colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
-      ////console.log(colid)
+      //////console.log(colid)
 
       if (data != "") {
         data.forEach(coldelData => {
@@ -1000,7 +1072,7 @@ export class ConfirminvoicePage implements OnInit {
       }
     }).finally(() => {
       this.storage.get('COLDEL_TABLE').then(ress => {
-        ////console.log(ress)
+        //////console.log(ress)
         this.proceedtoWhat()
       })
     })
@@ -1008,25 +1080,30 @@ export class ConfirminvoicePage implements OnInit {
 
   proceedtoWhat() {
     let proceedtowhere = this.validationforsync
+    ////console.log(proceedtowhere)
+    //console.log(this.newInvoiceCollection)
+    ////console.log(proceedtowhere)
     //console.log(proceedtowhere)
-    if (proceedtowhere == "true") {
+    if (proceedtowhere == "true" && this.newInvoiceCollection == "false") {
       this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-        //console.log('removed ');
+        ////console.log('removed ');
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
-          //console.log('removed ');
+          ////console.log('removed ');
         }).finally(() => {
           this.defaultSrvc.getTempItems = undefined;
+          this.customerData = ""
           this.loading.dismiss();
           this.router.navigate(['/coldev']);
         })
       })
-    } else if (proceedtowhere == "false") {
+    } else if (proceedtowhere == "false" && this.newInvoiceCollection == "true") {
       this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-        //console.log('removed ');
+        ////console.log('removed ');
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
-          //console.log('removed ');
+          ////console.log('removed ');
         }).finally(() => {
           this.defaultSrvc.getTempItems = undefined;
+          this.customerData = ""
           this.loading.dismiss();
           this.createNewInvoiceFromLocal();
         })
@@ -1039,7 +1116,7 @@ export class ConfirminvoicePage implements OnInit {
   async syncPay() {
 
     await Promise.resolve(this.collectiondata()).then(coldata => {
-      //console.log(coldata)
+      ////console.log(coldata)
 
       if (navigator.onLine == true && this.canSyncNow == "true") {
 
@@ -1107,7 +1184,7 @@ export class ConfirminvoicePage implements OnInit {
             this.savePay(coldata);
           }
         }).catch(e => {
-          ////console.log(e);
+          //////console.log(e);
           this.presentAlert2("Cannot sync, poor internet connection. Please save later")
           this.savePay(coldata);
         });
@@ -1156,7 +1233,7 @@ export class ConfirminvoicePage implements OnInit {
 
       this.storage.get('ENVNUM_TABLE').then(res => {
         var data = res
-        ////console.log(data)
+        //////console.log(data)
         let filtered: any = []
         if (data != null) {
           var l = res.length, i;
@@ -1169,7 +1246,7 @@ export class ConfirminvoicePage implements OnInit {
         }
         this.storage.set('ENVNUM_TABLE', filtered)
       })
-      // ////console.log(data);
+      // //////console.log(data);
       params.email = this.driver_email,
         params.password = this.driver_password,
         params.initial = this.company,
@@ -1191,10 +1268,11 @@ export class ConfirminvoicePage implements OnInit {
         params.express = this.expressData,
         params.bags = this.UNINV_BAGS,
         params.savedon = this.todaydate,
-        params.driversId = this.driversDetails.id
+        params.driversId = this.driversDetails.id,
+        params.invoiceType = this.typeofSync
       resolve(params)
     }).catch(e => {
-      ////console.log(e);
+      //////console.log(e);
     });
   }
 
@@ -1237,15 +1315,15 @@ export class ConfirminvoicePage implements OnInit {
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
     this.todaydate = today
 
-    this.mySpecialID = today
+    this.mySpecialIDCol = today
     return today
-    // //console.log(this.todaydate)
+    // ////console.log(this.todaydate)
   }
 
   async createNewInvoiceFromLocal() {
-    this.getToday();
-    //console.log(this.dataForCreateNewCollection)
-
+ 
+    ////console.log(this.dataForCreateNewCollection)
+    console.log(this.newInvoiceCollection)
     let tag;
     const alert = await this.alertController.create({
       header: 'Bill from which company?',
@@ -1258,15 +1336,15 @@ export class ConfirminvoicePage implements OnInit {
           handler: async () => {
             await this.presentLoading('Creating new Invoice');
             //function herer
-            // //console.log(this.selected);
+            // ////console.log(this.selected);
             tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
-            //   //console.log(data);
+            //   ////console.log(data);
             let params: any = {};
-            params.UNINV_COLLTS = this.mySpecialID
-            params.UNINV_COLLID = this.mySpecialID
+            params.UNINV_COLLTS = this.mySpecialIDCol
+            params.UNINV_COLLID = this.mySpecialIDCol
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = this.dataForCreateNewCollection.cui
             params.UNINV_INITIAL = tag
@@ -1289,17 +1367,18 @@ export class ConfirminvoicePage implements OnInit {
             params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
             params.driversId = this.driversDetails.id
-            //console.log(params)
+            params.invoicesynctype = 'NewandAnother'
+            ////console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              //console.log(this.unsyncData)
+              ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // //console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -1309,24 +1388,56 @@ export class ConfirminvoicePage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // //console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                 }
               }
-            }).finally(() => {
-              // //console.log(this.unsyncData);
-              this.checkIfRepeat = "yes";
-
+            }).then(() => {
+              // ////console.log(this.unsyncData);
               let params: any = {}
-              params.rid = this.mySpecialID
-                params.coldelID = this.mySpecialID
+              if (this.isCollection == "true") {
+                this.checkIfRepeat = "no";
+
+                params.rid = this.mySpecialIDCol
+                params.coldelID = this.mySpecialIDCol
+                params.custID = this.dataForCreateNewCollection.cui
+                params.accID = this.dataForCreateNewCollection.com
+                params.credit = ""
+                params.invoiceno = ""
+                params.invoicetype = "New"
+                params.invcompany = tag
+
+                params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+                params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
+                params.UCOcollecttype = this.dataForCreateNewCollection.col
+                params.UCOcollectdate = this.defaultSrvc.getToday()
+                params.UCOcollecttime = this.dataForCreateNewCollection.cot
+                params.UCOcollectaddress = this.dataForCreateNewCollection.coa
+                params.UCOcollectunit = this.dataForCreateNewCollection.cuo
+                params.UCOcollectpostal = this.dataForCreateNewCollection.cpc
+                params.UCOcollectbuilding = this.dataForCreateNewCollection.cob
+                params.UCOcollectregion = this.dataForCreateNewCollection.ren
+                params.UCOcollectnote = ""
+                params.UCOcollectstatus = "collected"
+                params.UCOreturndate = "0000-00-00"
+                params.UCOreturntime = "A 10 - 12pm"
+                params.done = "A 10 - 12pm"
+                params.syncserver = "false"
+                params.driversId = this.driversDetails.id
+                params.invoicesynctype = 'NewandAnother'
+              } else {
+
+                this.checkIfRepeat = "yes";
+
+                params.rid = this.mySpecialIDCol
+                params.coldelID = this.mySpecialIDCol
                 params.custID = this.dataForCreateNewCollection.cui
                 params.accID = this.dataForCreateNewCollection.com
                 params.credit = ""
@@ -1351,17 +1462,20 @@ export class ConfirminvoicePage implements OnInit {
                 params.done = "A 10 - 12pm"
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
+                params.invoicesynctype = 'NewandAnother'
+              }
+
 
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(datas =>{
               this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
                 this.unsyncDataCollection = res
-                // //console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
                 if (res == null) {
                   this.unsyncDataCollection = []
                   this.unsyncDataCollection.push(params)
                   this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
                   let result;
@@ -1371,28 +1485,158 @@ export class ConfirminvoicePage implements OnInit {
                   if (result.length < 1) {
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // //console.log(this.unsyncData)
+                    // ////console.log(this.unsyncData)
 
                   } else {
-                    // //console.log(result)
+                    // ////console.log(result)
                     let i;
                     i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
                     this.unsyncDataCollection.splice(i, 1, params);
-                    // //console.log(this.unsyncData)
+                    // ////console.log(this.unsyncData)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                   }
                 }
               }).finally(() => {
-                this.dataForCreateNewCollection.dei = this.mySpecialID
-                this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
-                this.loading.dismiss();
-                this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+              
+                if (this.isCollection == "true") {
+                  // this.storage.get('SELECTED_ITEM').then(res => {
+                  //   let data, colid
+                  //   data = res
+                  //   let filtered: any = []
+                  //   console.log(this.invoiceId)
+                  //   console.log(data.id)
+                  //   // if (data != "") {
+                  //     // data.forEach(coldelData => {
+                  //       if (data.id == this.invoiceId) {
+                  //         let params = {
+                  //           id: this.mySpecialIDCol,
+                  //           cui: data.cui,
+                  //           aid: data.aid,
+                  //           sts: data.sts,
+                  //           cod: data.cod,
+                  //           ren: data.ren,
+                  //           cot: data.cot,
+                  //           cun: data.cun,
+                  //           cut: data.cut,
+                  //           com: data.com,
+                  //           na2: data.na2,
+                  //           coa: data.coa,
+                  //           cob: data.cob,
+                  //           lil: data.lil,
+                  //           cuo: data.cuo,
+                  //           cue: data.cue,
+                  //           rtd: data.rtd,
+                  //           rtt: data.rtt,
+                  //           uby: data.uby,
+                  //           uon: data.uon,
+                  //           cpc: data.cpc,
+                  //           cn1: data.cn1,
+                  //           cn2: data.cn2,
+                  //           cn3: data.cn3,
+                  //           cca: data.cca,
+                  //           noe: data.noe,
+                  //           con: data.con,
+                  //           col: data.col,
+                  //           pax: data.pax,
+                  //           driver_id: data.driver_id,
+                  //           name: data.name,
+                  //           office_no: data.office_no,
+                  //           mobile_no: data.mobile_no,
+                  //           email_address: data.email_address,
+                  //           coldel_type: data.coldel_type,
+                  //           coldel_hang: data.coldel_hang,
+                  //           coldel_pack: data.coldel_pack,
+                  //           coldel_roll: data.coldel_roll,
+                  //           coldel_return: data.coldel_return,
+                  //           coldel_flag: "updated",
+                  //         }
+                          this.dataForCreateNewCollection.id = this.mySpecialIDCol
+                          this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
+                          this.loading.dismiss();
+                          this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+                        // }
+                      // })
+
+                    // }
+                  // })
+
+                } else {
+                  // this.storage.get('SELECTED_ITEM').then(res => {
+                  //   let data, colid
+                  //   data = res
+                  //   let filtered: any = []
+                  //   console.log(this.invoiceId)
+                  //   console.log(data.dei)
+                  //   // if (data != "") {
+                  //     // data.forEach(coldelData => {
+                  //       if (data.dei == this.invoiceId) {
+                  //         let params = {
+                  //           dei: this.mySpecialIDCol,
+                  //           aid: data.aid,
+                  //           cui: data.cui,
+                  //           sts: data.sts,
+                  //           ded: data.ded,
+                  //           ren: data.ren,
+                  //           det: data.det,
+                  //           cun: data.cun,
+                  //           cut: data.cut,
+                  //           com: data.com,
+                  //           na2: data.na2,
+                  //           dea: data.dea,
+                  //           deb: data.deb,
+                  //           lil: data.lil,
+                  //           dun: data.dun,
+                  //           cue: data.cue,
+                  //           uby: data.uby,
+                  //           uon: data.uon,
+                  //           dpc: data.dpc,
+                  //           cn1: data.cn1,
+                  //           cn2: data.cn2,
+                  //           cn3: data.cn3,
+                  //           noe: data.noe,
+                  //           den: data.den,
+                  //           han: data.han,
+                  //           pac: data.pac,
+                  //           rol: data.rol,
+                  //           ret: data.ret,
+                  //           del: data.del,
+                  //           pax: data.pax,
+                  //           id: data.id,
+                  //           inn: data.inn,
+                  //           coi: data.coi,
+                  //           toa: data.toa,
+                  //           dis: data.dis,
+                  //           dpt: data.dpt,
+                  //           dpa: data.dpa,
+                  //           delivery_driver_id: data.delivery_driver_id,
+                  //           delivery_driver: data.delivery_driver,
+                  //           cca: data.cca,
+                  //           exp: data.exp,
+                  //           baa: data.baa,
+                  //           bap: data.bap,
+                  //           invn: data.invn,
+                  //           accu: data.accu,
+                  //           coldel_type: data.coldel_type,
+                  //           coldel_returndate: data.coldel_returndate,
+                  //           coldel_returntime: data.coldel_returntime,
+                  //           coldel_flag: "updated"
+                  //         }
+                          this.dataForCreateNewCollection.dei = this.mySpecialIDCol
+                          this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
+                          this.loading.dismiss();
+                          this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+                      //  }
+                      // })
+
+                    // }
+                 // })
+                }
               })
             })
             // })
 
             // }).catch(e => {
-            //   //console.log(e);
+            //   ////console.log(e);
             // });
           }
         }, {
@@ -1401,8 +1645,8 @@ export class ConfirminvoicePage implements OnInit {
             await this.presentLoading('Creating new Invoice');
             tag = "CC"
             let params: any = {};
-            params.UNINV_COLLTS = this.mySpecialID
-            params.UNINV_COLLID = this.mySpecialID
+            params.UNINV_COLLTS = this.mySpecialIDCol
+            params.UNINV_COLLID = this.mySpecialIDCol
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = this.dataForCreateNewCollection.cui
             params.UNINV_INITIAL = tag
@@ -1424,20 +1668,20 @@ export class ConfirminvoicePage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
-            params.customerCredit = ""
             params.driversId = this.driversDetails.id
-            //console.log(params)
+            params.invoicesynctype = 'NewandAnother'
+            ////console.log(params)
 
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              // //console.log(this.unsyncData)
+              // ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // //console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -1447,24 +1691,28 @@ export class ConfirminvoicePage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // //console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                 }
               }
-            }).finally(() => {
-              // //console.log(this.unsyncData);
+            }).then(() => {
+              // ////console.log(this.unsyncData);
               // this.defaultSrvc.getTempItems = null
 
               let params: any = {}
-              params.rid = this.mySpecialID
-                params.coldelID = this.mySpecialID
+              if (this.isCollection == "true") {
+                this.checkIfRepeat = "no";
+
+
+                params.rid = this.mySpecialIDCol
+                params.coldelID = this.mySpecialIDCol
                 params.custID = this.dataForCreateNewCollection.cui
                 params.accID = this.dataForCreateNewCollection.com
                 params.credit = ""
@@ -1472,7 +1720,37 @@ export class ConfirminvoicePage implements OnInit {
                 params.invoicetype = "New"
                 params.invcompany = tag
 
-                params.UCOtimestamp = this.mySpecialID //new UCO will be generated in the collection loop if necessary
+                params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+                params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
+                params.UCOcollecttype = this.dataForCreateNewCollection.col
+                params.UCOcollectdate = this.defaultSrvc.getToday()
+                params.UCOcollecttime = this.dataForCreateNewCollection.cot
+                params.UCOcollectaddress = this.dataForCreateNewCollection.coa
+                params.UCOcollectunit = this.dataForCreateNewCollection.cuo
+                params.UCOcollectpostal = this.dataForCreateNewCollection.cpc
+                params.UCOcollectbuilding = this.dataForCreateNewCollection.cob
+                params.UCOcollectregion = this.dataForCreateNewCollection.ren
+                params.UCOcollectnote = ""
+                params.UCOcollectstatus = "collected"
+                params.UCOreturndate = "0000-00-00"
+                params.UCOreturntime = "A 10 - 12pm"
+                params.done = "A 10 - 12pm"
+                params.syncserver = "false"
+                params.driversId = this.driversDetails.id
+                params.invoicesynctype = 'NewandAnother'
+              } else {
+                this.checkIfRepeat = "yes";
+
+                params.rid = this.mySpecialIDCol
+                params.coldelID = this.mySpecialIDCol
+                params.custID = this.dataForCreateNewCollection.cui
+                params.accID = this.dataForCreateNewCollection.com
+                params.credit = ""
+                params.invoiceno = ""
+                params.invoicetype = "New"
+                params.invcompany = tag
+
+                params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
                 params.UCOcusttype = this.dataForCreateNewCollection.cut //30-11-2012 for checking minimum
                 params.UCOcollecttype = this.dataForCreateNewCollection.del
                 params.UCOcollectdate = this.defaultSrvc.getToday()
@@ -1486,19 +1764,22 @@ export class ConfirminvoicePage implements OnInit {
                 params.UCOcollectstatus = "collected"
                 params.UCOreturndate = "0000-00-00"
                 params.UCOreturntime = "A 10 - 12pm"
+                params.done = "A 10 - 12pm"
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
+                params.invoicesynctype = 'NewandAnother'
+              }
 
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(data =>{
               this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
                 this.unsyncDataCollection = res
-                // //console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
                 if (res == null) {
                   this.unsyncDataCollection = []
                   this.unsyncDataCollection.push(params)
                   this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                  // //console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
                   let result;
@@ -1508,28 +1789,158 @@ export class ConfirminvoicePage implements OnInit {
                   if (result.length < 1) {
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // //console.log(this.unsyncData)
+                    // ////console.log(this.unsyncData)
 
                   } else {
-                    // //console.log(result)
+                    // ////console.log(result)
                     let i;
                     i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
                     this.unsyncDataCollection.splice(i, 1, params);
-                    // //console.log(this.unsyncData)
+                    // ////console.log(this.unsyncData)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                   }
                 }
               }).finally(() => {
-                this.dataForCreateNewCollection.dei = this.mySpecialID
-                this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
-                this.loading.dismiss();
-                this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+                
+                if (this.isCollection == "true") {
+                  // this.storage.get('SELECTED_ITEM').then(res => {
+                  //   let data, colid
+                  //   data = res
+                  //   //let filtered: any = []
+                  //   console.log(this.invoiceId)
+                  //   console.log(data.id)
+                  //   // if (data != "") {
+                  //     // data.forEach(coldelData => {
+                  //       if (data.id == this.invoiceId) {
+                  //         let params = {
+                  //           id: this.mySpecialIDCol,
+                  //           cui: data.cui,
+                  //           aid: data.aid,
+                  //           sts: data.sts,
+                  //           cod: data.cod,
+                  //           ren: data.ren,
+                  //           cot: data.cot,
+                  //           cun: data.cun,
+                  //           cut: data.cut,
+                  //           com: data.com,
+                  //           na2: data.na2,
+                  //           coa: data.coa,
+                  //           cob: data.cob,
+                  //           lil: data.lil,
+                  //           cuo: data.cuo,
+                  //           cue: data.cue,
+                  //           rtd: data.rtd,
+                  //           rtt: data.rtt,
+                  //           uby: data.uby,
+                  //           uon: data.uon,
+                  //           cpc: data.cpc,
+                  //           cn1: data.cn1,
+                  //           cn2: data.cn2,
+                  //           cn3: data.cn3,
+                  //           cca: data.cca,
+                  //           noe: data.noe,
+                  //           con: data.con,
+                  //           col: data.col,
+                  //           pax: data.pax,
+                  //           driver_id: data.driver_id,
+                  //           name: data.name,
+                  //           office_no: data.office_no,
+                  //           mobile_no: data.mobile_no,
+                  //           email_address: data.email_address,
+                  //           coldel_type: data.coldel_type,
+                  //           coldel_hang: data.coldel_hang,
+                  //           coldel_pack: data.coldel_pack,
+                  //           coldel_roll: data.coldel_roll,
+                  //           coldel_return: data.coldel_return,
+                  //           coldel_flag: "updated",
+                  //         }
+                          //filtered.push(params)
+                          this.dataForCreateNewCollection.id = this.mySpecialIDCol
+                          this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
+                          this.loading.dismiss();
+                          this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+                        //}
+                      // })
+     
+                    // }
+                 // })
+                } else {
+                  // this.storage.get('SELECTED_ITEM').then(res => {
+                  //   let data, colid
+                  //   data = res
+                  //   //let filtered: any = []
+                  //   console.log(this.invoiceId)
+                  //   console.log(data.dei)
+                  //   // if (data != "") {
+                  //    // data.forEach(coldelData => {
+                  //       if (data.dei == this.invoiceId) {
+                  //         let params = {
+                  //           dei: this.mySpecialIDCol,
+                  //           aid: data.aid,
+                  //           cui: data.cui,
+                  //           sts: data.sts,
+                  //           ded: data.ded,
+                  //           ren: data.ren,
+                  //           det: data.det,
+                  //           cun: data.cun,
+                  //           cut: data.cut,
+                  //           com: data.com,
+                  //           na2: data.na2,
+                  //           dea: data.dea,
+                  //           deb: data.deb,
+                  //           lil: data.lil,
+                  //           dun: data.dun,
+                  //           cue: data.cue,
+                  //           uby: data.uby,
+                  //           uon: data.uon,
+                  //           dpc: data.dpc,
+                  //           cn1: data.cn1,
+                  //           cn2: data.cn2,
+                  //           cn3: data.cn3,
+                  //           noe: data.noe,
+                  //           den: data.den,
+                  //           han: data.han,
+                  //           pac: data.pac,
+                  //           rol: data.rol,
+                  //           ret: data.ret,
+                  //           del: data.del,
+                  //           pax: data.pax,
+                  //           id: data.id,
+                  //           inn: data.inn,
+                  //           coi: data.coi,
+                  //           toa: data.toa,
+                  //           dis: data.dis,
+                  //           dpt: data.dpt,
+                  //           dpa: data.dpa,
+                  //           delivery_driver_id: data.delivery_driver_id,
+                  //           delivery_driver: data.delivery_driver,
+                  //           cca: data.cca,
+                  //           exp: data.exp,
+                  //           baa: data.baa,
+                  //           bap: data.bap,
+                  //           invn: data.invn,
+                  //           accu: data.accu,
+                  //           coldel_type: data.coldel_type,
+                  //           coldel_returndate: data.coldel_returndate,
+                  //           coldel_returntime: data.coldel_returntime,
+                  //           coldel_flag: "updated"
+                  //         }
+                          //filtered.push(params)
+                          this.dataForCreateNewCollection.dei = this.mySpecialIDCol
+                          this.storage.set('SELECTED_ITEM', this.dataForCreateNewCollection)
+                          this.loading.dismiss();
+                          this.router.navigate(['/selectcategory', this.dataForCreateNewCollection]);
+                        //}
+                      //})
+
+                    // }
+                 // })
+                }
               })
-              // })
             })
 
             // }).catch(e => {
-            //   //console.log(e);
+            //   ////console.log(e);
             // });
           }
         }

@@ -82,7 +82,7 @@ export class AppComponent {
 
   // ionViewDidEnter() {
   //   document.addEventListener("backbutton",function(e) {
-  //     console.log("disable back button")
+  //     ////console.log("disable back button")
   //   }, false);
   // }
 
@@ -94,7 +94,7 @@ export class AppComponent {
         document.addEventListener('backbutton', function (event) {
           event.preventDefault();
           event.stopPropagation();
-          console.log('hello');
+          ////console.log('hello');
         }, false);
       });
     });
@@ -113,47 +113,47 @@ export class AppComponent {
   }
 
   onTap(info) {
-    console.log(info)
+    ////console.log(info)
     if (info.title == 'Sync Data') {
       if (navigator.onLine == true) {
-      this.storage.get('ACCOUNTS_TABLE').then(accData => {
-        console.log(accData)
-        Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
-          if(data == "12345678910"){
-            this.presentAlert('Syncing Successful')
-          }else{
-            this.presentAlert('Connection interrupted, please try again')
-          }
+        this.storage.get('ACCOUNTS_TABLE').then(accData => {
+          ////console.log(accData)
+          Promise.resolve(this.defaultSrvc.syncAll(accData)).then((data) => {
+            if (data == "12345678910") {
+              this.presentAlert('Syncing Successful')
+            } else {
+              this.presentAlert('Connection interrupted, please try again')
+            }
 
-        }).catch(e => {
-          console.log(e);
+          }).catch(e => {
+            ////console.log(e);
+          });
         });
-      });
-    }else{
-      this.presentAlert('No internet connection')
-    }
+      } else {
+        this.presentAlert('No internet connection')
+      }
     }
   }
 
   // async getAccounts() {
   //   this.storage.get('REMEMBER_ME').then(accData => {
-  //     console.log(accData)
+  //     ////console.log(accData)
   //     this.myusername = accData.email_address
   //     this.mypassword = accData.password
-    
+
   //   });
   // }
 
   async autoLogin() {
     this.storage.get('ACCOUNTS_TABLE').then(accData => {
-      console.log(accData)
+      ////console.log(accData)
       if (accData != undefined) {
         this.router.navigate(['/home']);
       }
     });
   }
 
-  async showAlert(msg){
+  async showAlert(msg) {
     const alert = await this.alertController.create({
       header: '',
       message: msg,
@@ -192,30 +192,30 @@ export class AppComponent {
           text: 'OK',
           handler: () => {
             this.storage.remove('ACCOUNTS_TABLE').then(() => {
-              console.log('removed ');
+              ////console.log('removed ');
               this.storage.remove('COLDEL_TABLE').then(() => {
-                console.log('removed ');
+                ////console.log('removed ');
                 // this.storage.remove('UNSYNCED_INVOICE_TABLE').then(() => {
-                //   console.log('removed '); 
+                //   ////console.log('removed '); 
                 //   this.storage.remove('UNSYNCED_PAYMENT_TABLE').then(() => {
-                //     console.log('removed '); 
-                  this.storage.remove('SO_TABLE').then(() => {
-                    console.log('removed ');           
-                    this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-                      console.log('removed ');
-                      this.storage.remove('TEMP_RATES_TABLE').then(() => {
-                        console.log('removed ');
-                      }).finally(() => {
-                        this.router.navigate(['/login']);
-                      })
-                    })       
-  
-              //   })
-              // })
-             })
-            })
+                //     ////console.log('removed '); 
+                this.storage.remove('SO_TABLE').then(() => {
+                  ////console.log('removed ');
+                  this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
+                    ////console.log('removed ');
+                    this.storage.remove('TEMP_RATES_TABLE').then(() => {
+                      ////console.log('removed ');
+                    }).finally(() => {
+                      this.router.navigate(['/login']);
+                    })
+                  })
+
+                  //   })
+                  // })
+                })
+              })
               // this.storage.remove('UNSYNCED_INVOICE_TABLE').then(() => {
-              //   console.log('removed ');
+              //   ////console.log('removed ');
               // })
             })
           }
@@ -228,39 +228,39 @@ export class AppComponent {
 
 
 
-//   ngAfterViewInit() {
-//     var $: any;
-//     // This element never changes.
-//     let ionapp = document.getElementsByTagName("ion-app")[0];
+  //   ngAfterViewInit() {
+  //     var $: any;
+  //     // This element never changes.
+  //     let ionapp = document.getElementsByTagName("ion-app")[0];
 
-//     window.addEventListener('keyboardDidShow', async (event) => {
-//         // Move ion-app up, to give room for keyboard
-//         let kbHeight: number = event["keyboardHeight"];
-//         let viewportHeight: number = $(window).height();
-//         let inputFieldOffsetFromBottomViewPort: number = viewportHeight - $(':focus')[0].getBoundingClientRect().bottom;
-//         let inputScrollPixels = kbHeight - inputFieldOffsetFromBottomViewPort;
+  //     window.addEventListener('keyboardDidShow', async (event) => {
+  //         // Move ion-app up, to give room for keyboard
+  //         let kbHeight: number = event["keyboardHeight"];
+  //         let viewportHeight: number = $(window).height();
+  //         let inputFieldOffsetFromBottomViewPort: number = viewportHeight - $(':focus')[0].getBoundingClientRect().bottom;
+  //         let inputScrollPixels = kbHeight - inputFieldOffsetFromBottomViewPort;
 
-//         // Set margin to give space for native keyboard.
-//         ionapp.style["margin-bottom"] = kbHeight.toString() + "px";
+  //         // Set margin to give space for native keyboard.
+  //         ionapp.style["margin-bottom"] = kbHeight.toString() + "px";
 
-//         // But this diminishes ion-content and may hide the input field...
-//         if (inputScrollPixels > 0) {
-//             // ...so, get the ionScroll element from ion-content and scroll correspondingly
-//             // The current ion-content element is always the last. If there are tabs or other hidden ion-content elements, they will go above.
-//             let ionScroll = await $("ion-content").last()[0].getScrollElement();
-//             setTimeout(() => {
-//                 $(ionScroll).animate({
-//                     scrollTop: ionScroll.scrollTop + inputScrollPixels
-//                 }, 300);
-//             }, 300); // Matches scroll animation from css.
-//         }
-//     });
-//     window.addEventListener('keyboardDidHide', () => {
-//         // Move ion-app down again
-//         // Scroll not necessary.
-//         ionapp.style["margin-bottom"] = "0px";
-//     });
-// }
+  //         // But this diminishes ion-content and may hide the input field...
+  //         if (inputScrollPixels > 0) {
+  //             // ...so, get the ionScroll element from ion-content and scroll correspondingly
+  //             // The current ion-content element is always the last. If there are tabs or other hidden ion-content elements, they will go above.
+  //             let ionScroll = await $("ion-content").last()[0].getScrollElement();
+  //             setTimeout(() => {
+  //                 $(ionScroll).animate({
+  //                     scrollTop: ionScroll.scrollTop + inputScrollPixels
+  //                 }, 300);
+  //             }, 300); // Matches scroll animation from css.
+  //         }
+  //     });
+  //     window.addEventListener('keyboardDidHide', () => {
+  //         // Move ion-app down again
+  //         // Scroll not necessary.
+  //         ionapp.style["margin-bottom"] = "0px";
+  //     });
+  // }
 
 
 }

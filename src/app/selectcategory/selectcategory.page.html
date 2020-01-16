@@ -1,9 +1,9 @@
 <ion-header>
     <ion-toolbar class="menutoolbar">
-        <ion-buttons slot="start" *ngIf="collectionInfo.coldel_type == 'delivery'">
+        <ion-buttons slot="start" *ngIf="invoiceType == 'Repeat' || invoiceType == 'NewandAnother'">
             <ion-button (click)="removeCurrentTransaction('Current Transaction will cancel. Proceed?')"> <ion-icon name="md-arrow-back"></ion-icon></ion-button>
         </ion-buttons>
-        <ion-buttons slot="start" *ngIf="collectionInfo.coldel_type == 'collection'">
+        <ion-buttons slot="start" *ngIf="invoiceType == 'undefined' || invoiceType == 'New'">
             <ion-back-button (click)="removeItems()"></ion-back-button>
         </ion-buttons>
         <ion-title>Category</ion-title>

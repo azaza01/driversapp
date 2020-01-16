@@ -53,12 +53,12 @@ export class SyncdeliveryService {
     let mmm = mm < 10 ? "0" + mm : mm
 
     today = yyyy + '-' + mmm + '-' + ddd;
-    // console.log(today)
+    // ////console.log(today)
     return today
   }
 
   async syncdeliverysrvcLocal(info: any) {
-    // console.log(info)
+    // ////console.log(info)
     let infox = {
       // email   :   "davidchia@cottoncare.com.sg",
       // password   :   "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
@@ -80,28 +80,28 @@ export class SyncdeliveryService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          // ////console.log(res)
           // this.storage.set('SYNCED_DELIVERY_TABLE', res).then(() => {
           resolve(res)
           // });
           this.loading.dismiss();
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
           this.loading.dismiss();
           // alert(JSON.stringify(err));
         }
       );
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
       this.loading.dismiss();
     })
   }
 
 
   async syncdeliverysrvc(info: any) {
-    console.log(info)
+    ////console.log(info)
     // let infox = {
     //   email   :   "davidchia@cottoncare.com.sg",
     //   password   :   "585ae7c2bcd0b7409c9be2edc4b117e22a51b33d",
@@ -124,14 +124,14 @@ export class SyncdeliveryService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          // ////console.log(res)
           // this.storage.set('SYNCED_DELIVERY_TABLE', res).then(() => {
             resolve(res)
           // });
           this.loading.dismiss();
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
           this.loading.dismiss();
           // alert(JSON.stringify(err));
@@ -139,7 +139,7 @@ export class SyncdeliveryService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
       this.loading.dismiss();
     })
   }

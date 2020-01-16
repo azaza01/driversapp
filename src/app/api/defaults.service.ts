@@ -91,9 +91,9 @@ export class DefaultsService {
 
   checkConnection() {
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-      console.log('network was disconnected :-(');
+      ////console.log('network was disconnected :-(');
     });
-    // console.log(disconnectSubscription)
+    // ////console.log(disconnectSubscription)
 
   }
 
@@ -114,7 +114,7 @@ export class DefaultsService {
 
     today = yyyy + '-' + mmm + '-' + ddd ;
 
-    console.log(today)
+    ////console.log(today)
     return today
   }
 
@@ -136,13 +136,13 @@ export class DefaultsService {
     today = yyyy + '-' + mmm + '-' + ddd ;
 
     this.mySelectedDate = today
-    console.log(today)
+    ////console.log(today)
     return today
   }
 
   getOthersCol(countdays) {
     this.nextcountdaysCol = (this.nextcountdaysCol * 1) + (countdays * 1)
-    console.log(this.nextcountdaysCol)
+    ////console.log(this.nextcountdaysCol)
     let today;
     
     let dd = new Date().getDate() + this.nextcountdaysCol;
@@ -157,13 +157,13 @@ export class DefaultsService {
     today = yyyy + '-' + mmm + '-' + ddd ;
 
     this.mySelectedDate = today
-    console.log(today)
+    ////console.log(today)
     return today
   }
 
   getOthersDel(countdays) {
     this.nextcountdaysDel = (this.nextcountdaysDel * 1) + (countdays * 1)
-    console.log(this.nextcountdaysDel)
+    ////console.log(this.nextcountdaysDel)
     let today;
     let dd = new Date().getDate() + this.nextcountdaysDel;
     let mm = new Date().getMonth() + 1;
@@ -177,13 +177,13 @@ export class DefaultsService {
     today = yyyy + '-' + mmm + '-' + ddd ;
 
     this.mySelectedDate = today
-    console.log(today)
+    ////console.log(today)
     return today
   }
 
   // getPrevDayCol(countdays) {
   //   this.prevcountdaysCol = (this.prevcountdaysCol * 1) -  (countdays * 1)
-  //   console.log(this.prevcountdaysCol)
+  //   ////console.log(this.prevcountdaysCol)
   //   let today;
     
   //   let dd = new Date().getDate() - this.prevcountdaysCol;
@@ -197,13 +197,13 @@ export class DefaultsService {
 
   //   today = yyyy + '-' + mmm + '-' + ddd ;
   //   this.mySelectedDate = today
-  //   console.log(today)
+  //   ////console.log(today)
   //   return today
   // }
 
   // getPrevDayDel(countdays) {
   //   this.prevcountdaysDel = (this.prevcountdaysDel * 1) -  (countdays * 1)
-  //   console.log(this.prevcountdaysDel)
+  //   ////console.log(this.prevcountdaysDel)
   //   let today;
   //   let dd = new Date().getDate() - this.prevcountdaysDel;
   //   let mm = new Date().getMonth() + 1;
@@ -216,16 +216,16 @@ export class DefaultsService {
 
   //   today = yyyy + '-' + mmm + '-' + ddd ;
   //   this.mySelectedDate = today
-  //   console.log(today)
+  //   ////console.log(today)
   //   return today
   // }
 
   createInvSeries() {
     // this.storage.remove('ENVNUM_TABLE').then(res => {
-    //   console.log('remove')
+    //   ////console.log('remove')
     // })
     // this.storage.get('ENVNUM_TABLE').then(res => {
-    //   console.log(res)
+    //   ////console.log(res)
     // })
     // return
 
@@ -249,16 +249,16 @@ export class DefaultsService {
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         driver = res
         params.drivercode = res.code
-        // console.log(driver)
+        // ////console.log(driver)
       })
 
       //CC-191123AG01
-      // console.log(params)
+      // ////console.log(params)
 
       this.storage.get('ENVNUM_TABLE').then(res => {
-        // console.log(res)
+        // ////console.log(res)
         res = null ? seriesTbl = [] : seriesTbl = res
-        // console.log(seriesTbl)
+        // ////console.log(seriesTbl)
         // return
         if (seriesTbl != null) {
           let result;
@@ -267,7 +267,7 @@ export class DefaultsService {
           })
 
           if (result.length < 1) {
-            // console.log("1st");
+            // ////console.log("1st");
             params.INV_RUNNING = 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
 
@@ -277,41 +277,41 @@ export class DefaultsService {
 
             //this.storage.set('ENVNUM_TABLE', seriesTbl)
 
-            // console.log(seriesNo)
-            // console.log(seriesTbl)
+            // ////console.log(seriesNo)
+            // ////console.log(seriesTbl)
             resolve(params)
           } else {
             // res.forEach(coldelData => {
             //   if (coldelData.COLID == info) {
-            //     console.log(true)
+            //     ////console.log(true)
             //     this.resultINVNUM = true
             //     this.myInvoiceNumber = coldelData.INV_NO 
             //   } 
             // })
 
             // if(this.resultINVNUM != true){
-            //   console.log(false)
-            // console.log("2nd");
+            //   ////console.log(false)
+            // ////console.log("2nd");
             let maxSeries = Math.max.apply(Math, result.map(function (o) { return o.INV_RUNNING; }))
             params.INV_RUNNING = parseInt(maxSeries) + 1
             let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
             seriesNo = params.INV_TYPE + "-" + yy + mmm + (dd < 10 ? '0' + dd : dd) + driver.code + num
             params.INV_NO = seriesNo
-            // console.log(params)
+            // ////console.log(params)
             seriesTbl.push(params)
 
             //this.storage.set('ENVNUM_TABLE', seriesTbl)
 
-            // console.log(seriesNo)
-            // console.log(seriesTbl)
+            // ////console.log(seriesNo)
+            // ////console.log(seriesTbl)
             resolve(params)
             // }else{
-            //   console.log(this.myInvoiceNumber)
+            //   ////console.log(this.myInvoiceNumber)
             //   resolve(this.myInvoiceNumber)
             // }
           }
         } else {
-          // console.log("3rd");
+          // ////console.log("3rd");
           params.INV_RUNNING = 1
           seriesTbl = []
           let num = params.INV_RUNNING < 10 ? "0" + params.INV_RUNNING : params.INV_RUNNING
@@ -321,14 +321,14 @@ export class DefaultsService {
 
           //this.storage.set('ENVNUM_TABLE', seriesTbl)
 
-          // console.log(seriesNo)
-          // console.log(seriesTbl)
+          // ////console.log(seriesNo)
+          // ////console.log(seriesTbl)
           resolve(params)
         }
       })
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
 
     // var result = Number(n) + 1;
@@ -356,7 +356,7 @@ export class DefaultsService {
     this.checkAllSucess =  "1"
     return new Promise(resolve => {
       Promise.resolve(this.getItems(driverInfo)).then(data => {
-        console.log('ITEMS_TABLE', data);
+        ////console.log('ITEMS_TABLE', data);
         this.loading.dismiss();
         if(data != "false"){
           this.checkAllSucess = this.checkAllSucess + "2"
@@ -364,7 +364,7 @@ export class DefaultsService {
           resolve(this.checkAllSucess)
         }
         Promise.resolve(this.getRates(driverInfo)).then(data => {
-          console.log('RATES_TABLE', data);
+          ////console.log('RATES_TABLE', data);
           this.loading.dismiss();
           if(data != "false"){
             this.checkAllSucess = this.checkAllSucess + "3"
@@ -372,7 +372,7 @@ export class DefaultsService {
             resolve(this.checkAllSucess)
           }
           Promise.resolve(this.getRegions(driverInfo)).then(data => {
-            console.log('AREAS_TABLE', data);
+            ////console.log('AREAS_TABLE', data);
             this.loading.dismiss();
             if(data != "false"){
               this.checkAllSucess = this.checkAllSucess + "4"
@@ -381,7 +381,7 @@ export class DefaultsService {
             }
             
             Promise.resolve(this.getInvoicetypes(driverInfo)).then(data => {
-              console.log('INVOICE_TYPES_TABLE', data);
+              ////console.log('INVOICE_TYPES_TABLE', data);
               this.loading.dismiss();
               if(data != "false"){
                 this.checkAllSucess = this.checkAllSucess + "5"
@@ -389,7 +389,7 @@ export class DefaultsService {
                 resolve(this.checkAllSucess)
               }
               Promise.resolve(this.getDiscounts(driverInfo)).then(data => {
-                console.log('DISCOUNT_TYPES_TABLE', data);
+                ////console.log('DISCOUNT_TYPES_TABLE', data);
                 this.loading.dismiss();
                 if(data != "false"){
                   this.checkAllSucess = this.checkAllSucess + "6"
@@ -397,7 +397,7 @@ export class DefaultsService {
                   resolve(this.checkAllSucess)
                 }
                 Promise.resolve(this.getTimeslot(driverInfo)).then(data => {
-                  console.log('TIMESLOT_TABLE', data);
+                  ////console.log('TIMESLOT_TABLE', data);
                   this.loading.dismiss();
                   if(data != "false"){
                     this.checkAllSucess = this.checkAllSucess + "7"
@@ -405,7 +405,7 @@ export class DefaultsService {
                     resolve(this.checkAllSucess)
                   }
                   Promise.resolve(this.getFeedback(driverInfo)).then(data => {
-                    console.log('FB_FORM_TABLE', data);
+                    ////console.log('FB_FORM_TABLE', data);
                     this.loading.dismiss();
                     if(data != "false"){
                       this.checkAllSucess = this.checkAllSucess + "8"
@@ -413,7 +413,7 @@ export class DefaultsService {
                       resolve(this.checkAllSucess)
                     }
                     Promise.resolve(this.getAreas(driverInfo)).then(data => {
-                      console.log('areas', data);
+                      ////console.log('areas', data);
                       this.loading.dismiss();
                       if(data != "false"){
                         this.checkAllSucess = this.checkAllSucess + "9"
@@ -422,7 +422,7 @@ export class DefaultsService {
                       }
                     // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
                       Promise.resolve(this.customerType(driverInfo)).then(data => {
-                        console.log('customertyp', data);
+                        ////console.log('customertyp', data);
                         this.loading.dismiss();
                         if(data != "false"){
                           this.checkAllSucess = this.checkAllSucess + "10"
@@ -439,60 +439,60 @@ export class DefaultsService {
                   }).catch(e => {
                     this.checkAllSucess = "1"
                     this.loading.dismiss();
-                    console.log(e);
+                    ////console.log(e);
                   });
 
                   }).catch(e => {
                     this.checkAllSucess = "1"
                     this.loading.dismiss();
-                    console.log(e);
+                    ////console.log(e);
                   });
 
                   }).catch(e => {
                     this.checkAllSucess = "1"
                     this.loading.dismiss();
-                    console.log(e);
+                    ////console.log(e);
                   });
 
                 }).catch(e => {
                   this.checkAllSucess = "1"
                   this.loading.dismiss();
-                  console.log(e);
+                  ////console.log(e);
                 });
 
               }).catch(e => {
                 this.checkAllSucess = "1"
                 this.loading.dismiss();
-                console.log(e);
+                ////console.log(e);
               });
 
             }).catch(e => {
               this.checkAllSucess = "1"
               this.loading.dismiss();
-              console.log(e);
+              ////console.log(e);
             });
 
           }).catch(e => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(e);
+            ////console.log(e);
           });
 
         }).catch(e => {
           this.checkAllSucess = "1"
           this.loading.dismiss();
-          console.log(e);
+          ////console.log(e);
         });
 
       }).catch(e => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(e);
+        ////console.log(e);
       });
     }).catch(err => {
       this.checkAllSucess = "1"
       this.loading.dismiss();
-      console.log(err)
+      ////console.log(err)
     })
 
   }
@@ -503,7 +503,7 @@ export class DefaultsService {
             resolve(res)
           })
         }).catch(err => {
-          console.log(err)
+          ////console.log(err)
         })
   }
 
@@ -519,7 +519,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            console.log(res)
+            ////console.log(res)
             this.storage.set('ITEMS_TABLE', res).then(() => {
               this.loading.dismiss();
               resolve(res)
@@ -528,7 +528,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -537,19 +537,19 @@ export class DefaultsService {
 
       }).catch(err => {
         this.checkAllSucess = "1"
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('ITEMS_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -567,7 +567,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            console.log(res)
+            ////console.log(res)
 
             this.storage.set('CUSTOMERTYPE_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -578,7 +578,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -588,19 +588,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('CUSTOMERTYPE_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -618,7 +618,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            console.log(res)
+            ////console.log(res)
 
             this.storage.set('AREAS_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -629,7 +629,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -638,19 +638,19 @@ export class DefaultsService {
 
       }).catch(err => {
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('AREAS_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -658,14 +658,14 @@ export class DefaultsService {
   getRatesLocal(info: any){
         return new Promise(resolve => {
           this.storage.get('RATES_TABLE').then(res => {
-            // console.log(res);
+            // ////console.log(res);
             this.loading.dismiss();
             resolve(res)
           })
         }).catch(err => {
           this.checkAllSucess = "1"
           this.loading.dismiss();
-          console.log(err)
+          ////console.log(err)
         })
   }
 
@@ -682,7 +682,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('RATES_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -693,7 +693,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
             // alert(JSON.stringify(err));
           }
@@ -702,19 +702,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('RATES_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -733,7 +733,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('AREAS_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -743,7 +743,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -753,19 +753,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('AREAS_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -783,7 +783,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('INVOICE_TYPES_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -794,7 +794,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -804,19 +804,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('INVOICE_TYPES_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -834,7 +834,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('DISCOUNT_TYPES_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -845,7 +845,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -854,19 +854,19 @@ export class DefaultsService {
 
       }).catch(err => {
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('DISCOUNT_TYPES_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -884,7 +884,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('TIMESLOT_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -895,7 +895,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -905,19 +905,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('TIMESLOT_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -935,7 +935,7 @@ export class DefaultsService {
           response => {
             let res;
             res = response;
-            // console.log(res)
+            // ////console.log(res)
 
             this.storage.set('FB_FORM_TABLE', res).then(() => {
               this.loading.dismiss();
@@ -946,7 +946,7 @@ export class DefaultsService {
           err => {
             this.checkAllSucess = "1"
             this.loading.dismiss();
-            console.log(err)
+            ////console.log(err)
             resolve(false)
 
             // alert(JSON.stringify(err));
@@ -956,19 +956,19 @@ export class DefaultsService {
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     } else {
       return new Promise(resolve => {
         this.storage.get('FB_FORM_TABLE').then(res => {
-          // console.log(res);
+          // ////console.log(res);
           this.loading.dismiss();
           resolve(res)
         })
       }).catch(err => {
         this.checkAllSucess = "1"
         this.loading.dismiss();
-        console.log(err)
+        ////console.log(err)
       })
     }
   }
@@ -985,7 +985,7 @@ export class DefaultsService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          // ////console.log(res)
 
           // this.storage.set('FB_FORM_TABLE', res).then(() => {
           //   resolve(res)
@@ -993,7 +993,7 @@ export class DefaultsService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -1001,7 +1001,7 @@ export class DefaultsService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -1016,7 +1016,7 @@ export class DefaultsService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          // ////console.log(res)
 
           // this.storage.set('FB_FORM_TABLE', res).then(() => {
           //   resolve(res)
@@ -1025,7 +1025,7 @@ export class DefaultsService {
         },
         err => {
           this.checkAllSucess = "1"
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -1034,7 +1034,7 @@ export class DefaultsService {
 
     }).catch(err => {
       this.checkAllSucess = "1"
-      console.log(err)
+      ////console.log(err)
     })
   }
 

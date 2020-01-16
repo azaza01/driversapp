@@ -33,10 +33,10 @@ export class CollectionitemsPage implements OnInit {
 
   async ngOnInit() {
     let list = this.params.get('value')
-    console.log(list)
+    ////console.log(list)
 
-    console.log(this.defaultSrvc.getCategory)
-    console.log(this.defaultSrvc.getTempItems)
+    ////console.log(this.defaultSrvc.getCategory)
+    ////console.log(this.defaultSrvc.getTempItems)
     this.category = this.defaultSrvc.getCategory
     this.temp_List = this.defaultSrvc.getTempItems
     this.item_List = await this.getList(this.temp_List)
@@ -47,7 +47,7 @@ export class CollectionitemsPage implements OnInit {
   updateSubtotal(item) {
     if (item.qty != 0) {
       this.subtotal = item.qty * item.price;
-      console.log(this.subtotal)
+      ////console.log(this.subtotal)
       return this.subtotal;
     }
   }
@@ -80,7 +80,7 @@ export class CollectionitemsPage implements OnInit {
   }
 
   viewItemsX(info) {
-    console.log(info)
+    ////console.log(info)
   }
 
   async viewItems(info) {
@@ -94,7 +94,7 @@ export class CollectionitemsPage implements OnInit {
     myModal.onDidDismiss().then(data => {
 
       if (data['data'] != undefined) {
-        console.log(data)
+        ////console.log(data)
         this.item_List = data['data'].data
       } else {
 

@@ -25,7 +25,7 @@ export class ViewItemsComponent implements OnInit {
     // this.item_List = this.params.get('value')
     this.item_List = this.defaultSrvc.getTempItems
 
-    console.log(this.item_List)
+    ////console.log(this.item_List)
   }
 
   filterItems(){

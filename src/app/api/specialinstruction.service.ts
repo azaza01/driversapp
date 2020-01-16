@@ -41,19 +41,19 @@ export class SpecialinstructionService {
     //   "driverid": "109",
     //  }
 
-    console.log(info)
-    console.log(today)
+    ////console.log(info)
+    ////console.log(today)
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/specialinstructions.json", params).subscribe(
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
             resolve(res)
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -61,7 +61,7 @@ export class SpecialinstructionService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -83,18 +83,18 @@ export class SpecialinstructionService {
     //   "id": coldelSplID,
     //  }
 
-    console.log(params)
+    ////console.log(params)
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/deletespecialinstructions.json", params).subscribe(
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
             resolve(res)
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -102,7 +102,7 @@ export class SpecialinstructionService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 

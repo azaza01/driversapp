@@ -56,12 +56,12 @@ export class AccountsService {
   async accountsDetails() {
     return new Promise(resolve => {
       this.storage.get('ACCOUNTS_TABLE').then(res => {
-        console.log(res);
+        ////console.log(res);
         this.driverData = res
         resolve(res)
       })
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -85,14 +85,14 @@ export class AccountsService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
           this.storage.set('SELECTED_CUSTOMER', res[0]).then(() => {
 
           });
           resolve(res)
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -100,15 +100,15 @@ export class AccountsService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
 
   addCustomerStandingOrder(info) {
-    console.log(info)
+    ////console.log(info)
     // this.storage.get('ACCOUNTS_TABLE').then(res => {
-    //   console.log(res);
+    //   ////console.log(res);
     //   this.driverData = res
     // })
 
@@ -117,28 +117,27 @@ export class AccountsService {
       // params.password = "7c222fb2927d828af22f592134e8932480637c0d"
       // params.userid = "109",
       // params.drivername = "dummydriver",
-      params.userid = this.driverData.id,
-      params.email = this.driverData.email_address,
-      params.password = this.driverData.password,
-      params.drivername = this.driverData.name,
+      params.userid = this.driverData.id
+      params.email = this.driverData.email_address
+      params.password = this.driverData.password
+      params.drivername = this.driverData.name
       // params.companyagent = info.companyagent,
-      params.contactperson1 = info.contactperson1,
-      params.contactno1 = info.contactno1,
-      params.mailingaddress = info.mailingaddress,
+      params.contactperson1 = info.contactperson1
+      params.contactno1 = info.contactno1
+      params.mailingaddress = info.mailingaddress
       params.unitno = info.unitno,
-      params.builidngname = info.builidngname,
-      params.postalcode = info.postalcode,
-      params.liftlobby = info.liftlobby,
-      params.areacode = info.areacode,
-      params.contactno2 = info.contactno2,
-      params.emailcus = info.emailcus,
-      params.contactperson2 = info.contactperson2,
-      params.customertype = info.customertype,
+      params.builidngname = info.builidngname
+      params.postalcode = info.postalcode
+      params.liftlobby = info.liftlobby
+      params.areacode = info.areacode
+      params.contactno2 = info.contactno2
+      params.emailcus = info.emailcus
+      params.contactperson2 = info.contactperson2
+      params.customertype = info.customertype
 
 
 
-
-    console.log(params)
+    ////console.log(params)
     
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/addcustomerdata.json", params).subscribe(
@@ -149,7 +148,7 @@ export class AccountsService {
           resolve(returndata)
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(err)
 
           // alert(JSON.stringify(err));
@@ -157,13 +156,13 @@ export class AccountsService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
   login(info: any) {
-    // console.log(info)
-    // console.log(info.password)
+    // ////console.log(info)
+    // ////console.log(info.password)
     this.storage.set('REMEMBER_ME', info).then(() => {});
 
     // convert password to sha1 
@@ -200,7 +199,7 @@ export class AccountsService {
     }
 
 
-    console.log(info.password);
+    ////console.log(info.password);
 
     let infoi = {
       "email": "it01.azaza@gmail.com",
@@ -218,7 +217,7 @@ export class AccountsService {
           response => {
             let res;
             res = response[0];
-            // console.log(res)
+            // ////console.log(res)
             this.driverData = res
             this.storage.set('ACCOUNTS_TABLE', res).then(() => {
               // this.getStandingOrder(res)
@@ -228,17 +227,17 @@ export class AccountsService {
   
           },
           err => {
-            console.log(err)
+            ////console.log(err)
             resolve(false)
   
             // alert(JSON.stringify(err));
           }
         );
       }).catch(err => {
-        console.log(err)
+        ////console.log(err)
         return new Promise(resolve => {
           this.storage.get('ACCOUNTS_TABLE').then(res => {
-            console.log(res);
+            ////console.log(res);
             this.driverData = res
             if(res.email_address == info.email && res.password == info.password){
               resolve(res)
@@ -247,13 +246,13 @@ export class AccountsService {
             }
           })
         }).catch(err => {
-          console.log(err)
+          ////console.log(err)
         })
       })
     }else{
       return new Promise(resolve => {
         this.storage.get('ACCOUNTS_TABLE').then(res => {
-          console.log(res);
+          ////console.log(res);
           this.driverData = res
           if(res.email_address == info.email && res.password == info.password){
             resolve(res)
@@ -262,7 +261,7 @@ export class AccountsService {
           }
         })
       }).catch(err => {
-        console.log(err)
+        ////console.log(err)
       })
     }
 
@@ -288,13 +287,13 @@ export class AccountsService {
         response => {
           let res;
           res = response[0];
-          // console.log(res)
+          // ////console.log(res)
           this.storage.set('SO_TABLE', res[0]).then(() => {
             resolve(res)
           });
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -302,7 +301,7 @@ export class AccountsService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 

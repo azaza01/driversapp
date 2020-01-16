@@ -48,7 +48,7 @@ export class DriversummaryPage implements OnInit {
         this.storage.set('DRIVER_SUMMARY', params)
       }
       this.loading.dismiss();
-      console.log(this.summarydata)
+      ////console.log(this.summarydata)
     })
   }
 

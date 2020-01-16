@@ -6,8 +6,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterItems implements PipeTransform {
 
   transform(items: any[], type: string): any[] {
-    console.log(items)
-    console.log(type)
+    ////console.log(items)
+    ////console.log(type)
     if (!items) {
       return [];
     }

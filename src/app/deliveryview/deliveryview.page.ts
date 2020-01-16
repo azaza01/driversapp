@@ -63,7 +63,7 @@ export class DeliveryviewPage implements OnInit {
   ngOnInit() {
     this.isLoading = true
     this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
+      ////console.log(params);
       this.deliveryInfo = params
       this.selectedDelivery =  params.dei
       this.customerEmail = params.cue
@@ -86,12 +86,12 @@ export class DeliveryviewPage implements OnInit {
       todays = yyyy + "-" + mmm + "-" + ddd
       this.postponeDate = ddd + '-' + mmm + '-' + yyyy
       this.today = todays
-      console.log(todays)
+      ////console.log(todays)
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       this.driverInfo = res
-      console.log(this.driverInfo)
+      ////console.log(this.driverInfo)
       this.isLoading = false
     })
 
@@ -99,7 +99,7 @@ export class DeliveryviewPage implements OnInit {
       res.forEach(element => {
         this.timeslots.push(element.description)
       });
-      console.log(this.timeslots)
+      ////console.log(this.timeslots)
       this.selectedtime = this.selectedtime
       this.isLoading = false
     })
@@ -118,7 +118,7 @@ export class DeliveryviewPage implements OnInit {
 
 
   getTime(selectedtime){
-    console.log(selectedtime);
+    ////console.log(selectedtime);
     this.selectedtime = selectedtime
   }
 
@@ -177,13 +177,13 @@ export class DeliveryviewPage implements OnInit {
             }
           }).finally(() => {
             this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
-              // console.log(res)
+              // ////console.log(res)
             })
             
           })
         }
       }).catch(e => {
-        console.log(e);
+        ////console.log(e);
         this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
           let data
           data = res
@@ -202,7 +202,7 @@ export class DeliveryviewPage implements OnInit {
           }
         }).finally(() => {
           this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
-            // console.log(res)
+            // ////console.log(res)
           })
         })
       });
@@ -211,8 +211,8 @@ export class DeliveryviewPage implements OnInit {
 
   async postphone(){
     await this.presentLoading('trying to postpone delivery');
-    console.log(this.today)
-    console.log(this.selectedtime)
+    ////console.log(this.today)
+    ////console.log(this.selectedtime)
     let selectedDate;
     let dd = new Date(this.today).getDate();
     let mm = new Date(this.today).getMonth() + 1;
@@ -241,7 +241,7 @@ export class DeliveryviewPage implements OnInit {
           this.presentAlert("Connection error");
         }
       }).catch(e => {
-        console.log(e);
+        ////console.log(e);
         this.presentAlert("Connection error");
       });
      }else{
@@ -259,7 +259,7 @@ export class DeliveryviewPage implements OnInit {
       data = res
       let filtered: any = []
       // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
-      // console.log(colid)
+      // ////console.log(colid)
       // i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
       if (data != "") {
         data.forEach(coldelData => {

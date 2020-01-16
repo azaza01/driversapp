@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-
+// this.storage.clear();
 
     // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
     // this.storage.remove('UNSYNCED_INVOICE_TABLE')
@@ -73,11 +73,11 @@ export class LoginPage implements OnInit {
 
     // }
     // this.storage.set('ENVNUM_TABLE', wew2).then(res => {
-    //   console.log(res);
+    //   ////console.log(res);
     // })
 
     // this.storage.get('REMEMBER_ME').then(accData => {
-    //   console.log(accData)
+    //   ////console.log(accData)
     //   if (accData != undefined) {
     //     this.cred.value.email = accData.email_address
     //     this.cred.value.password = accData.password
@@ -100,7 +100,7 @@ export class LoginPage implements OnInit {
       console.log(res)
     })
     this.storage.get('ENVNUM_TABLE').then(res => {
-      console.log(res)
+      //console.log(res)
     })
 
   }
@@ -119,7 +119,7 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {
     this.storage.get('REMEMBER_ME').then(accData => {
-      console.log(accData)
+      ////console.log(accData)
       if(accData != "" && accData != null){
         this.email = accData.email
         this.password = accData.origpassword
@@ -153,31 +153,31 @@ export class LoginPage implements OnInit {
     // if(user.value != "" && user.value != "" ){
     await this.presentLoading('Validating credentials');
     // this.isLoading = true;
-    // console.log(user.value)
+    // ////console.log(user.value)
     Promise.resolve(this.accSrvc.login(user)).then(data => {
-      console.log(data);
-      console.log(this.accSrvc.driverData.id)
+      ////console.log(data);
+      ////console.log(this.accSrvc.driverData.id)
       if (data) {
         this.storage.get('ENVNUM_TABLE').then(res => {
           let data = res
           let newSet = []
-          console.log(res)
+          ////console.log(res)
         if(data != null){
           data.forEach(inv => {
             if (inv.INV_DATE == this.defaultSrvc.getToday()) { // && inv.DriverID == this.accSrvc.driverData.id
-              console.log('yeah')
+              ////console.log('yeah')
               newSet.push(inv)
             }
           });
           this.storage.set('ENVNUM_TABLE', newSet).then(res => {
-            console.log(res)
+            ////console.log(res)
             this.router.navigate(['/home']);
           })
          }else{
             this.router.navigate(['/home']);
          }
-          // console.log(data)
-          // console.log(newSet)
+          // ////console.log(data)
+          // ////console.log(newSet)
         })
       } else {
         this.presentToast("Invalid credentials")
@@ -186,7 +186,7 @@ export class LoginPage implements OnInit {
       this.loading.dismiss();
 
     }).catch(e => {
-      console.log(e);
+      ////console.log(e);
       this.loading.dismiss();
     });
     // }else{

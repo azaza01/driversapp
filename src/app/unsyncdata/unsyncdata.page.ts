@@ -55,7 +55,7 @@ export class UnsyncdataPage implements OnInit {
   async ionViewWillEnter() {
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       this.driverInfo = res
-      console.log(res)
+      ////console.log(res)
     })
     // await this.presentLoading('Collecting Local Data');
     await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -130,7 +130,7 @@ export class UnsyncdataPage implements OnInit {
   }
 
   async syncCollection(selected) {
-    // console.log(selected)
+    // ////console.log(selected)
     if (navigator.onLine == true) {
       await Promise.resolve(this.syncinvoiceSrvs.addinvoiceServiceLocal(selected)).then(data => {
         if (data != "false" && data != null && data != "duplicate") {
@@ -139,7 +139,7 @@ export class UnsyncdataPage implements OnInit {
             let data
             data = res
             let filtered: any = []
-            console.log(data)
+            ////console.log(data)
             if (data != null) {
               data.forEach(unsync => {
                 if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
@@ -158,14 +158,14 @@ export class UnsyncdataPage implements OnInit {
           })
 
         }else if (data == "duplicate") {
-          console.log("Duplicate Invoice")
+          ////console.log("Duplicate Invoice")
           this.coldev(selected)
         } else {
           this.presentAlert("Cannot sync, poor internet connection. Please save later")
           // this.loading.dismiss();
         }
       }).catch(e => {
-        console.log(e);
+        ////console.log(e);
         this.presentAlert("Cannot sync, poor internet connection. Please save later")
         // this.loading.dismiss();
       });
@@ -190,7 +190,7 @@ export class UnsyncdataPage implements OnInit {
               let data
               data = res
               let filtered: any = []
-              console.log(data)
+              ////console.log(data)
               if (data != null) {
                 data.forEach(unsync => {
                   if (unsync.UNINV_COLLID == selected.UNINV_COLLID) {
@@ -221,7 +221,7 @@ export class UnsyncdataPage implements OnInit {
 
 
   async syncDelivery(selected) {
-    console.log(selected)
+    ////console.log(selected)
     if (navigator.onLine == true) {
       await Promise.resolve(this.syncdeliverySrvs.syncdeliverysrvcLocal(selected)).then(data => {
         if (data == "true" || data != null) {
@@ -229,13 +229,13 @@ export class UnsyncdataPage implements OnInit {
           this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
             let data
             data = res
-            console.log(data)
+            ////console.log(data)
             let filtered: any = []
 
             if (data != null) {
               data.forEach(unsync => {
                 if (unsync.delid == selected.delid) {
-                  console.log("Deleted")
+                  ////console.log("Deleted")
                 } else {
                   filtered.push(unsync)
                 }
@@ -245,7 +245,7 @@ export class UnsyncdataPage implements OnInit {
             }
           }).finally(() => {
             // this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
-            //   console.log(ress)
+            //   ////console.log(ress)
             this.ionViewWillEnter();
             // })
           })
@@ -254,7 +254,7 @@ export class UnsyncdataPage implements OnInit {
           // this.loading.dismiss();
         }
       }).catch(e => {
-        console.log(e);
+        ////console.log(e);
         this.presentAlert("Cannot sync, poor internet connection. Please save later")
         // this.loading.dismiss();
       });
@@ -265,23 +265,23 @@ export class UnsyncdataPage implements OnInit {
   }
 
   async syncColLoc(selected) {
-    console.log(selected)
+    ////console.log(selected)
     if (navigator.onLine == true) {
       this.presentLoading('Syncing Collection');
       await Promise.resolve(this.syncinvoiceSrvs.addinvoiceFromLocal(selected)).then(returnID => {
         let data = returnID
-        console.log(returnID)
+        ////console.log(returnID)
         if (returnID != false || returnID != "") {
           this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
             let data
             data = res
-            console.log(data)
+            ////console.log(data)
             let filtered: any = []
-            console.log(selected.UNINV_COLLTS)
+            ////console.log(selected.UNINV_COLLTS)
             if (data != false) {
-              console.log("papasok ba")
+              ////console.log("papasok ba")
               data.forEach(unsync => {
-                console.log("pumasok naman")
+                ////console.log("pumasok naman")
                 if (unsync.UNINV_COLLTS == selected.rid) {
                   let params: any = {
                     UNINV_COLLTS: returnID,
@@ -309,7 +309,7 @@ export class UnsyncdataPage implements OnInit {
                     syncserver: "true",
                     driversId : this.driverInfo.id
                   }
-                  console.log(params)
+                  ////console.log(params)
                   filtered.push(params)
                 } else {
                   filtered.push(unsync)
@@ -322,9 +322,9 @@ export class UnsyncdataPage implements OnInit {
             this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
               let data
               data = res
-              console.log(data)
+              ////console.log(data)
               let filtered: any = []
-              console.log(selected.UNINV_COLLTS)
+              ////console.log(selected.UNINV_COLLTS)
               if (data != null) {
                 data.forEach(unsync => {
                   if (unsync.rid == selected.rid) {
@@ -347,7 +347,7 @@ export class UnsyncdataPage implements OnInit {
         }
 
       }).catch(e => {
-        console.log(e);
+        ////console.log(e);
         this.presentAlert("Cannot sync, poor internet connection. Please save later")
         // this.loading.dismiss();
       });

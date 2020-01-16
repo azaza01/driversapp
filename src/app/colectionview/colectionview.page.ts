@@ -66,7 +66,7 @@ export class ColectionviewPage implements OnInit {
   ngOnInit() {
     this.isLoading = true
     this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
+      ////console.log(params);
       this.collectionInfo = params
       this.selectedtime = this.collectionInfo.cot
       this.customerName = this.collectionInfo.cun
@@ -76,7 +76,7 @@ export class ColectionviewPage implements OnInit {
       this.collectionId = this.collectionInfo.id
 
       this.currentInstruction =  this.collectionInfo.con
-      console.log(this.currentInstruction)
+      ////console.log(this.currentInstruction)
 
       this.isTodayCollection = this.defaultSrvc.getToday();
 
@@ -89,13 +89,13 @@ export class ColectionviewPage implements OnInit {
       let mmm = mm < 10 ? "0" + mm : mm
       todays = yyyy + "-" + mmm + "-" + ddd
       this.today = this.collectionInfo.cod
-      // console.log(todays)
+      // ////console.log(todays)
       this.getTodayID();
     });
 
     this.storage.get('ACCOUNTS_TABLE').then(res => {
       this.driverInfo = res
-      // console.log(this.driverInfo)
+      // ////console.log(this.driverInfo)
       this.isLoading = false
     })
 
@@ -103,7 +103,7 @@ export class ColectionviewPage implements OnInit {
       res.forEach(element => {
         this.timeslots.push(element.description)
       });
-      // console.log(this.timeslots)
+      // ////console.log(this.timeslots)
       this.isLoading = false
     })
 
@@ -126,7 +126,7 @@ export class ColectionviewPage implements OnInit {
   //     // resp.coords.longitude
   //     this.presentAlert(resp.coords.latitude)
   //    }).catch((error) => {
-  //      console.log('Error getting location', error);
+  //      ////console.log('Error getting location', error);
   //    });
      
   //    let watch = this.geolocation.watchPosition();
@@ -187,7 +187,7 @@ export class ColectionviewPage implements OnInit {
     todayId = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss ;
     this.mySpecialID = todayId
     this.postponeDate = ddd + '-' + mmm + '-' + yyyy
-    console.log(today)
+    ////console.log(today)
     return today
   }
 
@@ -205,8 +205,8 @@ export class ColectionviewPage implements OnInit {
   }
 
   async postphone() {
-    // console.log(this.today)
-    // console.log(this.selectedtime)
+    // ////console.log(this.today)
+    // ////console.log(this.selectedtime)
     let selectedDate;
     let dd = new Date(this.today).getDate();
     let mm = new Date(this.today).getMonth() + 1;
@@ -226,10 +226,10 @@ export class ColectionviewPage implements OnInit {
     let mymonth = mm < 10 ? "0" + mmmm : mmmm
     selectedDate2 = myday + "-" + mymonth + "-" + yyyyy
 
-    // console.log(this.reasonofpostpone)
+    // ////console.log(this.reasonofpostpone)
 
-    console.log(selectedDate)
-    console.log(this.originalDate)
+    ////console.log(selectedDate)
+    ////console.log(this.originalDate)
 
     if (selectedDate == this.originalDate) {
       this.presentAlert("Selected Date is the same as today. Please choose other day to Re-Schedule");
@@ -247,7 +247,7 @@ export class ColectionviewPage implements OnInit {
             this.loading.dismiss();
           }
         }).catch(e => {
-          console.log(e);
+          ////console.log(e);
           this.presentAlert("Connection error");
           this.loading.dismiss();
         });
@@ -263,7 +263,7 @@ export class ColectionviewPage implements OnInit {
         data = res
         let filtered: any = []
         // colid = res.type == 'collection' ? res.findIndex(x => x.id == res.id) : res.findIndex(x => x.dei == res.dei)
-        // console.log(colid)
+        // ////console.log(colid)
         //i = data.type == 'collection' ? data.findIndex(x => x.id == offlinedata.id) : data.findIndex(x => x.dei == offlinedata.dei)
         if (data != "") {
           data.forEach(coldelData => {
@@ -323,14 +323,14 @@ export class ColectionviewPage implements OnInit {
           }
         }).finally(() => {
           this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
-            // console.log(res)
+            // ////console.log(res)
             this.loading.dismiss();
           })
           
         })
       }
     }).catch(e => {
-      console.log(e);
+      ////console.log(e);
       this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
         let data
         data = res
@@ -351,7 +351,7 @@ export class ColectionviewPage implements OnInit {
         }
       }).finally(() => {
         this.storage.get('UNSYNCED_EMAILS_TABLE').then(res => {
-          // console.log(res)
+          // ////console.log(res)
           this.loading.dismiss();
         })
       })
@@ -367,12 +367,12 @@ export class ColectionviewPage implements OnInit {
 
 
   getTime(selectedtime) {
-    console.log(selectedtime);
+    ////console.log(selectedtime);
   }
 
   async createInvoiceSelectItem(info: any = []) {
-    console.log(info)
-    // console.log(this.collectionInfo)
+    ////console.log(info)
+    // ////console.log(this.collectionInfo)
     let tag;
     const alert = await this.alertController.create({
       header: 'Bill from which company?',
@@ -383,13 +383,13 @@ export class ColectionviewPage implements OnInit {
           text: 'DC',
           handler: async () => {
             //function herer
-            // console.log(this.selected);
+            // ////console.log(this.selected);
             tag = "DC"
             // info.tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
-            //   console.log(data);
+            //   ////console.log(data);
             let params: any = {};
             params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = info.id
@@ -415,17 +415,18 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
-            // console.log(params)
+            params.invoicesynctype = 'New'
+            // ////console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              // console.log(this.unsyncData)
+              // ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -435,37 +436,37 @@ export class ColectionviewPage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                 }
               }
             }).finally(() => {
-              // console.log(this.unsyncData);
+              // ////console.log(this.unsyncData);
               this.router.navigate(['/selectcategory', info]);
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   ////console.log(e);
             // });
           }
         }, {
           text: 'CC',
           handler: async () => {
             //function herer
-            // console.log(this.selected);
+            // ////console.log(this.selected);
             tag = "CC"
             // info.tag(tag)
             // this.collectionInfo. = ""
             // this.defaultSrvc.createInvSeries(tag)
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag,this.collectionId)).then(data => {
-            //   console.log(data);
+            //   ////console.log(data);
             let params: any = {};
             params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = info.id
@@ -491,17 +492,18 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
-            // console.log(params)
+            params.invoicesynctype = 'New'
+            // ////console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              // console.log(this.unsyncData)
+              // ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -511,25 +513,25 @@ export class ColectionviewPage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
                 }
               }
             }).finally(() => {
-              // console.log(this.unsyncData);
+              // ////console.log(this.unsyncData);
               this.defaultSrvc.getTempItems = null
               this.router.navigate(['/selectcategory', info]);
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   ////console.log(e);
             // });
           }
         }

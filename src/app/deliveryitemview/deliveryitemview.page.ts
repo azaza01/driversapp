@@ -64,10 +64,10 @@ export class DeliveryitemviewPage implements OnInit {
   getItems() {
     this.isLoading = true
     this.storage.get('ACCOUNTS_TABLE').then(ress => {
-      console.log(ress)
+      ////console.log(ress)
    
       this.storage.get('SELECTED_ITEM').then(res => {
-      console.log(res)
+      ////console.log(res)
       this.isLoading = false
       let info = {
         email: ress.email_address,
@@ -75,7 +75,7 @@ export class DeliveryitemviewPage implements OnInit {
         driverid : ress.id,
         coldelID : res.dei
       }
-      console.log(info);
+      ////console.log(info);
 
         Promise.resolve(this.delcltnSrvc.gettems(info)).then(data => {
            this.items = ""
@@ -83,9 +83,9 @@ export class DeliveryitemviewPage implements OnInit {
            items = data;
            this.info = data;
            this.loading.dismiss();
-           console.log(items);
+           ////console.log(items);
         }).catch(e => {
-            console.log(e);
+            ////console.log(e);
         });
       })
     })

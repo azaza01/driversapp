@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { LoadingController, ToastController, AlertController} from '@ionic/angular';
+import { LoadingController, ToastController, AlertController } from '@ionic/angular';
 import { AccountsService } from '../api/accounts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultsService } from '../api/defaults.service';
@@ -17,7 +17,7 @@ export class CreatelocalinvoicePage implements OnInit {
   customerlist: any = []
   mySpecialID: any
   todaydate: any
-  unsyncData: any 
+  unsyncData: any
   unsyncDataCollection: any
   customerDetails: any
   driverData: any
@@ -40,7 +40,7 @@ export class CreatelocalinvoicePage implements OnInit {
     this.getToday()
   }
 
-  goToHome(){
+  goToHome() {
     this.router.navigate(['/home']);
   }
 
@@ -59,15 +59,15 @@ export class CreatelocalinvoicePage implements OnInit {
     let mmm = mm < 10 ? "0" + mm : mm
     let hhr = hr < 10 ? "0" + hr : hr
     let mmin = min < 10 ? "0" + min : min
-    let sss = ss < 10 ? "0" + ss: ss
+    let sss = ss < 10 ? "0" + ss : ss
 
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
-    todays = yyyy + '-' + mmm + '-' + ddd ;
+    todays = yyyy + '-' + mmm + '-' + ddd;
     this.todaydate = todays
 
     this.mySpecialID = today
     return today
-    // console.log(this.todaydate)
+    // ////console.log(this.todaydate)
   }
 
   async presentToast(msg) {
@@ -92,43 +92,59 @@ export class CreatelocalinvoicePage implements OnInit {
   }
 
 
-  async getCustomer(user: NgForm){
-    console.log(user)
+  async getCustomer(user: NgForm) {
+    ////console.log(user)
 
     if (navigator.onLine == true) {
-    await this.presentLoading('Searching Customer');
-    Promise.resolve(this.accSrvc.getCustomer(user.value)).then(data => {
-      console.log(data)
-      this.customerlist = data
-      if(data == ""){
-        this.presentToast("No customer found!")
-      }
-      this.loading.dismiss();
+      await this.presentLoading('Searching Customer');
+      Promise.resolve(this.accSrvc.getCustomer(user.value)).then(data => {
+        ////console.log(data)
+        this.customerlist = data
+        if (data == "") {
+          this.presentToast("No customer found!")
+        }
+        this.loading.dismiss();
 
-    }).catch(e => {
-      console.log(e);
-      this.presentToast("Please type your credentials")
-      this.loading.dismiss();
-    });
-    }else{
+      }).catch(e => {
+        ////console.log(e);
+        this.presentToast("Please type your credentials")
+        this.loading.dismiss();
+      });
+    } else {
       this.presentToast("Please type your credentials")
       this.loading.dismiss();
     }
 
   }
 
-  async selectCus(custlist){
+  async selectCus(custlist) {
     console.log(custlist)
 
     let paramsselected: any = {
-      coldel_type : "delivery",
-      coldel_return : 'nil',
-      cca : custlist.credit_amount,
-      cut : custlist.customer_type,
-      id : custlist.id,
-      dei : this.mySpecialID,
-      com : custlist.account_id,
-      del : "Laundry"
+      id: this.mySpecialID,
+      cui: custlist.id,
+      aid: custlist.account_id,
+      cod: this.todaydate,
+      ren: custlist.region,
+      cot: 'A 10 - 12pm',
+      cun: custlist.name,
+      cut: custlist.customer_type,
+      com: custlist.account_id,
+      na2: custlist.name2,
+      coa: custlist.mail_address,
+      cob: custlist.building,
+      lil: custlist.lift_lobby,
+      cuo: custlist.unit_no,
+      cue: custlist.email_address,
+      rtd: "0000-00-00",
+      rtt: "A 10 - 12pm",
+      cpc: custlist.postal_code,
+      cn1: custlist.contact_no1,
+      cn2: custlist.contact_no2,
+      cca: custlist.credit_amount,
+      col: "Laundry",
+      coldel_type: "collection",
+      coldel_return: 'nil',
     }
 
     this.customerDetails = custlist
@@ -142,12 +158,12 @@ export class CreatelocalinvoicePage implements OnInit {
           text: 'DC',
           handler: async () => {
             //function herer
-            // console.log(this.selected);
+            // ////console.log(this.selected);
             tag = "DC"
             // this.defaultSrvc.createInvSeries(tag)
             // this.router.navigate(['/selectcategory', this.collectionInfo]);
             // Promise.resolve(this.defaultSrvc.createInvSeries(tag, this.collectionId)).then(data => {
-            //   console.log(data);
+            //   ////console.log(data);
             let params: any = {};
             params.UNINV_COLLTS = this.mySpecialID
             params.UNINV_COLLID = this.mySpecialID
@@ -172,19 +188,20 @@ export class CreatelocalinvoicePage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
-            params.customerCredit = custlist.credit_amount
+            // params.customerCredit = custlist.credit_amount
             params.driversId = this.driverData.id
-            console.log(params)
+            params.invoicesynctype = 'NewandAnother'
+            ////console.log(params)
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              console.log(this.unsyncData)
+              ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -194,19 +211,19 @@ export class CreatelocalinvoicePage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                 }
               }
-            }).finally(() =>  {
-              // console.log(this.unsyncData);
+            }).finally(() => {
+              // ////console.log(this.unsyncData);
               // this.checkIfRepeat = "yes";
               // Promise.resolve(this.deliveryndata()).then(coldata => {
               // this.savePay(coldata);
@@ -222,7 +239,7 @@ export class CreatelocalinvoicePage implements OnInit {
               params.invoicetype = "New"
               params.invcompany = tag
 
-              params.UCOtimestamp =  "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
+              params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
               params.UCOcusttype = custlist.customer_type //30-11-2012 for checking minimum
               params.UCOcollecttype = paramsselected.del
               params.UCOcollectdate = this.defaultSrvc.getToday()
@@ -239,46 +256,47 @@ export class CreatelocalinvoicePage implements OnInit {
               params.done = "A 10 - 12pm"
               params.syncserver = "false"
               params.driversId = this.driverData.id
-            
+              params.invoicesynctype = 'NewandAnother'
+
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then( datas => {
-                this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-                  this.unsyncDataCollection = res
-                  // console.log(this.unsyncData)
-    
-                  if (res == null) {
-                    this.unsyncDataCollection = []
+              this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+                this.unsyncDataCollection = res
+                // ////console.log(this.unsyncData)
+
+                if (res == null) {
+                  this.unsyncDataCollection = []
+                  this.unsyncDataCollection.push(params)
+                  this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
+                  // ////console.log(this.unsyncData)
+
+                } else {
+                  let result;
+                  result = this.unsyncDataCollection.filter((item) => {
+                    return (item.rid.indexOf(params.rid) !== -1)
+                  })
+                  if (result.length < 1) {
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // console.log(this.unsyncData)
-    
+                    // ////console.log(this.unsyncData)
+
                   } else {
-                    let result;
-                    result = this.unsyncDataCollection.filter((item) => {
-                      return (item.rid.indexOf(params.rid) !== -1)
-                    })
-                    if (result.length < 1) {
-                      this.unsyncDataCollection.push(params)
-                      this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                      // console.log(this.unsyncData)
-    
-                    } else {
-                      // console.log(result)
-                      let i;
-                      i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
-                      this.unsyncDataCollection.splice(i, 1, params);
-                      // console.log(this.unsyncData)
-                      this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    }
+                    // ////console.log(result)
+                    let i;
+                    i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
+                    this.unsyncDataCollection.splice(i, 1, params);
+                    // ////console.log(this.unsyncData)
+                    this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                   }
-                }).finally(() => {
-                  this.storage.set('SELECTED_ITEM',  paramsselected)       
-                  this.router.navigate(['/selectcategory', paramsselected]);
-                })
+                }
+              }).finally(() => {
+                this.storage.set('SELECTED_ITEM', paramsselected)
+                this.router.navigate(['/selectcategory', paramsselected]);
+              })
               // })
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   ////console.log(e);
             // });
           }
         }, {
@@ -309,19 +327,20 @@ export class CreatelocalinvoicePage implements OnInit {
             params.colitem = '0'
             params.UNINV_SAVEDON = this.todaydate
             params.syncserver = "false"
-            params.customerCredit = custlist.credit_amount
+            // params.customerCredit = custlist.credit_amount
             params.driversId = this.driverData.id
-            console.log(params)
+            params.invoicesynctype = 'NewandAnother'
+            ////console.log(params)
 
             await this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
-              console.log(this.unsyncData)
+              ////console.log(this.unsyncData)
 
               if (res == null) {
                 this.unsyncData = []
                 this.unsyncData.push(params)
                 this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                // console.log(this.unsyncData)
+                // ////console.log(this.unsyncData)
 
               } else {
                 let result;
@@ -331,19 +350,19 @@ export class CreatelocalinvoicePage implements OnInit {
                 if (result.length < 1) {
                   this.unsyncData.push(params)
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
 
                 } else {
-                  // console.log(result)
+                  // ////console.log(result)
                   let i;
                   i = this.unsyncData.findIndex(x => x.id == result[0].id)
                   this.unsyncData.splice(i, 1, params);
                   this.storage.set('UNSYNCED_INVOICE_TABLE', this.unsyncData)
-                  // console.log(this.unsyncData)
+                  // ////console.log(this.unsyncData)
                 }
               }
-            }).finally(() =>  {
-              // console.log(this.unsyncData);
+            }).finally(() => {
+              // ////console.log(this.unsyncData);
               // this.checkIfRepeat = "yes";
               // Promise.resolve(this.deliveryndata()).then(coldata => {
               // this.savePay(coldata);
@@ -351,71 +370,72 @@ export class CreatelocalinvoicePage implements OnInit {
 
               let params: any = {}
               params.rid = this.mySpecialID,
-              params.coldelID = this.mySpecialID,
-              params.custID = custlist.id,
-              params.accID = custlist.account_id,
-              params.credit = custlist.credit_amount,
-              params.invoiceno = "",
-              params.invoicetype = "New",
-              params.invcompany = tag,
+                params.coldelID = this.mySpecialID,
+                params.custID = custlist.id,
+                params.accID = custlist.account_id,
+                params.credit = custlist.credit_amount,
+                params.invoiceno = "",
+                params.invoicetype = "New",
+                params.invcompany = tag,
 
-              params.UCOtimestamp =  this.mySpecialID , //new UCO will be generated in the collection loop if necessary
-              params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
-              params.UCOcollecttype = paramsselected.del,
-              params.UCOcollectdate =this.defaultSrvc.getToday(),
-              params.UCOcollecttime = "A 10 - 12pm",
-              params.UCOcollectaddress = custlist.mail_address,
-              params.UCOcollectunit = custlist.unit_no,
-              params.UCOcollectpostal = custlist.postal_code,
-              params.UCOcollectbuilding = custlist.building,
-              params.UCOcollectregion = custlist.region,
-              params.UCOcollectnote = "",
-              params.UCOcollectstatus = "collected",
-              params.UCOreturndate = "0000-00-00",
-              params.UCOreturntime = "A 10 - 12pm"
+                params.UCOtimestamp = this.mySpecialID, //new UCO will be generated in the collection loop if necessary
+                params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
+                params.UCOcollecttype = paramsselected.del,
+                params.UCOcollectdate = this.defaultSrvc.getToday(),
+                params.UCOcollecttime = "A 10 - 12pm",
+                params.UCOcollectaddress = custlist.mail_address,
+                params.UCOcollectunit = custlist.unit_no,
+                params.UCOcollectpostal = custlist.postal_code,
+                params.UCOcollectbuilding = custlist.building,
+                params.UCOcollectregion = custlist.region,
+                params.UCOcollectnote = "",
+                params.UCOcollectstatus = "collected",
+                params.UCOreturndate = "0000-00-00",
+                params.UCOreturntime = "A 10 - 12pm"
               params.done = "A 10 - 12pm"
               params.syncserver = "false"
               params.driversId = this.driverData.id
-            
+              params.invoicesynctype = 'NewandAnother'
+
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then( datas => {
-                this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-                  this.unsyncDataCollection = res
-                  // console.log(this.unsyncData)
-    
-                  if (res == null) {
-                    this.unsyncDataCollection = []
+              this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+                this.unsyncDataCollection = res
+                // ////console.log(this.unsyncData)
+
+                if (res == null) {
+                  this.unsyncDataCollection = []
+                  this.unsyncDataCollection.push(params)
+                  this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
+                  // ////console.log(this.unsyncData)
+
+                } else {
+                  let result;
+                  result = this.unsyncDataCollection.filter((item) => {
+                    return (item.rid.indexOf(params.rid) !== -1)
+                  })
+                  if (result.length < 1) {
                     this.unsyncDataCollection.push(params)
                     this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    // console.log(this.unsyncData)
-    
+                    // ////console.log(this.unsyncData)
+
                   } else {
-                    let result;
-                    result = this.unsyncDataCollection.filter((item) => {
-                      return (item.rid.indexOf(params.rid) !== -1)
-                    })
-                    if (result.length < 1) {
-                      this.unsyncDataCollection.push(params)
-                      this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                      // console.log(this.unsyncData)
-    
-                    } else {
-                      // console.log(result)
-                      let i;
-                      i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
-                      this.unsyncDataCollection.splice(i, 1, params);
-                      // console.log(this.unsyncData)
-                      this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
-                    }
+                    // ////console.log(result)
+                    let i;
+                    i = this.unsyncDataCollection.findIndex(x => x.id == result[0].id)
+                    this.unsyncDataCollection.splice(i, 1, params);
+                    // ////console.log(this.unsyncData)
+                    this.storage.set('UNSYNCOLLECTIONLOCAL', this.unsyncDataCollection)
                   }
-                }).finally(() => {
-                  this.storage.set('SELECTED_ITEM', paramsselected)
-                  this.router.navigate(['/selectcategory', paramsselected]);
-                })
+                }
+              }).finally(() => {
+                this.storage.set('SELECTED_ITEM', paramsselected)
+                this.router.navigate(['/selectcategory', paramsselected]);
+              })
               // })
             })
 
             // }).catch(e => {
-            //   console.log(e);
+            //   ////console.log(e);
             // });
           }
         }

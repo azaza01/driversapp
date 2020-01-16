@@ -29,7 +29,9 @@ export class SelectcategoryPage implements OnInit {
   deliveryInfo: any = ""
   myColID: any = ""
   activeData: any
+  checkifNew: any
 
+  invoiceType: any
 
   constructor(
     private router: Router,
@@ -62,9 +64,9 @@ export class SelectcategoryPage implements OnInit {
     //this.defaultSrvc.getTempItems = undefined;
 
     // this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-    //   console.log('removed ');
+    //   ////console.log('removed ');
     //   this.storage.remove('TEMP_RATES_TABLE').then(() => {
-    //     console.log('removed ');
+    //     ////console.log('removed ');
     //   })
     // })
 
@@ -72,21 +74,27 @@ export class SelectcategoryPage implements OnInit {
     await this.presentLoading('Loading Items');
     this.myColID
     this.activatedRoute.params.subscribe((params) => {
-      console.log(params)
-      console.log(this.defaultSrvc.getTempItems)
+      ////console.log(params)
+      ////console.log(this.defaultSrvc.getTempItems)
 
       // let wew
       // wew = params
       // wew.com = "wew"
-      // //console.log(wew);
+      // //////console.log(wew);
 
       this.collectionInfo = params
+      console.log(params)
       if (this.collectionInfo.coldel_type == "collection") {
+        this.myColID = ""
         this.myColID = this.collectionInfo.id
+        // this.checkifNew = this.collectionInfo.UCOtimestamp
       } else if (this.collectionInfo.coldel_type == "delivery") {
+        this.myColID = ""
         this.myColID = this.collectionInfo.dei
       }
+
       console.log(this.myColID)
+      ////console.log(this.myColID)
       // myColID = this.collectionInfo.id
       // if(myColID = undefined){
       //   myColID = this.collectionInfo.UNINV_COLLID
@@ -97,24 +105,26 @@ export class SelectcategoryPage implements OnInit {
       //   myColID = this.collectionInfo.id
       // }
 
-      //console.log(this.collectionInfo);
+      //////console.log(this.collectionInfo);
 
       this.storage.get('ACCOUNTS_TABLE').then(res => {
         this.driverInfo = res
-        //console.log(this.driverInfo)
+        //////console.log(this.driverInfo)
 
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           var l = res.length, i;
           for (i = 0; i < l; i++) {
             if (res[i].UNINV_COLLID == this.myColID) {
               this.unsyncData = res[i]
+              this.invoiceType = res[i].invoicesynctype
+              console.log(this.invoiceType)
             }
           }
-          console.log(this.unsyncData)
+          ////console.log(this.unsyncData)
 
           if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getitemsLocal(this.driverInfo)).then(data => {
-              console.log('ITEMS_TABLE', data);
+              ////console.log('ITEMS_TABLE', data);
               if(data != "" || data != undefined || data != null){
                 this.tempItems = data
                 this.tempItems.forEach(item => {
@@ -124,10 +134,10 @@ export class SelectcategoryPage implements OnInit {
                   item.subtotal = 0
                   item.rid = this.myColID
                 });
-                console.log('TEMP_ITEMS_TABLE', this.tempItems);
+                ////console.log('TEMP_ITEMS_TABLE', this.tempItems);
                 this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
   
-                console.log(this.defaultSrvc.getTempItems)
+                ////console.log(this.defaultSrvc.getTempItems)
   
                 this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
                 this.category = this.getItem(this.tempItems, 'items')
@@ -136,7 +146,7 @@ export class SelectcategoryPage implements OnInit {
                 this.presentToast("Invoice item not sync")
               }
             }).catch(e => {
-              //console.log(e);
+              //////console.log(e);
               // this.loading.dismiss();
 
             });
@@ -144,7 +154,7 @@ export class SelectcategoryPage implements OnInit {
 
           } else {
             Promise.resolve(this.defaultSrvc.getRatesLocal(this.driverInfo)).then(data => {
-              console.log('RATES_TABLE', data);
+              ////console.log('RATES_TABLE', data);
               if(data != "" || data != undefined || data != null){
               this.tempItems = data
               this.tempItems.forEach(item => {
@@ -154,7 +164,7 @@ export class SelectcategoryPage implements OnInit {
                 item.subtotal = 0
                 item.rid = this.myColID
               });
-              console.log('TEMP_RATES_TABLE', this.tempItems);
+              ////console.log('TEMP_RATES_TABLE', this.tempItems);
               this.storage.set('TEMP_RATES_TABLE', this.tempItems)
               this.category = this.getItem(this.tempItems, 'rates')
               this.isLoading = false
@@ -163,7 +173,7 @@ export class SelectcategoryPage implements OnInit {
             }
 
             }).catch(e => {
-              //console.log(e);
+              //////console.log(e);
 
 
             });
@@ -184,9 +194,9 @@ export class SelectcategoryPage implements OnInit {
     this.unsyncData.UNINV_INITIAL = "";
 
     this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-      console.log('removed ');
+      ////console.log('removed ');
       this.storage.remove('TEMP_RATES_TABLE').then(() => {
-        console.log('removed ');
+        ////console.log('removed ');
 
         this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
           let data
@@ -205,7 +215,7 @@ export class SelectcategoryPage implements OnInit {
           }
         }).finally(() => {
           this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-            console.log(res)
+            ////console.log(res)
           })
           this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
             let data
@@ -224,7 +234,7 @@ export class SelectcategoryPage implements OnInit {
             }
           }).finally(() => {
             this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-              console.log(res)
+              ////console.log(res)
 
             })
           })
@@ -235,7 +245,27 @@ export class SelectcategoryPage implements OnInit {
 
   async removeCurrentTransaction(msg) {
     if (this.collectionInfo.coldel_type == "collection") {
+      const alert = await this.alertController.create({
+        header: '',
+        message: msg,
+        cssClass: 'ion-alertCSS',
+        buttons: [
+          {
+            text: 'Yes',
+            handler: () => {
+              alert.dismiss();
+              this.tansProceed()
+            }
+          }, {
+            text: 'No',
+            handler: () => {
+              alert.dismiss();
+            }
+          }
+        ]
+      });
 
+      await alert.present();
     } else {
       const alert = await this.alertController.create({
         header: '',
@@ -279,7 +309,7 @@ export class SelectcategoryPage implements OnInit {
       }
     }).then(() => {
       this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-        console.log(res)
+        ////console.log(res)
       })
       this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
         let data
@@ -298,15 +328,15 @@ export class SelectcategoryPage implements OnInit {
         }
       }).then(() => {
         this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-          console.log(res)
+          ////console.log(res)
           this.router.navigate(['/coldev']);
         })
       }).finally(() =>{
 
     this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
-      console.log('removed ');
+      ////console.log('removed ');
       this.storage.remove('TEMP_RATES_TABLE').then(() => {
-        console.log('removed ');
+        ////console.log('removed ');
       })
       })
       })
@@ -347,7 +377,7 @@ export class SelectcategoryPage implements OnInit {
 
       }
     }
-    console.log(output);
+    ////console.log(output);
     this.loading.dismiss();
     return output
   }
@@ -355,8 +385,8 @@ export class SelectcategoryPage implements OnInit {
 
 
   createInvoiceItem(data) {
-    //console.log(data)
-    //console.log(this.tempItems)
+    //////console.log(data)
+    //////console.log(this.tempItems)
     this.defaultSrvc.getCategory = data
     // this.defaultSrvc.getTempItems = this.tempItems
     this.router.navigate(['/selectitemlist']);
@@ -377,8 +407,8 @@ export class SelectcategoryPage implements OnInit {
     myModal.onDidDismiss().then(async data => {
 
       if (data['data'] != undefined) {
-        //console.log(data)
-        //console.log(data['data'].data)
+        //////console.log(data)
+        //////console.log(data['data'].data)
         if (data['data'].data == 'close') {
           // this.defaultSrvc.getTempItems
         } else {
@@ -387,7 +417,7 @@ export class SelectcategoryPage implements OnInit {
 
         }
 
-        //console.log(this.tempItems)
+        //////console.log(this.tempItems)
 
       } else {
 
@@ -460,7 +490,7 @@ export class SelectcategoryPage implements OnInit {
     // } else {
       var checkitems = "false"
       if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
-        console.log('wow')
+        ////console.log('wow')
 
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
@@ -477,7 +507,7 @@ export class SelectcategoryPage implements OnInit {
           })
         })
       } else {
-        console.log('wew')
+        ////console.log('wew')
 
         this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
@@ -510,7 +540,7 @@ export class SelectcategoryPage implements OnInit {
       myModal.onDidDismiss().then(async data => {
 
         if (data['data'] != undefined) {
-          //console.log(data)
+          //////console.log(data)
           // this.tempItems = await this.getList(data['data'].data)
 
         } else {

@@ -46,12 +46,12 @@ export class CreatelocalcustomerPage implements OnInit {
   ngOnInit() {
    
     this.storage.get('CUSTOMERTYPE_TABLE').then(res => {
-      console.log(res)
+      ////console.log(res)
       var l = res.length, i;
       for (i = 0; i < l; i++) {
         this.custtypelist.push(res[i].description);          
       }
-      console.log(this.custtypelist)
+      ////console.log(this.custtypelist)
     })
 
   }
@@ -83,7 +83,7 @@ export class CreatelocalcustomerPage implements OnInit {
   }
 
   setDef(propertytype){
-    console.log(propertytype)
+    ////console.log(propertytype)
     if(propertytype== "Self Collect"){
       this.postalcode = "408934"
       this.mailingaddress = "53 Ubi Ave 1"
@@ -101,14 +101,14 @@ export class CreatelocalcustomerPage implements OnInit {
   }
 
   getAreas(postal){
-    console.log(postal)
+    ////console.log(postal)
     if(postal != ""){
       let mypostalcode  = postal
       var member = mypostalcode.toString();
       var last2 = member.slice(0,2); 
-      console.log(last2)
+      ////console.log(last2)
       this.storage.get('AREAS_TABLE').then(res => {
-        console.log(res)
+        ////console.log(res)
         var l = res.length, i;
         for (i = 0; i < l; i++) {
           if(res[i].postal_json.includes(last2) ){
@@ -116,7 +116,7 @@ export class CreatelocalcustomerPage implements OnInit {
             // this.arealist.push(res[i].region)
           }  
         }
-        console.log(this.areacode)
+        ////console.log(this.areacode)
       })
     }else{
       this.areacode = ""
@@ -125,7 +125,7 @@ export class CreatelocalcustomerPage implements OnInit {
   }
 
   async registerCustomer(){
-    // console.log(user)
+    // ////console.log(user)
     // this.getAreas(user)
     // if(user.value.customertype == "Self Collect"){
     //   user.value.postalcode = user.value.postalcode == "" ? "408934" : user.value.postalcode
@@ -149,7 +149,7 @@ export class CreatelocalcustomerPage implements OnInit {
       areacode: this.areacode
     }
 
-    console.log(params)
+    ////console.log(params)
     if((this.contactperson1 != "" && this.contactno1 != "" && this.mailingaddress != "" && this.postalcode != "") && (this.contactperson1 != undefined && this.contactno1 != undefined && this.mailingaddress != undefined && this.postalcode != undefined )){
       if (navigator.onLine == true) {
         await this.presentLoading('Creating Customer');
@@ -157,7 +157,7 @@ export class CreatelocalcustomerPage implements OnInit {
     
           var newdata: any = [];
           newdata.push(data);
-          console.log(newdata.customerid )
+          ////console.log(newdata.customerid )
           if (data != "" &&  data != false) {
             this.resetdata();
             this.presentToast("Successfully added")
@@ -169,7 +169,7 @@ export class CreatelocalcustomerPage implements OnInit {
           this.loading.dismiss();
     
         }).catch(e => {
-          console.log(e);
+          ////console.log(e);
           this.presentToast("No internet connection")
           this.loading.dismiss();
         });
@@ -254,7 +254,7 @@ export class CreatelocalcustomerPage implements OnInit {
 
   // getArea(areacode){
   //   this.areacode = areacode
-  //   console.log(areacode)
+  //   ////console.log(areacode)
     
   // }
 

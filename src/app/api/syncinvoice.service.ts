@@ -56,7 +56,7 @@ export class SyncinvoiceService {
     let mmm = mm < 10 ? "0" + mm : mm
 
     today = yyyy + '-' + mmm + '-' + ddd;
-    // console.log(today)
+    // ////console.log(today)
     return today
   }
 
@@ -72,7 +72,7 @@ export class SyncinvoiceService {
   }
 
   async addinvoiceServiceLocal(info: any) {
-    console.log(info)
+    ////console.log(info)
 
     let infox = {
       "email": info.drvem,
@@ -97,7 +97,7 @@ export class SyncinvoiceService {
       "bags": info.UNINV_BAGS,
       "savedon": info.UNINV_SAVEDON
     }
-    console.log(info)
+    ////console.log(info)
 
     await this.presentLoading('Syncing Collection');
     return new Promise(resolve => {
@@ -105,7 +105,7 @@ export class SyncinvoiceService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
           this.loading.dismiss();
           resolve(res)
          
@@ -116,7 +116,7 @@ export class SyncinvoiceService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
           this.loading.dismiss();
           // alert(JSON.stringify(err));
@@ -124,16 +124,16 @@ export class SyncinvoiceService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
       this.loading.dismiss();
     })
   }
 
   async addinvoiceFromLocal(info: any) {
-    console.log(info)
+    ////console.log(info)
     return new Promise(resolve => {
         this.storage.get('ACCOUNTS_TABLE').then(res => {
-          console.log(res)
+          ////console.log(res)
           this.driversDetails = res
           
         }).finally(() =>{
@@ -155,17 +155,17 @@ export class SyncinvoiceService {
             "status" : "Collected",
             "saved_on" : info.rid
           }
-          console.log(infox)
+          ////console.log(infox)
         
           this.httpclient.post(this.url + "/addcollection.json", infox).subscribe(
           response => {
             let res;
             res = response;
-            console.log(res)
+            ////console.log(res)
             resolve(res)
           },
           err => {
-            console.log(err)
+            ////console.log(err)
             resolve(false)
    
             // alert(JSON.stringify(err));
@@ -173,7 +173,7 @@ export class SyncinvoiceService {
         );
   
       }).catch(err => {
-        console.log(err)
+        ////console.log(err)
         this.loading.dismiss();
       })
     })
@@ -184,7 +184,7 @@ export class SyncinvoiceService {
 
 
   async addinvoiceService(info: any) {
-    console.log(info)
+    ////console.log(info)
 
 
     await this.presentLoading('Syncing Collection');
@@ -193,7 +193,7 @@ export class SyncinvoiceService {
         response => {
           let res;
           res = response;
-          // console.log(res)
+          // ////console.log(res)
           resolve(res)
           this.loading.dismiss();
 
@@ -203,7 +203,7 @@ export class SyncinvoiceService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
           this.loading.dismiss();
           // alert(JSON.stringify(err));
@@ -211,7 +211,7 @@ export class SyncinvoiceService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
       this.loading.dismiss();
     })
   }
@@ -228,11 +228,11 @@ export class SyncinvoiceService {
 
   //   today = yyyy + '-' + mm + '-' + dd + " " + hr + ":" + min + ":" + ss;
   //   this.todaydate = today
-  //   console.log(this.todaydate)
+  //   ////console.log(this.todaydate)
   // }
 
   //   syncInvoice(info: any) {
-  //     console.log(info)
+  //     ////console.log(info)
   //   let infox = {
   //   "email": "it01.azaza@gmail.com",
   // 	"password": "7c222fb2927d828af22f592134e8932480637c0d",
@@ -264,7 +264,7 @@ export class SyncinvoiceService {
   //         response => {
   //           let res;
   //           res = response;
-  //           console.log(res)
+  //           ////console.log(res)
 
   //           this.storage.set('SYNCED_INVOICE_TABLE', res).then(() => {
   //             resolve(res)
@@ -272,7 +272,7 @@ export class SyncinvoiceService {
 
   //         },
   //         err => {
-  //           console.log(err)
+  //           ////console.log(err)
   //           resolve(false)
 
   //           // alert(JSON.stringify(err));
@@ -280,30 +280,30 @@ export class SyncinvoiceService {
   //       );
 
   //     }).catch(err => {
-  //       console.log(err)
+  //       ////console.log(err)
   //     })
   //   }
 
 
   checkOverDue(info: any) {
     //address.setText(o.getCDListAddress() + "\n" + o.getCDListUnit() + " S" +o.getCDListPostal() + "\n" + o.getCDListBuilding() +  "\n" + "NOTE : "+ o.getCDListInstruction());
-    console.log(info)
+    ////console.log(info)
 
     return new Promise(resolve => {
       this.httpclient.post(this.url + "/addcollection.json", info).subscribe(
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
         }
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 

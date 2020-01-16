@@ -66,7 +66,7 @@ export class DeliveryService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
             resolve(res)
@@ -74,7 +74,7 @@ export class DeliveryService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -82,7 +82,7 @@ export class DeliveryService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -100,7 +100,7 @@ export class DeliveryService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
           info = res
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
@@ -109,7 +109,7 @@ export class DeliveryService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -117,7 +117,7 @@ export class DeliveryService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
@@ -138,7 +138,7 @@ export class DeliveryService {
       "invoiceid" : invoiceId
     }
 
-    console.log(params)
+    ////console.log(params)
 
 
     return new Promise(resolve => {
@@ -146,7 +146,7 @@ export class DeliveryService {
         response => {
           let res;
           res = response;
-          console.log(res)
+          ////console.log(res)
           info = res
 
           // this.storage.set('COLDEL_TABLE', res).then(() => {
@@ -155,7 +155,7 @@ export class DeliveryService {
 
         },
         err => {
-          console.log(err)
+          ////console.log(err)
           resolve(false)
 
           // alert(JSON.stringify(err));
@@ -163,7 +163,7 @@ export class DeliveryService {
       );
 
     }).catch(err => {
-      console.log(err)
+      ////console.log(err)
     })
   }
 
