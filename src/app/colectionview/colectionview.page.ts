@@ -396,7 +396,7 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = info.cui
             params.UNINV_INITIAL = tag
-            params.UNINV_TYPE = 'New'
+            params.UNINV_TYPE = "New"
             params.UNINV_DEPOAMT = '0'
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
@@ -415,8 +415,8 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
-            params.invoicesynctype = 'New'
-            // ////console.log(params)
+            params.invoicesynctype = "New"
+            console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
@@ -473,7 +473,7 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_INVNO = ""
             params.UNINV_CUSTID = info.cui
             params.UNINV_INITIAL = tag
-            params.UNINV_TYPE = 'New'
+            params.UNINV_TYPE = "New"
             params.UNINV_DEPOAMT = '0'
             params.UNINV_DEPOTYPE = 'Cash'
             params.UNINV_BALANCE = '0'
@@ -492,8 +492,8 @@ export class ColectionviewPage implements OnInit {
             params.UNINV_SAVEDON = this.today
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
-            params.invoicesynctype = 'New'
-            // ////console.log(params)
+            params.invoicesynctype = "New"
+            console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res

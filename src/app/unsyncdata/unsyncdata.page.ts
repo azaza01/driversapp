@@ -282,7 +282,7 @@ export class UnsyncdataPage implements OnInit {
               ////console.log("papasok ba")
               data.forEach(unsync => {
                 ////console.log("pumasok naman")
-                if (unsync.UNINV_COLLTS == selected.rid) {
+                if (unsync.UNINV_COLLID == selected.rid) {
                   let params: any = {
                     UNINV_COLLTS: returnID,
                     UNINV_COLLID: returnID,

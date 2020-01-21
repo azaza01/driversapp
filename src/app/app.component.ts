@@ -40,12 +40,12 @@ export class AppComponent {
       url: '/unsyncdata',
       icon: 'md-sync'
     }
-    // ,
-    // {
-    //   title: 'Driver Summary',
-    //   url: '/driversummary',
-    //   icon: 'logo-usd'
-    // }
+    ,
+    {
+      title: 'Driver Summary',
+      url: '/driversummary',
+      icon: 'logo-usd'
+    }
     // {
     //   title: 'Create Invoice',
     //   url: this.showAlert("Please Pick"),
@@ -204,12 +204,13 @@ export class AppComponent {
                   this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
                     ////console.log('removed ');
                     this.storage.remove('TEMP_RATES_TABLE').then(() => {
+                      this.storage.remove('SELECTED_INVOICES').then(() => {
                       ////console.log('removed ');
                     }).finally(() => {
                       this.router.navigate(['/login']);
                     })
                   })
-
+                })
                   //   })
                   // })
                 })

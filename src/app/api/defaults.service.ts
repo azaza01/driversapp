@@ -381,7 +381,7 @@ export class DefaultsService {
             }
             
             Promise.resolve(this.getInvoicetypes(driverInfo)).then(data => {
-              ////console.log('INVOICE_TYPES_TABLE', data);
+              console.log('INVOICE_TYPES_TABLE', data);
               this.loading.dismiss();
               if(data != "false"){
                 this.checkAllSucess = this.checkAllSucess + "5"
@@ -430,6 +430,21 @@ export class DefaultsService {
                         }else{
                           resolve(this.checkAllSucess)
                         }
+
+                         // let params: any = {
+                          //   invoicecompany: 0,
+                          //   invoicetype: 0,
+                          //   amount: 0,
+                          //   paidtype: 0,
+                          //   noofcol: 0,
+                          //   nofodel: 0,
+                          //   driversid: 0,
+                          //   date: 0,
+                          //   invoiceno: 0
+                          // }
+                          // this.storage.set('DRIVER_SUMMARY', "").then(() => {
+                          // })
+
                         // this.storage.set('UNSYNCED_PAYMENT_TABLE', '').then(() => {
                       // this.storage.set('UNSYNCED_EMAILS_TABLE', '').then(() => {
                  

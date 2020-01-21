@@ -1,155 +1,171 @@
 <ion-header>
-  <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
-      </ion-buttons>
-      <ion-title>Driver Summary</ion-title>
+  <ion-toolbar class="menutoolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title [hidden]="showSum == 'false'">Driver Summary</ion-title>
+    <ion-title [hidden]="letShow == 'false'">List of Invoices</ion-title>
   </ion-toolbar>
-
-
-<ion-toolbar class="menutoolbar">
-  <img object-fit: cover src="../assets/images/cottoncarelogo.png" style="padding: 20px;">
-</ion-toolbar>
 </ion-header>
 
 <ion-content >
 
-  <form  style="padding-top: 10px;" >
+  <ion-list lines="none" style="margin-bottom: 30px;"> 
+    <ion-item-group [hidden]="showSum == 'false'" class="ion-text-center" style="margin: 10px;">
+      <!-- <ion-item-divider style="background-color: #000000;">
+        <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">Customer Details</ion-label>
+      </ion-item-divider> -->
 
-    <ion-grid class="backgrounds ion-padding"  *ngFor="let sumData of summarydata; let i = index">
-      <ion-row class="container">
-        <ion-col>
-          <ion-item>
-            <ion-label color="medium" >No. of Collection : {{ sumData.colNum }}</ion-label>
-            <ion-icon name="md-car" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Deliveries : {{ sumData.delNum }}</ion-label>
-              <ion-icon name="md-car" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.repeatNum }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-              <ion-label color="medium" >No. of Repeat : {{ sumData.cashno }}</ion-label>
-              <ion-icon name="md-repeat" color="medium" slot="start"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-row>
-      <ion-col>
-        <!-- <ion-button expand="full" shape="round" color="warning" >LOGIN</ion-button> -->
-        <!-- <ion-button  expand="full" shape="round" color="warning" (click)="showFingerprintAuthDlg()">LOGIN</ion-button> -->
+      <ion-grid >
+        <div style="margin-right: 30px;">
+        <ion-row >
+          <ion-col class="back-col" style="margin-left: 2px;margin-bottom: 2px;" >
+            <div style="margin: 20px;" >
+              Collection<br/>{{ noofCollection }}
+            </div>
+          </ion-col>
+          <ion-col class="back-del" style="margin-left: 2px;margin-bottom: 2px;">
+            <div style="margin: 20px;">
+              Deliveries<br/>{{ noofDeliveries }}
+            </div>
+          </ion-col>
+        </ion-row>
+        </div>
+
+
+        <div style="margin-right: 30px;">
+          <ion-row >
+            <ion-col class="back-rep" style="margin-left: 2px;margin-bottom: 2px;" >
+              <div style="margin: 20px;" >
+                Repeat<br/>{{ invoicetypeRepeat }}
+              </div>
+            </ion-col>
+            <ion-col class="back-new" style="margin-left: 2px;margin-bottom: 2px;">
+              <div style="margin: 20px;">
+                New<br/>{{ invoicetypeNew }}
+              </div>
+            </ion-col>
+          </ion-row>
+          </div>
+
+
+          <div style="margin-right: 30px;">
+            <ion-row >
+              <ion-col class="light-labels" style="margin-left: 2px;margin-bottom: 2px;" >
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">CASH</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ invoiceCashAmt }}</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">{{ invoiceCash }}</ion-label>
+                </div>
+              </ion-col>
+              <ion-col class="light-labels" style="margin-left: 2px;margin-bottom: 2px;">
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">CHEQUE</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ invoiceChequeAmt }}</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">{{ invoiceCheque }}</ion-label>
+                </div>
+              </ion-col>
+              <ion-col class="light-labels" style="margin-left: 2px;margin-bottom: 2px;">
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">CREDIT</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ invoiceCreditAmt }}</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">{{ invoiceCredit }}</ion-label>
+                </div>
+              </ion-col>
+              <ion-col class="light-labels" style="margin-left: 2px;margin-bottom: 2px;">
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">BT</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ invoiceBTAmt }}</ion-label>
+                </div>
+                <div style="margin: 10px;" >
+                  <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">{{ invoiceBT }}</ion-label>
+                </div>
+              </ion-col>
+            </ion-row>
+            </div>
+
+            <div style="margin-right: 30px;">
+              <ion-row >
+                <ion-col class="light-dc" style="margin-left: 2px;margin-bottom: 2px;" >
+                  <div style="margin: 20px;" >
+                    <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">DC<br/>{{ invoicecompanyDC }}</ion-label>
+                    <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ dcAmount }}</ion-label>
+                  </div>
+                </ion-col>
+                <ion-col class="light-cc" style="margin-left: 2px;margin-bottom: 2px;">
+                  <div style="margin: 20px;">
+                    <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">CC<br/>{{ invoicecompanyCC }}</ion-label>
+                    <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">${{ ccAmount }}</ion-label>
+                  </div>
+                </ion-col>
+              </ion-row>
+              </div>
+
+              <div style="margin-right: 30px;">
+                <ion-row >
+                  <ion-col class="light-tot" style="margin-left: 2px;margin-bottom: 2px;" >
+                    <div style="margin: 20px;" >
+                      <ion-label  class="ion-text-center"  style="font-size: small ;font-weight: bolder;">Total : ${{ totalAmount }}</ion-label>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                </div>
+      </ion-grid >
+
+    </ion-item-group>
+    </ion-list>
+    <ion-list  [hidden]="letShow == 'false'" *ngFor="let viewInvoice of selectedInvoice; let i = index">
+      <!-- <ion-item-group  class="ion-padding"  >
+        <ion-item-divider style="background-color: #000000;" >
+          <ion-label style="font-size: medium;font-weight: bold;color: rgb(255, 255, 255);">{{ unsyncItems.UNINV_INVNO }}<br/></ion-label>
+          <ion-label style="padding-left: 10px;font-size: smaller;color: black;" >{{ unsyncItems.UNINV_AGREEDDELIVERYDATE }}<br/></ion-label>
+          <ion-button slot="end"  expand="full"  color="warning" ng-selected="selected[i]" (click)="syncCollection(unsyncItems)" >Sync</ion-button>
+        </ion-item-divider> 
+      </ion-item-group> -->
+
+    <ion-item-divider  style="border-color: rgba(0, 0, 0, 0);background-color: rgba(228, 228, 228, 0);font-style: bold;">
+        <ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-img *ngIf="viewInvoice.invoicetype != 'Delivery'" src="../assets/images/collection_icon.png" style="width:40%;height: 40%;"></ion-img>
+              <ion-img *ngIf="viewInvoice.invoicetype == 'Delivery'"  src="../assets/images/delivery_icon.png" style="width:40%;height: 40%;"></ion-img>
+              <ion-label style="font-size: smaller;color: black;padding-top: 5px;" >{{ viewInvoice.invoiceno }}</ion-label>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col >
+              <ion-label style="font-size: small;" >{{ viewInvoice.invoicecompany }} - {{ viewInvoice.date | date: 'dd MMM yyyy'}}</ion-label>
+              <ion-label style="font-size: small;" >{{ viewInvoice.invoicetype }}</ion-label>
+              <ion-label style="font-size: small;" >{{ viewInvoice.paidtype }} - ${{ viewInvoice.amount }}</ion-label>
+            </ion-col>
+          </ion-row>       
+        </ion-item>
+      </ion-item-divider>
+    </ion-list>
+</ion-content>      
+<ion-footer >
+  <ion-row>
+      <ion-col [hidden]="showSum == 'false'" >
+          <ion-button expand="full" shape="round" (click)="viewInvoice()"  color="success">VIEW SYNCED INVOICES</ion-button>
+          <ion-button expand="full" shape="round" color="warning" (click)="openDatePicker()">CHANGE DATE</ion-button>
       </ion-col>
-    </ion-row>
-  </form>
-
-</ion-content>
+      <ion-col [hidden]="letShow == 'false'">
+        <ion-button expand="full" shape="round" color="warning" (click)="closeMe()">CLOSE</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

@@ -55,6 +55,10 @@ export class DeliverymakepaymentPage implements OnInit {
 
   todaydate: any
 
+
+  initial: any
+  mydate: any
+
   driversDetails: any
 
   constructor(
@@ -127,6 +131,7 @@ export class DeliverymakepaymentPage implements OnInit {
       this.outstandingbalance = this.deliveryDetails.baa
       //parseInt(this.deliveryDetails.toa) - (parseInt(this.deliveryDetails.dpa) + parseInt(this.deliveryDetails.bap))
       this.inn = res.inn
+      this.initial = res.coi
     }).then(() =>{
       this.getToday()
     }).finally(() => {
@@ -209,6 +214,7 @@ export class DeliverymakepaymentPage implements OnInit {
     let sss = ss < 10 ? "0" + ss: ss
 
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
+    this.mydate =  yyyy + '-' + mmm + '-' + ddd 
     this.todaydate = today
 
     this.mySpecialID = today
@@ -432,6 +438,49 @@ export class DeliverymakepaymentPage implements OnInit {
   }
 
   proceedtoWhere(kindoftransaction, offlinedata){
+
+    let params: any = {}
+    params.invoicecompany = this.initial
+    params.invoicetype = "Delivery"
+    params.amount = offlinedata.nowpaid
+    params.paidtype = offlinedata.balancetype
+    params.noofcol = 0
+    params.nofodel = 1
+    params.driversid = this.driversDetails.id
+    params.date = this.mydate
+    params.invoiceno = this.inn 
+
+    this.storage.get('DRIVER_SUMMARY').then(res => {
+      this.unsyncData = res
+      // ////console.log(this.unsyncData)
+
+      if (res == null) {
+        this.unsyncData = []
+        this.unsyncData.push(params)
+        this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+        // ////console.log(this.unsyncData)
+
+      } else {
+        let result;
+        result = this.unsyncData.filter((item) => {
+          return (item.invoiceno.indexOf(offlinedata.inn) !== -1)
+        })
+        if (result.length < 1) {
+          this.unsyncData.push(params)
+          this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+          // ////console.log(this.unsyncData)
+
+        } else {
+          // ////console.log(result)
+          let i;
+          i = this.unsyncData.findIndex(x => x.id == result[0].id)
+          this.unsyncData.splice(i, 1, params);
+          this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+          // ////console.log(this.unsyncData)
+        }
+      }
+    })
+
     if(kindoftransaction == "maypayment"){
       this.loading.dismiss();
       this.router.navigate(['/coldev']);

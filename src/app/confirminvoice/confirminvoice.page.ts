@@ -30,6 +30,8 @@ export class ConfirminvoicePage implements OnInit {
   checkAccount = 0;
   company: any;
 
+  summdata: any
+
   mySpecialIDCol: any
 
   invoiceId: any = ""
@@ -44,6 +46,8 @@ export class ConfirminvoicePage implements OnInit {
   canSyncNow: any
 
   dataForCreateNewCollection: any
+
+  todaydateonly: any
 
   checkIfRepeat: any
 
@@ -237,7 +241,7 @@ export class ConfirminvoicePage implements OnInit {
           if (res[i].UNINV_COLLID == this.invoiceId) {
             this.customerData = res[i];
             this.typeofSync = res[i].invoicesynctype
-            //console.log(this.customerData)
+            console.log(this.customerData)
           }
         }
 
@@ -314,39 +318,39 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   getItemSubtotal() {
-    if (this.checkAccount == 1) {
-      this.storage.get("TEMP_RATES_TABLE").then(res => {
-        var flags = [], output = [], l = res.length, i;
-        for (i = 0; i < l; i++) {
-          if (res[i].rid == this.invoiceId && (res[i].qty != 0 && res[i].qty != null)) {
-            let params = {
-              "cat_type": res[i].cat_type,
-              "description": res[i].description,
-              "clean_type": res[i].clean_type,
-              "ready_type": res[i].ready_type,
-              "price": parseFloat(res[i].price),
-              "is_ready": res[i].is_ready,
-              "qty": parseFloat(res[i].qty),
-              "pieces": parseFloat(res[i].pieces)
-            }
-            this.allinvoiceitems.push(params);
-            // this.allinvoiceitems = this.allinvoiceitems.concat(params)
-            // this.allinvoiceitems = params
-            this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
-          }
-        }
-        this.alertCustomerType()
-        //console.log(this.allinvoiceitems)
-        if (this.finalSubtotal > 30) {
-          this.addDiscount();
-        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
-          this.coldev("Final amount is zero please click back button to refresh the amount");
-        } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
-          this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
-        }
+    // if (this.checkAccount == 1) {
+    //   this.storage.get("TEMP_ITEMS_TABLE").then(res => {
+    //     var flags = [], output = [], l = res.length, i;
+    //     for (i = 0; i < l; i++) {
+    //       if (res[i].rid == this.invoiceId && (res[i].qty != 0 && res[i].qty != null)) {
+    //         let params = {
+    //           "cat_type": res[i].cat_type,
+    //           "description": res[i].description,
+    //           "clean_type": res[i].clean_type,
+    //           "ready_type": res[i].ready_type,
+    //           "price": parseFloat(res[i].price),
+    //           "is_ready": res[i].is_ready,
+    //           "qty": parseFloat(res[i].qty),
+    //           "pieces": parseFloat(res[i].pieces)
+    //         }
+    //         this.allinvoiceitems.push(params);
+    //         // this.allinvoiceitems = this.allinvoiceitems.concat(params)
+    //         // this.allinvoiceitems = params
+    //         this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
+    //       }
+    //     }
+    //     this.alertCustomerType()
+    //     //console.log(this.allinvoiceitems)
+    //     if (this.finalSubtotal > 30) {
+    //       this.addDiscount();
+    //     } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "CC") {
+    //       this.coldev("Final amount is zero please click back button to refresh the amount");
+    //     } else if (this.finalSubtotal <= 0 && this.customerData.UNINV_INITIAL == "DC") {
+    //       this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
+    //     }
 
-      })
-    } else if (this.checkAccount == 0) {
+    //   })
+    // } else if (this.checkAccount == 0) {
       this.storage.get("TEMP_ITEMS_TABLE").then(res => {
         // //////console.log(res)
         var str1, flags = [], output = [], l = res.length, i;
@@ -379,7 +383,7 @@ export class ConfirminvoicePage implements OnInit {
           this.coldev("Final amount is zero press back button to refresh or continue with the transaction ");
         }
       })
-    }
+    // }
 
 
   }
@@ -1073,23 +1077,70 @@ export class ConfirminvoicePage implements OnInit {
     }).finally(() => {
       this.storage.get('COLDEL_TABLE').then(ress => {
         //////console.log(ress)
-        this.proceedtoWhat()
+        this.proceedtoWhat(offlinedata)
       })
     })
   }
 
-  proceedtoWhat() {
+  proceedtoWhat(offlinedata) {
+    console.log(offlinedata)
     let proceedtowhere = this.validationforsync
-    ////console.log(proceedtowhere)
-    //console.log(this.newInvoiceCollection)
+    console.log(proceedtowhere)
+    console.log(this.newInvoiceCollection)
     ////console.log(proceedtowhere)
     //console.log(proceedtowhere)
+
     if (proceedtowhere == "true" && this.newInvoiceCollection == "false") {
       this.storage.remove('TEMP_ITEMS_TABLE').then(() => {
         ////console.log('removed ');
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
           ////console.log('removed ');
+        }).then(() => {
+          let params: any = {}
+          params.invoicecompany = this.company
+          params.invoicetype = this.invoiceType
+          params.amount = offlinedata.depositamount
+          params.paidtype =offlinedata.deposittype
+          params.noofcol = 1
+          params.nofodel = 0
+          params.driversid = this.driversDetails.id
+          params.date = this.todaydateonly
+          params.invoiceno = offlinedata.invoiceno
+
+          this.storage.get('DRIVER_SUMMARY').then(res => {
+            this.unsyncData = res
+            // ////console.log(this.unsyncData)
+
+            if (res == null) {
+              this.unsyncData = []
+              this.unsyncData.push(params)
+              this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+              // ////console.log(this.unsyncData)
+
+            } else {
+              let result;
+              result = this.unsyncData.filter((item) => {
+                return (item.invoiceno.indexOf(offlinedata.invoiceno) !== -1)
+              })
+              if (result.length < 1) {
+                this.unsyncData.push(params)
+                this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+                // ////console.log(this.unsyncData)
+
+              } else {
+                // ////console.log(result)
+                let i;
+                i = this.unsyncData.findIndex(x => x.id == result[0].id)
+                this.unsyncData.splice(i, 1, params);
+                this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+                // ////console.log(this.unsyncData)
+              }
+            }
+          })
         }).finally(() => {
+          this.storage.get('DRIVER_SUMMARY').then(res => {
+            console.log(res)
+          })
           this.defaultSrvc.getTempItems = undefined;
           this.customerData = ""
           this.loading.dismiss();
@@ -1101,6 +1152,48 @@ export class ConfirminvoicePage implements OnInit {
         ////console.log('removed ');
         this.storage.remove('TEMP_RATES_TABLE').then(() => {
           ////console.log('removed ');
+        }).then(() => {
+          let params: any = {}
+          params.invoicecompany = this.company
+          params.invoicetype = this.invoiceType
+          params.amount = offlinedata.depositamount
+          params.paidtype =offlinedata.deposittype
+          params.noofcol = 1
+          params.nofodel = 0
+          params.driversid = this.driversDetails.id
+          params.date = this.todaydateonly
+          params.invoiceno = offlinedata.invoiceno
+
+          this.storage.get('DRIVER_SUMMARY').then(res => {
+            this.unsyncData = res
+            // ////console.log(this.unsyncData)
+
+            if (res == null) {
+              this.unsyncData = []
+              this.unsyncData.push(params)
+              this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+              // ////console.log(this.unsyncData)
+
+            } else {
+              let result;
+              result = this.unsyncData.filter((item) => {
+                return (item.invoiceno.indexOf(offlinedata.invoiceno) !== -1)
+              })
+              if (result.length < 1) {
+                this.unsyncData.push(params)
+                this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+                // ////console.log(this.unsyncData)
+
+              } else {
+                // ////console.log(result)
+                let i;
+                i = this.unsyncData.findIndex(x => x.id == result[0].id)
+                this.unsyncData.splice(i, 1, params);
+                this.storage.set('DRIVER_SUMMARY', this.unsyncData)
+                // ////console.log(this.unsyncData)
+              }
+            }
+          })
         }).finally(() => {
           this.defaultSrvc.getTempItems = undefined;
           this.customerData = ""
@@ -1122,57 +1215,6 @@ export class ConfirminvoicePage implements OnInit {
 
         Promise.resolve(this.syncinvoiceSrvs.addinvoiceService(coldata)).then(data => {
           if (data != "false" && data != null && data != "duplicate") {
-
-            // this.storage.get('DRIVER_SUMMARY').then(res => {
-            //   let data
-            //   data = res
-            //   if (data != "") {
-            //     let params: any = {
-            //       colNum: data.colNum,
-            //       delNum: data.delNum,
-            //       repeatNum: data.repeatNum,
-            //       tripNum: data.tripNum,
-            //       cashno: data.cashno,
-            //       cashtotal: data.cashtotal,
-            //       chequeno: data.chequeno,
-            //       chequetotal: data.chequetotal,
-            //       creditno: data.creditno,
-            //       creditotoal: data.creditotoal,
-            //       banktransferno: data.banktransferno,
-            //       banktransfertotal: data.banktransfertotal,
-            //       ccamount: data.ccamount,
-            //       dcamount: data.dcamount,
-            //       totalamount: data.totalamount,
-            //       summarydate: data.summarydate
-            //     }
-            //     this.storage.set('DRIVER_SUMMARY', params)
-
-            //     this.loading.dismiss();
-            //   }else{
-            //     let params: any = {
-            //       colNum: "0",
-            //       delNum: "0",
-            //       repeatNum: "0",
-            //       tripNum: "0",
-            //       cashno: "0",
-            //       cashtotal: "0",
-            //       chequeno: "0",
-            //       chequetotal: "0",
-            //       creditno: "0",
-            //       creditotoal: "0",
-            //       banktransferno: "0",
-            //       banktransfertotal: "0",
-            //       ccamount: "0",
-            //       dcamount: "0",
-            //       totalamount: "0",
-            //       summarydate: "0"
-            //     }
-            //     this.storage.set('DRIVER_SUMMARY', params)
-            //   }
-            //   this.loading.dismiss();
-            // })
-
-
             this.presentAlert2("Invoice Successfully Sync")
             this.offlineCollectionUpdate(coldata);
 
@@ -1314,6 +1356,7 @@ export class ConfirminvoicePage implements OnInit {
 
     today = yyyy + '-' + mmm + '-' + ddd + " " + hhr + ":" + mmin + ":" + sss;
     this.todaydate = today
+    this.todaydateonly = yyyy + '-' + mmm + '-' + ddd
 
     this.mySpecialIDCol = today
     return today
@@ -1323,7 +1366,7 @@ export class ConfirminvoicePage implements OnInit {
   async createNewInvoiceFromLocal() {
  
     ////console.log(this.dataForCreateNewCollection)
-    console.log(this.newInvoiceCollection)
+   // console.log(this.newInvoiceCollection)
     let tag;
     const alert = await this.alertController.create({
       header: 'Bill from which company?',

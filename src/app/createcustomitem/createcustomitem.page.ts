@@ -452,20 +452,20 @@ export class CreatecustomitemPage implements OnInit {
     this.getCompany();
 
     //////console.log(this.checkAccount);
-    if (this.checkAccount == 1) {
-      this.storage.get("RATES_TABLE").then(res => {
-        var flags = [], output = [], l = res.length, i;
-        for (i = 0; i < l; i++) {
-          if (flags[res[i].cat_type]) continue;
-          flags[res[i].cat_type] = true;
-          output.push(res[i].cat_type);
+    // if (this.checkAccount == 1) {
+    //   this.storage.get("ITEMS_TABLE").then(res => {
+    //     var flags = [], output = [], l = res.length, i;
+    //     for (i = 0; i < l; i++) {
+    //       if (flags[res[i].cat_type]) continue;
+    //       flags[res[i].cat_type] = true;
+    //       output.push(res[i].cat_type);
 
-        }
-        output.push("Custom");
-        // output.push("Curtains"); 
-        this.generatedCategories = output;
-      })
-    } else if (this.checkAccount == 0) {
+    //     }
+    //     output.push("Custom");
+    //     // output.push("Curtains"); 
+    //     this.generatedCategories = output;
+    //   })
+    // } else if (this.checkAccount == 0) {
       this.storage.get("ITEMS_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
@@ -486,7 +486,7 @@ export class CreatecustomitemPage implements OnInit {
         // output.push("Curtains"); 
         this.generatedCategories = output;
       })
-    }
+    // }
 
   }
 
@@ -495,20 +495,20 @@ export class CreatecustomitemPage implements OnInit {
 
     this.getCompany();
 
-    if (this.checkAccount == 1) {
-      this.storage.get("RATES_TABLE").then(res => {
-        var flags = [], output = [], l = res.length, i;
-        for (i = 0; i < l; i++) {
-          if (flags[res[i].cat_type]) continue;
-          flags[res[i].cat_type] = true;
-          output.push(res[i].cat_type);
+    // if (this.checkAccount == 1) {
+    //   this.storage.get("ITEMS_TABLE").then(res => {
+    //     var flags = [], output = [], l = res.length, i;
+    //     for (i = 0; i < l; i++) {
+    //       if (flags[res[i].cat_type]) continue;
+    //       flags[res[i].cat_type] = true;
+    //       output.push(res[i].cat_type);
 
-        }
-        output.push("Custom");
-        // output.push("Curtains"); 
-        this.generatedCategories = output;
-      })
-    } else if (this.checkAccount == 0) {
+    //     }
+    //     output.push("Custom");
+    //     // output.push("Curtains"); 
+    //     this.generatedCategories = output;
+    //   })
+    // } else if (this.checkAccount == 0) {
       this.storage.get("ITEMS_TABLE").then(res => {
         var flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
@@ -522,7 +522,7 @@ export class CreatecustomitemPage implements OnInit {
         // output.push("Curtains"); 
         this.generatedSofa = output;
       })
-    }
+    // }
 
   }
 

@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
   password: any =""
   email: any = ""
 
-  
+
 
 
 
@@ -57,6 +57,8 @@ export class LoginPage implements OnInit {
     // this.storage.remove('TEMP_ITEMS_TABLE')
     
     // this.storage.remove('ENVNUM_TABLE')
+    // this.storage.remove('DRIVER_SUMMARY')
+
     // this.storage.remove('REMEMBER_ME')
     // let wew
     // let wew2 = []
@@ -90,18 +92,28 @@ export class LoginPage implements OnInit {
     // this.password = this.mycomp.mypassword
     // this.email = this.mycomp.myusername
 
-    this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-      console.log(res)
-    })
-    this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
-      console.log(res)
-    })
-    this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-      console.log(res)
-    })
-    this.storage.get('ENVNUM_TABLE').then(res => {
-      //console.log(res)
-    })
+    // this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+    //   console.log(res)
+    // })
+    // this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
+    //   console.log(res)
+    // })
+    // this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
+    //   console.log(res)
+    // })
+    // this.storage.get('ENVNUM_TABLE').then(res => {
+    //   console.log(res)
+    // })
+    // // this.storage.get('DRIVER_SUMMARY').then(res => {
+    //   console.log(res)
+    // })
+
+    // this.storage.get('DRIVER_SUMMARY').then(res => {
+    //   let data
+    //   data = res
+    //   let filtered: any = []
+    //   console.log(data)
+    // })
 
   }
 

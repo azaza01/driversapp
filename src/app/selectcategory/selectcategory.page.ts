@@ -31,7 +31,7 @@ export class SelectcategoryPage implements OnInit {
   activeData: any
   checkifNew: any
 
-  invoiceType: any
+  invoiceTypepins: any
 
   constructor(
     private router: Router,
@@ -69,6 +69,10 @@ export class SelectcategoryPage implements OnInit {
     //     ////console.log('removed ');
     //   })
     // })
+
+    this.storage.get('DRIVER_SUMMARY').then(res => {
+      console.log(res)
+    })
 
     this.isLoading = true
     await this.presentLoading('Loading Items');
@@ -116,13 +120,14 @@ export class SelectcategoryPage implements OnInit {
           for (i = 0; i < l; i++) {
             if (res[i].UNINV_COLLID == this.myColID) {
               this.unsyncData = res[i]
-              this.invoiceType = res[i].invoicesynctype
-              console.log(this.invoiceType)
+              this.invoiceTypepins = res[i].invoicesynctype
+              console.log(this.invoiceTypepins)
             }
           }
+          console.log(res)
           ////console.log(this.unsyncData)
 
-          if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+          // if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
             Promise.resolve(this.defaultSrvc.getitemsLocal(this.driverInfo)).then(data => {
               ////console.log('ITEMS_TABLE', data);
               if(data != "" || data != undefined || data != null){
@@ -152,34 +157,36 @@ export class SelectcategoryPage implements OnInit {
             });
 
 
-          } else {
-            Promise.resolve(this.defaultSrvc.getRatesLocal(this.driverInfo)).then(data => {
-              ////console.log('RATES_TABLE', data);
-              if(data != "" || data != undefined || data != null){
-              this.tempItems = data
-              this.tempItems.forEach(item => {
-                item.is_ready = "no"
-                item.qty = 0
-                item.pieces = 0
-                item.subtotal = 0
-                item.rid = this.myColID
-              });
-              ////console.log('TEMP_RATES_TABLE', this.tempItems);
-              this.storage.set('TEMP_RATES_TABLE', this.tempItems)
-              this.category = this.getItem(this.tempItems, 'rates')
-              this.isLoading = false
-            }else{
-              this.presentToast("Invoice item not sync")
-            }
+          // } else {
+          //   Promise.resolve(this.defaultSrvc.getitemsLocal(this.driverInfo)).then(data => {
+          //     ////console.log('RATES_TABLE', data);
+          //     if(data != "" || data != undefined || data != null){
+          //     this.tempItems = data
+          //     this.tempItems.forEach(item => {
+          //       item.is_ready = "no"
+          //       item.qty = 0
+          //       item.pieces = 0
+          //       item.subtotal = 0
+          //       item.rid = this.myColID
+          //     });
 
-            }).catch(e => {
-              //////console.log(e);
+          //     this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
+          //     ////console.log('TEMP_RATES_TABLE', this.tempItems);
+          //     this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
+          //     this.category = this.getItem(this.tempItems, 'items')
+          //     this.isLoading = false
+          //   }else{
+          //     this.presentToast("Invoice item not sync")
+          //   }
+
+          //   }).catch(e => {
+          //     //////console.log(e);
 
 
-            });
-            // this.loading.dismiss();
+          //   });
+          //   // this.loading.dismiss();
 
-          }
+          // }
         })
 
       })
@@ -434,7 +441,7 @@ export class SelectcategoryPage implements OnInit {
     // if (this.defaultSrvc.getTempItems == undefined || this.defaultSrvc.getTempItems == "") {
     //   this.presentToast('Please select item first')
     // } else {
-      if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+      // if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
           // this.defaultSrvc.getTempItems = this.item_List
 
@@ -454,27 +461,27 @@ export class SelectcategoryPage implements OnInit {
             // }
           })
         })
-      } else {
-        this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
-          // this.defaultSrvc.getTempItems = this.item_List
-          this.storage.get("TEMP_RATES_TABLE").then(res => {
-            var flags = [], output = [], l = res.length, i;
-            for (i = 0; i < l; i++) {
-              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
-                checkitems = "true"
-              } else {
-                //checkitems = "false"
-              }
-            }
-            // if (checkitems == "true") {
+      // } else {
+      //   this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
+      //     // this.defaultSrvc.getTempItems = this.item_List
+      //     this.storage.get("TEMP_RATES_TABLE").then(res => {
+      //       var flags = [], output = [], l = res.length, i;
+      //       for (i = 0; i < l; i++) {
+      //         if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+      //           checkitems = "true"
+      //         } else {
+      //           //checkitems = "false"
+      //         }
+      //       }
+      //       // if (checkitems == "true") {
           
-              this.router.navigate(['/confirminvoice', this.collectionInfo]);
-            // } else {
-            //   this.presentToast('Please select item first')
-            // }
-          })
-        })
-      }
+      //         this.router.navigate(['/confirminvoice', this.collectionInfo]);
+      //       // } else {
+      //       //   this.presentToast('Please select item first')
+      //       // }
+      //     })
+      //   })
+      // }
     // }
   }
 
@@ -489,7 +496,7 @@ export class SelectcategoryPage implements OnInit {
     //   this.presentToast('Please select item first')
     // } else {
       var checkitems = "false"
-      if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
+      // if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
         ////console.log('wow')
 
         this.storage.set('TEMP_ITEMS_TABLE', this.defaultSrvc.getTempItems).then(() => {
@@ -506,24 +513,24 @@ export class SelectcategoryPage implements OnInit {
             this.checkitems(checkitems, info)
           })
         })
-      } else {
-        ////console.log('wew')
+      // } else {
+      //   ////console.log('wew')
 
-        this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
-          // this.defaultSrvc.getTempItems = this.item_List
-          this.storage.get("TEMP_RATES_TABLE").then(res => {
-            var flags = [], output = [], l = res.length, i;
-            for (i = 0; i < l; i++) {
-              if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
-                checkitems = "true"
-              } else {
-                checkitems = "false"
-              }
-            }
-            this.checkitems(checkitems, info)
-          })
-        })
-      }
+      //   this.storage.set('TEMP_RATES_TABLE', this.defaultSrvc.getTempItems).then(() => {
+      //     // this.defaultSrvc.getTempItems = this.item_List
+      //     this.storage.get("TEMP_RATES_TABLE").then(res => {
+      //       var flags = [], output = [], l = res.length, i;
+      //       for (i = 0; i < l; i++) {
+      //         if (res[i].rid == this.myColID && (res[i].qty != 0 && res[i].qty != null)) {
+      //           checkitems = "true"
+      //         } else {
+      //           checkitems = "false"
+      //         }
+      //       }
+      //       this.checkitems(checkitems, info)
+      //     })
+      //   })
+      // }
 
     // }
   }

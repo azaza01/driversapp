@@ -5,42 +5,94 @@
     font-size: 15px;
 }
 
-.forgotpass{
-    color: #3d3d3a;
-    font-size: 15px;
-}
+ion-content {
+    position: absolute;
+    top: 8%;
+    left: 5%;
+    right: 5%;
+    margin: 0 auto;
+    margin-top: 0;
+    margin-left: 0;
+  }
 
-.backgrounds{
-    background-color: #e5e5e2!important;
+  .menutoolbar{
+    --background: #ffce00;
 }
-
-ion-button{
-    color: #fbb03b;
-    --ion-background-color:#fbb03b;
-}
-
-.menutoolbar{
-    --background: #000000;
-}
-
   
 
-.containertext {
-    text-align: center;
+
+.back-col{
+    background-color:  #FD9FF7
+ }
+
+ .back-del{
+    background-color:  rgb(29, 175, 235)
+ }
+
+ .back-rep{
+  background-color:  rgb(81, 252, 67)
 }
 
-.myimages {
-    width: 50px; 
-    height: 50px; 
+.back-new{
+  background-color: rgb(251, 158, 54)
 }
 
-.containerforsocial {
-    padding-right: 110px;
-    padding-left: 110px;
-    
+
+
+.light-cash{
+  --ion-background-color: linear-gradient(to top left, #233329 0%, #63D471 100%);
 }
 
-.container {
-    column-count: 3;
-  }
+.light-che{
+  --ion-background-color: linear-gradient(to top left, #FF8489 0%, #D5ADC8 100%);
+}
+
+.light-cred{
+  --ion-background-color: linear-gradient(to top left, #233329 0%, #F8CEEC 100%);
+}
+
+.light-bt{
+  --ion-background-color: linear-gradient(to top left, #A88BEB 0%, #63D471 100%);
+}
+ 
+
+.light-labels{
+  background-color: rgb(252, 192, 44)
+}
+
+.light-for{
+  --ion-background-color: linear-gradient(to top left, rgb(252, 192, 44) 0%, rgb(252, 192, 44) 100%);
+}
+
+.light-dc{
+  background-color: rgb(255, 252, 79)
+}
+ 
+
+.light-cc{
+  background-color: rgb(255, 252, 79)
+}
+ 
+
+.light-tot{
+  background-color: rgb(222, 220, 223)
+}
+ 
+
+.back-changedate{
+  --ion-background-color: linear-gradient(to top left, rgb(119, 126, 61) 0%,  rgb(219, 170, 85) 100%);
+}
+
+.back-viewsync{
+  --ion-background-color: linear-gradient(to top left, rgb(172, 171, 87) 0%,  rgb(102, 156, 77) 100%);
+}
+
+ion-content > .scroll-content{
+  margin-bottom: 56px;
+}
+
+ 
+ 
+ 
+ 
 

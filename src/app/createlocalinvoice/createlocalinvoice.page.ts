@@ -241,7 +241,7 @@ export class CreatelocalinvoicePage implements OnInit {
 
               params.UCOtimestamp = "UCOtimestamp" //new UCO will be generated in the collection loop if necessary
               params.UCOcusttype = custlist.customer_type //30-11-2012 for checking minimum
-              params.UCOcollecttype = paramsselected.del
+              params.UCOcollecttype = paramsselected.col
               params.UCOcollectdate = this.defaultSrvc.getToday()
               params.UCOcollecttime = "A 10 - 12pm"
               params.UCOcollectaddress = custlist.mail_address
@@ -380,7 +380,7 @@ export class CreatelocalinvoicePage implements OnInit {
 
                 params.UCOtimestamp = this.mySpecialID, //new UCO will be generated in the collection loop if necessary
                 params.UCOcusttype = custlist.customer_type, //30-11-2012 for checking minimum
-                params.UCOcollecttype = paramsselected.del,
+                params.UCOcollecttype = paramsselected.col,
                 params.UCOcollectdate = this.defaultSrvc.getToday(),
                 params.UCOcollecttime = "A 10 - 12pm",
                 params.UCOcollectaddress = custlist.mail_address,
