@@ -23,7 +23,7 @@
           <ion-label>Billed From : {{ company }}</ion-label>
         </ion-item>
       <ion-item>
-        <ion-label >Agreed Delivery Date : {{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getDay(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
+        <ion-label >Agreed Delivery Date : {{UNINV_AGREEDDELIVERYDATE == '0000-00-00' ? getday(7) : UNINV_AGREEDDELIVERYDATE | date: 'dd MMM yyyy'}}</ion-label>
         <!-- <ion-datetime  min="2019-12-12" max="2100-12-31"  displayFormat="DD-MMMM-YYYY" [(ngModel)]="today"></ion-datetime> -->
       </ion-item>
       <ion-item *ngIf="initDELIVERYDATE == '0000-00-00'">
@@ -61,7 +61,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Others : </ion-label>
-        <ion-input placeholder="0" [(ngModel)]="percentPromo" (ngModelChange)="lessPromotion(percentPromo)"></ion-input>
+        <ion-input type="number" placeholder="0" [(ngModel)]="percentPromo" (ngModelChange)="lessPromotion(percentPromo)"></ion-input>
         <ion-label>% </ion-label>
       </ion-item>
       <ion-item>
@@ -82,11 +82,11 @@
       </ion-item> -->
       <ion-item>
         <ion-label>Payable : </ion-label>
-        <ion-input>{{ payableAmount  | number:'1.2-2' }}</ion-input>
+        <ion-input type="number">{{ payableAmount  | number:'1.2-2' }}</ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Deposit : </ion-label>
-        <ion-input cancelText="Dismiss" [(ngModel)]="depositAmount" (ngModelChange)="getDeposit(depositAmount)">
+        <ion-input type="number" cancelText="Dismiss" [(ngModel)]="depositAmount" (ngModelChange)="getDeposit(depositAmount)">
         </ion-input>
         <ion-select cancelText="Dismiss" [(ngModel)]="paymentMethod" (ngModelChange)="getPayemntMethod(paymentMethod)">
           <ion-select-option value="Cash">Cash</ion-select-option>
@@ -97,7 +97,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Balance : </ion-label>
-        <ion-input>{{ balanceAmount  | number:'1.2-2' }}</ion-input>
+        <ion-input type="number">{{ balanceAmount  | number:'1.2-2' }}</ion-input>
       </ion-item>
     </ion-item-group>
   

@@ -118,7 +118,7 @@ export class CreatelocalinvoicePage implements OnInit {
   }
 
   async selectCus(custlist) {
-    console.log(custlist)
+   //console.log(custlist)
 
     let paramsselected: any = {
       id: this.mySpecialID,

@@ -71,7 +71,7 @@ export class SelectcategoryPage implements OnInit {
     // })
 
     this.storage.get('DRIVER_SUMMARY').then(res => {
-      console.log(res)
+     //console.log(res)
     })
 
     this.isLoading = true
@@ -87,7 +87,7 @@ export class SelectcategoryPage implements OnInit {
       // //////console.log(wew);
 
       this.collectionInfo = params
-      console.log(params)
+     //console.log(params)
       if (this.collectionInfo.coldel_type == "collection") {
         this.myColID = ""
         this.myColID = this.collectionInfo.id
@@ -97,7 +97,7 @@ export class SelectcategoryPage implements OnInit {
         this.myColID = this.collectionInfo.dei
       }
 
-      console.log(this.myColID)
+     //console.log(this.myColID)
       ////console.log(this.myColID)
       // myColID = this.collectionInfo.id
       // if(myColID = undefined){
@@ -121,10 +121,10 @@ export class SelectcategoryPage implements OnInit {
             if (res[i].UNINV_COLLID == this.myColID) {
               this.unsyncData = res[i]
               this.invoiceTypepins = res[i].invoicesynctype
-              console.log(this.invoiceTypepins)
+             //console.log(this.invoiceTypepins)
             }
           }
-          console.log(res)
+         //console.log(res)
           ////console.log(this.unsyncData)
 
           // if (this.collectionInfo.com == 0 || this.collectionInfo.com == "") {
@@ -142,9 +142,10 @@ export class SelectcategoryPage implements OnInit {
                 ////console.log('TEMP_ITEMS_TABLE', this.tempItems);
                 this.defaultSrvc.getTempItems == null || this.defaultSrvc.getTempItems == undefined ? this.defaultSrvc.getTempItems = this.tempItems : this.defaultSrvc.getTempItems;
   
-                ////console.log(this.defaultSrvc.getTempItems)
+                //console.log(this.defaultSrvc.getTempItems)
   
                 this.storage.set('TEMP_ITEMS_TABLE', this.tempItems)
+
                 this.category = this.getItem(this.tempItems, 'items')
                 this.isLoading = false
               }else{

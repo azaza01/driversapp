@@ -200,8 +200,8 @@ export class ColectionviewPage implements OnInit {
       this.callnumber = this.collectionInfo.cn2
     }
     this.callNumber.callNumber(this.callnumber, true)
-      .then(res => console.log('Launched dialer!', res))
-      .catch(err => console.log('Error launching dialer', err));
+      .then(res =>console.log('Launched dialer!', res))
+      .catch(err =>console.log('Error launching dialer', err));
   }
 
   async postphone() {
@@ -416,7 +416,7 @@ export class ColectionviewPage implements OnInit {
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
             params.invoicesynctype = "New"
-            console.log(params)
+           //console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res
@@ -493,7 +493,7 @@ export class ColectionviewPage implements OnInit {
             params.syncserver = "false"
             params.driversId = this.driverInfo.id
             params.invoicesynctype = "New"
-            console.log(params)
+           //console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
               this.unsyncData = res

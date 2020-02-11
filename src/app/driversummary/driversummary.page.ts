@@ -107,9 +107,9 @@ export class DriversummaryPage implements OnInit {
 
   
   getSummary(mydate){
-    console.log(mydate)
+   //console.log(mydate)
     this.storage.get('DRIVER_SUMMARY').then(res => {
-      console.log(res);
+     //console.log(res);
       res == null ? this.mysummary = [] : this.mysummary = res
       this.mysummary.forEach(myC => {
 
@@ -160,7 +160,7 @@ export class DriversummaryPage implements OnInit {
         if(today == mydate && myC.driversid == this.driversDetails.id){
           this.totalAmount = (this.totalAmount * 1)  + (myC.amount * 1)
         }
-        console.log(myC.invoicecompany)
+       //console.log(myC.invoicecompany)
       });
 
       this.totalAmount = Math.round((this.totalAmount) * 100) / 100;
@@ -188,7 +188,7 @@ export class DriversummaryPage implements OnInit {
 
     modalCtrl.onDidDismiss().then(data => {
       // this.isModalOpen = false;
-      console.log(data.data.date)
+     //console.log(data.data.date)
 
       this.mysummary = ""
       this.invoicecompanyCC= 0
@@ -243,7 +243,7 @@ export class DriversummaryPage implements OnInit {
     this.letShow = "true"
 
     this.storage.get('DRIVER_SUMMARY').then(res => {
-      console.log(res);      
+     //console.log(res);      
       let filtered: any = []
       res == null ? this.mysummary = [] : this.mysummary = res
       this.mysummary.forEach(myC => {
@@ -264,7 +264,7 @@ export class DriversummaryPage implements OnInit {
     }).finally(() =>{
       this.storage.get('SELECTED_INVOICES').then(res => {
         this.selectedInvoice = res
-        console.log(res)
+       //console.log(res)
       })
     })
   }

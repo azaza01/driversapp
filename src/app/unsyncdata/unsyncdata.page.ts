@@ -59,7 +59,7 @@ export class UnsyncdataPage implements OnInit {
     })
     // await this.presentLoading('Collecting Local Data');
     await Promise.resolve(this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-      console.log(res)
+     //console.log(res)
       if (res != null) {
         let filtered: any = []
          res.forEach(unsyncin => {
@@ -83,7 +83,7 @@ export class UnsyncdataPage implements OnInit {
     }))
 
     await Promise.resolve(this.storage.get('UNSYNCED_PAYMENT_TABLE').then(ress => {
-      console.log(ress)
+     //console.log(ress)
       if (ress != null) {
         let filtered: any = []
         ress.forEach(unsyncpay => {
@@ -105,7 +105,7 @@ export class UnsyncdataPage implements OnInit {
     }))
 
     await Promise.resolve(this.storage.get('UNSYNCOLLECTIONLOCAL').then(data => {
-      console.log(data)
+     //console.log(data)
       if (data != null) {
         let filtered: any = []
         data.forEach(unsyncinloc => {

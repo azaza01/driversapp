@@ -6,6 +6,8 @@ import { DefaultsService } from '../api/defaults.service';
 import { filter } from 'minimatch';
 import { ViewItemsComponent } from '../view-items/view-items.component';
 import { Storage } from '@ionic/storage';
+import { Platform } from '@ionic/angular';
+
 @Component({
   selector: 'app-selectitemlist',
   templateUrl: './selectitemlist.page.html',
@@ -21,6 +23,8 @@ export class SelectitemlistPage implements OnInit {
   qty: any
   price: any
 
+  public unsubscribeBackEvent: any;
+
   constructor(
     public modalController: ModalController,
     public activatedRoute: ActivatedRoute,
@@ -28,10 +32,13 @@ export class SelectitemlistPage implements OnInit {
     public loadingCtrl: LoadingController,
     private router: Router,
     private storage: Storage,
+    private platform: Platform
 
   ) { }
 
   async ngOnInit() {
+
+  
     ////console.log(this.defaultSrvc.getCategory)
     ////console.log(this.defaultSrvc.getTempItems)
     this.storage.get('TEMP_ITEMS_TABLE').then(async res => {
@@ -42,6 +49,24 @@ export class SelectitemlistPage implements OnInit {
       ////console.log(this.item_List)
 
     })
+
+    console.log('this.router.url', this.router.url);
+
+  
+  }
+
+  initializeBackButtonCustomHandler(): void {
+    if(this.router.url == "/selectitemlist"){
+      this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(999999,  () => {
+        alert("back pressed home" + this.constructor.name);
+        this.modalController.dismiss();
+      });
+    }
+    // this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(999999,  () => {
+    //     alert("back pressed home" + this.constructor.name);
+    // });
+    /* here priority 101 will be greater then 100 
+    if we have registerBackButtonAction in app.component.ts */
   }
 
   ionViewWillLeave() {

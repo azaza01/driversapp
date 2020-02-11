@@ -8,6 +8,7 @@ import { ItemsService } from '../api/items.service';
 // import { CryptoJS } from 'crypto-js';
 import { DefaultsService } from '../api/defaults.service';
 import { AppComponent } from '../app.component';
+import { ConnectionService } from 'ng-connection-service';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class LoginPage implements OnInit {
   password: any =""
   email: any = ""
 
-
+  status = 'ONLINE';
+  isConnected = true;
 
 
 
@@ -40,15 +42,30 @@ export class LoginPage implements OnInit {
     private accSrvc: AccountsService,
     private storage: Storage,
     private defaultSrvc: DefaultsService,
-    private mycomp: AppComponent
+    private mycomp: AppComponent,
+    private connectionService: ConnectionService
   ) {
     
-
+    this.connectionService.monitor().subscribe(isConnected => {
+      console.log(isConnected)
+      this.isConnected = isConnected;
+      if (this.isConnected) {
+        this.status = "ONLINE";
+        this.checkCon(this.status)
+       
+      }
+      else {
+        this.status = "OFFLINE";
+        this.checkCon(this.status)
+      }
+    })
+    console.log(this.status)
    }
 
   ngOnInit() {
 
 // this.storage.clear();
+    console.log(navigator)
 
     // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
     // this.storage.remove('UNSYNCED_INVOICE_TABLE')
@@ -93,31 +110,53 @@ export class LoginPage implements OnInit {
     // this.email = this.mycomp.myusername
 
     // this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
-    //   console.log(res)
+    //  //console.log(res)
     // })
     // this.storage.get('UNSYNCED_PAYMENT_TABLE').then(res => {
-    //   console.log(res)
+    //  //console.log(res)
     // })
     // this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {
-    //   console.log(res)
+    //  //console.log(res)
     // })
     // this.storage.get('ENVNUM_TABLE').then(res => {
-    //   console.log(res)
+    //  //console.log(res)
     // })
     // // this.storage.get('DRIVER_SUMMARY').then(res => {
-    //   console.log(res)
+    //  //console.log(res)
     // })
 
     // this.storage.get('DRIVER_SUMMARY').then(res => {
     //   let data
     //   data = res
     //   let filtered: any = []
-    //   console.log(data)
+    //  //console.log(data)
     // })
+
 
   }
 
+  
+
   // form.resetForm({ email: "@cottoncare.com.sg" });
+
+  async checkCon(msg) {
+    const alert = await this.alertController.create({
+      header: 'Internet',
+      message: msg,
+      cssClass: 'ion-alertCSS',
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {
+            alert.dismiss();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
 
   async presentLoading(msg) {

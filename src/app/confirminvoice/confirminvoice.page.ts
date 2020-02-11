@@ -226,7 +226,7 @@ export class ConfirminvoicePage implements OnInit {
         this.validationforsync = "false"
         this.servicetype = res.del
         this.isCollection = "false"
-        console.log(this.invoiceId)
+       //console.log(this.invoiceId)
         ////console.log(this.invoiceId)
       }
 
@@ -241,7 +241,7 @@ export class ConfirminvoicePage implements OnInit {
           if (res[i].UNINV_COLLID == this.invoiceId) {
             this.customerData = res[i];
             this.typeofSync = res[i].invoicesynctype
-            console.log(this.customerData)
+           //console.log(this.customerData)
           }
         }
 
@@ -373,7 +373,8 @@ export class ConfirminvoicePage implements OnInit {
             this.finalSubtotal = this.finalSubtotal + res[i].subtotal;
           }
         }
-        //console.log(this.allinvoiceitems)
+
+       console.log(this.allinvoiceitems)
         // //////console.log(this.finalSubtotal)
         if (this.finalSubtotal > 30) {
           this.addDiscount();
@@ -399,18 +400,42 @@ export class ConfirminvoicePage implements OnInit {
     // //////console.log(today)
     var now = new Date();
     var mydays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    //console.log(mydays)
+
+  
     if (dd > mydays) {
       var newdays
       newdays = dd - mydays
       if (mm == 12) {
         mm = 1
         yyyy = new Date().getFullYear() + 1;
+      }else if(mm != 12){
+        mm = mm + 1
+       ////console.log(mm)
       }
       today = this.datepipe.transform(new Date(yyyy + '-' + mm + '-' + newdays), 'dd MMM yyyy');
     } else {
       today = this.datepipe.transform(new Date(yyyy + '-' + mm + '-' + dd), 'dd MMM yyyy');
     }
+
+
+
     return today
+  }
+
+  get7days(){
+
+    let today;
+    let dd = new Date().getDate();
+    let mm = new Date().getMonth() + 1;
+    let yyyy = new Date().getFullYear();
+    let yy = (yyyy + '').substr(2, 2);
+
+    var dates = new Date(today)
+    var newdate = dates.setDate(dates.getDate() + 7);
+    var mynewdate = new Date(newdate)
+
+    return mynewdate
   }
 
   formatDate(sdate) {
@@ -1083,10 +1108,10 @@ export class ConfirminvoicePage implements OnInit {
   }
 
   proceedtoWhat(offlinedata) {
-    console.log(offlinedata)
+   //console.log(offlinedata)
     let proceedtowhere = this.validationforsync
-    console.log(proceedtowhere)
-    console.log(this.newInvoiceCollection)
+   //console.log(proceedtowhere)
+   //console.log(this.newInvoiceCollection)
     ////console.log(proceedtowhere)
     //console.log(proceedtowhere)
 
@@ -1139,7 +1164,7 @@ export class ConfirminvoicePage implements OnInit {
           })
         }).finally(() => {
           this.storage.get('DRIVER_SUMMARY').then(res => {
-            console.log(res)
+           //console.log(res)
           })
           this.defaultSrvc.getTempItems = undefined;
           this.customerData = ""
@@ -1366,7 +1391,7 @@ export class ConfirminvoicePage implements OnInit {
   async createNewInvoiceFromLocal() {
  
     ////console.log(this.dataForCreateNewCollection)
-   // console.log(this.newInvoiceCollection)
+   ////console.log(this.newInvoiceCollection)
     let tag;
     const alert = await this.alertController.create({
       header: 'Bill from which company?',
@@ -1546,8 +1571,8 @@ export class ConfirminvoicePage implements OnInit {
                   //   let data, colid
                   //   data = res
                   //   let filtered: any = []
-                  //   console.log(this.invoiceId)
-                  //   console.log(data.id)
+                  //  //console.log(this.invoiceId)
+                  //  //console.log(data.id)
                   //   // if (data != "") {
                   //     // data.forEach(coldelData => {
                   //       if (data.id == this.invoiceId) {
@@ -1608,8 +1633,8 @@ export class ConfirminvoicePage implements OnInit {
                   //   let data, colid
                   //   data = res
                   //   let filtered: any = []
-                  //   console.log(this.invoiceId)
-                  //   console.log(data.dei)
+                  //  //console.log(this.invoiceId)
+                  //  //console.log(data.dei)
                   //   // if (data != "") {
                   //     // data.forEach(coldelData => {
                   //       if (data.dei == this.invoiceId) {
@@ -1850,8 +1875,8 @@ export class ConfirminvoicePage implements OnInit {
                   //   let data, colid
                   //   data = res
                   //   //let filtered: any = []
-                  //   console.log(this.invoiceId)
-                  //   console.log(data.id)
+                  //  //console.log(this.invoiceId)
+                  //  //console.log(data.id)
                   //   // if (data != "") {
                   //     // data.forEach(coldelData => {
                   //       if (data.id == this.invoiceId) {
@@ -1912,8 +1937,8 @@ export class ConfirminvoicePage implements OnInit {
                   //   let data, colid
                   //   data = res
                   //   //let filtered: any = []
-                  //   console.log(this.invoiceId)
-                  //   console.log(data.dei)
+                  //  //console.log(this.invoiceId)
+                  //  //console.log(data.dei)
                   //   // if (data != "") {
                   //    // data.forEach(coldelData => {
                   //       if (data.dei == this.invoiceId) {

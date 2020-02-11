@@ -356,7 +356,7 @@ export class DefaultsService {
     this.checkAllSucess =  "1"
     return new Promise(resolve => {
       Promise.resolve(this.getItems(driverInfo)).then(data => {
-        ////console.log('ITEMS_TABLE', data);
+        console.log('ITEMS_TABLE', data);
         this.loading.dismiss();
         if(data != "false"){
           this.checkAllSucess = this.checkAllSucess + "2"
@@ -364,7 +364,7 @@ export class DefaultsService {
           resolve(this.checkAllSucess)
         }
         Promise.resolve(this.getRates(driverInfo)).then(data => {
-          ////console.log('RATES_TABLE', data);
+          console.log('RATES_TABLE', data);
           this.loading.dismiss();
           if(data != "false"){
             this.checkAllSucess = this.checkAllSucess + "3"
@@ -381,7 +381,7 @@ export class DefaultsService {
             }
             
             Promise.resolve(this.getInvoicetypes(driverInfo)).then(data => {
-              console.log('INVOICE_TYPES_TABLE', data);
+             //console.log('INVOICE_TYPES_TABLE', data);
               this.loading.dismiss();
               if(data != "false"){
                 this.checkAllSucess = this.checkAllSucess + "5"

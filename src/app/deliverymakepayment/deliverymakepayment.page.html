@@ -51,7 +51,7 @@
             </ion-item> -->
             <ion-item>
                 <ion-label>Paying : </ion-label>
-                <ion-input cancelText="Dismiss" [(ngModel)]="payAmount" (ngModelChange)="getPay(payAmount)"> </ion-input>
+                <ion-input type="number" cancelText="Dismiss" [(ngModel)]="payAmount" (ngModelChange)="getPay(payAmount)"> </ion-input>
                 <ion-select cancelText="Dismiss" [(ngModel)]="deliveryDetails.dpt" (ngModelChange)="getPayemntMethod(deliveryDetails.dpt)">
                   <ion-select-option value="Cash">Cash</ion-select-option>
                   <ion-select-option value="Cheque">Cheque</ion-select-option>

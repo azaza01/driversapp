@@ -314,7 +314,7 @@ export class ColdevPage implements OnInit {
           });
           // //////console.log(this.myCollection);
           this.storage.get('COLDEL_TABLE').then(res => {
-            console.log(res);
+           //console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myCollection.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""
@@ -373,7 +373,7 @@ export class ColdevPage implements OnInit {
           });
           // //////console.log(this.myDeliveries);
           this.storage.get('COLDEL_TABLE').then(res => {
-          console.log(res);
+         //console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myDeliveries.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""

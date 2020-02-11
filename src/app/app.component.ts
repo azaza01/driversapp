@@ -77,6 +77,8 @@ export class AppComponent {
     // this.getAccounts()
     this.initializeApp();
 
+
+
   }
 
 
@@ -90,13 +92,13 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.platform.backButton.subscribeWithPriority(9999, () => {
-        document.addEventListener('backbutton', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          ////console.log('hello');
-        }, false);
-      });
+      // this.platform.backButton.subscribeWithPriority(9999, () => {
+      //   document.addEventListener('backbutton', function (event) {
+      //     event.preventDefault();
+      //     event.stopPropagation();
+      //     ////console.log('hello');
+      //   }, false);
+      // });
     });
   }
 

@@ -40,7 +40,7 @@ export class CollectionitemsPage implements OnInit {
     this.category = this.defaultSrvc.getCategory
     this.temp_List = this.defaultSrvc.getTempItems
     this.item_List = await this.getList(this.temp_List)
-    console.log(this.item_List)
+   //console.log(this.item_List)
 
   }
 

@@ -370,58 +370,7 @@ export class DeliverymakepaymentPage implements OnInit {
         data.forEach(coldelData => {
           if (coldelData.coldel_type == 'delivery') {
             if (coldelData.dei == offlinedata.delid) {
-              // let params = {
-              //   dei: coldelData.dei,
-              //   aid: coldelData.aid,
-              //   cui: coldelData.cui,
-              //   sts: coldelData.sts,
-              //   ded: coldelData.ded,
-              //   ren: coldelData.ren,
-              //   det: coldelData.det,
-              //   cun: coldelData.cun,
-              //   cut: coldelData.cut,
-              //   com: coldelData.com,
-              //   na2: coldelData.na2,
-              //   dea: coldelData.dea,
-              //   deb: coldelData.deb,
-              //   lil: coldelData.lil,
-              //   dun: coldelData.dun,
-              //   cue: coldelData.cue,
-              //   uby: coldelData.uby,
-              //   uon: coldelData.uon,
-              //   dpc: coldelData.dpc,
-              //   cn1: coldelData.cn1,
-              //   cn2: coldelData.cn2,
-              //   cn3: coldelData.cn3,
-              //   noe: coldelData.noe,
-              //   den: coldelData.den,
-              //   han: coldelData.han,
-              //   pac: coldelData.pac,
-              //   rol: coldelData.rol,
-              //   ret: coldelData.ret,
-              //   del: coldelData.del,
-              //   pax: coldelData.pax,
-              //   id: coldelData.id,
-              //   inn: coldelData.inn,
-              //   coi: coldelData.coi,
-              //   toa: coldelData.toa,
-              //   dis: coldelData.dis,
-              //   dpt: coldelData.dpt,
-              //   dpa: coldelData.dpa,
-              //   delivery_driver_id: coldelData.delivery_driver_id,
-              //   delivery_driver: coldelData.delivery_driver,
-              //   cca: coldelData.cca,
-              //   exp: coldelData.exp,
-              //   baa: coldelData.baa,
-              //   bap: coldelData.bap,
-              //   invn: coldelData.invn,
-              //   accu: coldelData.accu,
-              //   coldel_type: coldelData.coldel_type,
-              //   coldel_returndate: coldelData.coldel_returndate,
-              //   coldel_returntime: coldelData.coldel_returntime,
-              //   coldel_flag: "updated"
-              // }
-              //filtered.push(params)
+             //delete
             } else {
               filtered.push(coldelData)
             }

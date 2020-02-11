@@ -50,6 +50,7 @@
     "ionic4-date-picker": "^0.1.0",
     "moment": "^2.24.0",
     "mx.ferreyra.callnumber": "0.0.2",
+    "ng-connection-service": "^1.0.4",
     "require": "^2.4.20",
     "rxjs": "~6.5.1",
     "sha1": "^1.1.1",
