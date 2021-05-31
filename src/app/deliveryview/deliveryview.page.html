@@ -70,6 +70,16 @@
                 href="sms: +65{{deliveryInfo.cn2}}">SMS
             </ion-button>
         </ion-item>
+        <ion-item *ngIf="deliveryInfo.cn3 != ''">
+            <ion-label>Number 3 : </ion-label>
+            <ion-label>{{deliveryInfo.cn3}}</ion-label>
+            <ion-button shape="round" color="warning" class="ion-float-right" position="bottom" (click)="callNow('3')">
+                Call
+            </ion-button>
+            <ion-button shape="round" color="warning" class="ion-float-right" position="bottom"
+                href="sms: +65{{deliveryInfo.cn3}}">SMS
+            </ion-button>
+        </ion-item>
         <ion-item *ngIf="deliveryInfo.na2 != ''">
             <ion-label>Alt name : </ion-label>
             <ion-label>{{deliveryInfo.na2}}</ion-label>

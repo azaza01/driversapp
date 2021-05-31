@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    endpoint: 'https://ccmanagerproduction.1kbiz.com/ws',
+    endpoint: 'https://ccmanager.cottoncare.sg/ws',
     socketUrl: '',
     apiKey: '',
     notification: ''

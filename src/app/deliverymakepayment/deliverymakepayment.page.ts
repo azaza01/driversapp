@@ -85,6 +85,9 @@ export class DeliverymakepaymentPage implements OnInit {
     this.getToday()
   }
 
+
+
+
   getTodayID() {
     let today;
     let dd = new Date().getDate();

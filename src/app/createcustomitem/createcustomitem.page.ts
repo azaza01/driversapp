@@ -372,24 +372,24 @@ export class CreatecustomitemPage implements OnInit {
   }
   onClickprice(myprice) {
     if (myprice == 0) {
-      this.myprice = ""
+      // this.myprice = ""
     }
   }
   onClickPcs(noOfPcs) {
     if (noOfPcs == 0) {
-      this.noOfPcs = ""
+      // this.noOfPcs = ""
     }
   }
 
   onClickLength(lengths) {
     if (lengths == 0) {
-      this.lengths = ""
+      // this.lengths = ""
     }
   }
 
   onClickBreadth(breadthdata) {
     if (breadthdata == 0) {
-      this.breadthdata = ""
+      // this.breadthdata = ""
     }
   }
 
@@ -750,7 +750,7 @@ export class CreatecustomitemPage implements OnInit {
 
         this.concatDesc = this.carpettype + " Carpet " + this.lengths + this.unittype + " x " + this.breadthdata + this.unittype 
         this.Category = this.selectedCategory
-        if (this.cleantypes = "DC") {
+        if (this.cleantypes == "DC") {
           this.cleantype2 = ("Dry Clean"); //default
         } else {
           this.cleantype2 = ("Laundry");
@@ -784,11 +784,13 @@ export class CreatecustomitemPage implements OnInit {
 
         this.concatDesc = this.concatDescripton
         this.Category = this.selectedCategory
-        if (this.company = "DC") {
+
+        if (this.cleantypes == "DC") {
           this.cleantype2 = ("Dry Clean"); //default
         } else {
-          this.cleantype2 = ("Dry Clean");
+          this.cleantype2 = ("Laundry");
         }
+        
         this.readytype = this.selectedreadyTypes;
         this.itesmReady = "no";
 
@@ -821,7 +823,7 @@ export class CreatecustomitemPage implements OnInit {
           this.concatDesc = this.normaldesc;
           //////console.log(this.concatDesc)
           this.Category = this.selectedCategory
-          if (this.cleantypes = "DC") {
+          if (this.cleantypes == "DC") {
             this.cleantype2 = ("Dry Clean"); //default
           } else {
             this.cleantype2 = ("Laundry");
@@ -870,7 +872,7 @@ export class CreatecustomitemPage implements OnInit {
         params.id = "999"
         params.description = this.concatDesc
         params.cat_type = this.Category
-        params.clean_type = this.cleantype2
+        params.clean_type = this.cleantypes
         params.ready_type = this.readytype
         params.price = this.itemPrice
         params.is_ready = "no"

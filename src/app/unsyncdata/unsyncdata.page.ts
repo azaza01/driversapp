@@ -275,7 +275,7 @@ export class UnsyncdataPage implements OnInit {
           this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
             let data
             data = res
-            ////console.log(data)
+            
             let filtered: any = []
             ////console.log(selected.UNINV_COLLTS)
             if (data != false) {
@@ -306,6 +306,7 @@ export class UnsyncdataPage implements OnInit {
                     drvem: unsync.drvem,
                     colitem: unsync.colitem,
                     UNINV_SAVEDON: unsync.UNINV_SAVEDON,
+                    rateus: unsync.rateus,
                     syncserver: "true",
                     driversId : this.driverInfo.id
                   }
@@ -317,6 +318,9 @@ export class UnsyncdataPage implements OnInit {
               });
 
               this.storage.set('UNSYNCED_INVOICE_TABLE', filtered)
+              this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
+                console.log(res)
+              })
             }
           }).then(() => {
             this.storage.get('UNSYNCOLLECTIONLOCAL').then(res => {

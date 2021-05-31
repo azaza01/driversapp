@@ -47,6 +47,47 @@ export class DeliveryService {
     return await this.loading.present();
   }
 
+  getDeliveryCount(info: any, today) {
+    let params = {
+      email: info.email_address,
+      password: info.password,
+      driverid: info.id,
+      date: today,
+      // "email": "it01.azaza@gmail.com",
+      // "password": "7c222fb2927d828af22f592134e8932480637c0d",
+      // "driverid": "109",
+      // "date": "2019-11-21"
+    }
+
+    console.log(params)
+
+
+
+    return new Promise(resolve => {
+      this.httpclient.post(this.url + "/countMeon.json", params).subscribe(
+        response => {
+          let res;
+          res = response;
+          ////console.log(res)
+
+          // this.storage.set('COLDEL_TABLE', res).then(() => {
+            resolve(res)
+          // });
+
+        },
+        err => {
+          ////console.log(err)
+          resolve(false)
+
+          // alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      ////console.log(err)
+    })
+  }
+
   getDelivery(info: any, today) {
     let params = {
       email: info.email_address,

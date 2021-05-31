@@ -95,7 +95,8 @@ export class SyncinvoiceService {
       "discount": info.UNINV_DISCOUNT,
       "express": info.UNINV_EXPRESS,
       "bags": info.UNINV_BAGS,
-      "savedon": info.UNINV_SAVEDON
+      "savedon": info.UNINV_SAVEDON,
+      "rateus": info.rateus
     }
     ////console.log(info)
 

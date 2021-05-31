@@ -108,8 +108,10 @@ export class DeliveryviewPage implements OnInit {
   callNow(number) {
     if (number == "1") {
       this.callnumber = this.deliveryInfo.cn1
-    } else {
+    } else  if (number == "2"){
       this.callnumber = this.deliveryInfo.cn2
+    } else {
+      this.callnumber = this.deliveryInfo.cn3
     }
     this.callNumber.callNumber(this.callnumber, true)
       .then(res =>console.log('Launched dialer!', res))

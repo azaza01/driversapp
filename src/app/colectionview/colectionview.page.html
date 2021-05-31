@@ -67,6 +67,14 @@
             <ion-button shape="round"  color="warning" class="ion-float-right" position="bottom" href="sms: +65{{collectionInfo.cn2}}">SMS
             </ion-button>
         </ion-item>
+        <ion-item *ngIf="collectionInfo.cn3 != ''">
+            <ion-label>Number 3 : </ion-label>
+            <ion-label>{{collectionInfo.cn3}}</ion-label>
+            <ion-button shape="round"  color="warning" class="ion-float-right" position="bottom" (click)="callNow('3')">Call
+            </ion-button>
+            <ion-button shape="round"  color="warning" class="ion-float-right" position="bottom" href="sms: +65{{collectionInfo.cn3}}">SMS
+            </ion-button>
+        </ion-item>
         <ion-item *ngIf="collectionInfo.na2 != ''">
             <ion-label>Alt name : </ion-label>
             <ion-label>{{collectionInfo.na2}}</ion-label>
@@ -158,4 +166,20 @@
                 (click)="createInvoiceSelectItem(collectionInfo)">CREATE INVOICE</ion-button>
         </ion-col>
     </ion-row>
+    <ion-row *ngIf="collectionInfo.mydates == isTodayCollection">
+        <ion-col>
+                <ion-button  shape="round"  expand="full" color="warning" class="ion-float-left" position="bottom" href="sms: {{collectionInfo.cn1}}?body=Dear Customer, %0D%0A %0D%0A This is to acknowledge receipt of your item.  In view of the current Covid-19 situation, we will send your invoice latest by tomorrow. %0D%0A %0D%0A Thank you for your understanding. %0D%0A %0D%0A %0D%0A Sincerely, %0D%0A The Management %0D%0A Cotton Care" >SMS</ion-button>
+                <!-- <ion-button [disabled]="initprcid == ''" expand="full" shape="round"  color="warning" class="ion-float-right" position="bottom" href="whatsapp://send?text=Dear Customer, %0D%0A %0D%0A This is to acknowledge receipt of your item.  In view of the current Covid-19 situation, we will send your invoice latest by tomorrow. %0D%0A %0D%0A Thank you for your understanding. %0D%0A %0D%0A %0D%0A Sincerely, %0D%0A The Management %0D%0A Cotton Care&phone=+63{{ collectionInfo.cn1 }}"  >WHATSAPP</ion-button> -->
+                <ion-button [disabled]="initprcid == ''" expand="full" shape="round"  color="warning" class="ion-float-right" position="bottom" (click)="shareViaWhatsApps()"  >WHATSAPP</ion-button>
+       
+        </ion-col>
+     </ion-row>
+    <!-- <ion-row *ngIf="collectionInfo.mydates == isTodayCollection">
+        <ion-col >
+            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="sendTo()">Acknowledge Receipt</ion-button>
+          </ion-col>
+          <ion-col >
+            <ion-button expand="full" shape="round" color="warning"  position="bottom" (click)="sendTo()">Acknowledge Receipt</ion-button>
+          </ion-col>
+    </ion-row> -->
 </ion-footer>

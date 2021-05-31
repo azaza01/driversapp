@@ -9,6 +9,10 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CollectionService } from '../api/collection.service';
 import { AccountsService } from '../api/accounts.service';
 // import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { SMS } from '@ionic-native/sms/ngx';
+// import { SMS } from '@ionic-native/sms/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @Component({
   selector: 'app-colectionview',
@@ -59,8 +63,9 @@ export class ColectionviewPage implements OnInit {
     private callNumber: CallNumber,
     public loadingCtrl: LoadingController,
     // private geolocation: Geolocation
-
-    // private sms: SMS
+    private socialSharing: SocialSharing,
+    // private sms: SMS,
+    public androidPermissions: AndroidPermissions,
   ) { }
 
   ngOnInit() {
@@ -118,7 +123,59 @@ export class ColectionviewPage implements OnInit {
     //   this.timeslots = output;
     // })
 
+
   }
+
+  async sendTo(){
+    const alert = await this.alertController.create({
+      header: 'Send acknowledge message',
+      message: "send to?",
+      cssClass: 'ion-alertCSS',
+      buttons: [
+        {
+          text: 'SMS',
+          handler: () => {
+            alert.dismiss();
+            this.sendSMS()
+            // this.shareViaWhatsApps() 
+          }
+        }, {
+          text: 'Whatsapp',
+          handler: () => {
+            this.shareViaWhatsApps()
+          }
+        }
+      ]
+    });
+    this.loading.dismiss()
+    await alert.present();
+  }
+
+  shareViaWhatsApps() {
+    var mylink = "Dear Customer,\r\n\r\nThis is to acknowledge receipt of your item.  In view of the current Covid-19 situation, we will send your invoice latest by tomorrow.\r\n\r\nThank you for your understanding. \r\n\r\n\r\nSincerely,\r\nThe Management\r\nCotton Care";
+    this.socialSharing.shareViaWhatsAppToReceiver("+65" + this.collectionInfo.cn1,mylink).then(() => {
+    }).catch(() => {
+    });
+  }
+
+  sendAutoSMS(){
+    this.shareViaWhatsApps() 
+  }
+
+  sendSMS(){
+    // var mylink = "Dear Customer,\r\n\r\nThis is to acknowledge receipt of your item.  In view of the current Covid-19 situation, we will send your invoice latest by tomorrow.\r\n\r\nThank you for your understanding. \r\n\r\n\r\nSincerely,\r\nThe Management\r\nCotton Care";
+    // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_CONTACTS).then(() => {
+    // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(() => {
+    //     this.sms.send("+659770916899", mylink);
+    //   }).catch((err) => {
+    //     alert(JSON.stringify(err));
+    //   });
+    // }).catch((err) => {
+    //   alert(JSON.stringify(err));
+    // });
+
+  }
+
 
   // getMylocation(){
   //   this.geolocation.getCurrentPosition().then((resp) => {
@@ -196,8 +253,10 @@ export class ColectionviewPage implements OnInit {
   callNow(number) {
     if (number == "1") {
       this.callnumber = this.collectionInfo.cn1
-    } else {
+    } else  if (number == "2"){
       this.callnumber = this.collectionInfo.cn2
+    } else {
+      this.callnumber = this.collectionInfo.cn3
     }
     this.callNumber.callNumber(this.callnumber, true)
       .then(res =>console.log('Launched dialer!', res))

@@ -18,7 +18,11 @@ import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CollectionitemsPage } from './collectionitems/collectionitems.page';
 import { CreatecustomitemPage } from './createcustomitem/createcustomitem.page';
-// import { SMS } from '@ionic-native/sms';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { SMS } from '@ionic-native/sms/';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+// import { OneSignal } from '@ionic-native/onesignal/ngx';
+
 
 
 @NgModule({
@@ -49,7 +53,11 @@ import { CreatecustomitemPage } from './createcustomitem/createcustomitem.page';
     // SMS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Network,
-    DatePipe
+    DatePipe,
+    SocialSharing,
+    // SMS,
+    AndroidPermissions,
+    // OneSignal
   ],
   bootstrap: [AppComponent]
 })

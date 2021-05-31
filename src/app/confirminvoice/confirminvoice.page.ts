@@ -9,6 +9,7 @@ import { Ionic4DatepickerModalComponent } from '@logisticinfotech/ionic4-datepic
 import { SyncinvoiceService } from '../api/syncinvoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-confirminvoice',
   templateUrl: './confirminvoice.page.html',
@@ -26,6 +27,8 @@ export class ConfirminvoicePage implements OnInit {
   unsyncData: any
 
   proceedtoWherePage: any
+
+  rateusdata: any
 
   checkAccount = 0;
   company: any;
@@ -146,7 +149,7 @@ export class ConfirminvoicePage implements OnInit {
     public syncinvoiceSrvs: SyncinvoiceService,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-    private router: Router,
+    private router: Router
   ) {
     this.datePickerObj = {
       // inputDate: new Date('12'), // If you want to set month in date-picker
@@ -316,6 +319,17 @@ export class ConfirminvoicePage implements OnInit {
     this.loading.dismiss();
 
   }
+
+  getrate(checktorate){
+    if(checktorate == true){
+      this.rateusdata = 1
+      console.log(this.rateusdata)
+    }else{
+      this.rateusdata = 0
+      console.log(this.rateusdata)
+    }
+  }
+
 
   getItemSubtotal() {
     // if (this.checkAccount == 1) {
@@ -944,7 +958,8 @@ export class ConfirminvoicePage implements OnInit {
                 colitem: offlinedata.invoiceitem,
                 syncserver: this.canSyncNow,
                 driversId: this.driversDetails.id,
-                invoiceType: this.typeofSync
+                invoiceType: this.typeofSync,
+                rateus : this.rateusdata
               }
               filtered.push(params)
             } else {
@@ -977,7 +992,8 @@ export class ConfirminvoicePage implements OnInit {
                 colitem: offlinedata.invoiceitem,
                 syncserver: this.canSyncNow,
                 driversId: this.driversDetails.id,
-                invoiceType: this.typeofSync
+                invoiceType: this.typeofSync,
+                rateus : this.rateusdata
               }
               filtered.push(params)
             } else {
@@ -1013,7 +1029,8 @@ export class ConfirminvoicePage implements OnInit {
           colitem: offlinedata.invoiceitem,
           syncserver: this.canSyncNow,
           driversId: this.driversDetails.id,
-          invoiceType: this.typeofSync
+          invoiceType: this.typeofSync,
+          rateus : this.rateusdata
         }
         //////console.log(params)
         this.storage.set('UNSYNCED_INVOICE_TABLE', params)
@@ -1314,7 +1331,7 @@ export class ConfirminvoicePage implements OnInit {
         this.storage.set('ENVNUM_TABLE', filtered)
       })
       // //////console.log(data);
-      params.email = this.driver_email,
+        params.email = this.driver_email,
         params.password = this.driver_password,
         params.initial = this.company,
         params.customerid = this.customerID,
@@ -1336,7 +1353,8 @@ export class ConfirminvoicePage implements OnInit {
         params.bags = this.UNINV_BAGS,
         params.savedon = this.todaydate,
         params.driversId = this.driversDetails.id,
-        params.invoiceType = this.typeofSync
+        params.invoiceType = this.typeofSync,
+        params.rateus = this.rateusdata
       resolve(params)
     }).catch(e => {
       //////console.log(e);
@@ -1436,6 +1454,7 @@ export class ConfirminvoicePage implements OnInit {
             params.syncserver = "false"
             params.driversId = this.driversDetails.id
             params.invoicesynctype = 'NewandAnother'
+            params.rateus = this.rateusdata
             ////console.log(params)
 
             this.storage.get('UNSYNCED_INVOICE_TABLE').then(res => {
@@ -1500,6 +1519,7 @@ export class ConfirminvoicePage implements OnInit {
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
                 params.invoicesynctype = 'NewandAnother'
+                params.rateus = this.rateusdata
               } else {
 
                 this.checkIfRepeat = "yes";
@@ -1531,6 +1551,7 @@ export class ConfirminvoicePage implements OnInit {
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
                 params.invoicesynctype = 'NewandAnother'
+                params.rateus = this.rateusdata
               }
 
 
@@ -1738,6 +1759,7 @@ export class ConfirminvoicePage implements OnInit {
             params.syncserver = "false"
             params.driversId = this.driversDetails.id
             params.invoicesynctype = 'NewandAnother'
+            params.rateus = this.rateusdata
             ////console.log(params)
 
 
@@ -1806,6 +1828,7 @@ export class ConfirminvoicePage implements OnInit {
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
                 params.invoicesynctype = 'NewandAnother'
+                params.rateus = this.rateusdata
               } else {
                 this.checkIfRepeat = "yes";
 
@@ -1836,6 +1859,7 @@ export class ConfirminvoicePage implements OnInit {
                 params.syncserver = "false"
                 params.driversId = this.driversDetails.id
                 params.invoicesynctype = 'NewandAnother'
+                params.rateus = this.rateusdata
               }
 
               // this.storage.set('UNSYNCOLLECTIONLOCAL', params).then(data =>{

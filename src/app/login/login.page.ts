@@ -8,7 +8,11 @@ import { ItemsService } from '../api/items.service';
 // import { CryptoJS } from 'crypto-js';
 import { DefaultsService } from '../api/defaults.service';
 import { AppComponent } from '../app.component';
-import { ConnectionService } from 'ng-connection-service';
+// import { ConnectionService } from 'ng-connection-service';
+import { Network } from '@ionic-native/network/ngx'; //ngx
+import { NetworkService } from '../api/network.service';
+import { debounceTime } from 'rxjs/operators';
+// import * as Ping from "../../../plugins/cordova-plugin-ping/www/ping.js";
 
 
 @Component({
@@ -20,11 +24,13 @@ export class LoginPage implements OnInit {
 
   loading: any = new LoadingController;
   hash: any
-  password: any =""
+  password: any = ""
   email: any = ""
 
   status = 'ONLINE';
   isConnected = true;
+
+  users: any
 
 
 
@@ -43,36 +49,35 @@ export class LoginPage implements OnInit {
     private storage: Storage,
     private defaultSrvc: DefaultsService,
     private mycomp: AppComponent,
-    private connectionService: ConnectionService
+    private network: Network,
+    public networkService: NetworkService
+    // private connectionService: ConnectionService
   ) {
-    
-    this.connectionService.monitor().subscribe(isConnected => {
-      console.log(isConnected)
-      this.isConnected = isConnected;
-      if (this.isConnected) {
-        this.status = "ONLINE";
-        this.checkCon(this.status)
-       
-      }
-      else {
-        this.status = "OFFLINE";
-        this.checkCon(this.status)
-      }
-    })
-    console.log(this.status)
-   }
+
+    // this.connectionService.monitor().subscribe(isConnected => {
+    //   console.log(isConnected)
+    //   this.isConnected = isConnected;
+    //   if (this.isConnected) {
+    //     this.status = "ONLINE";
+    //     this.checkCon(this.status)
+
+    //   }
+    //   else {
+    //     this.status = "OFFLINE";
+    //     this.checkCon(this.status)
+    //   }
+    // })
+    // console.log(this.status)
+  }
 
   ngOnInit() {
-
-// this.storage.clear();
-    console.log(navigator)
 
     // this.storage.remove('UNSYNCED_PAYMENT_TABLE')
     // this.storage.remove('UNSYNCED_INVOICE_TABLE')
     // this.storage.remove('UNSYNCOLLECTIONLOCAL')
     // this.storage.remove('TEMP_RATES_TABLE')
     // this.storage.remove('TEMP_ITEMS_TABLE')
-    
+
     // this.storage.remove('ENVNUM_TABLE')
     // this.storage.remove('DRIVER_SUMMARY')
 
@@ -135,27 +140,69 @@ export class LoginPage implements OnInit {
 
   }
 
-  
+//   networkSubscriber(): void {
+    
+//     console.log(this.networkService.getNetworkType())
+//     this.checkCon(this.networkService.getNetworkType())
+
+
+//     if(this.networkService.getNetworkType() == "wifi"){
+//       this.checkCon("Wifi")
+//     }
+//     if(this.networkService.getNetworkType() == "2g"){
+//       this.checkCon("2g")
+//     }
+//     if(this.networkService.getNetworkType() == "3g"){
+//       this.checkCon("3g")
+//     }
+//     if(this.networkService.getNetworkType() == "4g"){
+//       this.checkCon("4g")
+//     }
+//     if(this.networkService.getNetworkType() == "ethernet"){
+//       this.checkCon("ethernet")
+//     }
+//     if(this.networkService.getNetworkType() == "none"){
+//       this.checkCon("none")
+//     }
+
+//     this.networkService
+//         .getNetworkStatus()
+//         .pipe(debounceTime(300))
+//         .subscribe((connected: boolean) => {
+//             this.isConnected = connected;
+//             console.log('[Home] isConnected', this.isConnected);
+//             this.handleNotConnected(connected);
+//         });
+
+        
+//  }
+
+//  handleNotConnected(con){
+//   this.checkCon(con)
+//  }
+
+
+
 
   // form.resetForm({ email: "@cottoncare.com.sg" });
 
-  async checkCon(msg) {
-    const alert = await this.alertController.create({
-      header: 'Internet',
-      message: msg,
-      cssClass: 'ion-alertCSS',
-      buttons: [
-        {
-          text: 'Ok',
-          handler: () => {
-            alert.dismiss();
-          }
-        }
-      ]
-    });
+  // async checkCon(msg) {
+  //   const alert = await this.alertController.create({
+  //     header: 'Internet',
+  //     message: msg,
+  //     cssClass: 'ion-alertCSS',
+  //     buttons: [
+  //       {
+  //         text: 'Ok',
+  //         handler: () => {
+  //           alert.dismiss();
+  //         }
+  //       }
+  //     ]
+  //   });
 
-    await alert.present();
-  }
+  //   await alert.present();
+  // }
 
 
 
@@ -171,10 +218,10 @@ export class LoginPage implements OnInit {
   ionViewWillEnter() {
     this.storage.get('REMEMBER_ME').then(accData => {
       ////console.log(accData)
-      if(accData != "" && accData != null){
+      if (accData != "" && accData != null) {
         this.email = accData.email
         this.password = accData.origpassword
-      }else{
+      } else {
         this.email = "sample@cottoncare.com.sg"
       }
     });
@@ -196,11 +243,11 @@ export class LoginPage implements OnInit {
   async login() {
 
     let user = {
-      "email" : this.email,
-      "password" : this.password, 
-      "origpassword" : this.password
+      "email": this.email,
+      "password": this.password,
+      "origpassword": this.password
     }
-    
+
     // if(user.value != "" && user.value != "" ){
     await this.presentLoading('Validating credentials');
     // this.isLoading = true;
@@ -213,20 +260,20 @@ export class LoginPage implements OnInit {
           let data = res
           let newSet = []
           ////console.log(res)
-        if(data != null){
-          data.forEach(inv => {
-            if (inv.INV_DATE == this.defaultSrvc.getToday()) { // && inv.DriverID == this.accSrvc.driverData.id
-              ////console.log('yeah')
-              newSet.push(inv)
-            }
-          });
-          this.storage.set('ENVNUM_TABLE', newSet).then(res => {
-            ////console.log(res)
+          if (data != null) {
+            data.forEach(inv => {
+              if (inv.INV_DATE == this.defaultSrvc.getToday()) { // && inv.DriverID == this.accSrvc.driverData.id
+                ////console.log('yeah')
+                newSet.push(inv)
+              }
+            });
+            this.storage.set('ENVNUM_TABLE', newSet).then(res => {
+              ////console.log(res)
+              this.router.navigate(['/home']);
+            })
+          } else {
             this.router.navigate(['/home']);
-          })
-         }else{
-            this.router.navigate(['/home']);
-         }
+          }
           // ////console.log(data)
           // ////console.log(newSet)
         })

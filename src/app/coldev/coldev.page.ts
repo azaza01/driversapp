@@ -10,6 +10,7 @@ import { SpecialinstructionService } from '../api/specialinstruction.service';
 import { formatDate } from '@angular/common';
 import { format } from 'util';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-coldev',
@@ -29,9 +30,14 @@ export class ColdevPage implements OnInit {
   collectionCount: any = 0
 
   theSelectedDate: any = ""
+  theSelectedDateCollection: any = ""
+  theSelectedDateDelivery: any = ""
 
   selected: any = []
   loading: any = new LoadingController;
+
+  subscription: Subscription;
+  theDateToday: any
 
   constructor(
     private router: Router,
@@ -64,6 +70,20 @@ export class ColdevPage implements OnInit {
     //     this.coldev("Load collections and deliveries from?")
     //   }
     // })
+
+    const source = interval(10000);
+    const text = 'Your Text Here';
+    this.subscription = source.subscribe(val => this.alertlagi(text));
+
+  }
+
+  alertlagi(text){
+    console.log(text)
+    this.CountDeliveryServer()
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -79,9 +99,13 @@ export class ColdevPage implements OnInit {
     today = yy + '-' + mmm + '-' + ddd;
     //////console.log(today)
 
+    this.theDateToday = today
+
 
     if(this.theSelectedDate == ""){
       this.theSelectedDate = today
+      this.theSelectedDateCollection = today
+      this.theSelectedDateDelivery = today
     }
     this.storage.get('COLDEL_TABLE').then(res => {
       //////console.log(res)
@@ -143,7 +167,7 @@ export class ColdevPage implements OnInit {
                       exData.splice(i, 1);
                       this.storage.set('COLDEL_TABLE', exData).then(res => {
                         this.myColDev = exData;
-                        //////console.log(this.myColDev)
+                        console.log(this.myColDev)
                       })
                     }
 
@@ -152,7 +176,7 @@ export class ColdevPage implements OnInit {
                       exData.splice(i, 1);
                       this.storage.set('COLDEL_TABLE', exData).then(res => {
                         this.myColDev = exData;
-                        //////console.log(this.myColDev)
+                        console.log(this.myColDev)
                       })
                     }
                   } else if(i < 0){
@@ -314,13 +338,13 @@ export class ColdevPage implements OnInit {
           });
           // //////console.log(this.myCollection);
           this.storage.get('COLDEL_TABLE').then(res => {
-           //console.log(res);
+           console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myCollection.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""
               // this.checkDuplicate(myC, this.myColDev)
               Promise.resolve(this.checkDuplicate(myC, this.myColDev)).then(res => {
-                //////console.log(res);
+                //console.log(res);
 
                 resolve(true)
               }).catch(e => {
@@ -373,7 +397,7 @@ export class ColdevPage implements OnInit {
           });
           // //////console.log(this.myDeliveries);
           this.storage.get('COLDEL_TABLE').then(res => {
-         //console.log(res);
+         console.log(res);
             res == null ? this.myColDev = [] : this.myColDev = res
             this.myDeliveries.forEach(myC => {
               // myC.id = (parseInt(myC.id) + 1) + ""
@@ -467,15 +491,18 @@ export class ColdevPage implements OnInit {
       this.deliveryCount = 0
 
       this.presentLoading('Loading Collection, Please Wait');
-      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("-1"))).then(res => {
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("minus",this.theSelectedDateCollection))).then(res => {
         //////console.log(res);
         this.loading.dismiss();
-        this.theSelectedDate = this.defaultSrvc.mySelectedDate
+        this.theSelectedDate = this.defaultSrvc.mySelectedDateCollection
+        this.theSelectedDateCollection = this.defaultSrvc.mySelectedDateCollection
         ////console.log(this.defaultSrvc.mySelectedDate)
          this.presentLoading('Loading Delivery, Please Wait');
-        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("-1"))).then(res => {
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("minus",this.theSelectedDateDelivery))).then(res => {
           //////console.log(res);
           this.loading.dismiss();
+          this.theSelectedDate = this.defaultSrvc.mySelectedDateDelivery
+          this.theSelectedDateDelivery = this.defaultSrvc.mySelectedDateDelivery
             this.countColAndDel()
         }).catch(e => {
           //////console.log(e);
@@ -501,15 +528,18 @@ export class ColdevPage implements OnInit {
       this.deliveryCount = 0
 
       this.presentLoading('Loading Collection, Please Wait');
-      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("1"))).then(res => {
+      Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getOthersCol("plus",this.theSelectedDateCollection))).then(res => {
         //////console.log(res);
         this.loading.dismiss();
-        this.theSelectedDate = this.defaultSrvc.mySelectedDate
+        this.theSelectedDate = this.defaultSrvc.mySelectedDateCollection
+        this.theSelectedDateCollection = this.defaultSrvc.mySelectedDateCollection
         ////console.log(this.defaultSrvc.mySelectedDate)
          this.presentLoading('Loading Delivery, Please Wait');
-        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("1"))).then(res => {
+        Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getOthersDel("plus",this.theSelectedDateDelivery))).then(res => {
           //////console.log(res);
           this.loading.dismiss();
+          this.theSelectedDate = this.defaultSrvc.mySelectedDateDelivery
+          this.theSelectedDateDelivery = this.defaultSrvc.mySelectedDateDelivery
           this.countColAndDel()
         }).catch(e => {
           //////console.log(e);
@@ -524,6 +554,44 @@ export class ColdevPage implements OnInit {
     } else {
       this.presentAlert("Please check your internet connection")
     }
+  }
+
+  CountDeliveryServer(){
+    if (navigator.onLine == true) {
+      // Promise.resolve(this.collection(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+      //   Promise.resolve(this.delivery(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+          Promise.resolve(this.deliverycount(this.accSrvc.driverData, this.defaultSrvc.getTodayColDel())).then(res => {
+            
+          }).catch(e => {
+          });
+
+      //   }).catch(e => {
+      //   });
+      // }).catch(e => {
+      // }).finally(() => {
+      // })
+    } else {
+    }
+  }
+
+  async deliverycount(info, today) {
+    // await this.presentLoading('');
+    //////console.log(info)
+    return new Promise(resolve => {
+
+      Promise.resolve(this.delcltnSrvc.getDeliveryCount(info, today)).then(data => {
+        console.log(data);
+
+      }).catch(e => {
+        //////console.log(e);
+        this.loading.dismiss();
+
+      });
+
+    }).catch(err => {
+      //////console.log(err)
+    })
+
   }
 
   LoadFromServer(){
@@ -571,20 +639,27 @@ export class ColdevPage implements OnInit {
 
     
   }
-  
+
   countColAndDel(){
     this.presentLoading('Counting Collection');
     this.storage.get('COLDEL_TABLE').then(res => {
-      ////console.log(res)
+      console.log(res)
       if(res == "" || res == null){
         this.presentAlert("No collection and Deliveries")
       }else{
         var flags = [], output = [], l = res.length, i;
         for (i = 0; i < l; i++) {
           //////console.log(res[i].coldel_type)
-          if(res[i].coldel_type == "collection" && res[i].mydates == this.theSelectedDate){
+          let selectedDateCol = new Date(this.theSelectedDateCollection).getDate();
+          let selectedDateDel = new Date(this.theSelectedDateCollection).getDate();
+          let colDate = new Date(res[i].mydates).getDate();
+          console.log(selectedDateCol)
+          console.log(selectedDateDel)
+          console.log(colDate)
+
+          if(res[i].coldel_type == "collection" && colDate == selectedDateCol){
             this.collectionCount = (this.collectionCount * 1) + 1
-          }else if(res[i].coldel_type == "delivery" && res[i].mydates == this.theSelectedDate){
+          }else if(res[i].coldel_type == "delivery" && colDate == selectedDateDel){
             this.deliveryCount = (this.deliveryCount * 1) + 1
           }
         }
@@ -593,6 +668,8 @@ export class ColdevPage implements OnInit {
       this.loading.dismiss();
     })
   }
+  
+
 
   // onRenderItems(event) {
   //   //////console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);

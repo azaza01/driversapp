@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { DefaultsService } from './api/defaults.service';
+// import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 @Component({
   selector: 'app-root',
@@ -70,6 +71,7 @@ export class AppComponent {
     public alertController: AlertController,
     private router: Router,
     private storage: Storage,
+    // private oneSignal: OneSignal,
     private defaultSrvc: DefaultsService,
 
   ) {
@@ -78,7 +80,7 @@ export class AppComponent {
     this.initializeApp();
 
 
-
+    
   }
 
 
@@ -99,8 +101,56 @@ export class AppComponent {
       //     ////console.log('hello');
       //   }, false);
       // });
+      // if (this.platform.is('cordova')) {
+      //   this.setupPush();
+      // }
     });
   }
+
+
+
+  // setupPush() {
+  //   // I recommend to put these into your environment.ts
+  //   this.oneSignal.startInit('4c85d5e6-63d1-43b4-af39-a2702bfb333c', '1:541549198270:android:49d40a2b649f7df486d7ef');
+ 
+  //   this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.None);
+ 
+  //   // Notifcation was received in general
+  //   this.oneSignal.handleNotificationReceived().subscribe(data => {
+  //     let msg = data.payload.body;
+  //     let title = data.payload.title;
+  //     let additionalData = data.payload.additionalData;
+  //     this.showAlertNew(title, msg, additionalData.task);
+  //   });
+ 
+  //   // Notification was really clicked/opened
+  //   this.oneSignal.handleNotificationOpened().subscribe(data => {
+  //     // Just a note that the data is a different place here!
+  //     let additionalData = data.notification.payload.additionalData;
+ 
+  //     this.showAlertNew('Notification opened', 'You already read this before', additionalData.task);
+  //   });
+ 
+  //   this.oneSignal.endInit();
+  // }
+
+  
+
+  // async showAlertNew(title, msg, task) {
+  //   const alert = await this.alertController.create({
+  //     header: title,
+  //     subHeader: msg,
+  //     buttons: [
+  //       {
+  //         text: `Action: ${task}`,
+  //         handler: () => {
+  //           // E.g: Navigate to a specific screen
+  //         }
+  //       }
+  //     ]
+  //   })
+  //   alert.present();
+  // }
 
   async presentAlert(msg) {
     const alert = await this.alertController.create({

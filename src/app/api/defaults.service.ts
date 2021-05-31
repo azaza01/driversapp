@@ -36,6 +36,8 @@ export class DefaultsService {
   prevcountdaysDel: any = 0
 
   mySelectedDate: any 
+  mySelectedDateCollection: any 
+  mySelectedDateDelivery: any 
 
   checkAllSucess: any = "1"
 
@@ -140,45 +142,131 @@ export class DefaultsService {
     return today
   }
 
-  getOthersCol(countdays) {
+  getOthersCol(operation,countdays) {
+    console.log(countdays)
+
     this.nextcountdaysCol = (this.nextcountdaysCol * 1) + (countdays * 1)
     ////console.log(this.nextcountdaysCol)
     let today;
     
-    let dd = new Date().getDate() + this.nextcountdaysCol;
-    let mm = new Date().getMonth() + 1;
-    let yyyy = new Date().getFullYear();
-    let yy = (yyyy + '').substr(2, 2);
+    // let dd = new Date().getDate() + this.nextcountdaysCol;
+    // let mm = new Date().getMonth() + 1;
+    // let yyyy = new Date().getFullYear();
+    // let yy = (yyyy + '').substr(2, 2);
 
+    today = new Date(countdays);
+    var nextdate
+    if(operation == "plus"){
+      nextdate = new Date(today.getFullYear(),today.getMonth(),today.getDate() + 1);
+    }else if(operation == "minus"){
+      nextdate = new Date(today.getFullYear(),today.getMonth(),today.getDate() - 1);
+    }
+
+
+
+    // var now = new Date();
+    // var mydays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    // console.log(mydays)
+    // console.log(dd)
+
+    // if (mm == 12 && dd == 32) {
+    //   dd = 1
+    //   mm = 1
+    //   yyyy = (yyyy * 1) + 1
+
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // } else if (mydays == dd && mm != 12){
+    //   dd = 1
+    //   mm = (mm * 1) + 1
+
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // }else{
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // }
+    // console.log(today)
+
+    this.mySelectedDateCollection = nextdate
+
+    let dd = new Date(this.mySelectedDateCollection).getDate();
+    let mm = new Date(this.mySelectedDateCollection ).getMonth() + 1;
+    let yyyy = new Date(this.mySelectedDateCollection ).getFullYear();
     let ddd = dd < 10 ? "0" + dd : dd
     let mmm = mm < 10 ? "0" + mm : mm
+    let selectedDate = yyyy + '-' + mmm + '-' + ddd ;
+    console.log(selectedDate)
 
-
-    today = yyyy + '-' + mmm + '-' + ddd ;
-
-    this.mySelectedDate = today
-    ////console.log(today)
-    return today
+    console.log(this.mySelectedDateCollection)
+    return selectedDate
   }
 
-  getOthersDel(countdays) {
+  getOthersDel(operation,countdays) {
+    console.log(countdays)
     this.nextcountdaysDel = (this.nextcountdaysDel * 1) + (countdays * 1)
     ////console.log(this.nextcountdaysDel)
     let today;
-    let dd = new Date().getDate() + this.nextcountdaysDel;
-    let mm = new Date().getMonth() + 1;
-    let yyyy = new Date().getFullYear();
-    let yy = (yyyy + '').substr(2, 2);
+    // let dd = new Date().getDate() + this.nextcountdaysDel;
+    // let mm = new Date().getMonth() + 1;
+    // let yyyy = new Date().getFullYear();
+    // let yy = (yyyy + '').substr(2, 2);
 
+    // var now = new Date();
+    // var mydays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+    today = new Date(countdays);
+    var nextdate
+    if(operation == "plus"){
+      nextdate = new Date(today.getFullYear(),today.getMonth(),today.getDate() + 1);
+    }else if(operation == "minus"){
+      nextdate = new Date(today.getFullYear(),today.getMonth(),today.getDate() - 1);
+    }
+
+    // if (mm == 12 && dd == 32) {
+    //   dd = 1
+    //   mm = 1
+    //   yyyy = (yyyy * 1) + 1
+
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // } else if (mydays == dd && mm != 12){
+    //   dd = 1
+    //   mm = (mm * 1) + 1
+
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // }else{
+    //   let ddd = dd < 10 ? "0" + dd : dd
+    //   let mmm = mm < 10 ? "0" + mm : mm
+  
+    //   today = yyyy + '-' + mmm + '-' + ddd ;
+    // }
+    // console.log(today)
+
+    this.mySelectedDateDelivery = nextdate
+
+    let dd = new Date(this.mySelectedDateDelivery).getDate();
+    let mm = new Date(this.mySelectedDateDelivery).getMonth() + 1;
+    let yyyy = new Date(this.mySelectedDateDelivery).getFullYear();
     let ddd = dd < 10 ? "0" + dd : dd
     let mmm = mm < 10 ? "0" + mm : mm
+    let selectedDate = yyyy + '-' + mmm + '-' + ddd ;
+    console.log(selectedDate)
 
-
-    today = yyyy + '-' + mmm + '-' + ddd ;
-
-    this.mySelectedDate = today
-    ////console.log(today)
-    return today
+    console.log(this.mySelectedDateDelivery)
+    
+    return selectedDate
   }
 
   // getPrevDayCol(countdays) {
