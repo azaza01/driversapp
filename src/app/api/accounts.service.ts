@@ -199,7 +199,6 @@ export class AccountsService {
     }else if(info.email == "poolresources@gmail.com" && info.password == "10101"){
       info.password = "5f9a4125cace29c1a4db8fee4eb3657c949d176c";
     }
-    ////console.log(info.password);
 
     let infoi = {
       "email": "it01.azaza@gmail.com",
