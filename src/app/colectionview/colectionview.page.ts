@@ -21,7 +21,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 })
 export class ColectionviewPage implements OnInit {
 
-
+  //collection variables
   collectionInfo: any = []
   driverInfo: any
   isLoading: boolean = false
